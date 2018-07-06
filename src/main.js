@@ -3,17 +3,17 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+//引入store
+import store from './store'
 
-// 资源请求(类似于ajax)
-import axios from 'axios'
-Vue.prototype.$axios = axios
-
-Vue.config.productionTip = false
+//在应用启动时，可以通过设置 Vue.config.productionTip = false 来关闭生产模式下给出的提示
+Vue.config.productionTip = true
 
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
+  store,
   components: { App },
   template: '<App/>'
 })
