@@ -6,7 +6,7 @@
  */
 let baseUrl = '';
 if (process.env.NODE_ENV == 'development') {
-  baseUrl = 'http://101.37.27.156:7081';
+  // baseUrl = 'http://101.37.27.156:7081';
 
 }else if(process.env.NODE_ENV == 'production'){
   baseUrl = '';
