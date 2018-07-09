@@ -1,7 +1,19 @@
 <template>
-    <div class="loginContainer">
+    <div class="containt">
 
-        <div class="login_container" @click="userLogin">登录</div>
+        <mt-header  title="科地地产" class="top-header">
+
+        </mt-header>
+        <mt-header title="登录" class="nav-header">
+            <mt-button icon="back" slot="left" @click="$router.go(-1)"></mt-button>
+        </mt-header>
+      <form class="loginForm">
+          <mt-field class="input-telpnone"  placeholder="请输入手机号" v-model="telphone">
+            <span @click="getCode">获取验证码</span>
+          </mt-field>
+          <mt-field class="input-code"  placeholder="请输入验证码" v-model="mobileCode"></mt-field>
+          <mt-button class="btn-login" @click="userLogin">立即登录</mt-button>
+      </form>
 
     </div>
 </template>
@@ -12,6 +24,8 @@
     export default {
         data(){
             return {
+              telphone:'',
+              mobileCode:'',
               token: ''
             }
         },
@@ -26,7 +40,6 @@
         },
         methods: {
           userLogin(){
-
             api.userLogin({})
               .then(function (response) {
                 console.log(response);
@@ -47,6 +60,9 @@
                 var error = JSON.parse(response.responseText);
                 this.$alert(response.error_msg);
               });
+          },
+          getCode(){
+
           }
         }
     }
@@ -55,126 +71,48 @@
 
 <style lang="scss" scoped>
     @import '../../style/mixin';
-
-    .loginContainer{
-        padding-top: 1.95rem;
-        p, span, input{
-            font-family: Helvetica Neue,Tahoma,Arial;
-        }
+    .containt{
     }
-    .change_login{
-        position: absolute;
-        @include ct;
-        right: 0.75rem;
-        @include sc(.7rem, #fff);
-    }
+    .top-header{
+        background-color: $themeColor;
 
+    }
+    .nav-header{
+      height: 4.4rem;
+      font-size: 16px;
+      color: #424242;
+      background-color: #ffffff;
+      margin-bottom: .6rem;
+    }
     .loginForm{
-        background-color: #fff;
-        margin-top: .6rem;
-        .input_container{
-            display: flex;
-            justify-content: space-between;
-            padding: .6rem .8rem;
-            border-bottom: 1px solid #f1f1f1;
-            input{
-                @include sc(.7rem, #666);
-            }
-            button{
-                @include sc(.65rem, #fff);
-                font-family: Helvetica Neue,Tahoma,Arial;
-                padding: .28rem .4rem;
-                border: 1px;
-                border-radius: 0.15rem;
-            }
-            .right_phone_number{
-                background-color: #4cd964;
-            }
-        }
-        .phone_number{
-            padding: .3rem .8rem;
-        }
-        .captcha_code_container{
-            height: 2.2rem;
-            .img_change_img{
-                display: flex;
-                align-items: center;
-                img{
-                    @include wh(3.5rem, 1.5rem);
-                    margin-right: .2rem;
-                }
-                .change_img{
-                    display: flex;
-                    flex-direction: 'column';
-                    flex-wrap: wrap;
-                    width: 2rem;
-                    justify-content: center;
-                    p{
-                        @include sc(.55rem, #666);
-                    }
-                    p:nth-of-type(2){
-                        color: #3b95e9;
-                        margin-top: .2rem;
-                    }
-                }
-            }
-        }
+      background-color: #ffffff;
+      padding:0 2.4rem;
     }
-    .login_tips{
-        @include sc(.5rem, red);
-        padding: .4rem .6rem;
-        line-height: .5rem;
-        a{
-            color: #3b95e9;
-        }
+  .input-telpnone{
+    padding-top:4rem ;
+    padding-bottom:1.45rem;
+    font-size: 16px;
+    color: #424242;
+    border-bottom: 1px solid #f5f5f5;
+    span{
+      font-size: 15px;
+      color: #ffc16b;
     }
-    .login_container{
-        margin: 0 .5rem 1rem;
-        @include sc(.7rem, #fff);
-        background-color: #4cd964;
-        padding: .5rem 0;
-        border: 1px;
-        border-radius: 0.15rem;
-        text-align: center;
-    }
-    .button_switch{
-        background-color: #ccc;
-        display: flex;
-        justify-content: center;
-        @include wh(2rem, .7rem);
-        padding: 0 .2rem;
-        border: 1px;
-        border-radius: 0.5rem;
-        position: relative;
-        .circle_button{
-            transition: all .3s;
-            position: absolute;
-            top: -0.2rem;
-            z-index: 1;
-            left: -0.3rem;
-            @include wh(1.2rem, 1.2rem);
-            box-shadow: 0 0.026667rem 0.053333rem 0 rgba(0,0,0,.1);
-            background-color: #f1f1f1;
-            border-radius: 50%;
-        }
-        .trans_to_right{
-            transform: translateX(1.3rem);
-        }
-        span{
-            @include sc(.45rem, #fff);
-            transform: translateY(.05rem);
-            line-height: .6rem;
-        }
-        span:nth-of-type(2){
-            transform: translateY(-.08rem);
-        }
-    }
-    .change_to_text{
-        background-color: #4cd964;
-    }
-    .to_forget{
-        float: right;
-        @include sc(.6rem, #3b95e9);
-        margin-right: .3rem;
-    }
+  }
+  .input-code{
+    padding-top: 2rem;
+    padding-bottom: 1.45rem;
+    font-size: 16px;
+    color: #9a9c9d;
+    border-bottom: 1px solid #f5f5f5;
+  }
+  .btn-login{
+    margin-top: 3rem;
+    width: 32.3rem;
+    height: 5rem;
+    background-color: #ffc16b;
+    font-size: 16px;
+    color: #754501;
+  }
+
 </style>
