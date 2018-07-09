@@ -5,7 +5,15 @@ import store from '../store'
 Vue.use(Router)
 
 // 路由懒加载
+
 // require.ensure 是 Webpack 的特殊语法，用来设置 code-split point
+
+const Home = resolve => {
+  require.ensure(['../page/home/home'], () => {
+    resolve(require('../page/home/home'));
+  });
+};
+
 const Login = resolve => {
   require.ensure(['../page/login/login'], () => {
     resolve(require('../page/login/login'));
@@ -16,8 +24,8 @@ const Login = resolve => {
 const routes = [
     {
       path: '/',
-      name:'',
-      component: Login,
+      name:'home',
+      component: Home,
     },
     {
       path: '/login',

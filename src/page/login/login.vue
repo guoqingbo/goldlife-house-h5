@@ -1,20 +1,16 @@
 <template>
-    <div class="containt">
-
-        <mt-header  title="科地地产" class="top-header">
-
-        </mt-header>
+    <div>
+        <head-top />
         <mt-header title="登录" class="nav-header">
-            <mt-button icon="back" slot="left" @click="$router.go(-1)"></mt-button>
+          <mt-button icon="back" slot="left" @click="$router.go(-1)"></mt-button>
         </mt-header>
-      <form class="loginForm">
+        <form class="loginForm">
           <mt-field class="input-telpnone"  placeholder="请输入手机号" v-model="telphone">
             <span @click="getCode">获取验证码</span>
           </mt-field>
           <mt-field class="input-code"  placeholder="请输入验证码" v-model="mobileCode"></mt-field>
           <mt-button class="btn-login" @click="userLogin">立即登录</mt-button>
-      </form>
-
+        </form>
     </div>
 </template>
 
@@ -69,21 +65,18 @@
 
 </script>
 
-<style lang="scss" scoped>
-    @import '../../style/mixin';
-    .containt{
-    }
-    .top-header{
-        background-color: $themeColor;
-
-    }
+<style lang="scss">
     .nav-header{
       height: 4.4rem;
       font-size: 16px;
       color: #424242;
       background-color: #ffffff;
       margin-bottom: .6rem;
+      h1{
+        font-weight: bold;
+      }
     }
+
     .loginForm{
       background-color: #ffffff;
       padding:0 2.4rem;
