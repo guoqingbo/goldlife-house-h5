@@ -1,72 +1,18 @@
 <template>
     <div class="loginContainer">
-      <head-top :head-title="loginWay? '登录':'密码登录'" goBack="true">
-        <!-- <div slot="changeLogin" class="change_login" @click="changeLoginWay">{{loginWay? "密码登录":"短信登录"}}</div> -->
-      </head-top>
-        <form class="loginForm" v-if="loginWay">
-            <section class="input_container phone_number">
-                <input type="text" placeholder="账号密码随便输入" name="phone" maxlength="11" v-model="phoneNumber">
-                <button @click.prevent="" :class="{right_phone_number:rightPhoneNumber}" v-show="!computedTime">获取验证码</button>
-                <button  @click.prevent v-show="computedTime">已发送({{computedTime}}s)</button>
-            </section>
-            <section class="input_container">
-                <input type="text" placeholder="验证码" name="mobileCode" maxlength="6" v-model="mobileCode">
-            </section>
-        </form>
-        <form class="loginForm" v-else>
-            <section class="input_container">
-                <input type="text" placeholder="账号" v-model.lazy="userAccount">
-            </section>
-            <section class="input_container">
-                <input v-if="!showPassword" type="password" placeholder="密码"  v-model="passWord">
-                <input v-else type="text" placeholder="密码"  v-model="passWord">
-                <div class="button_switch" :class="{change_to_text: showPassword}">
-                    <div class="circle_button" :class="{trans_to_right: showPassword}" @click=""></div>
-                    <span>abc</span>
-                    <span>...</span>
-                </div>
-            </section>
-            <section class="input_container captcha_code_container">
-                <input type="text" placeholder="验证码" maxlength="4" v-model="codeNumber">
-                <div class="img_change_img">
-                    <img v-show="captchaCodeImg" :src="captchaCodeImg">
-                    <div class="change_img" @click="">
-                        <p>看不清</p>
-                        <p>换一张</p>
-                    </div>
-                </div>
-            </section>
-        </form>
-        <p class="login_tips">
-            温馨提示：未注册过的账号，登录时将自动注册
-        </p>
-        <p class="login_tips">
-            注册过的用户可凭账号密码登录
-        </p>
-        <div class="login_container" @click="">登录</div>
-        <router-link to="/forget" class="to_forget" v-if="!loginWay">重置密码？</router-link>
-        <alert-tip v-if="showAlert" :showHide="showAlert" @closeTip="closeTip" :alertText="alertText"></alert-tip>
+
+        <div class="login_container" @click="userLogin">登录</div>
+
     </div>
 </template>
 
 <script>
+    import api from '../../api/axios'
     import headTop from '../../components/header/head'
     export default {
         data(){
             return {
-                loginWay: false, //登录方式，默认短信登录
-                showPassword: false, // 是否显示密码
-                phoneNumber: null, //电话号码
-                mobileCode: null, //短信验证码
-                validate_token: null, //获取短信时返回的验证值，登录时需要
-                computedTime: 0, //倒数记时
-                userInfo: null, //获取到的用户信息
-                userAccount: null, //用户名
-                passWord: null, //密码
-                captchaCodeImg: null, //验证码地址
-                codeNumber: null, //验证码
-                showAlert: false, //显示提示组件
-                alertText: null, //提示的内容
+              token: ''
             }
         },
         created(){
@@ -79,7 +25,29 @@
 
         },
         methods: {
+          userLogin(){
 
+            api.userLogin({})
+              .then(function (response) {
+                console.log(response);
+                let userInfo = {
+                  loginname: response.loginname,
+                  avatar_url: response.avatar_url,
+                  userId: response.id,
+                  token: response.token
+                };
+                this.$store.dispatch('setUserInfo', userInfo);
+                let redirect = decodeURIComponent(this.$route.query.redirect || '/');
+                this.$router.push({
+                  path: redirect
+                });
+              })
+              .catch(function (response) {
+                console.log(response);
+                var error = JSON.parse(response.responseText);
+                this.$alert(response.error_msg);
+              });
+          }
         }
     }
 
