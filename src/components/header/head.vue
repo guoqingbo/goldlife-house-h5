@@ -1,7 +1,8 @@
 <template>
-  <el-header  title="科地地产" class="top-header">
-    <el-button v-if="goBack" icon="back" slot="append" @click="$router.go(-1)"></el-button>
-  </el-header>
+  <h1 class="top-header">
+    <span class="go-back" v-if="goBack" @click="$router.go(-1)"><i class="icon iconfont go-back-icon">&#xe60f;</i></span>
+    <span class="top-header-title">{{title}}</span>
+  </h1>
 </template>
 
 <script>
@@ -15,7 +16,14 @@
         mounted(){
 
         },
-        props: ['goBack'],
+        props: {
+          goBack:{
+          },
+          title:{
+            type:String,
+            default:"科地地产"
+          }
+        },
         computed: {
 
         },
@@ -27,14 +35,27 @@
 
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   @import '../../style/mixin';
   .top-header{
+    position: relative;
     background-color: $themeColor;
     font-size: 16px;
+    color: #ffffff;
     height: 4.4rem;
-    h1{
+    line-height: 4.4rem;
+    .go-back{
+      position: absolute;
+      left: $contentPadding;
+    }
+    .go-back-icon{
+      font-size: 2.6rem;
+    }
+    .top-header-title{
+      display: inline-block;
+      width:100% ;
       font-weight: bold;
+      text-align: center;
     }
   }
 </style>
