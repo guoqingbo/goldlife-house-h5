@@ -52,7 +52,7 @@ export default {
   //发送验证码
   getCode(telphone){
     return axios.post(
-      '/user/sendVerCode',
+      'api/user/sendVerCode',
       qs.stringify({
         telphone:telphone,
       })
@@ -61,15 +61,15 @@ export default {
   //用户登录
   userLogin(data){
     return axios.post(
-      '/user/login',
-      qs.stringify({
-        loginName:data.loginName,
-        password:data.password,
-        type:data.type // 1:密码登录 2：验证码登录
-      })
-      // ,{emulateJSON: true},{
-      //   headers:{"Content-Type": "application/x-www-form-urlencoded;charset=utf-8",}
-      // }
+      'api/user/login'
+      // qs.stringify({
+      //   loginName:data.loginName,
+      //   password:data.password,
+      //   type:data.type // 1:密码登录 2：验证码登录
+      // })
+      ,{emulateJSON: true},{
+        headers:{"Content-Type": "application/x-www-form-urlencoded;charset=utf-8",}
+      }
     )
   },
   //获取用户

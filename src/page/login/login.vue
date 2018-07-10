@@ -50,13 +50,13 @@
         },
         methods: {
           userLogin(){
-              if (this.mobileCodeInput){
-                this.$message.error('请输入验证码');
-                return
-              }else if(this.mobileCodeInput != this.mobileCodeGet){
-                this.$message.error('验证码输入错误');
-                return
-              }
+//              if (this.mobileCodeInput){
+//                this.$message.error('请输入验证码');
+//                return
+//              }else if(this.mobileCodeInput != this.mobileCodeGet){
+//                this.$message.error('验证码输入错误');
+//                return
+//              }
               let loginInfo = {
                 loginName:this.loginName,
                 password:this.mobileCodeInput,
@@ -77,7 +77,8 @@
                   });
                 })
                 .catch(function (response) {
-                  this.$message.error(response.error_msg);
+//                  this.$message.error(response.error_msg);
+                  console.log(response)
                 });
           },
           getCode(){
