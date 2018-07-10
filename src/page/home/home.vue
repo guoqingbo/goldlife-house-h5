@@ -26,11 +26,12 @@
             <li>房型<i class="icon iconfont">&#xe65e;</i></li>
             <li>筛选<i class="icon iconfont">&#xe65e;</i></li>
           </ul>
-          <span class="left clear">ll</span>
+          <span class="right clear"> <i class="icon iconfont">&#xe656;</i></span>
         </div>
         <div class="list clear">
           <ul>
             <li>
+              <router-link to="/sellDetail">
                 <div class="img left">
                   <img src="" >
                 </div>
@@ -41,7 +42,7 @@
                   <span class="dicrible">240</span>
                   <span class="dicrible">444</span>
                 </p>
-
+              </router-link>
             </li>
           </ul>
         </div>
@@ -149,7 +150,7 @@
       }
       li{
         float: left;
-        width: 7.5rem;
+        width: 7.8rem;
       }
     }
     /**列表*/

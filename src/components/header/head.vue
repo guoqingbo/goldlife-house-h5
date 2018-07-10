@@ -1,7 +1,7 @@
 <template>
-  <mt-header  title="科地地产" class="top-header">
-    <mt-button v-if="goBack" icon="back" slot="left" @click="$router.go(-1)"></mt-button>
-  </mt-header>
+  <el-header  title="科地地产" class="top-header">
+    <el-button v-if="goBack" icon="back" slot="append" @click="$router.go(-1)"></el-button>
+  </el-header>
 </template>
 
 <script>

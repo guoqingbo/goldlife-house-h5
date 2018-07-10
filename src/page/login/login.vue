@@ -1,15 +1,15 @@
 <template>
     <div>
         <head-top />
-        <mt-header title="登录" class="nav-header">
+        <el-header title="登录" class="nav-header">
           <mt-button icon="back" slot="left" @click="$router.go(-1)"></mt-button>
-        </mt-header>
+        </el-header>
         <form class="loginForm">
-          <mt-field class="input-telpnone"  placeholder="请输入手机号" v-model="telphone">
-            <span @click="getCode">获取验证码</span>
-          </mt-field>
-          <mt-field class="input-code"  placeholder="请输入验证码" v-model="mobileCode"></mt-field>
-          <mt-button class="btn-login" @click="userLogin">立即登录</mt-button>
+          <el-input class="input-telpnone"  placeholder="请输入手机号" v-model="telphone">
+            <span slot="append" @click="getCode">获取验证码</span>
+          </el-input>
+          <el-input class="input-code"  placeholder="请输入验证码" v-model="mobileCode"></el-input>
+          <el-button class="btn-login" @click="userLogin">立即登录</el-button>
         </form>
     </div>
 </template>
