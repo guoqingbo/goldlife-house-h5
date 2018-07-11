@@ -28,11 +28,11 @@
       <div class="condition-filter clear">
         <ul class="left clear">
           <li @click='recommendList'>区域<i class="icon iconfont">&#xe65e;</i></li>
-          <li >价格<i class="icon iconfont">&#xe65e;</i></li>
+          <li @click='show("priceId")'>价格<i class="icon iconfont">&#xe65e;</i></li>
           <li @click='show("homesId")' >房型<i class="icon iconfont">&#xe65e;</i></li>
           <li @click='show("chooseId")'>筛选<i class="icon iconfont">&#xe65e;</i></li>
         </ul>
-        <span class="right clear"> <i class="icon iconfont">&#xe656;</i></span>
+        <span class="right clear" @click='show("sortId")'> <i class="icon iconfont">&#xe656;</i></span>
 
       </div>
       <div class="downli">
