@@ -46,12 +46,12 @@
         },
         methods: {
           getCode(){
-              if (!this.telphone){
+              if (!this.loginName){
 //                this.alertText = '请输入手机号';
                 $alert.open('请输入手机号');
                 return
 
-              }else if (!/^1\d{10}$/gi.test(this.telphone)) {
+              }else if (!/^1\d{10}$/gi.test(this.loginName)) {
                 $alert.open('手机号号码格式错误');
                 return
               }else{
@@ -63,7 +63,7 @@
                   }
                 }, 1000)
                 //发送短信验证码
-                api.getCode(this.telphone)
+                api.getCode(this.loginName)
                   .then( res =>{
                       console.log(res)
                   })

@@ -8,7 +8,8 @@ import axiosConfig from  '../config/axios'
 axios.defaults.timeout = 5000; //5000的超时验证
 console.log(process.env.NODE_ENV)
 axios.defaults.baseURL = axiosConfig.baseUrl;
-axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8';
+// axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8';
+axios.defaults.headers.post['Content-Type'] = "application/x-www-form-urlencoded;charset=utf-8"
 
 //创建一个axios实例
 // const instance = axios.create();
@@ -63,12 +64,12 @@ export default {
     return axios.post(
       'api/user/login',
       qs.stringify({
-        loginName:data.loginName,
         password:data.password,
-        type:data.type // 1:密码登录 2：验证码登录
+        type:data.type, // 1:密码登录 2：验证码登录
+        loginName:data.loginName,
       }),
       // {emulateJSON: true},
-      // {headers:{"Content-Type": "application/x-www-form-urlencoded;charset=utf-8",}}
+      {headers:{"Content-Type": "application/x-www-form-urlencoded;charset=utf-8"}}
     )
   },
   //获取用户
