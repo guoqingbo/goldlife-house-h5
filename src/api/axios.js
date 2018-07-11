@@ -77,4 +77,32 @@ export default {
     return instance.get('/api/user');
   },
 
+  //租房列表
+  getRentHouseList(){
+    return axios.get('api/house/getRentHouseList',{
+
+    })
+  },
+
+  //二手房列表
+  getHouseList(){
+    return axios.get('api/house/getHouseList',{
+
+    })
+  },
+
+  //推荐房源
+  recommendList(){
+    return axios.post('api/house/recommendList',{
+
+    })
+  },
+
+  //筛选条件
+  getFilterList(){
+    return axios.post('api/house/getFilterList',{
+
+    })
+  },
+
 }
