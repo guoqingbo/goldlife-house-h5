@@ -37,7 +37,7 @@ const routes = [
 
 
 const router = new Router({
-  // mode: 'history',
+  mode: 'history',
   routes,
 })
 //注册全局钩子用来拦截导航

@@ -32,3 +32,9 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 ## 技术栈
 
 vue2 + vuex + vue-router + webpack + ES6/7 + axios + sass + mint-ui
+
+location ^~/api/{
+rewrite ^/(.*)$ /$1 break;
+proxy_pass http://10.29.113.176:7090;
+}
+
