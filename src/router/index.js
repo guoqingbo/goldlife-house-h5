@@ -26,6 +26,12 @@ const houseList = resolve => {
   });
 };
 
+const houseDetail = resolve => {
+  require.ensure(['../page/houseDetail/houseDetail'], () => {
+    resolve(require('../page/houseDetail/houseDetail'));
+  });
+};
+
 
 const routes = [
     {
@@ -43,6 +49,11 @@ const routes = [
     path: '/houseList',
     name:'houseList',
     component: houseList,
+  },
+  {
+    path: '/houseDetail',
+    name:'houseDetail',
+    component: houseDetail,
   },
   ]
 
