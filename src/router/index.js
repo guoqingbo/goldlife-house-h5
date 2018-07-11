@@ -20,6 +20,12 @@ const Login = resolve => {
   });
 };
 
+const houseList = resolve => {
+  require.ensure(['../page/houseList/houseList'], () => {
+    resolve(require('../page/houseList/houseList'));
+  });
+};
+
 
 const routes = [
     {
