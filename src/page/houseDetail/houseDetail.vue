@@ -84,7 +84,9 @@
         </el-row>
       </div>
 
-      <div class="BMap_mask" style="position: absolute; left: 0px; top: 0px; z-index: 9; overflow: hidden; user-select: none; width: 375px; height: 592px;"></div>
+      <div class="homeMap">
+        <div id="allmap" class="allmap"></div>
+      </div>
 
     </div>
   </div>
@@ -95,10 +97,15 @@
 <script>
   import api from '../../api/axios'
   import headTop from '../../components/header/head'
+  import BMap from 'BMap'
 
   export default {
     data() {
-      return {}
+      return {
+        type: 'tab',
+        address_detail: null,
+        center: {lng: 116.40387397, lat: 39.91488908}
+      }
     },
     created() {
 
@@ -106,10 +113,40 @@
     components: {
       headTop,
     },
-    computed: {},
-    methods: {}
+    mounted () {
+      this.ready()
+    },
+    methods: {
+      ready () {
+        let map = new BMap.Map('allmap');
+        let point = new BMap.Point(this.center.lng, this.center.lat);
+        map.centerAndZoom(point, 10);
+        map.enableScrollWheelZoom(true);
+        map.enableDoubleClickZoom(true);
+        var geolocation = new BMap.Geolocation();
+        geolocation.getCurrentPosition((r) => {
+          if (r.point) {
+            this.center.lng = r.longitude;
+            this.center.lat = r.latitude;
+            let markers = new BMap.Marker(r.point);
+            map.addOverlay(markers);
+            map.panTo(r.point);
+            map.centerAndZoom(r.point, 16);
+            //向地图中添加缩放控件
+            var ctrl_nav = new BMap.NavigationControl({anchor:BMAP_ANCHOR_BOTTOM_RIGHT,isOpen:1});
+            map.addControl(ctrl_nav);
+            //向地图中添加比例尺控件
+            var opts = {offset: new BMap.Size(1, 28)}
+            var ctrl_sca = new BMap.ScaleControl(opts);
+            map.addControl(ctrl_sca);
+          }
+        }, { enableHighAccuracy: true })
+      }
+    }
 
   }
+
+
 </script>
 
 <style lang="scss" scoped>
@@ -214,8 +251,15 @@
     p{
       color: #9c9a9d;
     }
-
   }
+  .homeMap{
+    margin-top: 20px;
+    #allmap{
+      width: 100%;
+      height: 15rem;
+    }
+  }
+
 
 
 </style>
