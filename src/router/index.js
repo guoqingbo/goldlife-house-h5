@@ -20,6 +20,18 @@ const Login = resolve => {
   });
 };
 
+const houseList = resolve => {
+  require.ensure(['../page/houseList/houseList'], () => {
+    resolve(require('../page/houseList/houseList'));
+  });
+};
+
+// const houseDetail = resolve => {
+//   require.ensure(['../page/houseDetail/houseDetail'], () => {
+//     resolve(require('../page/houseDetail/houseDetail'));
+//   });
+// };
+
 
 const routes = [
     {
@@ -33,10 +45,15 @@ const routes = [
       component: Login,
       meta: { keepAlive: false, requiresAuth: false },
     },
+  {
+    path: '/houseList',
+    name:'houseList',
+    component: houseList,
+  },
   // {
-  //   path: '/houseList',
-  //   name:'houseList',
-  //   component: houseList,
+  //   path: '/houseDetail',
+  //   name:'houseDetail',
+  //   component: houseDetail,
   // },
   ]
 
