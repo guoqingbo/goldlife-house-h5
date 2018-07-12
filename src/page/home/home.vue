@@ -30,7 +30,7 @@
           <ul class="left clear">
             <li @click = 'opentFilter("district")'>区域<i class="icon iconfont">&#xe65e;</i></li>
             <li @click = 'opentFilter("price")'>价格<i class="icon iconfont">&#xe65e;</i></li>
-            <li @click = 'opentFilter("district")'>房型<i class="icon iconfont">&#xe65e;</i></li>
+            <li @click = 'opentFilter("roomType")'>房型<i class="icon iconfont">&#xe65e;</i></li>
             <li @click = 'opentFilter("district")'>筛选<i class="icon iconfont">&#xe65e;</i></li>
           </ul>
           <span class="right clear"> <i class="icon iconfont">&#xe656;</i></span>
