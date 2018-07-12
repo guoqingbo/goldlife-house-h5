@@ -8,11 +8,11 @@
               <div class="my-search-dropdown left" >
                 <el-dropdown trigger="click">
                     <div class="el-dropdown-link dropdown-link-span">
-                      {{chosetype}}<i class="el-icon-arrow-down el-icon--right"></i>
+                      {{houseType == 1?"二手房":'租房' }}<i class="el-icon-arrow-down el-icon--right"></i>
                     </div>
                     <el-dropdown-menu slot="dropdown">
-                      <el-dropdown-item ><span @click='cltype()'>二手房</span></el-dropdown-item>
-                      <el-dropdown-item ><span @click='cltype()'>租房</span></el-dropdown-item>
+                      <el-dropdown-item ><span @click='cltype(1)'>二手房</span></el-dropdown-item>
+                      <el-dropdown-item ><span @click='cltype(2)'>租房</span></el-dropdown-item>
                     </el-dropdown-menu>
                 </el-dropdown>
               </div>
@@ -23,14 +23,15 @@
             <div class="my-search-more right">
                 <i class="icon iconfont iconfont-more">&#xe641;</i>
             </div>
+
           </div>
         <!--过滤导航-->
-        <div class="condition-filter clear">
+        <div class="condition-filter clear" @touchmove.prevent>
           <ul class="left clear">
-            <li>区域<i class="icon iconfont">&#xe65e;</i></li>
-            <li @click = 'openPriceFilter'>价格<i class="icon iconfont">&#xe65e;</i></li>
-            <li>房型<i class="icon iconfont">&#xe65e;</i></li>
-            <li>筛选<i class="icon iconfont">&#xe65e;</i></li>
+            <li @click = 'opentFilter("district")'>区域<i class="icon iconfont">&#xe65e;</i></li>
+            <li @click = 'opentFilter("price")'>价格<i class="icon iconfont">&#xe65e;</i></li>
+            <li @click = 'opentFilter("district")'>房型<i class="icon iconfont">&#xe65e;</i></li>
+            <li @click = 'opentFilter("district")'>筛选<i class="icon iconfont">&#xe65e;</i></li>
           </ul>
           <span class="right clear"> <i class="icon iconfont">&#xe656;</i></span>
         </div>
@@ -55,33 +56,67 @@
         </div>
 
         <!--价格-->
-        <div v-show="filterType == 'price'" class="price-filter" ref="priceFilter">
+        <div v-if="filterType == 'price'" class="filter-price"  @touchmove.prevent>
           <el-row>
-            <p>价格区间（万）</p>
+            <p class="price-between">价格区间（万）</p>
           </el-row>
           <el-row>
-            <el-col :xs="11" :sm="6" :md="4" :lg="3" :xl="1"><el-input class="input-content" v-model="priceStart" maxlength="4"></el-input></el-col>
+            <el-col :xs="11" :sm="6" :md="4" :lg="3" :xl="1">
+              <el-input class="input-content" v-model="sellHouseParams.priceMin" maxlength="4" type="number"></el-input>
+            </el-col>
             <el-col :xs="2" :sm="6" :md="4" :lg="3" :xl="1"><div class="line-div"><i class="el-icon-minus"></i></div></el-col>
-            <el-col :xs="11" :sm="6" :md="4" :lg="3" :xl="1"><el-input v-model="priceEnd" class="input-content" maxlength="4"></el-input></el-col>
+            <el-col
+              :xs="11" :sm="6" :md="4" :lg="3" :xl="1">
+              <el-input class="input-content" v-model="sellHouseParams.priceMax"  maxlength="4" type="number"></el-input>
+            </el-col>
           </el-row>
-          <el-row :gutter="30">
-            <el-col :xs="8" :sm="6" :md="4" :lg="3" :xl="1"><div class="grid-content bg-purple-light">200以下</div></el-col>
-            <el-col :xs="8" :sm="6" :md="4" :lg="3" :xl="1"><div class="grid-content bg-purple">200-300</div></el-col>
-            <el-col :xs="8" :sm="6" :md="4" :lg="3" :xl="1"><div class="grid-content bg-purple-light">300-400</div></el-col>
+          <el-row :gutter="20">
+            <el-col
+              v-for="priceItem in filterList.price.child"
+              :xs="8" :sm="6" :md="4"
+              :lg="3" :xl="1">
+              <div class="grid-content"
+                   :class="{'bg-purple-light': sellHouseParams.filterIds.indexOf(priceItem.id) >= 0}"
+                   @click="setCheckPriceValue($event,priceItem.id)">{{priceItem.child_name}}
+              </div>
+            </el-col>
           </el-row>
-          <el-row :gutter="30">
-            <el-col :xs="8" :sm="6" :md="4" :lg="3" :xl="1"><div class="grid-content bg-purple-light">400-500</div></el-col>
-            <el-col :xs="8" :sm="6" :md="4" :lg="3" :xl="1"><div class="grid-content bg-purple">500-800</div></el-col>
-            <el-col :xs="8" :sm="6" :md="4" :lg="3" :xl="1"><div class="grid-content bg-purple-light">800-1000</div></el-col>
+          <el-row class="el-btn">
+            <el-col :span="12"><div class="grid-bt-content bg-bt-light" @click="unlimit ">不限</div></el-col>
+            <el-col :span="12"><div class="grid-bt-content bg-bt" @click="filterConfirm">确定</div></el-col>
           </el-row>
-          <el-row class="el-bt">
-            <el-col :span="12"><div class="grid-bt-content bg-bt-light">不限</div></el-col>
-            <el-col :span="12"><div class="grid-bt-content bg-bt">确定</div></el-col>
-          </el-row>
+          <!--遮罩-->
+         <div class="mask" @click = 'opentFilter("price")'></div>
         </div>
+        <!--区域-->
+        <div v-if="filterType == 'district'" class="filter-district">
+
+          <div class="clear">
+            <!--区域-->
+            <ul class="district-ul left">
+              <li :class="{'district-active': activDistrictIndex < 0}">不限</li>
+              <li v-for="(districtItem,index) in district"
+                  :class="{'district-active': activDistrictIndex == index}"
+                  @click="setCheckDistrictValue($event,index)">
+                {{districtItem.district}}
+              </li>
+            </ul>
+            <!--板块-->
+            <ul class="street-ul left clear">
+              <li  :class="{'street-active': activDistrictIndex < 0}" v-if="activDistrictIndex< 0">不限</li>
+              <li v-else v-for="streetItem in district[activDistrictIndex].street"
+                  @click="setCheckStreetValue($event,streetItem.id)"
+                  :class="{'street-active': sellHouseParams.areaIds == streetItem.id}">
+                {{streetItem.name}}
+              </li>
+            </ul>
+          </div>
+          <!--遮罩-->
+          <div class="mask" @click = 'opentFilter("district")' @touchmove.prevent></div>
+        </div>
+
+        <!--房型-->
       </div>
-      <!--遮罩-->
-      <div v-if="maskShow" class="mask" ref="mask"  @touchmove.prevent></div>
     </div>
 </template>
 <script>
@@ -92,28 +127,30 @@
     export default {
         data(){
             return {
-              params:{
+              sellHouseParams:{
                 cityId:"hz",
                 communityId:"",
                 areaIds:"",
-                priceMin:"",
-                priceMax:"",
-                filterIds:"",
+                priceMin:"",//最小价格
+                priceMax:"",//最大价格
+                filterIds:[],
                 pageSize:"",
                 pageIndex:"",
                 orderBy:"",
                 orderColumn:'',
-              },
-              sellHouseLists:[],
-              chosetype:"二手房",
-              priceStart:'',
-              priceEnd:'',
-              filterType:'',
-              maskShow:''
+              },//房源请求参数
+              sellHouseLists:[],//房源列表
+              houseType:1,//房源类型
+              filterType:'',//过滤选项卡
+              filterList:{},//获取过滤列表
+              district:[],//区域板块列表
+              activDistrictIndex:-1,//选中的小区
             }
         },
         created(){
           this.getSellHoseLists();
+          this.getFilterList();
+          this.getDistrict();
         },
         components: {
           headTop,
@@ -153,24 +190,11 @@
 
         },
         methods: {
-            //获取房源列表
+          //获取房源列表
           getSellHoseLists(){
-//              let params = {
-//                cityId:this.params.cityId,
-//                communityId:this.params.communityId,
-//                areaIds:this.params.areaIds,
-//                priceMin:this.params.priceMin,
-//                priceMax:this.params.priceMax,
-//                filterIds:this.params.filterIds,
-//                pageSize:this.params.pageSize,
-//                pageIndex:this.params.pageIndex,
-//                orderBy:this.params.orderBy,
-//                orderColumn:this.params.orderColumn,
-//              }
-            let params = this.params;
+            let params = this.sellHouseParams;
             api.getSellHouseList(params)
               .then( res => {
-                console.log(res);
                 if (res.data.success){
                   this.sellHouseLists = res.data.result.list
                 }else{
@@ -181,34 +205,111 @@
                 this.$message.error(res.data.errorMessage);
               });
           },
+          //获取过滤条件
+          getFilterList(){
+//              console.log(this.filterList)
+//            if (this.filterList && this.filterList.price){
+//                return
+//            }
+            let params = {
+              type:this.houseType
+            };
+            api.getFilterList(params)
+              .then( res => {
+                if (res.data.success){
+                  this.filterList = res.data.result
+                }else{
+                  this.$message.error(res.data.errorMessage);
+                }
+              })
+              .catch(res =>{
+                this.$message.error(res.data.errorMessage);
+              });
+          },
+          //获取区域
+          //获取过滤条件
+          getDistrict(){
+            let params = {
+              city:"hz"
+            };
+            api.getDistrict(params)
+              .then( res => {
+                console.log(res);
+                if (res.data.success){
+                  this.district = res.data.result;
+                  console.log(this.disrtict)
+                }else{
+                  this.$message.error(res.data.errorMessage);
+                }
+              })
+              .catch(res =>{
+                this.$message.error(res.data.errorMessage);
+              });
+          },
           //获取选中房源类型
-          cltype(event){
-            this.chosetype= event.currentTarget.innerText;
+          cltype(houseType){
+            this.houseType=houseType;
           },
           //打开价格弹框
-          openPriceFilter(){
+          opentFilter(filterType){
+            console.log(filterType)
             if (this.filterType){
               this.filterType = ''
             }else{
-              this.filterType = 'price';
-              console.log(this.$refs.priceFilter)
-              this.opentMask(this.$refs.priceFilter.offsetTop)
+              this.filterType = filterType
             }
           },
-          //打开遮罩
-          opentMask(positionY){
-              this.maskShow = true
-              this.$refs.mask.style.top = positionY+"px"
-          }
+
+          //设置价格过滤条件
+          setCheckPriceValue(event,id){
+            let idIndex = this.sellHouseParams.filterIds.indexOf(id);
+            console.log(idIndex)
+            if (idIndex == "-1") {
+              this.sellHouseParams.filterIds.push(id);
+            } else {
+              this.sellHouseParams.filterIds.splice(idIndex,1);
+            }
+          },
+          //过滤确认按钮
+          filterConfirm(){
+            this.getSellHoseLists();
+            this.filterType = '';
+          },
+          //过滤不限按钮
+          unlimit(){
+            this.sellHouseParams = {
+                cityId:"hz",
+                communityId:"",
+                areaIds:"",
+                priceMin:"",
+                priceMax:"",
+                filterIds:[],
+                pageSize:"",
+                pageIndex:"",
+                orderBy:"",
+                orderColumn:'',
+            }//房源请求参数
+            this.getSellHoseLists();
+            this.filterType = '';
+          },
+
+          //设置区域滤条件
+          setCheckDistrictValue(event,id){
+            this.activDistrictIndex = id;
+          },
+          //设置板块过滤条件
+          setCheckStreetValue(event,id){
+            this.sellHouseParams.areaIds = id;
+            this.getSellHoseLists();
+            this.filterType = ''
+
+          },
         }
     }
 
 </script>
 
-<style lang="scss" scoped>
-    .content{
-
-    }
+<style lang="scss">
     /**搜索样式*/
     .my-search{
       margin-top: 1.2rem;
@@ -304,45 +405,58 @@
   }
 
   /*价格筛选*/
-    .price-filter {
-      padding:0 2rem;
+    .filter-price{
+      font-color:#424242;
+      font-size: 15px;
       position: absolute;
       z-index: 6;
-      top: 17rem;
+      top: 15.5rem;
       background-color: #fff;
       .el-row {
-        margin-bottom: 15px;
-        &:last-child {
-          margin-bottom: 0;
+        padding:0 2rem;
+      }
+      .price-between{
+        border-top: 1px solid #f5f5f5;
+        padding-top: 1rem;
+        padding-bottom: 2rem;
+      }
+
+      .input-content {
+        input{
+          height: 3rem;
+          text-align: center;
+          font-size: 16px;
         }
       }
-      .input-content {
-        height: 50px;
-        text-align: center;
-        max: 9999;
-        min: 0;
-      }
       .line-div {
-        height: 50px;
+        height: 3rem;
         text-align: center;
-        line-height: 50px;
+        line-height: 3rem;
         font-size: 2px;
 
       }
       .grid-content {
-        height: 30px;
-        background-color: #fbf6ee;
+        margin-top: 1.5rem;
+        height: 3rem;
         border-radius: 5px;
         text-align: center;
-        line-height: 30px;
+        line-height: 2.9rem;
+        font-weight: normal;
+        font-size: 15px;
+        border:1px solid #f5f5f5
       }
+      //选中状态
       .bg-purple-light {
         background-color: #fbf6ee;
+        color:#ffc16b;
       }
       .grid-bt-content {
         height: 40px;
         text-align: center;
         line-height: 40px;
+      }
+      .el-btn{
+        padding:2rem 0 0 0;
       }
       .bg-bt-light {
         background-color: #f5f7fa;
@@ -351,15 +465,49 @@
         background-color: #ffc16b;
       }
     }
-  /*遮罩*/
-  .mask{
-    z-index: 5;
-    width: 100%;
-    height: 100%;
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    background-color: rgba(0,0,0,0.6);
-  }
-
+  /*区域筛选*/
+    .filter-district{
+      font-color:#424242;
+      font-size: 16px;
+      position: absolute;
+      z-index: 6;
+      top: 15.5rem;
+      background-color: #fff;
+      width: 100%;
+      ul{
+        width: 50%;
+        height: 29rem;
+        overflow: scroll;
+        li{
+          padding-left: 2rem;
+          height: 4rem;
+          /*text-align: center;*/
+          line-height: 4rem;
+        }
+      }
+      .district-ul{
+        background-color: #f8f8f8;
+        //选中状态
+        .district-active{
+          color:#ffc16b;
+        }
+      }
+      .street-ul{
+        background-color: #f2f2f2;
+        //选中状态
+        .street-active{
+          background-color:#f7ddba;
+        }
+      }
+    }
+    /*遮罩*/
+    .mask{
+      /*z-index: 5;*/
+      width: 100%;
+      height: 28rem;
+      position: fixed;
+      /*top: 0;*/
+      /*bottom: 0;*/
+      background-color: rgba(0,0,0,0.5);
+    }
 </style>

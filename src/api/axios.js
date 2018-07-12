@@ -9,7 +9,7 @@ axios.defaults.timeout = 5000; //5000的超时验证
 console.log(process.env.NODE_ENV)
 axios.defaults.baseURL = axiosConfig.baseUrl;
 // axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8';
-axios.defaults.headers.post['Content-Type'] = "application/x-www-form-urlencoded;charset=utf-8"
+axios.defaults.headers.post['Content-Type'] = "application/x-www-form-urlencoded;charset=utf-8";
 
 //创建一个axios实例
 // const instance = axios.create();
@@ -59,6 +59,7 @@ export default {
       })
     )
   },
+
   //用户登录
   userLogin(data){
     return axios.post(
@@ -77,17 +78,17 @@ export default {
 
     })
   },
+
   //区域板块
   getDistrict(data){
     return axios.post(
-      'api/user/login',
+      'api/house/getRegion',
       qs.stringify({
-        password:data.password,
-        type:data.type, // 1:密码登录 2：验证码登录
-        loginName:data.loginName,
+        city:data.city,
       })
     )
   },
+
   //筛选条件
   getFilterList(data){
     return axios.post(
@@ -106,7 +107,7 @@ export default {
         areaIds:data.areaIds,
         priceMin:data.priceMin,
         priceMax:data.priceMax,
-        filterIds:data.filterIds,
+        filterIds:data.filterIds.join(','),
         pageSize:data.pageSize,
         pageIndex:data.pageIndex,
         orderBy:data.orderBy,
@@ -120,13 +121,6 @@ export default {
     return axios.post('api/house/recommendList',{
 
     })
-  },
-
-  //筛选条件
-  getFilterList(){
-    return axios.post('api/house/getFilterList',{
-
-    })
-  },
+  }
 
 }
