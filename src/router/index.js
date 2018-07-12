@@ -25,7 +25,6 @@ const houseList = resolve => {
     resolve(require('../page/houseList/houseList'));
   });
 };
-
  // const houseDetail = resolve => {
  //   require.ensure(['../page/houseDetail/houseDetail'], () => {
  //     resolve(require('../page/houseDetail/houseDetail'));

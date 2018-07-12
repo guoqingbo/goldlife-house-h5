@@ -72,7 +72,7 @@
           </el-row>
           <el-row :gutter="20">
             <el-col
-              v-for="priceItem in filterList.price.child"
+              v-for="priceItem in filterList.price.child" :key="priceItem.id"
               :xs="8" :sm="6" :md="4"
               :lg="3" :xl="1">
               <div class="grid-content"
