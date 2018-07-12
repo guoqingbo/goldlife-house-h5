@@ -17,7 +17,8 @@
                 </el-dropdown>
               </div>
               <div class="my-search-input left">
-                <input type="search" placeholder="请输入商圈或小区名">
+                <!--<input type="search" placeholder="请输入商圈或小区名">-->
+                <el-input v-model="input" placeholder="请输入商圈或小区名"></el-input>
               </div>
             </div>
             <div class="my-search-more right">
@@ -334,11 +335,13 @@
         }
       }
       .my-search-input{
-        /*border: 0;*/
-        padding-left: 0.3rem;
-        color: #424242;
-        input{
+        /*padding-left: 0.3rem;*/
+        .el-input__inner{
+          color: #424242;
+          border: 0;
           background-color: transparent;
+          height: 3.5rem;
+          line-height: 3.5rem;
         }
       }
       .my-search-more{
