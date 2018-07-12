@@ -67,14 +67,8 @@ export default {
         password:data.password,
         type:data.type, // 1:密码登录 2：验证码登录
         loginName:data.loginName,
-      }),
-      // {emulateJSON: true},
-      {headers:{"Content-Type": "application/x-www-form-urlencoded;charset=utf-8"}}
+      })
     )
-  },
-  //获取用户
-  getUser(){
-    return instance.get('/api/user');
   },
 
   //租房列表
@@ -83,11 +77,41 @@ export default {
 
     })
   },
-
+  //区域板块
+  getDistrict(data){
+    return axios.post(
+      'api/user/login',
+      qs.stringify({
+        password:data.password,
+        type:data.type, // 1:密码登录 2：验证码登录
+        loginName:data.loginName,
+      })
+    )
+  },
+  //筛选条件
+  getFilterList(data){
+    return axios.post(
+      'api/house/getFilterList',
+      qs.stringify({
+        type:data.type,//1:二手房 2：租房
+      })
+    )
+  },
   //二手房列表
-  getHouseList(){
+  getSellHouseList(data){
     return axios.get('api/house/getHouseList',{
-
+      params:{
+        cityId:data.cityId,
+        communityId:data.communityId,
+        areaIds:data.areaIds,
+        priceMin:data.priceMin,
+        priceMax:data.priceMax,
+        filterIds:data.filterIds,
+        pageSize:data.pageSize,
+        pageIndex:data.pageIndex,
+        orderBy:data.orderBy,
+        orderColumn:data.orderColumn,
+      }
     })
   },
 

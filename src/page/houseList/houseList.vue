@@ -33,7 +33,6 @@
           <li @click='show("chooseId")'>筛选<i class="icon iconfont">&#xe65e;</i></li>
         </ul>
         <span class="right clear" @click='show("sortId")'> <i class="icon iconfont">&#xe656;</i></span>
-
       </div>
       <div class="downli">
 
