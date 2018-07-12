@@ -53,7 +53,7 @@ export default {
   //发送验证码
   getCode(telphone){
     return axios.post(
-      'api/user/sendVerCode',
+      'user/sendVerCode',
       qs.stringify({
         telphone:telphone,
       })
@@ -63,7 +63,7 @@ export default {
   //用户登录
   userLogin(data){
     return axios.post(
-      'api/user/login',
+      'user/login',
       qs.stringify({
         password:data.password,
         type:data.type, // 1:密码登录 2：验证码登录
@@ -74,7 +74,7 @@ export default {
 
   //租房列表
   getRentHouseList(){
-    return axios.get('api/house/getRentHouseList',{
+    return axios.get('house/getRentHouseList',{
 
     })
   },
@@ -82,7 +82,7 @@ export default {
   //区域板块
   getDistrict(data){
     return axios.post(
-      'api/house/getRegion',
+      'house/getRegion',
       qs.stringify({
         city:data.city,
       })
@@ -92,7 +92,7 @@ export default {
   //筛选条件
   getFilterList(data){
     return axios.post(
-      'api/house/getFilterList',
+      'house/getFilterList',
       qs.stringify({
         type:data.type,//1:二手房 2：租房
       })
@@ -100,7 +100,7 @@ export default {
   },
   //二手房列表
   getSellHouseList(data){
-    return axios.get('api/house/getHouseList',{
+    return axios.get('house/getHouseList',{
       params:{
         cityId:data.cityId,
         communityId:data.communityId,
@@ -118,7 +118,7 @@ export default {
 
   //推荐房源
   recommendList(){
-    return axios.post('api/house/recommendList',{
+    return axios.post('house/recommendList',{
 
     })
   }
