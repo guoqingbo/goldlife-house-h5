@@ -33,11 +33,11 @@ const routes = [
       component: Login,
       meta: { keepAlive: false, requiresAuth: false },
     },
-  {
-    path: '/houseList',
-    name:'houseList',
-    component: houseList,
-  },
+  // {
+  //   path: '/houseList',
+  //   name:'houseList',
+  //   component: houseList,
+  // },
   ]
 
 
