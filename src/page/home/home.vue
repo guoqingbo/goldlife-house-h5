@@ -330,12 +330,12 @@
       .my-search-dropdown{
         font-size: 13px;
         .dropdown-link-span{
-          width: 7.8rem;
+          /*width: 7.8rem;*/
         }
       }
       .my-search-input{
         border: 0;
-        padding-left: 6px;
+        padding-left: 0.3rem;
         background-color: transparent;
         color: #424242;
       }
@@ -451,9 +451,9 @@
         color:#ffc16b;
       }
       .grid-bt-content {
-        height: 40px;
+        height: 2rem;
         text-align: center;
-        line-height: 40px;
+        line-height: 2rem
       }
       .el-btn{
         padding:2rem 0 0 0;
