@@ -16,8 +16,8 @@
                     </el-dropdown-menu>
                 </el-dropdown>
               </div>
-              <div class="left">
-                <input type="search" placeholder="请输入商圈或小区名" class="my-search-input">
+              <div class="my-search-input left">
+                <input type="search" placeholder="请输入商圈或小区名">
               </div>
             </div>
             <div class="my-search-more right">
@@ -334,10 +334,12 @@
         }
       }
       .my-search-input{
-        border: 0;
+        /*border: 0;*/
         padding-left: 0.3rem;
-        background-color: transparent;
         color: #424242;
+        input{
+          background-color: transparent;
+        }
       }
       .my-search-more{
         .iconfont-more{font-size: 2.5rem};
@@ -451,9 +453,9 @@
         color:#ffc16b;
       }
       .grid-bt-content {
-        height: 2rem;
+        height: 3rem;
         text-align: center;
-        line-height: 2rem
+        line-height: 3rem
       }
       .el-btn{
         padding:2rem 0 0 0;
