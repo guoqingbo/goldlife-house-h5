@@ -116,11 +116,16 @@ export default {
     })
   },
 
-  //推荐房源
-  recommendList(){
-    return axios.post('house/recommendList',{
-
+  //房源详情
+  getHouseDetail(data){
+    return axios.get('house/getHouseDetailStr',{
+      params:{
+        cityId:data.cityId,
+        houseId:data.houseId,
+        userType:data.userType,
+        houseType:data.houseType,
+      }
     })
-  }
+  },
 
 }
