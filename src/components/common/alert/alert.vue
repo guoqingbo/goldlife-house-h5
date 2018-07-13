@@ -1,3 +1,4 @@
+<!--无用组键-->
 <template>
   <div>
     <div class="alert" v-if="show">

@@ -8,13 +8,13 @@ Vue.use(Router)
 
 // require.ensure 是 Webpack 的特殊语法，用来设置 code-split point
 
-const Home = resolve => {
+const home = resolve => {
   require.ensure(['../page/home/home'], () => {
     resolve(require('../page/home/home'));
   });
 };
 
-const Login = resolve => {
+const login = resolve => {
   require.ensure(['../page/login/login'], () => {
     resolve(require('../page/login/login'));
   });
@@ -30,23 +30,27 @@ const houseList = resolve => {
  //     resolve(require('../page/houseDetail/houseDetail'));
  //   });
  // };
-
+const search = resolve => {
+  require.ensure(['../page/search/search'], () => {
+    resolve(require('../page/search/search'));
+  });
+};
 
 const routes = [
     {
       path: '/',
-      name:'home',
-      component: Home,
+      name:'home',//首页
+      component: home,
     },
     {
       path: '/login',
-      name: 'login',
-      component: Login,
+      name: 'login',//登录页
+      component: login,
       meta: { keepAlive: false, requiresAuth: false },
     },
   {
     path: '/houseList',
-    name:'houseList',
+    name:'houseList',//房源列表页
     component: houseList,
   },
    // {
@@ -54,6 +58,11 @@ const routes = [
    //   name:'houseDetail',
    //   component: houseDetail,
    // },
+    {
+      path: '/search',
+      name:'search',//房源列表页
+      component: search,
+    },
   ]
 
 
