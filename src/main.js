@@ -18,9 +18,9 @@ import './config/rem'
 import store from './store'
 
 //引入ui框架
-// import Mint from 'mint-ui';
+import Mint from 'mint-ui';
 // import 'mint-ui/lib/style.css';
-// Vue.use(Mint);
+Vue.use(Mint);
 
 //引入ElementUI框架
 import ElementUI from 'element-ui';

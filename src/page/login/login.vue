@@ -22,7 +22,8 @@
 <script>
     import api from '../../api/axios'
     import headTop from '../../components/header/head'
-    import $alert from '../../components/common/alert/alert.js'
+//    import $alert from '../../components/common/alert/alert.js'
+//    import { Toast } from 'mint-ui';
     export default {
         data(){
             return {
@@ -48,11 +49,20 @@
           getCode(){
               if (!this.loginName){
 //                this.alertText = '请输入手机号';
-                $alert.open('请输入手机号');
+//                $alert.open('请输入手机号');
+                this.$toast({
+                  message: '请输入手机号',
+                  position: 'bottom',
+                  duration: 3000
+                });
                 return
 
               }else if (!/^1\d{10}$/gi.test(this.loginName)) {
-                $alert.open('手机号号码格式错误');
+                this.$toast({
+                  message: '手机号号码格式错误',
+                  position: 'bottom',
+                  duration: 3000
+                });
                 return
               }else{
                 this.computedTime = 30;
@@ -65,16 +75,31 @@
                 //发送短信验证码
                 api.getCode(this.loginName)
                   .then( res =>{
+                      if (res.data.success == false){
+                        this.$toast({
+                          message: res.data.errorMessage,
+                          position: 'bottom',
+                          duration: 3000
+                        })
+                      }
                       console.log(res)
                   })
                   .catch(function (res) {
-                    this.$alert.error(response.error_msg);
+                    this.$toast({
+                      message: res.error_msg,
+                      position: 'bottom',
+                      duration: 3000
+                    })
                   })
               }
           },
           userLogin(){
             if (!this.mobileCodeInput){
-              $alert.open('请输入验证码');
+              this.$toast({
+                message: "请输入验证码",
+                position: 'bottom',
+                duration: 3000
+              })
               return
             }
 //            else if(this.mobileCodeInput != this.mobileCodeGet){
@@ -95,7 +120,11 @@
                     path: redirect
                   });
                 }else{
-                  $alert.open(res.data.errorMessage)
+                  this.$toast({
+                    message: res.data.errorMessage,
+                    position: 'bottom',
+                    duration: 3000
+                  })
                 }
 //                this.$store.dispatch('setUserInfo', userInfo);
               })

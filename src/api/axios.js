@@ -55,7 +55,7 @@ export default {
     return axios.post(
       'user/sendVerCode',
       qs.stringify({
-        telphone:telphone,
+        phone:telphone,
       })
     )
   },

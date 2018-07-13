@@ -17,8 +17,7 @@
                 </el-dropdown>
               </div>
               <div class="my-search-input left">
-                <!--<input type="search" placeholder="请输入商圈或小区名">-->
-                <el-input v-model="input" placeholder="请输入商圈或小区名"></el-input>
+                <input type="search" placeholder="请输入商圈或小区名">
               </div>
             </div>
             <div class="my-search-more right">
@@ -115,8 +114,22 @@
           <!--遮罩-->
           <div class="mask" @click = 'opentFilter("district")' @touchmove.prevent></div>
         </div>
-
         <!--房型-->
+        <div v-if="filterType == 'roomType'" class="filter-room-type"  @touchmove.prevent>
+          <ul>
+            <li v-for="item in filterList.room.child" :key="item.id"
+                   :class="{'room-active': sellHouseParams.filterIds.indexOf(item.id) >= 0}"
+                   @click="setfilterValue($event,item.id)">
+              {{item.child_name}}
+            </li>
+          </ul>
+          <div class="el-btn">
+            <button class="grid-bt-content bg-bt-light" @click="unlimit ">不限</button>
+            <button class="grid-bt-content bg-bt" @click="filterConfirm">确定</button>
+          </div>
+          <!--遮罩-->
+          <div class="mask" @click = 'opentFilter("price")'></div>
+        </div>
       </div>
     </div>
 </template>
@@ -219,6 +232,7 @@
               .then( res => {
                 if (res.data.success){
                   this.filterList = res.data.result
+                  console.log(this.filterList)
                 }else{
                   this.$message.error(res.data.errorMessage);
                 }
@@ -235,7 +249,6 @@
             };
             api.getDistrict(params)
               .then( res => {
-                console.log(res);
                 if (res.data.success){
                   this.district = res.data.result;
                   console.log(this.disrtict)
@@ -251,9 +264,9 @@
           cltype(houseType){
             this.houseType=houseType;
           },
-          //打开价格弹框
+          //打开筛选弹框
           opentFilter(filterType){
-            console.log(filterType)
+
             if (this.filterType){
               this.filterType = ''
             }else{
@@ -262,7 +275,7 @@
           },
 
           //设置价格过滤条件
-          setCheckPriceValue(event,id){
+          setfilterValue(event,id){
             let idIndex = this.sellHouseParams.filterIds.indexOf(id);
             console.log(idIndex)
             if (idIndex == "-1") {
@@ -335,13 +348,13 @@
         }
       }
       .my-search-input{
-        /*padding-left: 0.3rem;*/
-        .el-input__inner{
-          color: #424242;
-          border: 0;
+        /*border: 0;*/
+        padding-left: 0.5rem;
+        width: 18rem;
+        color: #424242;
+        input{
           background-color: transparent;
-          height: 3.5rem;
-          line-height: 3.5rem;
+          width: 18rem;
         }
       }
       .my-search-more{
@@ -504,6 +517,25 @@
           background-color:#f7ddba;
         }
       }
+    }
+    /*房型筛选*/
+    .filter-room-type{
+      font-color:#424242;
+      font-size: 16px;
+      position: absolute;
+      z-index: 6;
+      top: 15.5rem;
+      background-color: #fff;
+      width: 100%;
+      ul{
+        padding-left: 2rem;
+        li{
+          float: left;
+          width: 10rem;
+          margin-bottom: 1rem;
+        }
+      }
+
     }
     /*遮罩*/
     .mask{
