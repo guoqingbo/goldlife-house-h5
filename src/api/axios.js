@@ -128,4 +128,16 @@ export default {
     })
   },
 
+  //小区详情
+  getCommunityDetail(data){
+    return axios.get('house/getCommunityDetailStr',{
+      params:{
+        blockId:data.blockId,
+        city:data.city,
+        userType:data.userType,
+        houseType:data.houseType,
+      }
+    })
+  },
+
 }
