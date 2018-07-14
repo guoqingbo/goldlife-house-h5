@@ -482,7 +482,7 @@
         background-color: #f5f5f5;
         border-radius: 6px;
         padding-left: 1rem;
-        width: 29rem;
+        // width: 29rem;
       }
       /*下拉样式*/
       .my-search-dropdown{
@@ -536,7 +536,7 @@
         color: #424242;
         input{
           background-color: transparent;
-          width: 18rem;
+          width: 100;
         }
       }
       .my-search-right{
@@ -590,10 +590,11 @@
       }
       li{
         float: left;
-        width: 20%;
+        width: 16%;
+        margin-left:5%
       }
-      li:last-child{
-        text-align: center;
+      li:first-child{
+        margin-left: 0;
       }
     }
 
@@ -601,18 +602,23 @@
     .houseList{
       padding:0 2rem;
     ul{
+      width:100%;
       li{
         /*border-top: 1px solid #f5f5f5;*/
         @include border-top;
         padding: 1.5rem 0;
-        .img,img{
-          width: 12rem;
+        .img{
+          width: 42%;
           height: 9rem;
           border-radius: .5rem;
+          img{
+            width:100%;
+            height:100%;
+          }
         }
         .li-content{
-          width: 18.5rem;
-          margin-left: 2rem;
+          width: 58%;
+          padding-left: 2rem;
           p{
             margin-bottom: 0.2rem;
             overflow:hidden;

@@ -93,7 +93,7 @@
       background-color: #f5f5f5;
       border-radius: 6px;
       padding-left: 1rem;
-      width: 29rem;
+      // width: 29rem;
     }
     /*下拉样式*/
     .my-search-dropdown{
@@ -148,7 +148,7 @@
       color: #424242;
       input{
         background-color: transparent;
-        width: 18rem;
+        width: 100%;
       }
     }
     .my-search-right{
