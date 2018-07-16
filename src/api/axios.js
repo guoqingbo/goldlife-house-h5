@@ -73,6 +73,26 @@ export default {
     )
   },
 
+// 用户登出  
+  checkOut(){
+    return axios.post(
+      'user/logout',
+      qs.stringify({})//无需传参数
+    )
+  },
+
+
+  // 房源对比  
+  houseCompared(data){
+    // return axios.get('house/houseCompare?data='+data)
+    return axios.get('house/houseCompare',{
+      params:{
+        data:data
+      }
+    })
+  },
+
+
   //租房列表
   getRentHouseList(){
     return axios.get('house/getRentHouseList',{

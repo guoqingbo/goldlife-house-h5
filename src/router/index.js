@@ -21,6 +21,14 @@ const login = resolve => {
   });
 };
 
+// 登出
+const checkOut = resolve => {
+  require.ensure(['../page/login/checkOut'], () => {
+    resolve(require('../page/login/checkOut'));
+  });
+};
+
+
 const houseList = resolve => {
   require.ensure(['../page/houseList/houseList'], () => {
     resolve(require('../page/houseList/houseList'));
@@ -62,6 +70,14 @@ const myCare = resolve => {
     resolve(require('../page/myCare/myCare'));
   });
 };
+// 房源对比结果
+const comparedResult = resolve => {
+  require.ensure(['../page/houseCompared/comparedResult'], () => {
+    resolve(require('../page/houseCompared/comparedResult'));
+  });
+};
+
+
 const routes = [
     {
       path: '/',
@@ -73,6 +89,11 @@ const routes = [
       name: 'login',//登录页
       component: login,
       // meta: { keepAlive: false, requiresAuth: false },
+    },
+    {
+      path: '/checkOut',
+      name:'checkOut',//登出
+      component: checkOut,
     },
   {
     path: '/houseList',
@@ -104,11 +125,18 @@ const routes = [
       name: 'houseBuyDetail',
       component: houseBuyDetail,
     },
+
+    {//房源对比结果
+      path: '/comparedResult',
+      name: 'comparedResult',
+      component: comparedResult,
+    },
     {
       path: '/myCare',//我的关注
       name: 'myCare',
       component: myCare,
     }
+
 ];
 
 
