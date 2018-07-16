@@ -61,10 +61,10 @@ const routes = [
       component: home,
     },
     {
-      path: '/login',
+      path: '/login/:redirect',
       name: 'login',//登录页
       component: login,
-      meta: { keepAlive: false, requiresAuth: false },
+      // meta: { keepAlive: false, requiresAuth: false },
     },
   {
     path: '/houseList',

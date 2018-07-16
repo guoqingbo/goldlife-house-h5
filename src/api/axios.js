@@ -68,6 +68,7 @@ export default {
         password:data.password,
         type:data.type, // 1:密码登录 2：验证码登录
         loginName:data.loginName,
+        redirectType:data.redirectType,
       })
     )
   },

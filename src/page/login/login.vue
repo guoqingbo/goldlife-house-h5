@@ -33,10 +33,11 @@
 //              mobileCodeGet:'',//获取的验证码
 //              alertText:'',//提示内容
 //              token: ''
+//              redirect:"",//登录成功后要跳转的页面
             }
         },
         created(){
-
+//          console.log(this.$route.params);
         },
         components: {
           headTop,
@@ -46,6 +47,9 @@
 
         },
         methods: {
+//          ...mapMutations([
+//            'setUserInfo', // 将 `this.setUserInfo()` 映射为 `this.$store.commit('setUserInfo')`
+//          ]),
           getCode(){
               if (!this.loginName){
 //                this.alertText = '请输入手机号';
@@ -102,23 +106,27 @@
               })
               return
             }
-//            else if(this.mobileCodeInput != this.mobileCodeGet){
-//              $alert.open('验证码输入错误');
-//              return
-//            }
             let loginInfo = {
               loginName:this.loginName,
               password:this.mobileCodeInput,
-              type:2 // 1:密码登录 2：验证码登录
+              type:2, // 1:密码登录 2：验证码登录
+              redirectType:this.$route.params ? this.$route.params.redirect:"",
             }
             api.userLogin(loginInfo)
               .then(res =>{
                   console.log(res.data)
                 if (res.data.success){
-                  let redirect = decodeURIComponent(this.$route.query.redirect || '/');
-                  this.$router.push({
-                    path: redirect
-                  });
+                  //保存用户信息
+                  this.$store.commit('setUserInfo',{loginName:this.loginName,});
+                  //获取登录后的跳转地址
+                  let redirectUrl = res.data.result;
+                  if (redirectUrl){
+                      window.location.href = redirectUrl;
+                  }
+//                  let redirect = decodeURIComponent(this.$route.query.redirect || '/');
+//                  this.$router.push({
+//                    path: redirect
+//                  });
                 }else{
                   this.$toast({
                     message: res.data.errorMessage,
@@ -193,7 +201,7 @@
       }
       .btn-login{
         margin-top: 3rem;
-        width: 32.3rem;
+        width: 100%;
         height: 5rem;
         background-color: #ffc16b;
         font-size: 16px;
