@@ -41,31 +41,14 @@
             </ul>
           </div>
           <!--房源结果列表-->
-          <div class="houseList clear">
-            <ul>
-              <li class="clear" v-for="sellHouse in sellHouseLists" :key="sellHouse.id">
-                <router-link to="/sellDetail">
-                  <div class="img left"><img :src= "sellHouse.pic|pic" ></div>
-                  <div class="left li-content">
-                    <p><span class="title">{{sellHouse.title}}</span></p>
-                    <p><span class="dicrible">{{sellHouse.describe}}</span></p>
-                    <p>
-                      <span class="price">{{sellHouse.price|price}}</span>
-                      <span class="avgprice">{{sellHouse.avgprice|avgprice}}</span>
-                    </p>
-                    <p></p><span class="publish-time">{{sellHouse.create_time|publishTime}}</span>
-                  </div>
-                </router-link>
-              </li>
-            </ul>
-          </div>
+          <house-list :houseLists="sellHouseLists"></house-list>
 
           <!--价格-->
           <div v-if="filterType == 'price'" class="filter-price"  @touchmove.prevent>
             <div class="filter-title">价格区间（万）</div>
             <div class="price-between-input">
               <input class="left" v-model="sellHouseParams.priceMin" maxlength="4" type="number"/>
-              <i class="icon iconfont iconfont-heng">&#xe6f1;</i>
+              <span><i class="icon iconfont iconfont-heng">&#xe6f1;</i></span>
               <input class="right" v-model="sellHouseParams.priceMax"  maxlength="4" type="number"/>
             </div>
             <ul class="filter-select">
@@ -183,6 +166,7 @@
 <script>
     import api from '../../api/axios'
     import headTop from '../../components/header/head'
+    import houseList from '../../components/common/houseList'
     import search from '../../page/search/search'
 //    import $alert from '../../components/common/alert/alert.js'
 
@@ -190,6 +174,7 @@
       components: {
         headTop,
         search,
+        houseList,
       },
         data(){
             return {
@@ -228,37 +213,37 @@
           this.getFilterList();
           this.getDistrict();
         },
-        filters:{
-            pic(value){
-              if (value) {
-                return value;
-              }else{
-                  return "http://118.178.230.141/group1/M00/00/04/drLmjVsZ-cmAIWmKAASWd8wn0zs229.jpg"
-              }
-            },
-          price(value){
-            if (value) {
-              return value + '万元';
-            }
-          },
-          avgprice(value){
-            if (value) {
-              return value + '元/平房';
-            }
-          },
-          publishTime(value){
-            if (value) {
-              function add0(m) {
-                return m < 10 ? '0' + m : m
-              }
-              let time = new Date(parseInt(value)*1000);
-              let y = time.getFullYear();
-              let m = time.getMonth() + 1;
-              let d = time.getDate();
-              return y + '年' + add0(m) + '月' + add0(m)+ "日";
-            }
-          }
-        },
+//        filters:{
+//            pic(value){
+//              if (value) {
+//                return value;
+//              }else{
+//                  return "http://118.178.230.141/group1/M00/00/04/drLmjVsZ-cmAIWmKAASWd8wn0zs229.jpg"
+//              }
+//            },
+//          price(value){
+//            if (value) {
+//              return value + '万元';
+//            }
+//          },
+//          avgprice(value){
+//            if (value) {
+//              return value + '元/平房';
+//            }
+//          },
+//          publishTime(value){
+//            if (value) {
+//              function add0(m) {
+//                return m < 10 ? '0' + m : m
+//              }
+//              let time = new Date(parseInt(value)*1000);
+//              let y = time.getFullYear();
+//              let m = time.getMonth() + 1;
+//              let d = time.getDate();
+//              return y + '年' + add0(m) + '月' + add0(m)+ "日";
+//            }
+//          }
+//        },
         computed: {
 
         },
@@ -432,16 +417,21 @@
     margin: 0 2rem;
     li {
       float: left;
-      width: 10rem;
+      width: 31%;
       height: 2.5rem;
       line-height: 2.5rem;
       text-align: center;
       margin-bottom: 1rem;
-      margin-right: 1rem;
+      margin-right: 3.5%;
       border-radius: 5px;
       /*border:1px solid #f5f5f5;*/
       @include border;
+      box-sizing: border-box;
       font-size: 14px;
+      &:nth-child(3n){
+        margin-right: 0;
+      }
+
     }
   }
   /*选项选中状态*/
@@ -598,60 +588,6 @@
       }
     }
 
-    /**列表*/
-    .houseList{
-      padding:0 2rem;
-    ul{
-      width:100%;
-      li{
-        /*border-top: 1px solid #f5f5f5;*/
-        @include border-top;
-        padding: 1.5rem 0;
-        .img{
-          width: 42%;
-          height: 9rem;
-          border-radius: .5rem;
-          img{
-            width:100%;
-            height:100%;
-          }
-        }
-        .li-content{
-          width: 58%;
-          padding-left: 2rem;
-          p{
-            margin-bottom: 0.2rem;
-            overflow:hidden;
-            text-overflow:ellipsis;
-            white-space:nowrap;
-          }
-          .title{
-            font-weight: bold;
-            font-size: 16px;
-            color:#424242;
-          }
-          .dicrible{
-            font-size: 13px;
-            color: #9c9a9d;
-          }
-          .price{
-            font-size: 1.5rem;
-            color:#e10000;
-          }
-          .avgprice{
-            font-size: 1.5rem;
-            color:#424242;
-          }
-          .publish-time{
-            font-size: 1.3rem;
-            color:#754501;
-          }
-        }
-      }
-    }
-
-  }
-
   /*价格筛选*/
     .filter-price{
       @include filter-wrap;
@@ -660,20 +596,26 @@
       }
       .price-between-input {
         clear: both;
-        padding:0 2rem;
+        padding:0 2rem 1rem 2rem;
         line-height: 3rem;
         height: 3rem;
         input{
           height: 100%;
           text-align: center;
           font-size: 16px;
+          box-sizing:border-box;
           /*border: 1px solid #f5f5f5;*/
           @include border;
-          width: 15rem;
+          width: 45%;
         }
-        .iconfont-heng{
-          margin-left: 1rem;
+        span{
+          display: inline-block;
+          width: 10%;
+          text-align: center;
         }
+        /*.iconfont-heng{*/
+          /*margin-left: 1rem;*/
+        /*}*/
       }
       .filter-select{
         @include filter-select
@@ -721,29 +663,7 @@
     .filter-room-type{
       @include filter-wrap;
       .filter-select{
-        overflow: hidden;
-        margin: 0 2rem;
-        /*border-top: 1px solid #f5f5f5;*/
-        @include border-top;
-        padding-top: 1.5rem;
-        li{
-          /*font-size: 13px;*/
-          float: left;
-          width: 10rem;
-          height: 2.5rem;
-          line-height: 2.5rem;
-          text-align: center;
-          margin-bottom: 1rem;
-          margin-right: 1rem;
-          border-radius:5px;
-          /*border:1px solid #f5f5f5;*/
-          @include border;
-          font-size: 13px;
-        }
-        .room-active{
-          background-color: #fbf6ee;
-          font-color:#ffc16b;
-        }
+        @include filter-select
       }
       /*过滤按钮*/
       .filter-btn{
