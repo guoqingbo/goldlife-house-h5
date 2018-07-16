@@ -2,11 +2,13 @@
   <!--房源结果列表-->
   <div class="">
     <!--头部导航-->
-    <div></div>
-    <!-- 对应的内容 -->
-    <mt-tab-container v-model="selected">
+    <div >
 
-    </mt-tab-container>
+    </div>
+    <!-- 对应的内容 -->
+    <div>
+
+    </div>
   </div>
 </template>
 <script>
