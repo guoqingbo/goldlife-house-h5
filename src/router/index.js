@@ -8,12 +8,13 @@ Vue.use(Router);
 
 // require.ensure 是 Webpack 的特殊语法，用来设置 code-split point
 
+//首页
 const home = resolve => {
   require.ensure(['../page/home/home'], () => {
     resolve(require('../page/home/home'));
   });
 };
-
+//登录页
 const login = resolve => {
   require.ensure(['../page/login/login'], () => {
     resolve(require('../page/login/login'));
@@ -38,6 +39,8 @@ const houseList = resolve => {
  //     resolve(require('../page/houseDetail/houseDetail'));
  //   });
  // };
+
+//搜索页
 const search = resolve => {
   require.ensure(['../page/search/search'], () => {
     resolve(require('../page/search/search'));
@@ -61,7 +64,12 @@ const houseBuyDetail = resolve => {
     resolve(require('../page/houseDetail/houseBuyDetail'));
   });
 };
-
+//我的关注
+const myCare = resolve => {
+  require.ensure(['../page/myCare/myCare'], () => {
+    resolve(require('../page/myCare/myCare'));
+  });
+};
 // 房源对比结果
 const comparedResult = resolve => {
   require.ensure(['../page/houseCompared/comparedResult'], () => {
@@ -77,10 +85,10 @@ const routes = [
       component: home,
     },
     {
-      path: '/login',
+      path: '/login/:redirect',
       name: 'login',//登录页
       component: login,
-      meta: { keepAlive: false, requiresAuth: false },
+      // meta: { keepAlive: false, requiresAuth: false },
     },
     {
       path: '/checkOut',
@@ -123,6 +131,12 @@ const routes = [
       name: 'comparedResult',
       component: comparedResult,
     },
+    {
+      path: '/myCare',//我的关注
+      name: 'myCare',
+      component: myCare,
+    }
+
 ];
 
 
