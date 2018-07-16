@@ -9,7 +9,7 @@
             <p><span class="title">{{item.title}}</span></p>
             <p><span class="dicrible">{{item.describe}}</span></p>
             <p>
-              <span class="price">{{item.price | price}}</span>
+              <span class="price">{{item.price | price(houseType)}}</span>
               <span class="avgprice">{{item.avgprice | avgprice}}</span>
             </p>
             <p></p><span class="publish-time">{{item.create_time | publishTime}}</span>
@@ -21,6 +21,7 @@
 </template>
 <script>
   export default {
+    props:['houseLists','houseType'],
     filters:{
       pic(value){
         if (value) {
@@ -29,14 +30,14 @@
           return "http://118.178.230.141/group1/M00/00/04/drLmjVsZ-cmAIWmKAASWd8wn0zs229.jpg"
         }
       },
-      price(value){
+      price(value,houseType){
         if (value) {
-          return value + '万元';
+          return houseType == 1 ? value + ' 万元' : value + ' 元/月';
         }
       },
       avgprice(value){
         if (value) {
-          return value + '元/平房';
+          return value + ' 元/平';
         }
       },
       publishTime(value){
@@ -48,11 +49,10 @@
           let y = time.getFullYear();
           let m = time.getMonth() + 1;
           let d = time.getDate();
-          return y + '年' + add0(m) + '月' + add0(m)+ "日";
+          return y + '年' + add0(m) + '月' + add0(m)+ "日"+"发布";
         }
       }
     },
-    props:['houseLists'],
   }
 </script>
 <style lang="scss" scoped>
@@ -72,7 +72,7 @@
         padding: 1.5rem 0;
         .img {
           width: 42%;
-          height: 9rem;
+          height: 8rem;
           border-radius: .5rem;
           img {
             width: 100%;

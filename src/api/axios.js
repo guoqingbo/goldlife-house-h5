@@ -117,6 +117,24 @@ export default {
     })
   },
 
+  //租房列表
+  getRentHouseList(data){
+    return axios.get('house/getRentHouseList',{
+      params:{
+        cityId:data.cityId,
+        communityId:data.communityId,
+        areaIds:data.areaIds,
+        priceMin:data.priceMin,
+        priceMax:data.priceMax,
+        filterIds:data.filterIds.join(','),
+        pageSize:data.pageSize,
+        pageIndex:data.pageIndex,
+        orderBy:data.orderBy,
+        orderColumn:data.orderColumn,
+      }
+    })
+  },
+
   //房源详情
   getHouseDetail(data){
     return axios.get('house/getHouseDetailStr',{
@@ -141,4 +159,12 @@ export default {
     })
   },
 
+  //搜索小区
+  searchCommunity(data){
+    return axios.post('house/searchCommunity', qs.stringify({
+      keyword:data.keyword,//小区名关键字(拼音或汉字)
+      city:data.city,//城市拼写(hz)
+      limit:data.limit,//搜索到的小区限制，默认5条
+    }))
+  }
 }
