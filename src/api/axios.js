@@ -6,7 +6,6 @@ import axiosConfig from  '../config/axios'
 
 //设置全局axios默认值
 axios.defaults.timeout = 5000; //5000的超时验证
-console.log(process.env.NODE_ENV)
 axios.defaults.baseURL = axiosConfig.baseUrl;
 // axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8';
 axios.defaults.headers.post['Content-Type'] = "application/x-www-form-urlencoded;charset=utf-8";

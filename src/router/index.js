@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import store from '../store'
+import envConfig from '../config/env'
 
 Vue.use(Router);
 
@@ -153,7 +154,7 @@ const routes = [
 
 const router = new Router({
   // mode: 'history',
-  mode:"history",
+  mode:envConfig.routerMode,
   routes,
 });
 //注册全局钩子用来拦截导航

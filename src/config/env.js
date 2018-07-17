@@ -9,6 +9,7 @@
 
 let baseUrl = '';
 let imgBaseUrl = '';
+let routerMode = 'hash';
 
 
 if (process.env.NODE_ENV == 'development') {
@@ -18,9 +19,11 @@ if (process.env.NODE_ENV == 'development') {
 }else if(process.env.NODE_ENV == 'production'){
 	baseUrl = '';
   imgBaseUrl = '';
+  routerMode = 'history'
 }
 
 export default {
 	baseUrl:baseUrl,
-	imgBaseUrl:imgBaseUrl
+	imgBaseUrl:imgBaseUrl,
+  routerMode:routerMode
 }
