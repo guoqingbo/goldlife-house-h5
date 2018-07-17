@@ -15,6 +15,7 @@ let routerMode = 'hash';
 if (process.env.NODE_ENV == 'development') {
     baseUrl = '';
     imgBaseUrl = '';
+  routerMode = 'history';
 
 }else if(process.env.NODE_ENV == 'production'){
 	baseUrl = '';

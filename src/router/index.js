@@ -90,6 +90,11 @@ const routes = [
       name:'home',//首页
       component: home,
     },
+  {
+    path: '/home',
+    name:'home',//首页
+    component: home,
+  },
     {
       path: '/login/:redirect',
       name: 'login',//登录页
