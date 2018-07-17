@@ -36,21 +36,21 @@
         				</div> -->
 
         	<div class="compared" v-for="item in houseList">
-        		<h4>{{ item.title.length>6?item.title.split(6)+'...': item.title}}</h4>
-	              <p>{{ item.price }}万</p>
-	              <img :src="item.pic" alt="">
+        		<h4>{{ !!item.title?item.title:'暂无信息'}}</h4>
+	              <p>{{ !!item.price?item.price:'无' }}万</p>
+	              <img :src="!!item.pic?item.pic:'./static/searcherror@2x.png'" alt="">
 	              <ul class="first_ul">
-	              	  <li>{{ item.buildarea }}</li>
-		              <li>{{ item.avgprice }}</li>
+	              	  <li>{{ !!item.buildarea?item.buildarea:'无' }}</li>
+		              <li>{{ !!item.avgprice?item.avgprice:'无' }}</li>
 		              <li>{{ item.room }}室{{ item.hall }}厅{{ item.toilet }}卫</li>
-		              <li>{{ item.forward }}</li>
-		              <li>{{ item.fitment }}</li>
+		              <li>{{ !!item.forward?item.forward:'无' }}</li>
+		              <li>{{ !!item.fitment?item.fitment:'无' }}</li>
 		              <li>{{ item.floor_name }}/共{{ item.totalfloor }}层</li>
 	              </ul>
 	              <ul>
-	              	  <li>{{ item.district_name }}</li>
-		              <li>{{ item.block_name }}</li>
-		              <li>{{ item.sell_type }}</li>
+	              	  <li>{{ !!item.district_name?item.district_name:'无' }}</li>
+		              <li>{{ !!item.block_name?item.block_name: '无'}}</li>
+		              <li>{{ !!item.sell_type?item.sell_type:'无' }}</li>
 	              </ul>
         	</div>
 
@@ -109,15 +109,13 @@
 			this.getCompareData();
 		},
 		mounted(){
-			/*var mySwiper = new Swiper('.swiper-container', {
-	        loop: false,
-	      });*/
+			/*var mySwiper = new Swiper('.swiper-container', {loop: false,});*/
 		},
 		methods:{
 
 			getCompareData(){
 				// data为从上一页获取到的数据,最少2条，最多4条
-				var _data = [{"cityId":"hz","houseId":"36979"},{"cityId":"hz","houseId":"36980"}];
+				var _data = [{'cityId':'hz','houseId':'36979'},{'cityId':'hz','houseId':'36980'}];
 
 				api.houseCompared(_data)
 				.then(res=>{
@@ -136,16 +134,14 @@
 				})
 
 			}
-		}
+		},
+		components: {
+          headTop
+        },
 	}
 </script>
 <style lang="scss" scoped>
 	@import '../../style/mixin';
-
-	/* .swiper-container {
-	      width: 100%;
-	      height: 20rem;
-	    } */
 
     .box{
     	position: relative;
@@ -181,7 +177,7 @@
   	padding-bottom:6rem;
 	// position: fixed;
 	position: absolute;
-	top:4.4rem;
+	top:8.8rem;
 	left:0;
 	overflow: hidden;
 
@@ -213,7 +209,7 @@
   	overflow: scroll;
 
   	.compared{
-  		display:inline-block;
+  		display:table-cell;
   		width: 14rem;
   		margin-left:1rem;
   		background:#fff;
@@ -223,12 +219,16 @@
   		h4{
 			font-size:1.5rem;
 			color:#424242;
+			overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
   		}
   		p{
 			font-size:1.21rem;
 			color:#e10000;
   		}
   		img{
+  			display: inline-block;
   			width: 12rem;
   			height:9rem;
   			margin-top:1.5rem;
@@ -250,11 +250,4 @@
   		margin-bottom:6.1rem;
   	}
   }
-
-  /* .swiper-slide{
-  	display:inline-block;
-  	width: 14rem;
-  	margin-left:1rem;
-  	background:#fff;
-  } */
 </style>

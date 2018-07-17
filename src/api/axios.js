@@ -85,13 +85,32 @@ export default {
   // 房源对比  
   houseCompared(data){
     // return axios.get('house/houseCompare?data='+data)
-    return axios.get('house/houseCompare',{
+    return axios.post(
+      'house/houseCompare',
+      qs.stringify({
+        data:JSON.stringify(data)
+      })
+    )
+  },
+
+  //签约查询
+  signSearch(data){
+    return axios.get('sign/search',{
       params:{
-        data:data
+        phoneNum:data
       }
     })
   },
 
+  //签约详情
+  signDetail(data){
+    return axios.get('sign/detail',{
+      params:{
+        signId:data.signId,
+        userType:data.userType
+      }
+    })
+  },
 
   //租房列表
   getRentHouseList(){

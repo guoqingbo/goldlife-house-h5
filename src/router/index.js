@@ -77,6 +77,20 @@ const comparedResult = resolve => {
   });
 };
 
+// 签约查询
+const signSearch = resolve => {
+  require.ensure(['../page/sign/signSearch'], () => {
+    resolve(require('../page/sign/signSearch'));
+  });
+};
+
+// 签约详情
+const signDetail = resolve => {
+  require.ensure(['../page/sign/signDetail'], () => {
+    resolve(require('../page/sign/signDetail'));
+  });
+};
+
 
 const routes = [
     {
@@ -131,6 +145,19 @@ const routes = [
       name: 'comparedResult',
       component: comparedResult,
     },
+
+    {//签约查询
+      path: '/signSearch',
+      name: 'signSearch',
+      component: signSearch,
+    },
+
+    {//签约详情
+      path: '/signDetail',
+      name: 'signDetail',
+      component: signDetail,
+    },
+
     {
       path: '/myCare',//我的关注
       name: 'myCare',
