@@ -9,36 +9,86 @@
       <span class="go-back" @click="$router.go(-1)"><i class="icon iconfont go-back-icon">&#xe60f;</i></span>
       <!--导航项-->
       <ul class="nav-ul">
-        <li>租房</li>
-        <li>二手房</li>
-        <li>楼盘</li>
+        <li :class="{'select-active':houseType == '2'}">租房</li>
+        <li :class="{'select-active':houseType == '1'}">二手房</li>
+        <li :class="{'select-active':houseType == '3'}">楼盘</li>
       </ul>
     </div>
     <!-- 对应的内容 -->
     <div>
-
+      <!--房源结果列表-->
+      <house-list :houseLists="hoseLists" :houseType="houseType"></house-list>
     </div>
   </div>
 </template>
 <script>
   import api from '../../api/axios'
   import headTop from '../../components/header/head';
+  import houseList from '../../components/common/houseList'
 
   export default {
     props:[],
     data(){
       return {
-        selected:""
+        houseType:2, //1租房 2二手房 3楼盘
+        hoseLists:[],//收藏房源列表
       }
     },
     components: {
       headTop,
+      houseList,
     },
+    methods:{
+      getAttention(houseType){
+          if (houseType == 1){
+            api.getRentHouseList()
+              .then( res => {
+                console.log(res)
+                if (res.data.success){
+                  this.hoseLists = res.data.result.list
+                }else{
+                  this.$message.error(res.data.errorMessage);
+                }
+              })
+              .catch(res =>{
+                this.$message.error(res.data.errorMessage);
+              });
+          }else if(houseType == 2){
+            api.getRentHouseList()
+              .then( res => {
+                console.log(res)
+                if (res.data.success){
+                  this.hoseLists = res.data.result.list
+                }else{
+                  this.$message.error(res.data.errorMessage);
+                }
+              })
+              .catch(res =>{
+                this.$message.error(res.data.errorMessage);
+              });
+          }else if(houseType == 3){
+            api.getRentHouseList()
+              .then( res => {
+                console.log(res)
+                if (res.data.success){
+                  this.hoseLists = res.data.result.list
+                }else{
+                  this.$message.error(res.data.errorMessage);
+                }
+              })
+              .catch(res =>{
+                this.$message.error(res.data.errorMessage);
+              });
+          }
+      }
+    }
+
   }
 </script>
 <style lang="scss" scoped>
  .header-nav{
    position: relative;
+   border-bottom: 10px solid #f8f8f8;
    /*height: ;*/
    .go-back{
      position: absolute;
@@ -60,6 +110,7 @@
        line-height: 4.4rem;
 
      }
+     /*选中状态*/
      .select-active{
        color: #ffc16b;
      }

@@ -193,8 +193,21 @@ export default {
     return axios.get('/user/weixin/menu',{
       params:{
         redirectType:data.redirectType,// 可能值 house  account fund finan loan invite
-        code:data.code,
+        openId:data.openId,
       }
     })
+  },
+
+  //我的收藏--小区
+  getCommunityAttention(){
+    return axios.get('/house/getCommunityAttention')
+  },
+  //我的收藏--租房
+  getRentAttention(){
+    return axios.get('/house/getRentAttention')
+  },
+  //我的收藏--二手房
+  getHouseAttention(){
+    return axios.get('/house/getHouseAttention')
   },
 }
