@@ -29,5 +29,5 @@ export default {
 	baseUrl:baseUrl,
 	imgBaseUrl:imgBaseUrl,
   routerMode:routerMode,
-  weixinRederectUrl:weixinRederectUrl
+  weixinRederectUrl:weixinRederectUrl,
 }

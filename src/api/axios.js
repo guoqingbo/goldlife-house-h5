@@ -8,7 +8,7 @@ import envConfig from  '../config/env'
 axios.defaults.timeout = 5000; //5000的超时验证
 axios.defaults.baseURL = envConfig.baseUrl;
 // axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8';
-axios.defaults.withCredentials=true;
+axios.defaults.withCredentials = true;
 axios.defaults.headers.post['Content-Type'] = "application/x-www-form-urlencoded;charset=utf-8";
 
 //创建一个axios实例
