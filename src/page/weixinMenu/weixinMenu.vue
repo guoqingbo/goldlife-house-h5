@@ -20,11 +20,12 @@
 //          position: 'bottom',
 //          duration: 0
 //        })
+        MessageBox.alert(this.$route.fullPath,"fullPath");
           let Params = {
             redirectType:this.$route.params.redirectType,// 可能值 house  account fund finan loan invite
             code:this.$route.query?this.$route.query.code:"",
           };
-        MessageBox.alert(this.$route.fullPath,"fullPath");
+
 //        MessageBox.alert(this.$route.query,"qurey");
 //        MessageBox.alert(this.$route.params,"params");
         api.getWeixinMenu(Params)
@@ -32,8 +33,9 @@
               console.log(res.data)
             })
           .catch(res=>{
+              console.log(res+"res")
             this.$toast({
-              message: res.error_msg,
+              message: res,
               position: 'bottom',
               duration: 3000
             })
