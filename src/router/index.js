@@ -35,22 +35,11 @@ const houseList = resolve => {
     resolve(require('../page/houseList/houseList'));
   });
 };
- // const houseDetail = resolve => {
- //   require.ensure(['../page/houseDetail/houseDetail'], () => {
- //     resolve(require('../page/houseDetail/houseDetail'));
- //   });
- // };
 
 //搜索页
 const search = resolve => {
   require.ensure(['../page/search/search'], () => {
     resolve(require('../page/search/search'));
-  });
-};
-
-const houseDetail = resolve => {
-  require.ensure(['../page/houseDetail/houseDetail'], () => {
-    resolve(require('../page/houseDetail/houseDetail'));
   });
 };
 
@@ -136,27 +125,11 @@ const routes = [
     name:'houseList',//房源列表页
     component: houseList,
   },
-   // {
-   //   path: '/houseDetail',
-   //   name:'houseDetail',
-   //   component: houseDetail,
-   // },
     {
       path: '/search',
       name:'search',//房源列表页
       component: search,
     },
-    {
-      path: '/houseDetail',
-      name: 'houseDetail',
-      component: houseDetail,
-    },
-    {
-      path: '/houseBuyDetail',
-      name: 'houseBuyDetail',
-      component: houseBuyDetail,
-    },
-
     {//房源对比结果
       path: '/comparedResult',
       name: 'comparedResult',
