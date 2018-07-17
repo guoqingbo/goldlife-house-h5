@@ -14,13 +14,13 @@
     methods: {
       // 搜索结果展示
       getWeixinMenu(){
-        alert(this.$route)
+        alert(JSON.stringify(this.$route))
           let Params = {
             redirectType:this.$route.params.redirectType,// 可能值 house  account fund finan loan invite
             code:this.$route.query?this.$route.query.code:"",
           };
-
-        alert(this.Params)
+        alert(this.$route.query);
+        alert(JSON.stringify(this.Params));
         api.getWeixinMenu(Params)
           .then(res=>{
               console.log(res.data)
