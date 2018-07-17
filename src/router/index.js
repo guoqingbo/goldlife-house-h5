@@ -77,7 +77,12 @@ const comparedResult = resolve => {
   });
 };
 
-
+// 微信菜单
+const weixinMenu = resolve => {
+  require.ensure(['../page/weixinMenu/weixinMenu'], () => {
+    resolve(require('../page/weixinMenu/weixinMenu'));
+  });
+};
 const routes = [
     {
       path: '/',
@@ -135,7 +140,13 @@ const routes = [
       path: '/myCare',//我的关注
       name: 'myCare',
       component: myCare,
-    }
+    },
+    {
+      path: '/weixin/menu/:redirectType',
+      name: 'weixinMenu',//获取微信菜单
+      component: weixinMenu,
+      // meta: { keepAlive: false, requiresAuth: false },
+    },
 
 ];
 

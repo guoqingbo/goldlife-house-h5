@@ -6,9 +6,9 @@
     <!--头部导航-->
     <div class="header-nav">
       <!--返回图标-->
-      <span></span>
+      <span class="go-back" @click="$router.go(-1)"><i class="icon iconfont go-back-icon">&#xe60f;</i></span>
       <!--导航项-->
-      <ul class="nav-item">
+      <ul class="nav-ul">
         <li>租房</li>
         <li>二手房</li>
         <li>楼盘</li>
@@ -38,10 +38,18 @@
 </script>
 <style lang="scss" scoped>
  .header-nav{
-   .nav-item{
+   position: relative;
+   /*height: ;*/
+   .go-back{
+     position: absolute;
+   }
+   .nav-ul{
+     margin: 0 auto;
+     width: 20rem;
      display: flex;
      li{
        flex:1 1;
+       text-align: center;
      }
    }
  }

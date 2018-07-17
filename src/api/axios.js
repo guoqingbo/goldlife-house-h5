@@ -73,7 +73,7 @@ export default {
     )
   },
 
-// 用户登出  
+// 用户登出
   checkOut(){
     return axios.post(
       'user/logout',
@@ -82,7 +82,7 @@ export default {
   },
 
 
-  // 房源对比  
+  // 房源对比
   houseCompared(data){
     // return axios.get('house/houseCompare?data='+data)
     return axios.get('house/houseCompare',{
@@ -186,5 +186,15 @@ export default {
       city:data.city,//城市拼写(hz)
       limit:data.limit,//搜索到的小区限制，默认5条
     }))
-  }
+  },
+
+  //微信菜单
+  getWeixinMenu(data){
+    return axios.get('/user/weixin/menu',{
+      params:{
+        redirectType:data.redirectType,// 可能值 house  account fund finan loan invite
+        code:data.code,
+      }
+    })
+  },
 }
