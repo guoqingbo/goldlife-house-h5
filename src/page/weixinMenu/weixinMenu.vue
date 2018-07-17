@@ -25,8 +25,12 @@
             redirectType:this.$route.params.redirectType,// 可能值 house  account fund finan loan invite
             code:this.$route.query?this.$route.query.code:"",
           };
-
-          window.location.href='http://101.37.27.156:7090/user/weixin/menu?redirectType='+params.redirectType+'&'+'code='+params.code;
+let paramsStr = '?redirectType='+params.redirectType;
+if (params.code){
+  paramsStr += '&code='+params.code;
+}
+console.log(paramsStr)
+          window.location.href='http://101.37.27.156:7090/user/weixin/menu?redirectType='+paramsStr;
 //        MessageBox.alert(this.$route.query,"qurey");
 //        MessageBox.alert(this.$route.params,"params");
 //        api.getWeixinMenu(Params)
