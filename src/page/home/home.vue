@@ -245,11 +245,19 @@
                   if (res.data.success){
                     this.hoseLists = res.data.result.list
                   }else{
-                    this.$message.error(res.data.errorMessage);
+                    this.$toast({
+                  message: res.data.errorMessage,
+                  position: 'bottom',
+                  duration: 3000
+                });
                   }
                 })
                 .catch(res =>{
-                  this.$message.error(res.data.errorMessage);
+                  this.$toast({
+                  message: res.data.errorMessage,
+                  position: 'bottom',
+                  duration: 3000
+                });
                 });
             }
             else if(this.houseType == 2){
@@ -262,11 +270,19 @@
                   if (res.data.success){
                     this.hoseLists = res.data.result.list
                   }else{
-                    this.$message.error(res.data.errorMessage);
+                    this.$toast({
+                  message: res.data.errorMessage,
+                  position: 'bottom',
+                  duration: 3000
+                });
                   }
                 })
                 .catch(res =>{
-                  this.$message.error(res.data.errorMessage);
+                  this.$toast({
+                  message: res.data.errorMessage,
+                  position: 'bottom',
+                  duration: 3000
+                });
                 });
             }
           },
@@ -284,11 +300,19 @@
                 if (res.data.success){
                   this.filterList = res.data.result
                 }else{
-                  this.$message.error(res.data.errorMessage);
+                  this.$toast({
+                  message: res.data.errorMessage,
+                  position: 'bottom',
+                  duration: 3000
+                });
                 }
               })
               .catch(res =>{
-                this.$message.error(res.data.errorMessage);
+                this.$toast({
+                  message: res.data.errorMessage,
+                  position: 'bottom',
+                  duration: 3000
+                });
               });
           },
           //获取区域
@@ -302,11 +326,19 @@
                 if (res.data.success){
                   this.district = res.data.result;
                 }else{
-                  this.$message.error(res.data.errorMessage);
+                  this.$toast({
+                  message: res.data.errorMessage,
+                  position: 'bottom',
+                  duration: 3000
+                });
                 }
               })
               .catch(res =>{
-                this.$message.error(res.data.errorMessage);
+                this.$toast({
+                  message: res.data.errorMessage,
+                  position: 'bottom',
+                  duration: 3000
+                });
               });
           },
           //获取选中房源类型

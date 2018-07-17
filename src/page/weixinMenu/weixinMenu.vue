@@ -26,7 +26,7 @@
             code:this.$route.query?this.$route.query.code:"",
           };
 
-          window.location.href='http://101.37.27.156:7090/user/weixin/menu?redirectType='+params.redirectType+'&'+params.code;
+          window.location.href='http://101.37.27.156:7090/user/weixin/menu?redirectType='+params.redirectType+'&'+'code='+params.code;
 //        MessageBox.alert(this.$route.query,"qurey");
 //        MessageBox.alert(this.$route.params,"params");
 //        api.getWeixinMenu(Params)

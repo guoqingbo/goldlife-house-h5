@@ -9,9 +9,9 @@
       <span class="go-back" @click="$router.go(-1)"><i class="icon iconfont go-back-icon">&#xe60f;</i></span>
       <!--导航项-->
       <ul class="nav-ul">
-        <li :class="{'select-active':houseType == '2'}">租房</li>
-        <li :class="{'select-active':houseType == '1'}">二手房</li>
-        <li :class="{'select-active':houseType == '3'}">楼盘</li>
+        <li :class="{'select-active':houseType == '2'}" @click="getAttention(2)">租房</li>
+        <li :class="{'select-active':houseType == '1'}" @click="getAttention(1)">二手房</li>
+        <li :class="{'select-active':houseType == '3'}" @click="getAttention(3)">楼盘</li>
       </ul>
     </div>
     <!-- 对应的内容 -->
@@ -38,46 +38,74 @@
       headTop,
       houseList,
     },
+    created(){
+      this.getAttention(this.houseType);
+    },
     methods:{
       getAttention(houseType){
-          if (houseType == 1){
-            api.getRentHouseList()
+          this.houseType = houseType;
+          if (houseType == 3){
+            api.getCommunityAttention()
               .then( res => {
                 console.log(res)
                 if (res.data.success){
                   this.hoseLists = res.data.result.list
                 }else{
-                  this.$message.error(res.data.errorMessage);
+                  this.$toast({
+                  message: res.data.errorMessage,
+                  position: 'bottom',
+                  duration: 3000
+                });
                 }
               })
               .catch(res =>{
-                this.$message.error(res.data.errorMessage);
+                this.$toast({
+                  message: res.data.errorMessage,
+                  position: 'bottom',
+                  duration: 3000
+                });
               });
           }else if(houseType == 2){
-            api.getRentHouseList()
+            api.getRentAttention()
               .then( res => {
                 console.log(res)
                 if (res.data.success){
                   this.hoseLists = res.data.result.list
                 }else{
-                  this.$message.error(res.data.errorMessage);
+                  this.$toast({
+                  message: res.data.errorMessage,
+                  position: 'bottom',
+                  duration: 3000
+                });
                 }
               })
               .catch(res =>{
-                this.$message.error(res.data.errorMessage);
+                this.$toast({
+                  message: res.data.errorMessage,
+                  position: 'bottom',
+                  duration: 3000
+                });
               });
-          }else if(houseType == 3){
-            api.getRentHouseList()
+          }else if(houseType == 1){
+            api.getHouseAttention()
               .then( res => {
                 console.log(res)
                 if (res.data.success){
                   this.hoseLists = res.data.result.list
                 }else{
-                  this.$message.error(res.data.errorMessage);
+                  this.$toast({
+                  message: res.data.errorMessage,
+                  position: 'bottom',
+                  duration: 3000
+                });
                 }
               })
               .catch(res =>{
-                this.$message.error(res.data.errorMessage);
+                this.$toast({
+                  message: res.data.errorMessage,
+                  position: 'bottom',
+                  duration: 3000
+                })
               });
           }
       }
