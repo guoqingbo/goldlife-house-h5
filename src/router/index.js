@@ -23,9 +23,9 @@ const login = resolve => {
 };
 
 // 登出
-const checkOut = resolve => {
-  require.ensure(['../page/login/checkOut'], () => {
-    resolve(require('../page/login/checkOut'));
+const logout = resolve => {
+  require.ensure(['../page/login/logout'], () => {
+    resolve(require('../page/login/logout'));
   });
 };
 
@@ -95,6 +95,12 @@ const routes = [
     name:'home',//首页
     component: home,
   },
+  {
+    path: '/login',
+    name: 'login',//登录页
+    component: login,
+    // meta: { keepAlive: false, requiresAuth: false },
+  },
     {
       path: '/login/:redirect',
       name: 'login',//登录页
@@ -102,9 +108,9 @@ const routes = [
       // meta: { keepAlive: false, requiresAuth: false },
     },
     {
-      path: '/checkOut',
-      name:'checkOut',//登出
-      component: checkOut,
+      path: '/logout',
+      name:'logout',//登出
+      component: logout,
     },
   {
     path: '/houseList',
