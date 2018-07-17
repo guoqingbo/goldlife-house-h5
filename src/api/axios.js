@@ -210,4 +210,37 @@ export default {
   getHouseAttention(){
     return axios.get('/house/getHouseAttention')
   },
+
+  //关注房源
+  attention(data){
+    return axios.post(
+      'user/attention',
+      qs.stringify({
+        cityId:data.cityId,
+        businessNum:data.businessNum,//城市-业务id
+        businessType:data.businessType,//1二手房，2租房，3小区
+        sysType:data.sysType,//1
+        userId:data.userId,
+        attentionState:data.attentionState,//1关注，2取消
+      })
+    )
+  },
+
+  //用户看房预约
+  houseAppointment(data){
+    return axios.post(
+      'house/houseAppointment',
+      qs.stringify({
+        cityId:data.cityId,
+        houseId:data.houseId,
+        phoneNum:data.phoneNum,
+        verCode:data.verCode,
+        time:data.time,
+        desc:data.desc,
+        brokerId:data.brokerId,
+        userName:data.userName,
+      })
+    )
+  },
+
 }
