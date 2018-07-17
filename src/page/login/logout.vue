@@ -11,13 +11,13 @@
 			<p>当前 135775858 的账号？</p>
 			<el-button class="btn-checkOut" @click="confirmOut">确认退出</el-button>
 		</div>
-		
+
 	</div>
 </template>
 <script>
 	import api from '../../api/axios'
 	import headTop from '../../components/header/head'
-	import axios from '../../config/axios.js'
+	import envConfig from '../../config/env.js'
 
 	export default {
 		// name:'checkOut',
@@ -39,7 +39,7 @@
 		                  })
 
 						setTimeout(function(){
-							window.location.href = axios.baseUrl + "/user/weixin/menu/redirectType=account";
+							window.location.href = envConfig.baseUrl + "/user/weixin/menu/redirectType=account";
 						},1000)
 
 					}else{
@@ -51,7 +51,7 @@
 	                  })
 
 					}
-					
+
 				})
 				.catch(err=>{
 					console.log(err);

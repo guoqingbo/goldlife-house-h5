@@ -2,12 +2,13 @@ import qs from 'qs'
 import axios from 'axios'
 // import store from '../store'
 // import router from '../router'
-import axiosConfig from  '../config/axios'
+import envConfig from  '../config/env'
 
 //设置全局axios默认值
 axios.defaults.timeout = 5000; //5000的超时验证
-axios.defaults.baseURL = axiosConfig.baseUrl;
+axios.defaults.baseURL = envConfig.baseUrl;
 // axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8';
+axios.defaults.withCredentials=true;
 axios.defaults.headers.post['Content-Type'] = "application/x-www-form-urlencoded;charset=utf-8";
 
 //创建一个axios实例
@@ -188,14 +189,14 @@ export default {
   },
 
   //微信菜单
-  getWeixinMenu(data){
-    return axios.get('/user/weixin/menu',{
-      params:{
-        redirectType:data.redirectType,// 可能值 house  account fund finan loan invite
-        openId:data.openId,
-      }
-    })
-  },
+  // getWeixinMenu(data){
+  //   return axios.get('/user/weixin/menu',{
+  //     params:{
+  //       redirectType:data.redirectType,// 可能值 house  account fund finan loan invite
+  //       openId:data.openId,
+  //     }
+  //   })
+  // },
 
   //我的收藏--小区
   getCommunityAttention(){

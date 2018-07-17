@@ -6,45 +6,24 @@
 
 <script>
   import api from '../../api/axios' //后台数据接口
-  import { MessageBox } from 'mint-ui';
+  import envConfig from '../../config/env.js'
   export default {
-
     created(){
       this.getWeixinMenu();
     },
     methods: {
       // 搜索结果展示
       getWeixinMenu(){
-//        this.$toast({
-//          message: JSON.stringify(this.$route.fullPath),
-//          position: 'bottom',
-//          duration: 0
-//        })
-        MessageBox.alert(this.$route.fullPath,"fullPath");
           let params = {
             redirectType:this.$route.params.redirectType,// 可能值 house  account fund finan loan invite
             code:this.$route.query?this.$route.query.code:"",
           };
-let paramsStr = 'redirectType='+params.redirectType;
-if (params.code){
-  paramsStr += '&code='+params.code;
-}
-console.log(paramsStr)
-          window.location.href='http://101.37.27.156:7090/user/weixin/menu?'+paramsStr;
-//        MessageBox.alert(this.$route.query,"qurey");
-//        MessageBox.alert(this.$route.params,"params");
-//        api.getWeixinMenu(Params)
-//          .then(res=>{
-//              console.log(res.data)
-//            })
-//          .catch(res=>{
-//              console.log(res+"res")
-//            this.$toast({
-//              message: res,
-//              position: 'bottom',
-//              duration: 3000
-//            })
-//          })
+        let paramsStr = 'redirectType='+params.redirectType;
+        if (params.code){
+          paramsStr += '&code='+params.code;
+        }
+        console.log(axiosConfig)
+          window.location.href=envConfig.baseUrl+'/user/weixin/menu?'+paramsStr;
       },
     },
     watch: {

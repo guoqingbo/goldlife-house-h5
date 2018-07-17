@@ -154,7 +154,7 @@ const routes = [
       component: myCare,
     },
     {
-      path: '/weixin/menu/:redirectType',
+      path: '/weixin/menu/:redirectType',//可能值 house  account fund finan loan invite
       name: 'weixinMenu',//获取微信菜单
       component: weixinMenu,
       // meta: { keepAlive: false, requiresAuth: false },
