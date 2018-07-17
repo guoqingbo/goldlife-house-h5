@@ -42,14 +42,26 @@
    /*height: ;*/
    .go-back{
      position: absolute;
+     height: 4.4rem;
+     line-height: 4.4rem;
+     left: 2rem;
    }
    .nav-ul{
      margin: 0 auto;
      width: 20rem;
      display: flex;
      li{
+       font-size: 16px;
+       color: #424242;
+       font-weight: bold;
        flex:1 1;
        text-align: center;
+       height: 4.4rem;
+       line-height: 4.4rem;
+
+     }
+     .select-active{
+       color: #ffc16b;
      }
    }
  }
