@@ -41,7 +41,7 @@
             </ul>
           </div>
           <!--搜索结果为空-->
-          <div class="search-empty">
+          <div v-if="recomment > 0" class="search-empty">
             <div>找不到您搜索的房源</div>
             <div>为您推荐</div>
           </div>
@@ -210,6 +210,7 @@
                 },//租房房源请求参数
               },
               hoseLists:[],//房源列表
+              recomment:0,//是否为推荐房源
               houseType:1,//房源类型
               filterType:'',//过滤选项卡
               filterList:{},//获取过滤列表
@@ -247,14 +248,16 @@
               let params = this.houseParams[this.houseType];
               api.getSellHouseList(params)
                 .then( res => {
+                    console.log(res)
                   if (res.data.success){
-                    this.hoseLists = res.data.result.list
+                    this.hoseLists = res.data.result.list;
+                    this.recomment = res.data.result.recomment;
                   }else{
                     this.$toast({
-                  message: res.data.errorMessage,
-                  position: 'bottom',
-                  duration: 3000
-                });
+                      message: res.data.errorMessage,
+                      position: 'bottom',
+                      duration: 3000
+                    });
                   }
                 })
                 .catch(res =>{
