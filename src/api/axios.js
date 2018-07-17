@@ -7,7 +7,6 @@ import envConfig from  '../config/env'
 //设置全局axios默认值
 axios.defaults.timeout = 5000; //5000的超时验证
 axios.defaults.baseURL = envConfig.baseUrl;
-// axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8';
 axios.defaults.withCredentials = true;
 axios.defaults.headers.post['Content-Type'] = "application/x-www-form-urlencoded;charset=utf-8";
 
@@ -74,7 +73,7 @@ export default {
   },
 
 // 用户登出
-  checkOut(){
+  logout(){
     return axios.post(
       'user/logout',
       qs.stringify({})//无需传参数

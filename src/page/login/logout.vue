@@ -9,7 +9,7 @@
 			<img src="../../assets/icon/icon_questionmark@2x.png" alt="">
 			<p style="margin-bottom: 0.7rem;">是否确认退出</p>
 			<p>当前 135775858 的账号？</p>
-			<el-button class="btn-checkOut" @click="confirmOut">确认退出</el-button>
+			<el-button class="btn-logout" @click="confirmOut">确认退出</el-button>
 		</div>
 
 	</div>
@@ -20,7 +20,7 @@
 	import envConfig from '../../config/env.js'
 
 	export default {
-		// name:'checkOut',
+		// name:'logout',
 		data(){
 			return{
 
@@ -28,7 +28,7 @@
 		},
 		methods:{
 			confirmOut(){
-				api.checkOut()
+				api.logout()
 				.then(res=>{
 					if(res.data.success){
 						// 退出成功跳转到那个界面/user/weixin/menu/redirectType=account
@@ -101,7 +101,7 @@
   	}
   }
 
-  .btn-checkOut{
+  .btn-logout{
     margin-top: 11.5rem;
     width: 32.3rem;
     height: 5rem;
