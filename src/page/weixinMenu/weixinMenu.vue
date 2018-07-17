@@ -22,7 +22,7 @@
         if (params.code){
           paramsStr += '&code='+params.code;
         }
-        window.location.href=envConfig.baseUrl+'/user/weixin/menu?'+paramsStr;
+        window.location.href=envConfig.weixinRederectUrl+'/user/weixin/menu?'+paramsStr;
       },
     },
     watch: {
