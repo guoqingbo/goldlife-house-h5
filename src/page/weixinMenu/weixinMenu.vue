@@ -30,7 +30,7 @@ if (params.code){
   paramsStr += '&code='+params.code;
 }
 console.log(paramsStr)
-          window.location.href='http://101.37.27.156:7090/user/weixin/menu?redirectType='+paramsStr;
+          window.location.href='http://101.37.27.156:7090/user/weixin/menu?'+paramsStr;
 //        MessageBox.alert(this.$route.query,"qurey");
 //        MessageBox.alert(this.$route.params,"params");
 //        api.getWeixinMenu(Params)
