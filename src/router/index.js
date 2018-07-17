@@ -54,11 +54,11 @@ const houseDetail = resolve => {
   });
 };
 
-// const houseRentDetail = resolve => {
-//   require.ensure(['../page/houseDetail/houseRentDetail'], () => {
-//     resolve(require('../page/houseDetail/houseRentDetail'));
-//   });
-// };
+ const houseRentDetail = resolve => {
+   require.ensure(['../page/houseDetail/houseRentDetail'], () => {
+     resolve(require('../page/houseDetail/houseRentDetail'));
+   });
+ };
 
 const houseBuyDetail = resolve => {
   require.ensure(['../page/houseDetail/houseBuyDetail'], () => {
@@ -84,6 +84,25 @@ const weixinMenu = resolve => {
     resolve(require('../page/weixinMenu/weixinMenu'));
   });
 };
+
+const imgIncrease = resolve => {
+  require.ensure(['../page/houseDetail/imgIncrease'], () => {
+    resolve(require('../page/houseDetail/imgIncrease'));
+  });
+};
+
+const houseAppointment = resolve => {
+  require.ensure(['../page/houseDetail/houseAppointment'], () => {
+    resolve(require('../page/houseDetail/houseAppointment'));
+  });
+};
+
+const mapIncrease = resolve => {
+  require.ensure(['../page/houseDetail/mapIncrease'], () => {
+    resolve(require('../page/houseDetail/mapIncrease'));
+  });
+};
+
 const routes = [
     {
       path: '/',
@@ -132,11 +151,6 @@ const routes = [
       name: 'houseDetail',
       component: houseDetail,
     },
-    // {
-    //   path: '/houseRentDetail',
-    //   name: 'houseRentDetail',
-    //   component: houseRentDetail,
-    // },
     {
       path: '/houseBuyDetail',
       name: 'houseBuyDetail',
@@ -159,6 +173,32 @@ const routes = [
       component: weixinMenu,
       // meta: { keepAlive: false, requiresAuth: false },
     },
+  {
+    path: '/houseRentDetail',
+    name: 'houseRentDetail',//租房详情
+    component: houseRentDetail,
+  },
+  {
+    path: '/houseBuyDetail',
+    name: 'houseBuyDetail',//二手房详情
+    component: houseBuyDetail,
+  },
+  {
+    path: '/imgIncrease',
+    name: 'imgIncrease',//图片放大
+    component: imgIncrease,
+  },
+  {
+    path: '/houseAppointment',
+    name: 'houseAppointment',//客户看房
+    component: houseAppointment,
+  },
+
+  {
+    path: '/mapIncrease',
+    name: 'mapIncrease',
+    component: mapIncrease,
+  },
 
 ];
 
