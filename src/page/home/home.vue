@@ -40,6 +40,11 @@
               <li @click = 'opentFilter("filterOrder")'><i class="icon iconfont">&#xe656;</i></li>
             </ul>
           </div>
+          <!--搜索结果为空-->
+          <div class="search-empty">
+            <div>找不到您搜索的房源</div>
+            <div>为您推荐</div>
+          </div>
           <!--房源结果列表-->
           <house-list :houseLists="hoseLists" :houseType="houseType"></house-list>
 
