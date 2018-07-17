@@ -153,7 +153,6 @@ const routes = [
 
 
 const router = new Router({
-  // mode: 'history',
   mode:envConfig.routerMode,
   routes,
 });
