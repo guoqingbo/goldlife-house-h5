@@ -24,6 +24,7 @@
     import headTop from '../../components/header/head'
 //    import $alert from '../../components/common/alert/alert.js'
 //    import { Toast } from 'mint-ui';
+    import { MessageBox } from 'mint-ui';
     export default {
         data(){
             return {
@@ -99,6 +100,7 @@
           },
           userLogin(){
             if (!this.mobileCodeInput){
+//              MessageBox.alert("请输入验证码", "回掉地址");
               this.$toast({
                 message: "请输入验证码",
                 position: 'bottom',
@@ -112,6 +114,7 @@
               type:2, // 1:密码登录 2：验证码登录
               redirectType:this.$route.params ? this.$route.params.redirect:"",
             }
+            console.log(loginInfo)
             api.userLogin(loginInfo)
               .then(res =>{
                   console.log(res.data)
@@ -120,6 +123,7 @@
                   this.$store.commit('setUserInfo',{loginName:this.loginName,});
                   //获取登录后的跳转地址
                   let redirectUrl = res.data.result;
+                  this.$messageBox.alert(redirectUrl, "回掉地址");
                   if (redirectUrl){
                       window.location.href = redirectUrl;
                   }
