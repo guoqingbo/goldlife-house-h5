@@ -3,6 +3,9 @@ import Router from 'vue-router'
 import store from '../store'
 import envConfig from '../config/env'
 
+//引入ajax请求
+import api from '../api/axios'
+
 Vue.use(Router);
 
 // 路由懒加载
@@ -29,12 +32,6 @@ const logout = resolve => {
   });
 };
 
-
-const houseList = resolve => {
-  require.ensure(['../page/houseList/houseList'], () => {
-    resolve(require('../page/houseList/houseList'));
-  });
-};
 
 //搜索页
 const search = resolve => {
@@ -67,10 +64,10 @@ const comparedResult = resolve => {
   });
 };
 
-// 微信菜单
-const weixinMenu = resolve => {
-  require.ensure(['../page/weixinMenu/weixinMenu'], () => {
-    resolve(require('../page/weixinMenu/weixinMenu'));
+// 房源对比列表
+const houseCompared = resolve => {
+  require.ensure(['../page/houseCompared/houseCompared'], () => {
+    resolve(require('../page/houseCompared/houseCompared'));
   });
 };
 
@@ -120,11 +117,6 @@ const routes = [
       name:'logout',//登出
       component: logout,
     },
-  {
-    path: '/houseList',
-    name:'houseList',//房源列表页
-    component: houseList,
-  },
     {
       path: '/search',
       name:'search',//房源列表页
@@ -135,16 +127,17 @@ const routes = [
       name: 'comparedResult',
       component: comparedResult,
     },
+    // 房源对比列表
     {
+      path: '/houseCompared',
+      name: 'houseCompared',
+      component: houseCompared,
+    },
+
+  {
       path: '/myCare',//我的关注
       name: 'myCare',
       component: myCare,
-    },
-    {
-      path: '/weixin/menu/:redirectType',//可能值 house  account fund finan loan invite
-      name: 'weixinMenu',//获取微信菜单
-      component: weixinMenu,
-      // meta: { keepAlive: false, requiresAuth: false },
     },
   {
     path: '/houseRentDetail',
@@ -172,7 +165,11 @@ const routes = [
     name: 'mapIncrease',
     component: mapIncrease,
   },
-
+  {
+    path: '/user/weixin/menu',//可能值 house  account fund finan loan invite
+    name: 'weixinMenu',//获取微信菜单
+    meta: { redirect: true},
+  },
 ];
 
 
@@ -183,7 +180,7 @@ const router = new Router({
 //注册全局钩子用来拦截导航
 router.beforeEach((to, from, next) => {
   //获取store里面的token
-  let token = store.state.token;
+  // let token = store.state.token;
   //判断要去的路由有没有requiresAuth
   if (to.meta.requiresAuth) {
     if (token) {
@@ -194,7 +191,13 @@ router.beforeEach((to, from, next) => {
         query: {redirect: to.fullPath}  // 将刚刚要去的路由path（却无权限）作为参数，方便登录成功后直接跳转到该路由
       });
     }
-  } else {
+  } else if(to.meta.redirect){
+    //路由跳转(微信需要)
+    let data = to.query;
+    console.log(to.query)
+    api.weixinMenu(data);
+    // window.location.href = envConfig.weixinRederectUrl+to.fullPath;
+  }else {
     next();//如果无需token,那么随它去吧
   }
 });
