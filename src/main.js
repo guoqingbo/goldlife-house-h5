@@ -14,6 +14,10 @@ import './config/rem'
 // }
 
 
+// 引入时间格式化模块
+Vue.use(require('vue-moment'));
+
+
 //引入store
 import store from './store'
 

@@ -18,6 +18,7 @@ const home = resolve => {
     resolve(require('../page/home/home'));
   });
 };
+
 //登录页
 const login = resolve => {
   require.ensure(['../page/login/login'], () => {
@@ -32,7 +33,6 @@ const logout = resolve => {
   });
 };
 
-
 //搜索页
 const search = resolve => {
   require.ensure(['../page/search/search'], () => {
@@ -40,7 +40,8 @@ const search = resolve => {
   });
 };
 
- const houseRentDetail = resolve => {
+//房源详情
+const houseRentDetail = resolve => {
    require.ensure(['../page/houseDetail/houseRentDetail'], () => {
      resolve(require('../page/houseDetail/houseRentDetail'));
    });
@@ -51,12 +52,14 @@ const houseBuyDetail = resolve => {
     resolve(require('../page/houseDetail/houseBuyDetail'));
   });
 };
+
 //我的关注
 const myCare = resolve => {
   require.ensure(['../page/myCare/myCare'], () => {
     resolve(require('../page/myCare/myCare'));
   });
 };
+
 // 房源对比结果
 const comparedResult = resolve => {
   require.ensure(['../page/houseCompared/comparedResult'], () => {
@@ -68,8 +71,22 @@ const comparedResult = resolve => {
 const houseCompared = resolve => {
   require.ensure(['../page/houseCompared/houseCompared'], () => {
     resolve(require('../page/houseCompared/houseCompared'));
+  })
+}
+// 签约查询
+const signSearch = resolve => {
+  require.ensure(['../page/sign/signSearch'], () => {
+    resolve(require('../page/sign/signSearch'));
   });
 };
+
+// 签约详情
+const signDetail = resolve => {
+  require.ensure(['../page/sign/signDetail'], () => {
+    resolve(require('../page/sign/signDetail'));
+  });
+};
+
 
 const imgIncrease = resolve => {
   require.ensure(['../page/houseDetail/imgIncrease'], () => {
@@ -133,6 +150,17 @@ const routes = [
       name: 'houseCompared',
       component: houseCompared,
     },
+    {//签约查询
+      path: '/signSearch',
+      name: 'signSearch',
+      component: signSearch,
+    },
+
+    {//签约详情
+      path: '/signDetail',
+      name: 'signDetail',
+      component: signDetail,
+    },
 
   {
       path: '/myCare',//我的关注
@@ -159,7 +187,6 @@ const routes = [
     name: 'houseAppointment',//客户看房
     component: houseAppointment,
   },
-
   {
     path: '/mapIncrease',
     name: 'mapIncrease',
@@ -180,7 +207,7 @@ const router = new Router({
 //注册全局钩子用来拦截导航
 router.beforeEach((to, from, next) => {
   //获取store里面的token
-  // let token = store.state.token;
+  let token = store.state.token;
   //判断要去的路由有没有requiresAuth
   if (to.meta.requiresAuth) {
     if (token) {
@@ -194,12 +221,10 @@ router.beforeEach((to, from, next) => {
   } else if(to.meta.redirect){
     //路由跳转(微信需要)
     let data = to.query;
-    console.log(to.query)
     api.weixinMenu(data);
     // window.location.href = envConfig.weixinRederectUrl+to.fullPath;
   }else {
     next();//如果无需token,那么随它去吧
   }
 });
-
 export default router
