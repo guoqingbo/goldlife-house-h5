@@ -2,13 +2,12 @@ import qs from 'qs'
 import axios from 'axios'
 // import store from '../store'
 // import router from '../router'
-import axiosConfig from  '../config/axios'
+import envConfig from  '../config/env'
 
 //设置全局axios默认值
 axios.defaults.timeout = 5000; //5000的超时验证
-console.log(process.env.NODE_ENV)
-axios.defaults.baseURL = axiosConfig.baseUrl;
-// axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8';
+axios.defaults.baseURL = envConfig.baseUrl;
+axios.defaults.withCredentials = true;
 axios.defaults.headers.post['Content-Type'] = "application/x-www-form-urlencoded;charset=utf-8";
 
 //创建一个axios实例
@@ -73,8 +72,8 @@ export default {
     )
   },
 
-// 用户登出  
-  checkOut(){
+// 用户登出
+  logout(){
     return axios.post(
       'user/logout',
       qs.stringify({})//无需传参数
@@ -82,7 +81,7 @@ export default {
   },
 
 
-  // 房源对比  
+  // 房源对比
   houseCompared(data){
     // return axios.get('house/houseCompare?data='+data)
     return axios.post(
@@ -205,5 +204,61 @@ export default {
       city:data.city,//城市拼写(hz)
       limit:data.limit,//搜索到的小区限制，默认5条
     }))
-  }
+  },
+
+  //微信菜单
+  // getWeixinMenu(data){
+  //   return axios.get('/user/weixin/menu',{
+  //     params:{
+  //       redirectType:data.redirectType,// 可能值 house  account fund finan loan invite
+  //       openId:data.openId,
+  //     }
+  //   })
+  // },
+
+  //我的收藏--小区
+  getCommunityAttention(){
+    return axios.get('/house/getCommunityAttention')
+  },
+  //我的收藏--租房
+  getRentAttention(){
+    return axios.get('/house/getRentAttention')
+  },
+  //我的收藏--二手房
+  getHouseAttention(){
+    return axios.get('/house/getHouseAttention')
+  },
+
+  //关注房源
+  attention(data){
+    return axios.post(
+      'user/attention',
+      qs.stringify({
+        cityId:data.cityId,
+        businessNum:data.businessNum,//城市-业务id
+        businessType:data.businessType,//1二手房，2租房，3小区
+        sysType:data.sysType,//1
+        userId:data.userId,
+        attentionState:data.attentionState,//1关注，2取消
+      })
+    )
+  },
+
+  //用户看房预约
+  houseAppointment(data){
+    return axios.post(
+      'house/houseAppointment',
+      qs.stringify({
+        cityId:data.cityId,
+        houseId:data.houseId,
+        phoneNum:data.phoneNum,
+        verCode:data.verCode,
+        time:data.time,
+        desc:data.desc,
+        brokerId:data.brokerId,
+        userName:data.userName,
+      })
+    )
+  },
+
 }

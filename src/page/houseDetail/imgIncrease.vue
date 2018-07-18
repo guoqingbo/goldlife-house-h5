@@ -18,7 +18,7 @@
       <div class="swiper-container">
         <div class="swiper-wrapper">
           <div v-for='i in $route.params.imgs' class="swiper-slide">
-            <img :src="i.imgUrl">
+            <img :src="i">
           </div>
         </div>
         <!-- 如果需要分页器 -->

@@ -40,6 +40,11 @@
               <li @click = 'opentFilter("filterOrder")'><i class="icon iconfont">&#xe656;</i></li>
             </ul>
           </div>
+          <!--搜索结果为空-->
+          <div v-if="recomment > 0" class="search-empty">
+            <div>找不到您搜索的房源</div>
+            <div>为您推荐</div>
+          </div>
           <!--房源结果列表-->
           <house-list :houseLists="hoseLists" :houseType="houseType"></house-list>
 
@@ -205,6 +210,7 @@
                 },//租房房源请求参数
               },
               hoseLists:[],//房源列表
+              recomment:0,//是否为推荐房源
               houseType:1,//房源类型
               filterType:'',//过滤选项卡
               filterList:{},//获取过滤列表
@@ -242,14 +248,24 @@
               let params = this.houseParams[this.houseType];
               api.getSellHouseList(params)
                 .then( res => {
+                    console.log(res)
                   if (res.data.success){
-                    this.hoseLists = res.data.result.list
+                    this.hoseLists = res.data.result.list;
+                    this.recomment = res.data.result.recomment;
                   }else{
-                    this.$message.error(res.data.errorMessage);
+                    this.$toast({
+                      message: res.data.errorMessage,
+                      position: 'bottom',
+                      duration: 3000
+                    });
                   }
                 })
                 .catch(res =>{
-                  this.$message.error(res.data.errorMessage);
+                  this.$toast({
+                  message: res.data.errorMessage,
+                  position: 'bottom',
+                  duration: 3000
+                });
                 });
             }
             else if(this.houseType == 2){
@@ -262,11 +278,19 @@
                   if (res.data.success){
                     this.hoseLists = res.data.result.list
                   }else{
-                    this.$message.error(res.data.errorMessage);
+                    this.$toast({
+                  message: res.data.errorMessage,
+                  position: 'bottom',
+                  duration: 3000
+                });
                   }
                 })
                 .catch(res =>{
-                  this.$message.error(res.data.errorMessage);
+                  this.$toast({
+                  message: res.data.errorMessage,
+                  position: 'bottom',
+                  duration: 3000
+                });
                 });
             }
           },
@@ -284,11 +308,19 @@
                 if (res.data.success){
                   this.filterList = res.data.result
                 }else{
-                  this.$message.error(res.data.errorMessage);
+                  this.$toast({
+                  message: res.data.errorMessage,
+                  position: 'bottom',
+                  duration: 3000
+                });
                 }
               })
               .catch(res =>{
-                this.$message.error(res.data.errorMessage);
+                this.$toast({
+                  message: res.data.errorMessage,
+                  position: 'bottom',
+                  duration: 3000
+                });
               });
           },
           //获取区域
@@ -302,11 +334,19 @@
                 if (res.data.success){
                   this.district = res.data.result;
                 }else{
-                  this.$message.error(res.data.errorMessage);
+                  this.$toast({
+                  message: res.data.errorMessage,
+                  position: 'bottom',
+                  duration: 3000
+                });
                 }
               })
               .catch(res =>{
-                this.$message.error(res.data.errorMessage);
+                this.$toast({
+                  message: res.data.errorMessage,
+                  position: 'bottom',
+                  duration: 3000
+                });
               });
           },
           //获取选中房源类型

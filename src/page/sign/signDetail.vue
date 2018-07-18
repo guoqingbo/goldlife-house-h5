@@ -50,6 +50,7 @@
 	import api from '../../api/axios'
 	import headTop from '../../components/header/head'
 	export default {
+		name:'signDetail',
 		data(){
 			return{
 				signDetail:{},

@@ -54,24 +54,7 @@
 	              </ul>
         	</div>
 
-        	<!-- <div class="compared">
-        		<h4>武林府</h4>
-        		              <p>650万</p>
-        		              <img src="../../assets/icon/icon_topbar_hclist@3x.png" height="140" width="120" alt="">
-        		              <ul class="first_ul">
-        		              	  <li>67.99</li>
-        			              <li>38888</li>
-        			              <li>2室1厅1卫</li>
-        			              <li>南</li>
-        			              <li>精装</li>
-        			              <li>高楼层/共19层</li>
-        		              </ul>
-        		              <ul>
-        		              	  <li>拱墅</li>
-        			              <li>朝晖五区</li>
-        			              <li>住宅</li>
-        		              </ul>
-        	</div>
+        	<!-- 
         	<div class="compared">
         		<h4>武林府</h4>
         		              <p>650万</p>
@@ -98,6 +81,7 @@
 	import headTop from '../../components/header/head'
 	import Swiper from 'swiper'
 	export default {
+    name:'comparedResult',
 		data(){
 			return{
 				houseList:[],
