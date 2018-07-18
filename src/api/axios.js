@@ -88,6 +88,7 @@ export default {
       'house/houseCompare',
       qs.stringify({
         data:JSON.stringify(data)
+        // data:JSON.parse(data)
       })
     )
   },
