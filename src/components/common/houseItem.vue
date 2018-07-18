@@ -69,6 +69,7 @@
     /*height: 8rem;*/
 //    @include border-top;
     padding:1.5rem 0;
+    width: 100%;
     .img {
       width: 42%;
       height: 8rem;

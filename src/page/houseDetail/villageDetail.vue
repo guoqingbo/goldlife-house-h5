@@ -97,7 +97,7 @@
       </div>
 
       <!--同小区在售10套-->
-      <router-link :to="{ name:'villageMore',params: { more: sellList}}">
+      <router-link :to="{ name:'villageMore',params: { more: isSell?sellList:rentList,villageName:title,id:id,isOne:isSell}}">
         <div ref="sameSell" class="sameSells">
           <!--<div v-if="isSell"  >
             同小区在售{{sellList.length}}套
@@ -160,6 +160,7 @@
           {imgUrl: 'http://image.qmango.com/hotelimg/dl1210/119297/793.jpeg'},
           {imgUrl: 'http://image.qmango.com/hotelimg/dl1210/119297/793.jpeg'}
         ],
+        id:'',
         isSell: true,//是否在售
         isRent: false,//是否在租
         center: {lng: 116.40387397, lat: 39.91488908},
@@ -203,7 +204,7 @@
       //小区详情
       getCommunityDetail() {
         let params = {
-          blockId: "2839",
+          blockId: "2",
           city: 'hz',
           userType: '2',
           houseType: '2'
@@ -214,6 +215,7 @@
               console.log('小区');
               console.log(res.data.result);
               var resultHouse = res.data.result;
+              this.id = resultHouse.id;
               this.sellList = resultHouse.houseInblock.sell.lists;
               this.rentList = resultHouse.houseInblock.rent.lists;
               console.log(this.sellList);
