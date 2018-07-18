@@ -33,17 +33,34 @@
           <!--过滤导航-->
           <div class="condition-filter clear" @touchmove.prevent>
             <ul class="left clear">
-              <li @click = 'opentFilter("district")'>区域<i class="icon iconfont">&#xe65e;</i></li>
-              <li @click = 'opentFilter("price")'>价格<i class="icon iconfont">&#xe65e;</i></li>
-              <li @click = 'opentFilter("roomType")'>房型<i class="icon iconfont">&#xe65e;</i></li>
-              <li @click = 'opentFilter("filterMore")'>筛选<i class="icon iconfont">&#xe65e;</i></li>
-              <li @click = 'opentFilter("filterOrder")'><i class="icon iconfont">&#xe656;</i></li>
+              <li @click = 'opentFilter("district")'>
+                区域
+                <i v-if="filterType != 'district'" class="icon iconfont">&#xe65e;</i>
+                <i  v-if="filterType == 'district'" class="icon iconfont select-active-icon">&#xe65d;</i>
+              </li>
+              <li @click = 'opentFilter("price")'>
+                价格
+                <i v-if="filterType != 'price'" class="icon iconfont">&#xe65e;</i>
+                <i  v-if="filterType == 'price'" class="icon iconfont select-active-icon">&#xe65d;</i>
+              </li>
+              <li @click = 'opentFilter("roomType")'>
+                房型
+                <i v-if="filterType != 'roomType'" class="icon iconfont">&#xe65e;</i>
+                <i  v-if="filterType == 'roomType'" class="icon iconfont select-active-icon">&#xe65d;</i>
+              </li>
+              <li @click = 'opentFilter("filterMore")'>
+                筛选
+                <i v-if="filterType != 'filterMore'" class="icon iconfont">&#xe65e;</i>
+                <i v-if="filterType == 'filterMore'" class="icon iconfont select-active-icon">&#xe65d;</i>
+              </li>
+              <li @click = 'opentFilter("filterOrder")'>
+                <i class="icon iconfont" :class="{'select-active-icon':filterType == 'filterOrder'}">&#xe656;</i></li>
             </ul>
           </div>
           <!--搜索结果为空-->
           <div v-if="recomment > 0" class="search-empty">
-            <div>找不到您搜索的房源</div>
-            <div>为您推荐</div>
+            <div class="search-empty-tip">找不到您搜索的房源</div>
+            <div class="recomment-tip">为您推荐</div>
           </div>
           <!--房源结果列表-->
           <house-list :houseLists="hoseLists" :houseType="houseType"></house-list>
@@ -357,7 +374,6 @@
           },
           //打开筛选弹框
           opentFilter(filterType){
-
             if (this.filterType){
               this.filterType = ''
             }else{
@@ -458,16 +474,16 @@
   /*公用样式封装*/
   /*边框*/
   @mixin border {
-    border: 1px solid #f5f5f5;
+    border: 0.05rem solid #f5f5f5;
   }
   @mixin border-top {
-    border-top: 1px solid #f5f5f5;
+    border-top: 0.05rem solid #f5f5f5;
   }
   /*过滤弹框*/
   @mixin filter-wrap{
     width: 100%;
     font-color:#424242;
-    font-size: 15px;
+    font-size: 0.75rem;
     position: absolute;
     z-index: 6;
     top: 16.5rem;
@@ -479,7 +495,7 @@
 //    @include border-top;
     /*padding: 1rem 0 2rem 0;*/
     padding-bottom:1.5rem ;
-    font-size: 15px;
+    font-size: 0.75rem;
   }
   /*过滤选择项*/
   @mixin filter-select{
@@ -494,11 +510,11 @@
       text-align: center;
       margin-bottom: 1rem;
       margin-right: 3%;
-      border-radius: 5px;
+      border-radius: 0.025rem;
       /*border:1px solid #f5f5f5;*/
       @include border;
       box-sizing: border-box;
-      font-size: 14px;
+      font-size: 0.7rem;
 
     }
   }
@@ -521,7 +537,7 @@
       background-color:#f8f8f8 ;
     }
     button:nth-child(2){
-      font-size: 16px;
+      font-size: 0.8rem;
       color: #754501;
       background-color: #ffc16b;
     }
@@ -530,7 +546,7 @@
     .my-search{
       margin-top: 1.2rem;
       height: 3.5rem;
-      font-size: 13px;
+      font-size: 0.65rem;
       padding:0 2rem;
       div{
         height: 3.5rem;
@@ -545,7 +561,7 @@
       /*下拉样式*/
       .my-search-dropdown{
         position: relative;
-        font-size: 13px;
+        font-size: 0.65rem;
         .house-type-ul{
           width: 9rem;
           top: 5rem;
@@ -553,7 +569,7 @@
           z-index: 6;
           /*left: 2rem;*/
           background-color: #fff;
-          font-size: 13px;
+          font-size: 0.65rem;
           border-radius: 2px;
           box-shadow: 0px 0px 10px -3px rgba(0,0,0,0.5);
           li:not(:first-child){
@@ -578,7 +594,7 @@
             left: 1rem;
             .arrow-top{
               color:rgba(0,0,0,0.4);
-              font-size: 16px;
+              font-size: 0.8rem;
             }
           }
           .house-type-active{
@@ -645,15 +661,22 @@
       ul{
         padding-bottom: 1.5rem;
         width: 100%;
+        display: flex;
       }
       li{
-        float: left;
-        width: 16%;
-        margin-left:5%
+        /*float: left;*/
+        /*width: 16%;*/
+        /*margin-left:5%;*/
+        text-align: center;
+        flex:1 1 ;
+        .select-active-icon{
+          color:#ffc16a;
+        }
+
       }
-      li:first-child{
-        margin-left: 0;
-      }
+      /*li:last-child{*/
+        /*text-align: center;*/
+      /*}*/
     }
 
   /*价格筛选*/
@@ -793,8 +816,8 @@
       /*bottom: 0;*/
       background-color: rgba(0,0,0,0.5);
     }
-  /*全屏遮罩*/
-  .full-mask{
+    /*全屏遮罩*/
+    .full-mask{
     /*z-index: 5;*/
     width: 100%;
     height: 100%;
@@ -803,4 +826,21 @@
     left: 0;
     background-color: rgba(0,0,0,0.5);
   }
+
+    /*搜索结果为空*/
+    .search-empty{
+      .search-empty-tip{
+        height: 7rem;
+        line-height: 7rem;
+        text-align: center;
+        color: #414141;
+        background-color: #f8f8f8;
+      }
+      .recomment-tip{
+        font-weight: bold;
+        padding:1rem 0 1rem 2rem;
+        color:#444444;
+      }
+    }
+
 </style>

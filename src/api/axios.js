@@ -1,5 +1,5 @@
-import qs from 'qs'
 import axios from 'axios'
+import qs from 'qs'
 // import store from '../store'
 // import router from '../router'
 import envConfig from  '../config/env'
@@ -7,9 +7,9 @@ import envConfig from  '../config/env'
 //设置全局axios默认值
 axios.defaults.timeout = 5000; //5000的超时验证
 axios.defaults.baseURL = envConfig.baseUrl;
-// axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8';
-axios.defaults.withCredentials=true;
+axios.defaults.withCredentials = true;
 axios.defaults.headers.post['Content-Type'] = "application/x-www-form-urlencoded;charset=utf-8";
+// axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
 //创建一个axios实例
 // const instance = axios.create();
@@ -74,7 +74,7 @@ export default {
   },
 
 // 用户登出
-  checkOut(){
+  logout(){
     return axios.post(
       'user/logout',
       qs.stringify({})//无需传参数
@@ -85,21 +85,42 @@ export default {
   // 房源对比
   houseCompared(data){
     // return axios.get('house/houseCompare?data='+data)
-    return axios.get('house/houseCompare',{
+    return axios.post(
+      'house/houseCompare',
+      qs.stringify({
+        data:JSON.stringify(data)
+      })
+    )
+  },
+
+  //签约查询
+  signSearch(data){
+    return axios.get('sign/search',{
       params:{
-        data:data
+        phoneNum:data
       }
     })
   },
 
-
-  //租房列表
-  getRentHouseList(){
-    return axios.get('house/getRentHouseList',{
-
+  //签约详情
+  signDetail(data){
+    return axios.get('sign/detail',{
+      params:{
+        signId:data.signId,
+        userType:data.userType
+      }
     })
   },
 
+  // //区域板块
+  // getDistrict(data){
+  //   return axios.post(
+  //     'house/getRegion',
+  //     qs.stringify({
+  //       city:data.city,
+  //     })
+  //   )
+  // },
   //区域板块
   getDistrict(data){
     return axios.post(
@@ -189,14 +210,15 @@ export default {
   },
 
   //微信菜单
-  // getWeixinMenu(data){
-  //   return axios.get('/user/weixin/menu',{
-  //     params:{
-  //       redirectType:data.redirectType,// 可能值 house  account fund finan loan invite
-  //       openId:data.openId,
-  //     }
-  //   })
-  // },
+  weixinMenu(data){
+    return axios.get('/user/weixin/menu',{
+      params:{
+        redirectType:data.redirectType,// 可能值 house  account fund finan loan invite
+        openId:data.openId,
+        code:data.code
+      }
+    })
+  },
 
   //我的收藏--小区
   getCommunityAttention(){
