@@ -21,7 +21,7 @@
                 <input type="search" placeholder="请输入商圈或小区名" @focus="isShowSearch=true">
               </div>
             </div>
-            <div class="my-search-right right" @click="toggleMore">
+            <div class="my-search-right left" @click="toggleMore">
               <i class="icon iconfont iconfont-more">&#xe641;</i>
             </div>
             <ul class="more-ul" v-if="morePopVisible">
@@ -483,7 +483,7 @@
   @mixin filter-wrap{
     width: 100%;
     font-color:#424242;
-    font-size: 0.75rem;
+    font-size: 1.5rem;
     position: absolute;
     z-index: 6;
     top: 16.5rem;
@@ -495,7 +495,7 @@
 //    @include border-top;
     /*padding: 1rem 0 2rem 0;*/
     padding-bottom:1.5rem ;
-    font-size: 0.75rem;
+    font-size: 1.5rem;
   }
   /*过滤选择项*/
   @mixin filter-select{
@@ -514,7 +514,7 @@
       /*border:1px solid #f5f5f5;*/
       @include border;
       box-sizing: border-box;
-      font-size: 0.7rem;
+      font-size: 1.4rem;
 
     }
   }
@@ -537,7 +537,7 @@
       background-color:#f8f8f8 ;
     }
     button:nth-child(2){
-      font-size: 0.8rem;
+      font-size: 1.6rem;
       color: #754501;
       background-color: #ffc16b;
     }
@@ -546,7 +546,7 @@
     .my-search{
       margin-top: 1.2rem;
       height: 3.5rem;
-      font-size: 0.65rem;
+      font-size: 1.3rem;
       padding:0 2rem;
       div{
         height: 3.5rem;
@@ -556,12 +556,14 @@
         background-color: #f5f5f5;
         border-radius: 6px;
         padding-left: 1rem;
+        width:85%;
         // width: 29rem;
       }
       /*下拉样式*/
       .my-search-dropdown{
         position: relative;
-        font-size: 0.65rem;
+        width: 30%;
+        font-size: 1.3rem;
         .house-type-ul{
           width: 9rem;
           top: 5rem;
@@ -569,7 +571,7 @@
           z-index: 6;
           /*left: 2rem;*/
           background-color: #fff;
-          font-size: 0.65rem;
+          font-size: 1.3rem;
           border-radius: 2px;
           box-shadow: 0px 0px 10px -3px rgba(0,0,0,0.5);
           li:not(:first-child){
@@ -594,7 +596,7 @@
             left: 1rem;
             .arrow-top{
               color:rgba(0,0,0,0.4);
-              font-size: 0.8rem;
+              font-size: 1.6rem;
             }
           }
           .house-type-active{
@@ -606,7 +608,7 @@
       .my-search-input{
         /*border: 0;*/
         padding-left: 0.5rem;
-        width: 17rem;
+        width: 70%;
         color: #424242;
         input{
           background-color: transparent;
@@ -614,6 +616,8 @@
         }
       }
       .my-search-right{
+        width: 15%;
+        text-align: right;
         .iconfont-more{font-size: 2.5rem};
       }
       .more-ul{
@@ -622,7 +626,7 @@
         right: 2rem;
         top: 10rem;
         background-color: #fff;
-        font-size: 13px;
+        font-size: 1.3rem;
         border-radius: 6px;
         li:not(:first-child){
           height: 3.5rem;
@@ -638,18 +642,18 @@
         .arrow{
           color:#fff;
           position: absolute;
-          top: -16px;
+          top: -1.6rem;
           right: 0.5rem;
-          font-size: 25px;
+          font-size: 2.5rem;
         }
         .my-care{
           color:#ffc16b ;
-          font-size: 19px;
+          font-size: 1.9rem;
           margin: 0 1rem;
         }
         .look-house{
           color:#5c5990 ;
-          font-size: 22px;
+          font-size: 2.2rem;
           margin: 0 1rem;
         }
       }
@@ -693,7 +697,7 @@
         input{
           height: 100%;
           text-align: center;
-          font-size: 16px;
+          font-size: 1.6rem;
           box-sizing:border-box;
           /*border: 1px solid #f5f5f5;*/
           @include border;

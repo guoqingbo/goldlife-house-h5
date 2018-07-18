@@ -3,7 +3,7 @@
   <div class="house-list">
     <ul>
       <li class="house-item clear" v-for="item in houseLists" :key="item.id">
-        <house-item :item="item" :houseType="houseType"/>
+        <router-link to="/sellDetail"> <house-item :item="item" :houseType="houseType"/></router-link>
       </li>
     </ul>
   </div>

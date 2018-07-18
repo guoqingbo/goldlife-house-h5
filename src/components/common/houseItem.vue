@@ -1,13 +1,10 @@
 <template>
   <!--房源结果列表-->
   <div class="house-item">
-      <!--<div v-if="checkBox" class="house-left">-->
-        <!--<span class="check-box"></span>-->
-      <!--</div>-->
+      <!--选择按钮插槽-->
+      <slot name="checkBox"></slot>
       <div class="img">
-        <router-link to="/sellDetail">
          <img :src="item.pic|pic">
-        </router-link>
       </div>
       <div class="li-content">
         <p><span class="title">{{item.title}}</span></p>
@@ -16,7 +13,7 @@
           <span class="price">{{item.price | price(houseType)}}</span>
           <span class="avgprice">{{item.avgprice | avgprice}}</span>
         </p>
-        <p><span class="publish-time">{{item.create_time | publishTime}}</span></p>
+        <p v-if="!checkBox"><span class="publish-time">{{item.create_time | publishTime}}</span></p>
       </div>
   </div>
 </template>
@@ -27,6 +24,9 @@
       houseType:{
           default:1,//1二手房 2租房
       },
+      checkBox:{
+          default:false
+      }
     },
     filters:{
       pic(value){
@@ -63,10 +63,6 @@
 </script>
 <style lang="scss" scoped>
 
-  /*公用样式封装*/
-  @mixin border-top {
-    border-top: 0.05rem solid #f5f5f5;
-  }
   /**列表项*/
   .house-item {
     display: flex;
@@ -99,19 +95,19 @@
       }
       .title {
         font-weight: bold;
-        font-size: 0.8rem;
+        font-size: 1.6rem;
         color: #424242;
       }
       .dicrible {
-        font-size: .75rem;
+        font-size: 1.5rem;
         color: #9c9a9d;
       }
       .price {
-        font-size: 0.75rem;
+        font-size: 1.5rem;
         color: #e10000;
       }
       .avgprice {
-        font-size: 0.75rem;
+        font-size: 1.5rem;
         color: #424242;
       }
       .publish-time {
@@ -122,23 +118,6 @@
     .house-left{
       line-height: 8rem;
       padding-right: 1rem;
-      /*选中按钮*/
-      .check-box{
-        display: inline-block;
-        background-color: #eee;
-        width: 1.8rem;
-        height: 1.8rem;
-        border-radius: 1.8rem;
-      }
-      /*选中状态*/
-      .check-active{
-        display: inline-block;
-        background-color: #ffc16c;
-        border: solid .2rem #eee;
-        width: 1.6rem;
-        height: 1.6rem;
-        border-radius: 1.6rem;
-      }
     }
   }
 

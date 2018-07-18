@@ -1,8 +1,6 @@
 <template>
   <!--房源结果列表-->
-  <div class="">
-    <!--顶部头-->
-    <head-top goBack="true"/>
+  <div class="box">
     <!--头部导航-->
     <div class="nav-header">
       <!--返回图标-->
@@ -10,28 +8,41 @@
       <!--标题-->
       <span class="header-title">关注房源列表</span>
     </div>
-    <!-- 对应的内容 -->
+    <!--房源结果列表-->
     <div>
-      <!--房源结果列表-->
-      <house-list :houseLists="hoseLists" :houseType="1" :checkBox="true"></house-list>
+      <ul class="house-list">
+        <li class="house-item clear" v-for="item in houseLists" :key="item.id" @click="selectedHouse(item.id)">
+          <house-item :item="item" :houseType="1" :checkBox="true">
+            <div slot="checkBox" class="check-box-div">
+              <span
+                class="check-box"
+                :class="{'check-active':addComparedHouse.indexOf(item.id)>=0}"></span>
+            </div>
+          </house-item>
+        </li>
+      </ul>
     </div>
+    <!--加入对比清单-->
+    <div class="add-to-compared"
+         :class="{'add-active':addComparedHouse.length>0}"
+    @click="addToComparedList">加入对比清单</div>
   </div>
 </template>
 <script>
   import api from '../../api/axios'
   import headTop from '../../components/header/head';
-  import houseList from '../../components/common/houseList'
+  import houseItem from '../../components/common/houseItem'
 
   export default {
     props:[],
     data(){
       return {
-        hoseLists:[],//收藏房源列表
+        houseLists:[],//收藏房源列表
+        addComparedHouse:[],//选择关注的房源
       }
     },
     components: {
-      headTop,
-      houseList,
+      houseItem,
     },
     created(){
       this.getContrastAttentionHouse();
@@ -43,7 +54,7 @@
               .then( res => {
                 console.log(res)
                 if (res.data.success){
-                  this.hoseLists = res.data.result
+                  this.houseLists = res.data.result
                 }else{
                   this.$toast({
                   message: res.data.errorMessage,
@@ -59,6 +70,19 @@
                   duration: 3000
                 });
         });
+      },
+      // 选中房源
+      selectedHouse(houseId){
+          let idIndex = this.addComparedHouse.indexOf(houseId)
+          if (idIndex>=0){
+            this.addComparedHouse.splice(idIndex,1);
+          }else{
+            this.addComparedHouse.push(houseId)
+          }
+      },
+      //加入对比清单
+      addToComparedList(){
+          this.addComparedHouse;
       }
     }
 
@@ -66,6 +90,11 @@
 </script>
 <style lang="scss" scoped>
   @import '../../style/mixin';
+  .box{
+    position: relative;
+    height: 100%;
+  }
+  /*导航头*/
   .nav-header{
     position: relative;
     background-color: #fff;
@@ -87,5 +116,45 @@
       font-weight: bold;
       text-align: center;
     }
+  }
+  /*房源列表*/
+  .house-list{
+    padding: 0 2rem;
+    /*选中按钮*/
+    .check-box-div{
+      line-height: 8rem;
+      padding-right:1rem;
+    }
+    .check-box{
+      display: inline-block;
+      background-color: #eee;
+      width: 1.6rem;
+      height: 1.6rem;
+      border-radius: 1.6rem;
+    }
+    /*选中状态*/
+    .check-active{
+      background-color: #ffc16c;
+      border: solid .2rem #eee;
+      width: 1.6rem;
+      height: 1.6rem;
+      border-radius: 1.6rem;
+    }
+  }
+  /*加入对比清单*/
+  .add-to-compared{
+    position: absolute;
+    bottom: 0;
+    text-align: center;
+    width: 100%;
+    background-color: #424242;
+    color: #fec26a;
+    font-size: 1.6rem;
+    height: 5rem;
+    line-height: 5rem;
+  }
+  .add-active{
+    background-color: #787878;
+    color:#fccf94;
   }
 </style>
