@@ -219,13 +219,13 @@
               this.sellList = resultHouse.houseInblock.sell.lists;
               this.rentList = resultHouse.houseInblock.rent.lists;
               console.log(this.sellList);
+              console.log(this.rentList);
               this.communityAround = resultHouse.communityAround;
               this.address = resultHouse.disrictName + '区-' + resultHouse.streetName;
               this.buildYear = resultHouse.build_date;
               this.builds = resultHouse.build_num;
               this.title = resultHouse.cmt_name;
               this.addressDetail = resultHouse.address.split('（')[0];
-              console.log(this.addressDetail)
               this.center.lng = resultHouse.b_map_x;
               this.center.lat = resultHouse.b_map_y;
               var address = resultHouse.disrictName + ',' + resultHouse.streetName;

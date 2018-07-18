@@ -7,10 +7,13 @@
         百度地图
       </span>
     </h1>
-    <!--<h1> params.id：{{ $route.params.imgs }}</h1>-->
-    <div class="homeMap">
-        <div id="allmap" class="allmap"></div>
+    <div class="search" ref="search"><div style="width: 100%;height: 0.1rem;background-color: #424242"></div>
+      <span @click="walk()" :class="{ 'class-color': isWalk}">步行</span><span @click="bus()" :class="{ 'class-color': isBus}">公交</span><span @click="driver()" :class="{ 'class-color': isDriver}">驾车</span>
     </div>
+    <div class="homeMap">
+      <div id="allmap" class="allmap"></div>
+    </div>
+
     <keep-alive>
       <router-view></router-view>
     </keep-alive>
@@ -27,6 +30,12 @@
       return {
         lngx: 106.40387397,
         laty: 39.91488908,
+        walking:null,
+        transit:null,
+        driving:null,
+        isWalk:false,
+        isBus:false,
+        isDriver:false,
       }
     },
     created() {
@@ -42,36 +51,74 @@
 
     methods: {
       getBaiduMap() {
-
         let map = new BMap.Map('allmap');
-        console.log(this);
+        window.map = map;
         this.lngx = this.$route.params.x;
         this.laty = this.$route.params.y;
-        console.log(123);
-        console.log(this.lngx);
         let point = new BMap.Point(this.lngx, this.laty);
-        map.centerAndZoom(point, 10);
+        window.point = point;
         map.enableScrollWheelZoom(true);
         map.enableDoubleClickZoom(true);
+        let markers = new BMap.Marker(point);
+        map.addOverlay(markers);
+        map.panTo(point);
+        map.centerAndZoom(point, 16);
+        //向地图中添加缩放控件
+        var ctrl_nav = new BMap.NavigationControl({anchor: BMAP_ANCHOR_BOTTOM_RIGHT, isOpen: 1});
+        map.addControl(ctrl_nav);
+        //向地图中添加比例尺控件
+        var opts = {offset: new BMap.Size(1, 28)};
+        var ctrl_sca = new BMap.ScaleControl(opts);
+        map.addControl(ctrl_sca);
+        let point2;
         var geolocation = new BMap.Geolocation();
         geolocation.getCurrentPosition((r) => {
           console.log(r.point);
           if (r.point) {
-            var point = new BMap.Point(this.lngx, this.laty);
-            let markers = new BMap.Marker(point);
-            map.addOverlay(markers);
-            map.panTo(point);
-            map.centerAndZoom(point, 16);
-            //向地图中添加缩放控件
-            var ctrl_nav = new BMap.NavigationControl({anchor: BMAP_ANCHOR_BOTTOM_RIGHT, isOpen: 1});
-            map.addControl(ctrl_nav);
-            //向地图中添加比例尺控件
-            var opts = {offset: new BMap.Size(1, 28)};
-            var ctrl_sca = new BMap.ScaleControl(opts);
-            map.addControl(ctrl_sca);
-            map.addOverlay(new BMap.Marker(point));
+            point2 = r.point;
+            window.point2 = point2;
           }
         }, {enableHighAccuracy: true})
+      },
+      walk(){
+        if(this.transit != null){
+          this.transit.clearResults();
+          this.isBus = false;
+        }
+        if(this.driving != null){
+          this.driving.clearResults();
+          this.isDriver = false;
+        }
+
+        this.walking = new BMap.WalkingRoute(map, {renderOptions: {map: map, panel: "r-result", autoViewport: true}});
+        this.walking.search(point, point2);
+        this.isWalk = true;
+      },
+      bus(){
+        if(this.walking != null){
+          this.walking.clearResults();
+          this.isWalk = false;
+        }
+        if(this.driving != null){
+          this.driving.clearResults();
+          this.isDriver = false;
+        }
+        this.transit = new BMap.TransitRoute(map, {renderOptions: {map: map, panel: "r-result", autoViewport: true}});
+        this.transit.search(point, point2);
+        this.isBus = true;
+      },
+      driver(){
+        if(this.walking != null){
+          this.walking.clearResults();
+          this.isWalk = false;
+        }
+        if(this.transit != null){
+          this.transit.clearResults();
+          this.isBus = false;
+        }
+        this.driving = new BMap.DrivingRoute(map, {renderOptions: {map: map, panel: "r-result", autoViewport: true}});
+        this.driving.search(point, point2);
+        this.isDriver = true;
       },
     }
   }
@@ -107,6 +154,7 @@
       font-weight: bold;
       text-align: center;
     }
+
   }
   .mapIncrease{
     height: 100%;
@@ -118,6 +166,26 @@
       width: 100%;
       height: 100%;
       overflow:hidden;
+    }
+  }
+  .search{
+    position: absolute;
+    top:4.4rem;
+    background-color: #ffffff;
+    width: 100%;
+    z-index: 1;
+    line-height: 3rem;
+    span{
+      //background-color: #ffc16b;
+      width: 33.33%;
+      display: inline-block;
+      text-align:center;
+      color: #888888;
+      line-height: 3rem;
+      margin-top: -2rem;
+    }
+    .class-color{
+      color:#ffc16b;
     }
   }
 

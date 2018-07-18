@@ -276,9 +276,20 @@
               }else if(resultHouse.attentionState === '0'){
                 this.attentionStatus = '关注'
               }
+              var address = resultHouse.disrictName + ',' + resultHouse.streetName;
+              var point = new BMap.Point(this.center.lng, this.center.lat);
+              var marker = new BMap.Marker(point);
+              map.addOverlay(marker);
+              map.disableDragging();
+              map.centerAndZoom(point, 16);
+              map.panTo(point);
+              let lableInfor = new BMap.Label(address, {
+                position: point,
+                offset: new BMap.Size(-26, 0)
+              });
+              lableInfor.setStyle({backgroundColor: '#fff', padding: '0.5rem', border: '', fontSize: '.1rem',});
+              map.addOverlay(lableInfor)
 
-              console.log(this.maplng);
-              console.log(this.center.lng);
             } else {
               this.$message.error(res.data.errorMessage);
             }
