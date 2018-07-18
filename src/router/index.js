@@ -106,6 +106,12 @@ const mapIncrease = resolve => {
   });
 };
 
+const villageDetail = resolve => {
+  require.ensure(['../page/houseDetail/villageDetail'], () => {
+    resolve(require('../page/houseDetail/villageDetail'));
+  });
+};
+
 const routes = [
     {
       path: '/',
@@ -197,6 +203,12 @@ const routes = [
     name: 'weixinMenu',//获取微信菜单
     meta: { redirect: true},
   },
+    {
+    path: '/villageDetail',
+    name: 'villageDetail',
+    component: villageDetail,
+  },
+
 ];
 
 
