@@ -1,11 +1,9 @@
 <template>
 	<div class="box">
-		<head-top />
-        <h1 class="nav-header">
-          <span class="go-back" @click="$router.go(-1)"><i class="icon iconfont go-back-icon">&#xe60f;</i></span>
-          <span class="header-title">房源对比</span>
-        </h1>
-
+      <div class="nav-header">
+        <span class="go-back" @click="$router.go(-1)"><i class="icon iconfont go-back-icon">&#xe60f;</i></span>
+        <span class="header-title">房源对比</span>
+      </div>
         <div class="houseInfo">
         	<h2>房源名称</h2>
         	<div>
@@ -54,7 +52,7 @@
 	              </ul>
         	</div>
 
-        	<!-- 
+        	<!--
         	<div class="compared">
         		<h4>武林府</h4>
         		              <p>650万</p>

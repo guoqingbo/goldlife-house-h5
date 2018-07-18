@@ -3,6 +3,9 @@ import Router from 'vue-router'
 import store from '../store'
 import envConfig from '../config/env'
 
+//引入ajax请求
+import api from '../api/axios'
+
 Vue.use(Router);
 
 // 路由懒加载
@@ -15,6 +18,7 @@ const home = resolve => {
     resolve(require('../page/home/home'));
   });
 };
+
 //登录页
 const login = resolve => {
   require.ensure(['../page/login/login'], () => {
@@ -29,13 +33,6 @@ const logout = resolve => {
   });
 };
 
-
-const houseList = resolve => {
-  require.ensure(['../page/houseList/houseList'], () => {
-    resolve(require('../page/houseList/houseList'));
-  });
-};
-
 //搜索页
 const search = resolve => {
   require.ensure(['../page/search/search'], () => {
@@ -43,7 +40,8 @@ const search = resolve => {
   });
 };
 
- const houseRentDetail = resolve => {
+//房源详情
+const houseRentDetail = resolve => {
    require.ensure(['../page/houseDetail/houseRentDetail'], () => {
      resolve(require('../page/houseDetail/houseRentDetail'));
    });
@@ -69,7 +67,12 @@ const comparedResult = resolve => {
   });
 };
 
-
+// 房源对比列表
+const houseCompared = resolve => {
+  require.ensure(['../page/houseCompared/houseCompared'], () => {
+    resolve(require('../page/houseCompared/houseCompared'));
+  })
+}
 // 签约查询
 const signSearch = resolve => {
   require.ensure(['../page/sign/signSearch'], () => {
@@ -77,23 +80,12 @@ const signSearch = resolve => {
   });
 };
 
-
 // 签约详情
 const signDetail = resolve => {
   require.ensure(['../page/sign/signDetail'], () => {
     resolve(require('../page/sign/signDetail'));
   });
 };
-
-
-
-// 微信菜单
-const weixinMenu = resolve => {
-  require.ensure(['../page/weixinMenu/weixinMenu'], () => {
-    resolve(require('../page/weixinMenu/weixinMenu'));
-  });
-};
-
 
 
 const imgIncrease = resolve => {
@@ -113,7 +105,6 @@ const mapIncrease = resolve => {
     resolve(require('../page/houseDetail/mapIncrease'));
   });
 };
-
 
 const routes = [
     {
@@ -143,11 +134,6 @@ const routes = [
       name:'logout',//登出
       component: logout,
     },
-  {
-    path: '/houseList',
-    name:'houseList',//房源列表页
-    component: houseList,
-  },
     {
       path: '/search',
       name:'search',//房源列表页
@@ -158,7 +144,12 @@ const routes = [
       name: 'comparedResult',
       component: comparedResult,
     },
-
+    // 房源对比列表
+    {
+      path: '/houseCompared',
+      name: 'houseCompared',
+      component: houseCompared,
+    },
     {//签约查询
       path: '/signSearch',
       name: 'signSearch',
@@ -171,16 +162,10 @@ const routes = [
       component: signDetail,
     },
 
-    {
+  {
       path: '/myCare',//我的关注
       name: 'myCare',
       component: myCare,
-    },
-    {
-      path: '/weixin/menu/:redirectType',//可能值 house  account fund finan loan invite
-      name: 'weixinMenu',//获取微信菜单
-      component: weixinMenu,
-      // meta: { keepAlive: false, requiresAuth: false },
     },
   {
     path: '/houseRentDetail',
@@ -202,13 +187,16 @@ const routes = [
     name: 'houseAppointment',//客户看房
     component: houseAppointment,
   },
-
   {
     path: '/mapIncrease',
     name: 'mapIncrease',
     component: mapIncrease,
   },
-
+  {
+    path: '/user/weixin/menu',//可能值 house  account fund finan loan invite
+    name: 'weixinMenu',//获取微信菜单
+    meta: { redirect: true},
+  },
 ];
 
 
@@ -230,9 +218,13 @@ router.beforeEach((to, from, next) => {
         query: {redirect: to.fullPath}  // 将刚刚要去的路由path（却无权限）作为参数，方便登录成功后直接跳转到该路由
       });
     }
-  } else {
+  } else if(to.meta.redirect){
+    //路由跳转(微信需要)
+    let data = to.query;
+    api.weixinMenu(data);
+    // window.location.href = envConfig.weixinRederectUrl+to.fullPath;
+  }else {
     next();//如果无需token,那么随它去吧
   }
 });
-
 export default router

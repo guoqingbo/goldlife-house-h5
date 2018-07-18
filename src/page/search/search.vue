@@ -46,7 +46,8 @@
         },
         isShowHouseType:false,//搜索房源类型 1：二手房 2：租房
         searchResult:[],//搜索结果
-        searchHouseType:this.houseType //搜索房源类型
+        searchHouseType:this.houseType, //搜索房源类型
+        communitySearchHistory:localStorage.getItem("communitySearchHistory") == null ? {1:[], 2:[]} : JSON.parse(localStorage.getItem("communitySearchHistory")),
       }
     },
     props: {
@@ -64,13 +65,6 @@
 
     },
     computed: {
-      communitySearchHistory(){
-          let communitySearchHistory = JSON.parse(localStorage.getItem("communitySearchHistory"));
-        if (communitySearchHistory == null){
-          communitySearchHistory = {1:[], 2:[]}
-        }
-        return communitySearchHistory;
-      }//小区搜索历史记录
     },
     methods: {
       // 搜索结果展示
@@ -90,8 +84,9 @@
               }
             })
           .catch(res=>{
+              console.log(res)
             this.$toast({
-              message: res.error_msg,
+              message: res.Error,
               position: 'bottom',
               duration: 3000
             })

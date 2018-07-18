@@ -21,7 +21,12 @@
 </template>
 <script>
   export default {
-    props:['houseLists','houseType'],
+    props:{
+      houseLists:{},
+      houseType:{
+          default:1,//1二手房 2租房
+      }
+    },
     filters:{
       pic(value){
         if (value) {
@@ -59,7 +64,7 @@
 
   /*公用样式封装*/
   @mixin border-top {
-    border-top: 1px solid #f5f5f5;
+    border-top: 0.5rem solid #f5f5f5;
   }
   /**列表*/
   .houseList {
@@ -90,11 +95,11 @@
           }
           .title {
             font-weight: bold;
-            font-size: 16px;
+            font-size: 0.8px;
             color: #424242;
           }
           .dicrible {
-            font-size: 13px;
+            font-size: 7.5rem;
             color: #9c9a9d;
           }
           .price {
