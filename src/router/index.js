@@ -199,18 +199,16 @@ const routes = [
     component: mapIncrease,
   },
   {
-<<<<<<< Updated upstream
     path: '/user/weixin/menu',//可能值 house  account fund finan loan invite
     name: 'weixinMenu',//获取微信菜单
     meta: { redirect: true},
   },
-=======
+    {
     path: '/villageDetail',
     name: 'villageDetail',
     component: villageDetail,
   },
 
->>>>>>> Stashed changes
 ];
 
 
