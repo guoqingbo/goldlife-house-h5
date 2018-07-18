@@ -112,6 +112,12 @@ const villageDetail = resolve => {
   });
 };
 
+const villageMore = resolve => {
+  require.ensure(['../page/houseDetail/villageMore'], () => {
+    resolve(require('../page/houseDetail/villageMore'));
+  });
+};
+
 const routes = [
     {
       path: '/',
@@ -207,6 +213,11 @@ const routes = [
     path: '/villageDetail',
     name: 'villageDetail',
     component: villageDetail,
+  },
+  {
+    path: '/villageMore',
+    name: 'villageMore',
+    component: villageMore,
   },
 
 ];
