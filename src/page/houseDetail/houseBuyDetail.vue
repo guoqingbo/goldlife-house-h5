@@ -243,7 +243,7 @@
         buildyear: '',//年代
         maplng: '',//坐标x
         maplat: '',//坐标y
-        center: {lng: 116.40387397, lat: 39.91488908},
+        center: {lng: 120.12, lat: 30.16},
         imgHouseAttr: ['','',''],//房源照片
         //同小区
         sellList: [],//在售
@@ -307,9 +307,28 @@
               this.imgHouseAttr = resultHouse.img;
               this.center.lng = resultHouse.communityLocation.b_map_x;
               this.center.lat = resultHouse.communityLocation.b_map_y;
-
-              console.log(this.maplng);
-              console.log(this.center.lng);
+              var address = resultHouse.disrictName+','+resultHouse.streetName;
+              var point = new BMap.Point(this.maplng, this.maplat);
+              var marker = new BMap.Marker(point);
+              map.addOverlay(marker);
+              map.disableDragging();
+              map.centerAndZoom(point, 16);
+              map.panTo(point);
+              /*var opts = {
+                width : 0,
+                height: 0,
+                enableAutoPan: false,
+                enableCloseOnClick:false,
+                enableMessage:false,
+              }
+              var infoWindow = new BMap.InfoWindow(address, opts);  // 创建信息窗口对象
+              map.openInfoWindow(infoWindow, point);*/
+              let lableInfor = new BMap.Label(address,{
+                position:point,
+                offset : new BMap.Size(-26,0)
+              });
+              lableInfor.setStyle({backgroundColor: '#fff',padding:'0.5rem', border: '', fontSize: '.1rem',});
+              map.addOverlay(lableInfor)
             } else {
               this.$message.error(res.data.errorMessage);
             }
@@ -329,12 +348,9 @@
         api.getCommunityDetail(params)
           .then(res => {
             if (res.data.success) {
-              console.log('小区');
-              console.log(res.data.result);
               var resultHouse = res.data.result;
               this.sellList = resultHouse.houseInblock.sell.lists;
               this.rentList = resultHouse.houseInblock.rent.lists;
-              console.log(this.sellList);
               this.communityAround = resultHouse.communityAround;
             } else {
               this.$message.error(res.data.errorMessage);
@@ -345,47 +361,14 @@
           });
       },
       getBaiduMap() {
-        /*var map = new BMap.Map('allmap');
-        var point = new BMap.Point(this.center.lng, this.center.lat);
-        map.centerAndZoom(point, 16);
+        var map = new BMap.Map('allmap');
+        window.map = map;
+        var point = new BMap.Point(this.maplng, this.maplat);
         var marker = new BMap.Marker(point);
         map.addOverlay(marker);
-        //向地图中添加缩放控件
-        var ctrl_nav = new BMap.NavigationControl({anchor: BMAP_ANCHOR_BOTTOM_RIGHT, isOpen: 1});
-        map.addControl(ctrl_nav);
-        //向地图中添加比例尺控件
-        var opts = {offset: new BMap.Size(1, 28)}
-        var ctrl_sca = new BMap.ScaleControl(opts);
-        map.addControl(ctrl_sca);
-        //map.addOverlay(new BMap.Marker(this.userlocation));*/
-        let map = new BMap.Map('allmap');
-        console.log(this);
-        console.log(this.center.lng);
-        let point = new BMap.Point(this.center.lng, this.center.lat);
-        map.centerAndZoom(point, 10);
-        map.enableScrollWheelZoom(true);
-        map.enableDoubleClickZoom(true);
-        var geolocation = new BMap.Geolocation();
-        geolocation.getCurrentPosition((r) => {
-          console.log(r.point);
-          if (r.point) {
-            //this.center.lng = r.longitude;
-            //this.center.lat = r.latitude;
-            var point = new BMap.Point(this.center.lng, this.center.lat);
-            let markers = new BMap.Marker(point);
-            map.addOverlay(markers);
-            map.panTo(point);
-            map.centerAndZoom(point, 16);
-            //向地图中添加缩放控件
-            var ctrl_nav = new BMap.NavigationControl({anchor: BMAP_ANCHOR_BOTTOM_RIGHT, isOpen: 1});
-            map.addControl(ctrl_nav);
-            //向地图中添加比例尺控件
-            var opts = {offset: new BMap.Size(1, 28)};
-            var ctrl_sca = new BMap.ScaleControl(opts);
-            map.addControl(ctrl_sca);
-            map.addOverlay(new BMap.Marker(point));
-          }
-        }, {enableHighAccuracy: true})
+        map.disableDragging();
+        map.centerAndZoom(point, 16);
+
       },
       clickSell(){
         this.isSell = true;
