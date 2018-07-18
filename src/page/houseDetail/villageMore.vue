@@ -3,18 +3,18 @@
     <head-top goBack="true"/>
     <h1 class="nav-header">
       <span class="go-back" @click="$router.go(-1)"><i class="icon iconfont go-back-icon">&#xe60f;</i></span>
-      <span class="header-title">{{title}}</span>
+      <span class="header-title">{{this.$route.params.villageName}}</span>
     </h1>
 
     <div class="search">
-      <span class="left">{{title}}</span>
-      <span class="right" @click = 'opentFilter("filterOrder")'>综合排序
+      <span class="left">{{this.$route.params.villageName}}</span>
+      <span class="right" @click='opentFilter("filterOrder")'>综合排序
           <i class="icon iconfont" :class="{'select-active-icon':filterType == 'filterOrder'}">&#xe656;</i>
       </span>
     </div>
 
     <!--房源结果列表-->
-    <house-list :houseLists="$route.params.more" :houseType="houseType" class="houseList"></house-list>
+    <house-list :houseLists="hoseLists" :houseType="houseType"></house-list>
     <!--排序-->
     <div v-if="filterType == 'filterOrder'" class="filter-order">
       <div class="clear">
@@ -27,7 +27,7 @@
         </ul>
       </div>
       <!--遮罩-->
-      <div class="filter-mask" @click = 'opentFilter("district")' @touchmove.prevent></div>
+      <div class="filter-mask" @click='opentFilter("district")' @touchmove.prevent></div>
     </div>
     <keep-alive>
       <router-view></router-view>
@@ -40,7 +40,6 @@
 <script>
   import api from '../../api/axios'
   import headTop from '../../components/header/head'
-  import BMap from 'BMap'
   import houseList from '../../components/common/houseList'
 
   export default {
@@ -64,15 +63,15 @@
         //周边小区
         communityAround: [],//周边小区
         attentionStatus: '关注',
-        hoseLists:[],
-        houseType:2,
-        filterType:'',//过滤选项卡
-        orderFilter:[
-          {orderColumn:"id",orderBy:"desc",describe:"最新发布"},
-          {orderColumn:"price",orderBy:"asc",describe:"总价从低到高"},
-          {orderColumn:"price",orderBy:"desc",describe:"总价从高到底"},
-          {orderColumn:"avgprice",orderBy:"asc",describe:"单价从低到高"},
-          {orderColumn:"buildarea",orderBy:"asc",describe:"面积从大到小"},
+        hoseLists: [],
+        houseType: 2,
+        filterType: '',//过滤选项卡
+        orderFilter: [
+          {orderColumn: "id", orderBy: "desc", describe: "最新发布"},
+          {orderColumn: "price", orderBy: "asc", describe: "总价从低到高"},
+          {orderColumn: "price", orderBy: "desc", describe: "总价从高到底"},
+          {orderColumn: "avgprice", orderBy: "asc", describe: "单价从低到高"},
+          {orderColumn: "buildarea", orderBy: "asc", describe: "面积从大到小"},
         ],
         houseParams:{
           1:{
@@ -103,76 +102,91 @@
       }
     },
     created() {
-      this.getCommunityDetail();
+      //this.getHoseLists();
     },
     components: {
       headTop,
       houseList,
     },
     mounted() {
-
+      this.getHoseLists();
     },
 
     methods: {
-      //小区详情
-      getCommunityDetail() {
-        let params = {
-          blockId: "2839",
-          city: 'hz',
-          userType: '2',
-          houseType: '2'
-        };
-        api.getCommunityDetail(params)
-          .then(res => {
-            if (res.data.success) {
-              console.log('小区');
-              console.log(res.data.result);
-              var resultHouse = res.data.result;
-              this.sellList = resultHouse.houseInblock.sell.lists;
-              this.rentList = resultHouse.houseInblock.rent.lists;
-              console.log(this.sellList);
-              this.communityAround = resultHouse.communityAround;
-              this.address = resultHouse.disrictName + '区-' + resultHouse.streetName;
-              this.buildYear = resultHouse.build_date;
-              this.builds = resultHouse.build_num;
-              this.title = resultHouse.cmt_name;
-              this.addressDetail = resultHouse.address.split('（')[0];
-              console.log(this.addressDetail)
-              this.center.lng = resultHouse.b_map_x;
-              this.center.lat = resultHouse.b_map_y;
-              var address = resultHouse.disrictName + ',' + resultHouse.streetName;
-              var point = new BMap.Point(this.center.lng, this.center.lat);
-              var marker = new BMap.Marker(point);
-              map.addOverlay(marker);
-              map.disableDragging();
-              map.centerAndZoom(point, 16);
-              map.panTo(point);
-              let lableInfor = new BMap.Label(address, {
-                position: point,
-                offset: new BMap.Size(-26, 0)
+      getHoseLists(){
+        if(this.$route.params.isOne){
+          this.houseType = 1;
+        }
+        this.houseParams[this.houseType].communityId = this.$route.params.id;
+        console.log('id')
+        console.log(this.$route.params.id)
+        console.log(this.houseType)
+        if (this.houseType == 1){
+          //获取出售房源列表
+          let params = this.houseParams[this.houseType];
+          api.getSellHouseList(params)
+            .then( res => {
+              console.log('出售params')
+              console.log(params)
+              console.log('出售结果')
+              console.log(res)
+              if (res.data.success){
+                this.hoseLists = res.data.result.list;
+                this.recomment = res.data.result.recomment;
+              }else{
+                this.$toast({
+                  message: res.data.errorMessage,
+                  position: 'bottom',
+                  duration: 3000
+                });
+              }
+            })
+            .catch(res =>{
+              this.$toast({
+                message: res.data.errorMessage,
+                position: 'bottom',
+                duration: 3000
               });
-              lableInfor.setStyle({backgroundColor: '#fff', padding: '0.5rem', border: '', fontSize: '.1rem',});
-              map.addOverlay(lableInfor)
-            } else {
-              this.$message.error(res.data.errorMessage);
-            }
-          })
-          .catch(res => {
-            this.$message.error('小区详情' + res.data.errorMessage);
-          });
+            });
+        }
+        else if(this.houseType == 2){
+          //获取租房源列表
+          let params = this.houseParams[this.houseType];
+          console.log(params)
+          api.getRentHouseList(params)
+            .then( res => {
+              console.log(res)
+              if (res.data.success){
+                this.hoseLists = res.data.result.list
+              }else{
+                this.$toast({
+                  message: res.data.errorMessage,
+                  position: 'bottom',
+                  duration: 3000
+                });
+              }
+            })
+            .catch(res =>{
+              this.$toast({
+                message: res.data.errorMessage,
+                position: 'bottom',
+                duration: 3000
+              });
+            });
+        }
       },
-      opentFilter(filterType){
-        if (this.filterType){
+      opentFilter(filterType) {
+        if (this.filterType) {
           this.filterType = ''
-        }else{
+        } else {
           this.filterType = filterType
         }
       },
       //设置排序条件
-      setOrderValue(event,orderItem){
+      setOrderValue(event, orderItem) {
         this.houseParams[this.houseType].orderBy = orderItem.orderBy;
         this.houseParams[this.houseType].orderColumn = orderItem.orderColumn;
-        this.getCommunityDetail();
+        this.getHoseLists();
         this.filterType = ''
       },
     }
@@ -220,48 +234,50 @@
     }
   }
 
-  .search{
+  .search {
     background-color: #F8F8F8;
     height: 4rem;
     line-height: 4rem;
-    .left{
+    .left {
       margin-left: 2rem;
     }
-    .right{
+    .right {
       margin-right: 4rem;
     }
-    .select-active-icon{
-      color:#ffc16a;
+    .select-active-icon {
+      color: #ffc16a;
     }
   }
 
-  .houseList{
+  .houseList {
     /*position: absolute;
     top:10rem;*/
   }
 
   /*过滤弹框*/
-  @mixin filter-wrap{
+  @mixin filter-wrap {
     width: 100%;
-    font-color:#424242;
+    font-color: #424242;
     font-size: 0.75rem;
     position: absolute;
     z-index: 6;
     top: 11.5rem;
     background-color: #fff;
   }
+
   @mixin border-top {
     border-top: 0.05rem solid #f5f5f5;
   }
+
   /*排序*/
-  .filter-order{
+  .filter-order {
     @include filter-wrap;
     margin-top: 1rem;
-    ul{
+    ul {
       width: 100%;
       /*height: 29rem;*/
       overflow: scroll;
-      li{
+      li {
         padding-left: 2rem;
         height: 4rem;
         text-align: center;
@@ -270,8 +286,8 @@
         @include border-top;
       }
       //选中状态
-      .select-font-active{
-        color:#ffc16b;
+      .select-font-active {
+        color: #ffc16b;
       }
     }
   }
