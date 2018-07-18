@@ -3,7 +3,7 @@
   <div class="house-list">
     <ul>
       <li class="house-item clear" v-for="item in houseLists" :key="item.id">
-        <house-item :item="item"/>
+        <house-item :item="item" :houseType="houseType"/>
       </li>
     </ul>
   </div>
