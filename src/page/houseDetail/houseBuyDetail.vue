@@ -6,7 +6,7 @@
       <span class="header-title"><span class="village">{{block_name}}</span>
         <i v-if="attentionStatus" @click="attention()" class="icon iconfont xl">&#xe609;</i>
         <i v-else @click="attention()" class="icon iconfont xl">&#xe657;</i>
-        <div class="badge" >
+        <div class="badge">
           <router-link :to="{ name:'houseCompared',params: { }}">
             <img src="../../assets/icon/icon_topbar_hclist@2x.png">
             <div v-if="compareNum!=''" class="div2">{{compareNum}}</div>
@@ -138,10 +138,11 @@
             <p><span style="color: #e10000">{{sellImg.price}}</span>&nbsp;&nbsp;&nbsp;{{sellImg.avgprice}}</p>
           </li>
           <li v-if="isRent" v-for='rentImg in rentList'>
-            <router-link :to="{ name:'houseRentDetail',params: {cityId:cityId,houseId:houseId,userType:userType,houseType:houseType}}">
-            <img :src="rentImg.pic"><br/>
-            <p>{{rentImg.room_type}}|{{rentImg.buildarea}}|{{rentImg.forward}}</p>
-            <p><span style="color: #e10000">{{rentImg.price}}</span></p>
+            <router-link
+              :to="{ name:'houseRentDetail',params: {cityId:cityId,houseId:houseId,userType:userType,houseType:houseType}}">
+              <img :src="rentImg.pic"><br/>
+              <p>{{rentImg.room_type}}|{{rentImg.buildarea}}|{{rentImg.forward}}</p>
+              <p><span style="color: #e10000">{{rentImg.price}}</span></p>
             </router-link>
           </li>
 
@@ -150,7 +151,7 @@
 
       <!--同小区在售10套-->
       <div ref="sameSell" class="sameSells">
-        <div v-if="isSell"  >
+        <div v-if="isSell">
           同小区在售{{sellList.length}}套
         </div>
         <div v-else-if="isRent">
@@ -166,11 +167,13 @@
         <p>周边小区</p>
         <ul class="category-head">
           <li v-for="ortherImg in communityAround">
-            <router-link :to="{ name:'villageDetail',params: {cityId:cityId,houseId:houseId,userType:userType,houseType:houseType}}">
-            <img :src="ortherImg.surface_img?ortherImg.surface_img:require('../../assets/icon/icon_addtolist@2x.png')"><br/>
-            <p style="color: #885D24;">{{ortherImg.build_date}}年建</p>
-            <p>{{ortherImg.cmt_name}}</p>
-            <p class="p-bottom"><span style="color: #e10000">{{ortherImg.averprice}}元/平</span></p>
+            <router-link
+              :to="{ name:'villageDetail',params: {cityId:cityId,houseId:houseId,userType:userType,houseType:houseType}}">
+              <img
+                :src="ortherImg.surface_img?ortherImg.surface_img:require('../../assets/icon/icon_addtolist@2x.png')"><br/>
+              <p style="color: #885D24;">{{ortherImg.build_date}}年建</p>
+              <p>{{ortherImg.cmt_name}}</p>
+              <p class="p-bottom"><span style="color: #e10000">{{ortherImg.averprice}}元/平</span></p>
             </router-link>
           </li>
         </ul>
@@ -180,7 +183,8 @@
       <div class="button-bottom">
         <el-row class="el-bt">
           <el-col :span="8" class="grid-bt-content bg-bt-light">
-            <div @click="addCompare()"><img src="../../assets/icon/icon_addtolist@2x.png"><br><span class="span-icon">{{compareDesc}}</span></div>
+            <div @click="addCompare()"><img src="../../assets/icon/icon_addtolist@2x.png"><br><span class="span-icon">{{compareDesc}}</span>
+            </div>
           </el-col>
           <router-link :to="{ name:'houseAppointment',params: { homes: houseDetail}}">
             <el-col :span="8" class="grid-bt-content bg-bt-m centenr">
@@ -231,8 +235,8 @@
           {imgUrl: 'http://image.qmango.com/hotelimg/dl1210/119297/793.jpeg'}
         ],
         //房源
-        houseDetail:'',
-        houseId:'1',
+        houseDetail: '',
+        houseId: '1',
         isSell: true,//是否在售
         isRent: false,//是否在租
         title: '',//小区名+户型
@@ -249,20 +253,19 @@
         maplng: '',//坐标x
         maplat: '',//坐标y
         center: {lng: 120.12, lat: 30.16},
-        imgHouseAttr: ['','',''],//房源照片
+        imgHouseAttr: ['', '', ''],//房源照片
         //同小区
         sellList: [],//在售
         rentList: [],//在租
         //周边小区
         communityAround: [],//周边小区
         attentionStatus: false,
-        cityId:'hz',
-        userType:'customer',
-        houseType:'1',
-        blockId:'1',
-        compareNum:'',
-        compareDesc:'加入对比',
-        compareList:[],
+        cityId: 'hz',
+        userType: 'customer',
+        houseType: '1',
+        blockId: '1',
+        compareNum: '',
+        compareDesc: '加入对比',
       }
     },
     created() {
@@ -326,14 +329,14 @@
               this.imgHouseAttr = resultHouse.img;
               this.houseId = resultHouse.id;
               this.cityId = resultHouse.cityId;
-              if(resultHouse.attentionState == '0'){
+              if (resultHouse.attentionState == '0') {
                 this.attentionStatus = false;
-              }else if(resultHouse.attentionState == '1'){
+              } else if (resultHouse.attentionState == '1') {
                 this.attentionStatus = true;
               }
               this.center.lng = resultHouse.communityLocation.b_map_x;
               this.center.lat = resultHouse.communityLocation.b_map_y;
-              var address = resultHouse.disrictName+','+resultHouse.streetName;
+              var address = resultHouse.disrictName + ',' + resultHouse.streetName;
               var point = new BMap.Point(this.maplng, this.maplat);
               var marker = new BMap.Marker(point);
               map.addOverlay(marker);
@@ -349,12 +352,25 @@
               }
               var infoWindow = new BMap.InfoWindow(address, opts);  // 创建信息窗口对象
               map.openInfoWindow(infoWindow, point);*/
-              let lableInfor = new BMap.Label(address,{
-                position:point,
-                offset : new BMap.Size(-26,0)
+              let lableInfor = new BMap.Label(address, {
+                position: point,
+                offset: new BMap.Size(-26, 0)
               });
-              lableInfor.setStyle({backgroundColor: '#fff',padding:'0.5rem', border: '', fontSize: '.1rem',});
-              map.addOverlay(lableInfor)
+              lableInfor.setStyle({backgroundColor: '#fff', padding: '0.5rem', border: '', fontSize: '.1rem',});
+              map.addOverlay(lableInfor);
+
+              var loginName = this.$store.state.userInfo.loginName;
+              var list = localStorage.getItem("comparedList_hz_" + loginName);
+              if (list != null) {
+                list = JSON.parse(list);
+                let idIndex = list.indexOf(this.houseId);
+                if (idIndex == '-1') {
+                  this.compareDesc = '加入对比'
+                } else {
+                  this.compareDesc = '取消对比'
+                }
+              }
+
             } else {
               this.$message.error(res.data.errorMessage);
             }
@@ -401,31 +417,31 @@
         map.centerAndZoom(point, 16);
 
       },
-      clickSell(){
+      clickSell() {
         this.isSell = true;
         this.isRent = false;
-        if(this.sellList.length>0){
+        if (this.sellList.length > 0) {
           this.$refs.ulDisplay.style.display = '';
-          this.$refs.sameSell.style.marginTop= '16rem';
-        }else{
+          this.$refs.sameSell.style.marginTop = '16rem';
+        } else {
           this.$refs.ulDisplay.style.display = 'none';
-          this.$refs.sameSell.style.marginTop= '2rem';
+          this.$refs.sameSell.style.marginTop = '2rem';
         }
 
       },
-      clickRent(){
+      clickRent() {
         this.isSell = false;
         this.isRent = true;
-        if(this.rentList.length>0){
+        if (this.rentList.length > 0) {
           this.$refs.ulDisplay.style.display = '';
-          this.$refs.sameSell.style.marginTop= '16rem';
-        }else{
+          this.$refs.sameSell.style.marginTop = '16rem';
+        } else {
           this.$refs.ulDisplay.style.display = 'none';
-          this.$refs.sameSell.style.marginTop= '2rem';
+          this.$refs.sameSell.style.marginTop = '2rem';
         }
       },
       //关注
-      attention(){
+      attention() {
         console.log(this.attentionStatus)
         if (!this.attentionStatus) {
           let attentionnfo = {
@@ -469,34 +485,50 @@
             });
         }
       },
-      getHomeDetail(data){
+      getHomeDetail(data) {
         this.houseId = data;
         this.houseType = '1';
         this.getHouseDetail();
       },
-      getCompareNum(){
+      getCompareNum() {
         //获取用户名
         let loginName = this.$store.state.userInfo.loginName;
         //在该用户获取对比清单
-        this.compareList = localStorage.getItem("comparedList_hz_"+loginName);
+        var list = localStorage.getItem("comparedList_hz_" + loginName);
         console.log(localStorage)
-        console.log(this.compareList)
-        if(this.compareList != null){
-          this.compareNum = this.compareList.length;
+        console.log(list)
+        if (list != null) {
+          this.compareNum = JSON.parse(list).length;
+        } else {
+          this.compareNum = '';
         }
       },
-      addCompare(){
+      addCompare() {
         console.log(this.$store)
         var loginName = this.$store.state.userInfo.loginName;
-        if(this.compareDesc == '加入对比'){
-
+        var list;
+        list = localStorage.getItem("comparedList_hz_" + loginName);
+        console.log('listyuan')
+        console.log(list)
+        if (this.compareDesc == '加入对比') {
+          if (list != null) {
+            list = JSON.parse(list);
+            list.push(this.houseId);
+          } else {
+            list = [this.houseId]
+          }
+          console.log('listhou')
+          console.log(list)
           //加入对比清单
-          localStorage.setItem("comparedList_hz_"+loginName,JSON.stringify(this.houseDetail));
+          localStorage.setItem("comparedList_hz_" + loginName, JSON.stringify(list));
           this.compareDesc = '取消对比';
           this.getCompareNum();
-        }else if(this.compareDesc == '取消对比'){
+        } else if (this.compareDesc == '取消对比') {
+          list = JSON.parse(list);
+          let index = list.indexOf(this.houseId);
+          list.splice(index, 1);
           //对比清单移除
-          localStorage.removeItem("comparedList_hz_"+loginName);
+          localStorage.setItem("comparedList_hz_" + loginName, JSON.stringify(list));
           this.compareDesc = '加入对比';
           this.getCompareNum();
         }
@@ -510,6 +542,11 @@
 <style lang="scss" scoped>
   @import '../../style/mixin';
   @import "../../../static/css/swiper.min.css";
+
+  .houseBuyDetail {
+    font-size: 1.6rem;
+  }
+
   /**导航*/
   .nav-header {
     position: relative;
@@ -724,7 +761,7 @@
       li:first-child {
         padding-left: 0rem;
       }
-      .p-bottom{
+      .p-bottom {
         margin-top: 0.5rem;
       }
     }

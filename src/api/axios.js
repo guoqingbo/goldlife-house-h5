@@ -135,9 +135,16 @@ export default {
   },
 
   //看房日程
-  lookHouseIndex(data){
-    return axios.get('house/getHouseAppointmentList?openId='+data.openId +'&code='+data.code,{})
+  lookHouseIndex(){
+    return axios.get('house/getHouseAppointmentList',{})
   },
+
+
+  //看房记录
+  lookHouseHistory(data){
+    return axios.get('house/lookHouseHistory',{})
+  },
+
 
   // //区域板块
   // getDistrict(data){

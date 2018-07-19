@@ -101,6 +101,13 @@ const lookHouseIndex = resolve => {
   });
 };
 
+// 看房记录
+const lookHouseHistory = resolve => {
+  require.ensure(['../page/lookHouse/lookHouseHistory'], () => {
+    resolve(require('../page/lookHouse/lookHouseHistory'));
+  });
+};
+
 
 const imgIncrease = resolve => {
   require.ensure(['../page/houseDetail/imgIncrease'], () => {
@@ -237,6 +244,13 @@ const routes = [
     path: '/lookHouseIndex',
     name: 'lookHouseIndex',
     component: lookHouseIndex,
+  },
+
+  // 看房记录
+  {
+    path: '/lookHouseHistory',
+    name: 'lookHouseHistory',
+    component: lookHouseHistory,
   },
 
 ];
