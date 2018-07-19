@@ -3,13 +3,13 @@
 		<head-top />
         <h1 class="nav-header">
           <span class="go-back" @click="$router.go(-1)"><i class="icon iconfont go-back-icon">&#xe60f;</i></span>
-          <span class="header-title">看房日程</span>
-          <span class="go-edit"><i class="icon iconfont editor-icon">&#xe62e;</i></span>
+          <span class="header-title">看房记录</span>
         </h1>
 		
-		<div class="box" v-for="i in houseList">
-			<!-- 线上房源 -->
-			<div v-if="i.lineType == 0">
+		<div class="box">
+		<!-- <div class="box" v-for="i in houseList"> -->
+			
+			<!-- <div>
 				<div class="house-detail" v-if="i.targetHouse != undefined">
 					<img :src="!!i.targetHouse.pic?i.targetHouse.pic:'./static/searcherror@2x.png'">
 					<div>
@@ -25,34 +25,46 @@
 					</div>
 				</div>
 				<div class="house-status">
-					<p :class="'t'+i.state">
-						<span>{{ state[i.state] }}</span>
-						<span>{{ (i.time)*1000 |moment('MM月DD日 hh:mm') }}</span>
+					<p >
+						<span>{{ i.brokerName }}经纪人带看</span>
+						<span>{{ i.time|moment('MM月DD日 hh:mm') }}</span>
 					</p>
-				</div>
-			</div>
-
-			<!-- 线下房源 -->
-			<div v-else>
-				<div class="house-detail">
-					<img :src="!!i.targetHouse.pic?i.targetHouse.pic:'./static/searcherror@2x.png'">
-					<div>
-						<h3>线下房源</h3>
-						<p class="describ">请提前咨询确定房屋样式符合您的预期</p>
-						<p class="price">
-							<span>{{!!i.num?i.num:'0'}}</span>
-							<span>&nbsp;&nbsp;套</span>
-						</p>
+					没有看房笔记时
+					<p class="addNode">添加看房笔记</p>
+					有看房笔记
+					<div class="label">
+						<p>性价比高...前面添加小圆点</p>
 					</div>
+			
 				</div>
-				<div class="house-status">
-					<p :class="'t'+i.state">
-						<span>{{ state[i.state] }}</span>
-						<span>{{ (i.time)*1000|moment('MM/DD hh:mm') }}</span>
+			</div> -->
+			<div class="house-detail">
+				<img src="../../assets/icon/searcherror@2x.png">
+				<div>
+					<h3>
+						<span>约看小区&nbsp;</span>广厦天都城天星苑室内室内
+					</h3>
+					<p class="describ">3室1厅/120/朝北</p>
+					<p class="price">
+						<span>240万</span>
+						<span>&nbsp;&nbsp;43,345&nbsp;元/平</span>
 					</p>
-
 				</div>
 			</div>
+			<div class="house-status">
+				<p >
+					<span><b>罗罗</b>经纪人带看</span>
+					<span>7月7日</span>
+				</p>
+				
+				<p class="addNode">添加看房笔记</p>
+				
+				<!-- <div class="label">
+					<p>性价比高...前面添加小圆点</p>
+				</div> -->
+		
+			</div>
+
 
 		</div>
 
@@ -66,28 +78,22 @@
 		name:'lookHouseIndex',
 		data(){
 			return{
-				houseList:[],
-				state:{
-					'1':'预约中',
-					'2':'预约中',
-					'3':'预约失败',
-					'4':'待看房',
-					'5':'看房结束',
-				}
+				houseList:[],			
 			}
 		},
 		created(){
-			this.getLookHouseInfo();
+			// this.getLookHouseInfo();
 		},
 		methods:{
 			getLookHouseInfo(){
-				api.lookHouseIndex()
+				api.lookHouseHistory()
 				.then(res=>{
 					if(res.data.success){
+						console.log(res.data);
 						this.houseList = res.data.result;
 
 					}else{
-						console.log(res.data.errorMessage);
+						console.log(res.data);
 					}
 				})
 				.catch(err=>{
@@ -113,12 +119,7 @@
       position: absolute;
       left: 1.5rem;
     }
-    .go-edit{
-    	position: absolute;
-    	right: 1.5rem;
-    	top: 0;
-    }
-    .go-back-icon,.editor-icon{
+    .go-back-icon,{
       font-size: 2rem;
     }
     .header-title{
@@ -144,7 +145,7 @@
 				position: absolute;
 				left: 2rem;
 				width: 13rem;
-				height: 8.1rem;
+				height: 9.5rem;
 				border-radius: 0.5rem;
 			}
 			h3{
@@ -172,12 +173,15 @@
 			background: #ffffff;
 			margin-top: 0.5rem;
 			padding: 0 2rem;
-			height: 3.5rem;
-			line-height: 3.5rem;
+			// height: 3.5rem;
+			// line-height: 3.5rem;
+			padding-bottom: 1.5rem;
+			padding-top: 1rem;
+
 			p{
 				display: flex;
 				justify-content: space-between;
-				padding-left:3.7rem ;
+				// padding-left:3.7rem ;
 				span:first-child{
 					font-size: 1.5rem;
 					font-family: PingFang-SC-Bold;
@@ -185,20 +189,16 @@
 					color: #424242;
 				}
 			}
-			// .reservation{
-			.t1,.t2{ //状态码为1,2都显示预约中
-				background: url(../../assets/icon/icon_lighting@2x.png) no-repeat left center;
-				background-size: 2.2rem 2.2rem;
+			p:first-child{
+				margin-bottom: 1.5rem;
 			}
-			// .defeat{
-			.t3{
-				background: url(../../assets/icon/icon_bigredcancle@2x.png) no-repeat left center;
-				background-size: 2.2rem 2.2rem;
-			}
-			// .waitting{
-			.t4{
-				background: url(../../assets/icon/icon_right@2x.png) no-repeat left center;
-				background-size: 2.2rem 2.2rem;
+
+			.addNode{
+				font-size: 1.5rem;
+				color: #9a9c9d;
+				background: #F8F8F8;
+				text-align: center;
+				padding: 1rem 0;
 			}
 
 		}
