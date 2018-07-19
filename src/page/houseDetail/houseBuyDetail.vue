@@ -6,9 +6,11 @@
       <span class="header-title"><span class="village">{{block_name}}</span>
         <i v-if="attentionStatus" @click="attention()" class="icon iconfont xl">&#xe609;</i>
         <i v-else @click="attention()" class="icon iconfont xl">&#xe657;</i>
-        <div class="badge">
+        <div class="badge" >
+          <router-link :to="{ name:'houseCompared',params: { }}">
             <img src="../../assets/icon/icon_topbar_hclist@2x.png">
-            <div class="div2">4</div>
+            <div v-if="compareNum!=''" class="div2">{{compareNum}}</div>
+          </router-link>
         </div>
       </span>
 
@@ -178,7 +180,7 @@
       <div class="button-bottom">
         <el-row class="el-bt">
           <el-col :span="8" class="grid-bt-content bg-bt-light">
-            <div><img src="../../assets/icon/icon_addtolist@2x.png"><br><span class="span-icon">加入对比</span></div>
+            <div @click="addCompare()"><img src="../../assets/icon/icon_addtolist@2x.png"><br><span class="span-icon">{{compareDesc}}</span></div>
           </el-col>
           <router-link :to="{ name:'houseAppointment',params: { homes: houseDetail}}">
             <el-col :span="8" class="grid-bt-content bg-bt-m centenr">
@@ -258,11 +260,15 @@
         userType:'customer',
         houseType:'1',
         blockId:'1',
+        compareNum:'',
+        compareDesc:'加入对比',
+        compareList:[],
       }
     },
     created() {
       this.getHouseDetail();
       this.getCommunityDetail();
+      this.getCompareNum();
     },
     components: {
       headTop,
@@ -467,7 +473,34 @@
         this.houseId = data;
         this.houseType = '1';
         this.getHouseDetail();
-      }
+      },
+      getCompareNum(){
+        //获取用户名
+        let loginName = this.$store.state.userInfo.loginName;
+        //在该用户获取对比清单
+        this.compareList = localStorage.getItem("comparedList_hz_"+loginName);
+        console.log(localStorage)
+        console.log(this.compareList)
+        if(this.compareList != null){
+          this.compareNum = this.compareList.length;
+        }
+      },
+      addCompare(){
+        console.log(this.$store)
+        var loginName = this.$store.state.userInfo.loginName;
+        if(this.compareDesc == '加入对比'){
+
+          //加入对比清单
+          localStorage.setItem("comparedList_hz_"+loginName,JSON.stringify(this.houseDetail));
+          this.compareDesc = '取消对比';
+          this.getCompareNum();
+        }else if(this.compareDesc == '取消对比'){
+          //对比清单移除
+          localStorage.removeItem("comparedList_hz_"+loginName);
+          this.compareDesc = '加入对比';
+          this.getCompareNum();
+        }
+      },
     }
   }
 
