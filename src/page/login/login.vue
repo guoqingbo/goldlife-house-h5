@@ -24,7 +24,7 @@
     import headTop from '../../components/header/head'
 //    import $alert from '../../components/common/alert/alert.js'
 //    import { Toast } from 'mint-ui';
-    import { MessageBox } from 'mint-ui';
+//    import { MessageBox } from 'mint-ui';
     export default {
         data(){
             return {
@@ -125,7 +125,7 @@
                   this.$store.commit('setUserInfo',{loginName:this.loginName,});
                   //获取登录后的跳转地址
                   let redirectUrl = res.data.result;
-                  this.$messageBox.alert(redirectUrl, "回掉地址");
+//                  this.$messageBox.alert(redirectUrl, "回掉地址");
                   if (redirectUrl){
                       window.location.href = redirectUrl;
                   }
@@ -142,9 +142,9 @@
                 }
 //                this.$store.dispatch('setUserInfo', userInfo);
               })
-              .catch(function (response) {
+              .catch(function (res) {
 //                  this.$message.error(response.error_msg);
-                console.log(response)
+                console.log(res)
               });
           },
         }
