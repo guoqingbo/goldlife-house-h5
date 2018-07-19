@@ -30,15 +30,19 @@
 		},
 		methods:{
 			confirmOut(){
-				api.logout()
+        let params = {
+          openId:this.$route.query? this.$route.query.openId : "",
+          code:this.$route.query.code ? this.$route.query.code : "",
+        };
+				api.logout(params)
 				.then(res=>{
 					if(res.data.success){
 						// 退出成功跳转到那个界面/user/weixin/menu/redirectType=account
 						this.$toast({
-		                    message: "退出成功",
-		                    position: 'middle',
-		                    duration: 3000
-		                  })
+                message: "退出成功",
+                position: 'middle',
+                duration: 3000
+              })
 
 						setTimeout(function(){
 							window.location.href = envConfig.baseUrl + "/user/weixin/menu/redirectType=account";

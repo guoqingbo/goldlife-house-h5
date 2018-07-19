@@ -76,10 +76,13 @@ export default {
   },
 
 // 用户登出
-  logout(){
+  logout(data){
     return axios.post(
       'user/logout',
-      qs.stringify({})//无需传参数
+      qs.stringify({
+        openId:data.openId,
+        code:data.code,
+      })//无需传参数
     )
   },
 
@@ -156,6 +159,8 @@ export default {
         pageIndex:data.pageIndex,
         orderBy:data.orderBy,
         orderColumn:data.orderColumn,
+        openId:data.openId,
+        code:data.code,
       }
     })
   },
