@@ -94,6 +94,13 @@ const signDetail = resolve => {
   });
 };
 
+// 看房主页
+const lookHouseIndex = resolve => {
+  require.ensure(['../page/lookHouse/lookHouseIndex'], () => {
+    resolve(require('../page/lookHouse/lookHouseIndex'));
+  });
+};
+
 
 const imgIncrease = resolve => {
   require.ensure(['../page/houseDetail/imgIncrease'], () => {
@@ -230,6 +237,13 @@ const routes = [
     path: '/villageMore',
     name: 'villageMore',
     component: villageMore,
+  },
+
+  // 看房主页
+  {
+    path: '/lookHouseIndex',
+    name: 'lookHouseIndex',
+    component: lookHouseIndex,
   },
 
 ];

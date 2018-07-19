@@ -40,7 +40,7 @@
   .top-header{
     position: relative;
     background-color: $themeColor;
-    font-size: 0.8rem;
+    font-size: 1.6rem;
     color: #ffffff;
     height: 4.4rem;
     line-height: 4.4rem;

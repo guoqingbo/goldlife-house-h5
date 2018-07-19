@@ -1,5 +1,5 @@
 <template>
-  <div class="containt">
+  <div class="houseBuyDetail">
     <head-top goBack="true"/>
     <h1 class="nav-header">
       <span class="go-back" @click="$router.go(-1)"><i class="icon iconfont go-back-icon">&#xe60f;</i></span>
@@ -129,15 +129,18 @@
             <p>三室一厅/120㎡/朝北</p>
             <p><span style="color: #e10000">350万</span>&nbsp;&nbsp;&nbsp;45000元/平</p>
           </li>-->
-          <li v-if="isSell" v-for='sellImg in sellList' @click="getHomeDetail()">
+
+          <li v-if="isSell" v-for='sellImg in sellList' @click="getHomeDetail(sellImg.id)">
             <img :src="sellImg.pic"><br/>
             <p>{{sellImg.room_type}}|{{sellImg.buildarea}}|{{sellImg.forward}}</p>
             <p><span style="color: #e10000">{{sellImg.price}}</span>&nbsp;&nbsp;&nbsp;{{sellImg.avgprice}}</p>
           </li>
-          <li v-else-if="isRent" v-for='rentImg in rentList'>
+          <li v-if="isRent" v-for='rentImg in rentList'>
+            <router-link :to="{ name:'houseRentDetail',params: {cityId:cityId,houseId:houseId,userType:userType,houseType:houseType}}">
             <img :src="rentImg.pic"><br/>
             <p>{{rentImg.room_type}}|{{rentImg.buildarea}}|{{rentImg.forward}}</p>
             <p><span style="color: #e10000">{{rentImg.price}}</span></p>
+            </router-link>
           </li>
 
         </ul>
@@ -160,16 +163,13 @@
       <div class="sameArea">
         <p>周边小区</p>
         <ul class="category-head">
-          <!--<li v-for="ortherImg in otherImgAttr">
-            <img :src="ortherImg.imgUrl"><br/>
-            <p>3室1厅卫|120㎡|朝北</p>
-            <p><span style="color: #e10000">350万</span>&nbsp;&nbsp;&nbsp;45000元/平</p>
-          </li>-->
           <li v-for="ortherImg in communityAround">
+            <router-link :to="{ name:'villageDetail',params: {cityId:cityId,houseId:houseId,userType:userType,houseType:houseType}}">
             <img :src="ortherImg.surface_img?ortherImg.surface_img:require('../../assets/icon/icon_addtolist@2x.png')"><br/>
             <p style="color: #885D24;">{{ortherImg.build_date}}年建</p>
             <p>{{ortherImg.cmt_name}}</p>
             <p class="p-bottom"><span style="color: #e10000">{{ortherImg.averprice}}元/平</span></p>
+            </router-link>
           </li>
         </ul>
       </div>
@@ -190,9 +190,10 @@
           </el-col>
         </el-row>
       </div>
-
-
     </div>
+    <keep-alive>
+      <router-view></router-view>
+    </keep-alive>
   </div>
 
 </template>
@@ -254,6 +255,9 @@
         communityAround: [],//周边小区
         attentionStatus: false,
         cityId:'hz',
+        userType:'customer',
+        houseType:'1',
+        blockId:'1',
       }
     },
     created() {
@@ -281,11 +285,16 @@
     methods: {
       //房源详情
       getHouseDetail() {
+        //获取参数
+        /*this.cityId = this.$route.params.cityId;
+        this.houseId = this.$route.params.houseId;
+        this.userType = this.$route.params.userType;
+        this.houseType = this.$route.params.houseType;*/
         let params = {
-          cityId: "hz",
-          houseId: '1',
-          userType: '1',
-          houseType: '1'
+          cityId: this.cityId,
+          houseId: this.houseId,
+          userType: this.userType,
+          houseType: this.houseType
         };
         api.getHouseDetail(params)
           .then(res => {
@@ -350,11 +359,16 @@
       },
       //小区详情
       getCommunityDetail() {
+        //获取参数
+        /*this.blockId = this.$route.params.blockId;
+        this.cityId = this.$route.params.cityId;
+        this.userType = this.$route.params.userType;
+        this.houseType = this.$route.params.houseType;*/
         let params = {
-          blockId: "1",
-          city: 'hz',
-          userType: '1',
-          houseType: '1'
+          blockId: this.blockId,
+          city: this.cityId,
+          userType: this.userType,
+          houseType: this.houseType
         };
         api.getCommunityDetail(params)
           .then(res => {
@@ -449,8 +463,10 @@
             });
         }
       },
-      getHomeDetail(){
-        console.log('房源详情');
+      getHomeDetail(data){
+        this.houseId = data;
+        this.houseType = '1';
+        this.getHouseDetail();
       }
     }
   }
@@ -490,6 +506,7 @@
       .xl {
         position: absolute;
         right: 5rem;
+        color: #ffc16b;
       }
       .badge {
         width: 3rem;
