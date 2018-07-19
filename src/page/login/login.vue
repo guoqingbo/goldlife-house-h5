@@ -112,7 +112,9 @@
               loginName:this.loginName,
               password:this.mobileCodeInput,
               type:2, // 1:密码登录 2：验证码登录
-              redirectType:this.$route.params ? this.$route.params.redirect:"",
+              redirectType:this.$route.query ? this.$route.query.redirectType:"",
+              openId:this.$route.query ? this.$route.query.openId:"",
+              code:this.$route.query ? this.$route.query.code:"",
             }
             console.log(loginInfo)
             api.userLogin(loginInfo)

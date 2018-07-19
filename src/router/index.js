@@ -67,6 +67,13 @@ const comparedResult = resolve => {
   });
 };
 
+//关注房源列表
+const careHouseList = resolve => {
+  require.ensure(['../page/houseCompared/careHouseList'], () => {
+    resolve(require('../page/houseCompared/careHouseList'));
+  });
+};
+
 // 房源对比列表
 const houseCompared = resolve => {
   require.ensure(['../page/houseCompared/houseCompared'], () => {
@@ -112,6 +119,12 @@ const villageDetail = resolve => {
   });
 };
 
+const villageMore = resolve => {
+  require.ensure(['../page/houseDetail/villageMore'], () => {
+    resolve(require('../page/houseDetail/villageMore'));
+  });
+};
+
 const routes = [
     {
       path: '/',
@@ -130,7 +143,7 @@ const routes = [
   //   // meta: { keepAlive: false, requiresAuth: false },
   // },
     {
-      path: '/login/:redirect',
+      path: '/login',
       name: 'login',//登录页
       component: login,
       // meta: { keepAlive: false, requiresAuth: false },
@@ -174,6 +187,11 @@ const routes = [
       component: myCare,
     },
   {
+    path:'/careHouseList',
+    name:'careHouseList',
+    component:careHouseList,
+  },
+  {
     path: '/houseRentDetail',
     name: 'houseRentDetail',//租房详情
     component: houseRentDetail,
@@ -207,6 +225,11 @@ const routes = [
     path: '/villageDetail',
     name: 'villageDetail',
     component: villageDetail,
+  },
+  {
+    path: '/villageMore',
+    name: 'villageMore',
+    component: villageMore,
   },
 
 ];

@@ -1,6 +1,6 @@
 <template>
 	<div class="box">
-      <head-top />
+		<head-top />
         <h1 class="nav-header">
           <span class="go-back" @click="$router.go(-1)"><i class="icon iconfont go-back-icon">&#xe60f;</i></span>
           <span class="header-title">房源对比</span>
@@ -199,7 +199,7 @@
   		background:#fff;
   		padding:1.5rem 1rem 0;
   		font-family:PingFang-SC-Regular;
-		text-align: left;
+		  text-align: left;
   		h4{
 			font-size:1.5rem;
 			color:#424242;

@@ -69,6 +69,8 @@ export default {
         type:data.type, // 1:密码登录 2：验证码登录
         loginName:data.loginName,
         redirectType:data.redirectType,
+        openId:data.openId,
+        code:data.code,
       })
     )
   },
@@ -89,7 +91,6 @@ export default {
       'house/houseCompare',
       qs.stringify({
         data:JSON.stringify(data)
-        // data:JSON.parse(data)
       })
     )
   },
@@ -212,6 +213,7 @@ export default {
 
   //微信菜单
   weixinMenu(data){
+    console.log(data)
     return axios.get('/user/weixin/menu',{
       params:{
         redirectType:data.redirectType,// 可能值 house  account fund finan loan invite
@@ -232,6 +234,11 @@ export default {
   //我的收藏--二手房
   getHouseAttention(){
     return axios.get('/house/getHouseAttention')
+  },
+
+  //对比清单--从关注房源添加
+  getContrastAttentionHouse(){
+    return axios.post('/house/getContrastAttentionHouse')
   },
 
   //关注房源

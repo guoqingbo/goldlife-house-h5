@@ -11,7 +11,7 @@
       <span @click="walk()" :class="{ 'class-color': isWalk}">步行</span><span @click="bus()" :class="{ 'class-color': isBus}">公交</span><span @click="driver()" :class="{ 'class-color': isDriver}">驾车</span>
     </div>
     <div class="homeMap">
-        <div id="allmap" class="allmap"></div>
+      <div id="allmap" class="allmap"></div>
     </div>
 
     <keep-alive>

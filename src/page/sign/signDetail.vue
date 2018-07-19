@@ -12,7 +12,7 @@
 					<span>房源地址：</span>
 					<span>{{ signDetail.address }}</span>
 				</h2>
-				<p>成交价格：<span class="price">￥{{ signDetail.price |formatPrice}}</span></p>
+				<p>成交价格：<span class="price">￥{{ signDetail.price|formatPrice }}</span></p>
 				<p>建筑面积：<span>{{ signDetail.buildarea }}㎡</span></p>
 				<p>签约时间：<span>{{ signDetail.signing_time|moment("YYYY/MM/DD") }}</span></p>
 				<div class="flag">
@@ -30,20 +30,19 @@
 				</p>
 			</div>
 			<div class="status" v-if="signDetail.now_transfer != undefined">
-				<h2>当前签约状态：<span>{{ !!signDetail.now_transfer.stage_name?signDetail.now_transfer.stage_name:'' }}</span></h2>
+				<h2>当前签约状态：<span>{{ signDetail.now_transfer.stage_name }}</span></h2>
 
 				<div class="status_content">					
 					<p v-for="item in transfer">
-						<span v-if="item.step_id == nowTransferId" class="current"></span>
+						<span v-if="item.step_id==signDetail.now_transfer.step_id" class="current"></span>
 						<span v-else-if="item.isComplete==1" class="complete"></span>
-						<span v-else class="unComplete"></span>
-						<span>{{ !!item.stage_name?item.stage_name:'' }}</span>
+						<span v-else class="uncomplete"></span>
+						<span>{{ item.stage_name }}</span>
 					</p>
 				</div>
 				
 			</div>
 
-			<el-button v-show="signDetail.isConfirmCollectMoney" class="btn-receiver" @click="confirmReceive" style="font-size:1.6rem">确认收款</el-button>
 		</div>
 
 	</div>
@@ -63,15 +62,11 @@
 		          '1':'处理中',
 		          '2':'结案',
 		          '3':'作废'
-		        },
-		        nowTransferId:''
+		        }
 			}
 		},
-		created(){
-			this.getSignDetail();
-		},
 		mounted(){
-			
+			this.getSignDetail();
 		},
 		methods:{
 			getSignDetail(){
@@ -87,8 +82,8 @@
 					if(res.data.success){
 						this.signDetail = res.data.result;
 						this.transfer = res.data.result.transfer;
-						this.nowTransferId = res.data.result.now_transfer.step_id;
-						
+						console.log(this.signDetail);
+						console.log(this.transfer);
 					}else{
 						this.$toast({
 			              message: res.data.errorMessage,
@@ -101,15 +96,16 @@
 					console.log(err);
 				})
 			},
-			confirmReceive(){
-
-			}
 		},
-		filters: {
+		components: {
+          headTop
+        },
+        filters: { //定义过滤器
 		  formatPrice: function (value) {
  			if(!value) return '0.00';
 			   var intPart = Number(value).toFixed(0); //获取整数部分
-			   var intPartFormat = intPart.toString().replace(/(\d)(?=(?:\d{3})+$)/g, '$1,'); //将整数部分逢三一断
+				//将整数部分逢三一断
+			   var intPartFormat = intPart.toString().replace(/(\d)(?=(?:\d{3})+$)/g, '$1,'); 
 			   var valueStr = value + '';//先转换成字符串
 			   // 判断是否有小数
 			   if(valueStr.indexOf(".") >= 0){
@@ -117,13 +113,9 @@
 			   		return intPartFormat + "." + floatPart;
 			   }else{
 			   		return intPartFormat;
-			   }			   
-
+			   }			  
 		  }
 		},
-		components: {
-          headTop
-        },
 	}
 </script>
 <style lang="scss" scoped>
@@ -235,7 +227,8 @@
   		padding: 1.5rem;
   		p{
   			font-size: 1.4rem;
-  			margin-top: 2rem;  			
+  			margin-top: 2rem;
+  			
   		}
   		p:last-child{
   			margin-bottom: 1.75rem;
@@ -255,41 +248,35 @@
 		span{
 			font-size: 1.4rem;
 		}
-		.complete{			  			
+		
+		.complete{
+			@extend .common;
 			background: url(../../assets/icon/circle2@2x.png) no-repeat left center;
-			@extend.iconCommon;
 		}
-		.unComplete{				  			
+		.uncomplete{
+			@extend .common;
 			background: url(../../assets/icon/circle1@2x.png) no-repeat left center;
-			@extend.iconCommon;
 		}
-		.current{//当前签约icon
+		.current{
 			display: inline-block;
 			width: 2.2rem;
-			height: 2.2rem;
-			background: url(../../assets/icon/icon_now@2x.png) no-repeat left center;
-			background-size: 2.2rem 2.2rem;
+			height: 2.2rem;		
 			position: absolute;
 			left:-1.2rem;
+			background: url(../../assets/icon/icon_now@2x.png) no-repeat left center;
+			background-size: 2.2rem 2.2rem;
 		}
+
 	}
 
-  	.btn-receiver{
-	    width: 100%;
-	    height: 5rem;
-	    background-color: #FFBB02;
-	    // font-size: 16px;	    
-	    color: #ffffff;
-	  }
-  }
-
-  .iconCommon{
-  	display: inline-block;
-  	width: 2rem;
-	height: 2rem;		
-	position: absolute;
-	left:-0.5rem;
-	background-size: 1rem 1rem;
+  	.common{
+  		display: inline-block;
+		width: 2rem;
+		height: 2rem;
+		background-size: 1rem 1rem;
+		position: absolute;
+		left:-0.5rem;
+  	}
   }
 
 
