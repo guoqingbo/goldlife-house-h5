@@ -111,7 +111,7 @@
             <p><span style="color: #e10000">{{sellImg.price}}</span>&nbsp;&nbsp;&nbsp;{{sellImg.avgprice}}</p>
             </router-link>
           </li>
-          <li v-else-if="isRent" v-for='rentImg in rentList' @click="getHomeDetail(rentImg.id)">
+          <li v-if="isRent" v-for='rentImg in rentList' @click="getHomeDetail(rentImg.id)">
             <img :src="rentImg.pic"><br/>
             <p>{{rentImg.room_type}}|{{rentImg.buildarea}}|{{rentImg.forward}}</p>
             <p><span style="color: #e10000">{{rentImg.price}}</span></p>
@@ -216,7 +216,7 @@
         buildyear: '',//年代
         maplng: '',//坐标x
         maplat: '',//坐标y
-        center: {lng: 116.40387397, lat: 39.91488908},
+        center: {lng: 120.12, lat: 30.16},
         imgHouseAttr: ['', '', ''],//房源照片
         //同小区
         sellList: [],//在售
@@ -226,7 +226,7 @@
         attentionStatus: '关注',
         cityId: 'hz',
         userType:'customer',
-        houseType:'1',
+        houseType:'2',
         blockId:'1',
       }
     },
@@ -255,11 +255,16 @@
     methods: {
       //房源详情
       getHouseDetail() {
+        //获取参数
+        /*this.blockId = this.$route.params.blockId;
+        this.city = this.$route.params.city;
+        this.userType = this.$route.params.userType;
+        this.houseType = this.$route.params.houseType;*/
         let params = {
-          cityId: "hz",
-          houseId: '2',
-          userType: '2',
-          houseType: '2'
+          cityId: this.cityId,
+          houseId: this.houseId,
+          userType: this.userType,
+          houseType: this.houseType
         };
         api.getHouseDetail(params)
           .then(res => {
@@ -316,10 +321,10 @@
       //小区详情
       getCommunityDetail() {
         let params = {
-          blockId: "2839",
-          city: 'hz',
-          userType: '2',
-          houseType: '2'
+          blockId: this.blockId,
+          city: this.cityId,
+          userType: this.userType,
+          houseType: this.houseType
         };
         api.getCommunityDetail(params)
           .then(res => {

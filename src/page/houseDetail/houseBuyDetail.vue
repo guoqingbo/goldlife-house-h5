@@ -135,7 +135,7 @@
             <p>{{sellImg.room_type}}|{{sellImg.buildarea}}|{{sellImg.forward}}</p>
             <p><span style="color: #e10000">{{sellImg.price}}</span>&nbsp;&nbsp;&nbsp;{{sellImg.avgprice}}</p>
           </li>
-          <li v-else-if="isRent" v-for='rentImg in rentList'>
+          <li v-if="isRent" v-for='rentImg in rentList'>
             <router-link :to="{ name:'houseRentDetail',params: {cityId:cityId,houseId:houseId,userType:userType,houseType:houseType}}">
             <img :src="rentImg.pic"><br/>
             <p>{{rentImg.room_type}}|{{rentImg.buildarea}}|{{rentImg.forward}}</p>
@@ -285,6 +285,11 @@
     methods: {
       //房源详情
       getHouseDetail() {
+        //获取参数
+        /*this.cityId = this.$route.params.cityId;
+        this.houseId = this.$route.params.houseId;
+        this.userType = this.$route.params.userType;
+        this.houseType = this.$route.params.houseType;*/
         let params = {
           cityId: this.cityId,
           houseId: this.houseId,
@@ -354,6 +359,11 @@
       },
       //小区详情
       getCommunityDetail() {
+        //获取参数
+        /*this.blockId = this.$route.params.blockId;
+        this.cityId = this.$route.params.cityId;
+        this.userType = this.$route.params.userType;
+        this.houseType = this.$route.params.houseType;*/
         let params = {
           blockId: this.blockId,
           city: this.cityId,
