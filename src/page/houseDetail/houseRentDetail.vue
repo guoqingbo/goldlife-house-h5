@@ -214,6 +214,7 @@
         //周边小区
         communityAround: [],//周边小区
         attentionStatus:'关注',
+        cityId:'hz',
       }
     },
     created() {
@@ -271,6 +272,7 @@
               this.imgHouseAttr = resultHouse.img;
               this.center.lng = resultHouse.communityLocation.b_map_x;
               this.center.lat = resultHouse.communityLocation.b_map_y;
+              this.cityId = resultHouse.cityId;
               if(resultHouse.attentionState === '1'){
                 this.attentionStatus = '已关注'
               }else if(resultHouse.attentionState === '0'){
@@ -350,11 +352,10 @@
       clkAttention(){
         if(this.attentionStatus === '关注'){
           let attentionnfo = {
-            cityId:'hz',
-            businessNum:'hz'+this.houseId,
-            businessType:1,
+            cityId:this.cityId,
+            businessNum:this.houseId,
+            businessType:'租房',
             sysType:1,
-            userId:2,
             attentionState:1,
           };
           console.log(attentionnfo);
@@ -372,11 +373,10 @@
           return
         }else if(this.attentionStatus === '已关注'){
           let attentionnfo = {
-            cityId:'hz',
-            businessNum:'hz'+this.houseId,
-            businessType:1,
+            cityId:this.cityId,
+            businessNum:this.houseId,
+            businessType:'租房',
             sysType:1,
-            userId:2,
             attentionState:0,
           };
           api.attention(attentionnfo)

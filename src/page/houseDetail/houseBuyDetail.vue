@@ -3,7 +3,9 @@
     <head-top goBack="true"/>
     <h1 class="nav-header">
       <span class="go-back" @click="$router.go(-1)"><i class="icon iconfont go-back-icon">&#xe60f;</i></span>
-      <span class="header-title"><span class="village">{{block_name}}</span><i @click="attention()" class="icon iconfont xl">&#xe657;</i>
+      <span class="header-title"><span class="village">{{block_name}}</span>
+        <i v-if="attentionStatus" @click="attention()" class="icon iconfont xl">&#xe609;</i>
+        <i v-else @click="attention()" class="icon iconfont xl">&#xe657;</i>
         <div class="badge">
             <img src="../../assets/icon/icon_topbar_hclist@2x.png">
             <div class="div2">4</div>
@@ -250,6 +252,8 @@
         rentList: [],//在租
         //周边小区
         communityAround: [],//周边小区
+        attentionStatus: false,
+        cityId:'hz',
       }
     },
     created() {
@@ -305,6 +309,13 @@
               this.maplng = resultHouse.communityLocation.b_map_x;
               this.maplat = resultHouse.communityLocation.b_map_y;
               this.imgHouseAttr = resultHouse.img;
+              this.houseId = resultHouse.id;
+              this.cityId = resultHouse.cityId;
+              if(resultHouse.attentionState == '0'){
+                this.attentionStatus = false;
+              }else if(resultHouse.attentionState == '1'){
+                this.attentionStatus = true;
+              }
               this.center.lng = resultHouse.communityLocation.b_map_x;
               this.center.lat = resultHouse.communityLocation.b_map_y;
               var address = resultHouse.disrictName+','+resultHouse.streetName;
@@ -395,24 +406,48 @@
       },
       //关注
       attention(){
-        let attentionnfo = {
-          cityId:'hz',
-          businessNum:'hz'+this.houseId,
-          businessType:1,
-          sysType:1,
-          userId:1,
-          attentionState:1,
-        };
-        api.attention(attentionnfo)
-          .then(res =>{
-            console.log(res.data)
-            if (res.data.success){
-              console.log('关注成功')
-            }
-          })
-          .catch(function (response) {
-            console.log(response)
-          });
+        console.log(this.attentionStatus)
+        if (!this.attentionStatus) {
+          let attentionnfo = {
+            cityId: this.cityId,
+            businessNum: this.houseId,
+            businessType: '二手房',
+            sysType: 1,
+            attentionState: 1,
+          };
+          console.log(attentionnfo);
+          api.attention(attentionnfo)
+            .then(res => {
+              console.log(res.data)
+              if (res.data.success) {
+                console.log('关注成功')
+                this.attentionStatus = true;
+              }
+            })
+            .catch(function (response) {
+              console.log(response)
+            });
+          return
+        } else if (this.attentionStatus) {
+          let attentionnfo = {
+            cityId: this.cityId,
+            businessNum: this.houseId,
+            businessType: '二手房',
+            sysType: 1,
+            attentionState: 0,
+          };
+          api.attention(attentionnfo)
+            .then(res => {
+              console.log(res.data)
+              if (res.data.success) {
+                console.log('取消关注')
+                this.attentionStatus = false;
+              }
+            })
+            .catch(function (response) {
+              console.log(response)
+            });
+        }
       },
       getHomeDetail(){
         console.log('房源详情');
