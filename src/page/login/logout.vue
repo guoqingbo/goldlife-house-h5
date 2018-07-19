@@ -22,26 +22,32 @@
 	export default {
 		// name:'logout',
 		data(){
-			return{
-
-			}
+			return{}
 		},
-		created(){
-		},
+		created(){},
 		methods:{
 			confirmOut(){
-				api.logout()
+				//从url获取openId和code
+				let _data = {
+					// openId:this.$route.query.openId,
+					// code:this.$route.query.code
+					openId:'test_open_id',
+					code:2334
+				}
+
+				api.logout(_data)
 				.then(res=>{
 					if(res.data.success){
-						// 退出成功跳转到那个界面/user/weixin/menu/redirectType=account
 						this.$toast({
 		                    message: "退出成功",
 		                    position: 'middle',
 		                    duration: 3000
 		                  })
+						var openURL = res.data.result;
 
+						// 退出成功跳转
 						setTimeout(function(){
-							window.location.href = envConfig.baseUrl + "/user/weixin/menu/redirectType=account";
+							window.location.href = openURL;
 						},1000)
 
 					}else{
@@ -67,7 +73,6 @@
 </script>
 
 <style lang="scss" scoped>
-@import '../../style/mixin';
   .nav-header{
     position: relative;
     background-color: #fff;
@@ -78,7 +83,7 @@
     border-bottom: solid .6rem #f8f8f8;
     .go-back{
       position: absolute;
-      left: $contentPadding;
+      left: 1.5rem;
     }
     .go-back-icon{
       font-size: 2rem;

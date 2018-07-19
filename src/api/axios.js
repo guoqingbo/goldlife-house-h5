@@ -76,10 +76,13 @@ export default {
   },
 
 // 用户登出
-  logout(){
+  logout(data){
     return axios.post(
-      'user/logout',
-      qs.stringify({})//无需传参数
+      'user/logout?openId='+data.openId +'&code='+data.code,
+      // qs.stringify({
+      //   openId:JSON.stringify(data.openId),
+      //   code:JSON.stringify(data.code),
+      // })
     )
   },
 
@@ -112,6 +115,11 @@ export default {
         userType:data.userType
       }
     })
+  },
+
+  //看房日程
+  lookHouseIndex(data){
+    return axios.get('house/getHouseAppointmentList?openId='+data.openId +'&code='+data.code,{})
   },
 
   // //区域板块
