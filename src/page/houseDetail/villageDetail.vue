@@ -31,8 +31,12 @@
               </el-row>
             </el-col>
             <el-col :span="11">
-              <el-row class="el-houseDes">
+              <!--<el-row class="el-houseDes">
                 <span><i class="icon iconfont right">&#xe609;</i></span>
+              </el-row>-->
+              <el-row class="el-houseDes" >
+                <span v-if="attentionStatus" @click="clkAttention()"><i v-if="attentionStatus" class="icon iconfont right">&#xe609;</i></span>
+                <span v-else @click="clkAttention()"><i class="icon iconfont xl right">&#xe657;</i></span>
               </el-row>
             </el-col>
 
@@ -176,7 +180,8 @@
         rentList: [],//在租
         //周边小区
         communityAround: [],//周边小区
-        attentionStatus: '关注',
+        attentionStatus: false,
+        cityId:'hz',
       }
     },
     created() {
@@ -226,6 +231,15 @@
               this.builds = resultHouse.build_num;
               this.title = resultHouse.cmt_name;
               this.addressDetail = resultHouse.address.split('（')[0];
+              this.cityId = resultHouse.cityId;
+              console.log(this.id)
+              console.log('关注状态')
+              console.log(resultHouse.attentionState)
+              if(resultHouse.attentionState == '0'){
+                this.attentionStatus = false;
+              }else if(resultHouse.attentionState == '1'){
+                this.attentionStatus = true;
+              }
               this.center.lng = resultHouse.b_map_x;
               this.center.lat = resultHouse.b_map_y;
               var address = resultHouse.disrictName + ',' + resultHouse.streetName;
@@ -273,13 +287,12 @@
         }
       },
       clkAttention() {
-        if (this.attentionStatus === '关注') {
+        if (!this.attentionStatus) {
           let attentionnfo = {
-            cityId: 'hz',
-            businessNum: 'hz' + this.houseId,
-            businessType: 1,
+            cityId: this.cityId,
+            businessNum: this.id,
+            businessType: '小区',
             sysType: 1,
-            userId: 2,
             attentionState: 1,
           };
           console.log(attentionnfo);
@@ -288,20 +301,19 @@
               console.log(res.data)
               if (res.data.success) {
                 console.log('关注成功')
-                this.attentionStatus = '已关注';
+                this.attentionStatus = true;
               }
             })
             .catch(function (response) {
               console.log(response)
             });
           return
-        } else if (this.attentionStatus === '已关注') {
+        } else if (this.attentionStatus) {
           let attentionnfo = {
-            cityId: 'hz',
-            businessNum: 'hz' + this.houseId,
-            businessType: 1,
+            cityId: this.cityId,
+            businessNum: this.id,
+            businessType: '小区',
             sysType: 1,
-            userId: 2,
             attentionState: 0,
           };
           api.attention(attentionnfo)
@@ -309,7 +321,7 @@
               console.log(res.data)
               if (res.data.success) {
                 console.log('取消关注')
-                this.attentionStatus = '关注';
+                this.attentionStatus = false;
               }
             })
             .catch(function (response) {
