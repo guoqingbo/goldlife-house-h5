@@ -49,7 +49,14 @@
               .then( res => {
                 console.log(res)
                 if (res.data.success){
-                  this.hoseLists = res.data.result.list
+                  res.data.result.forEach(function (item) {
+                   let hoseItem = {
+                      title:item.cmt_name,
+                      describe:item.build_date?item.build_date+"年建":"",
+                      pic:item.surface_img
+                    }
+                    this.hoseLists.push(hoseItem);
+                  });
                 }else{
                   this.$toast({
                   message: res.data.errorMessage,
@@ -70,7 +77,7 @@
               .then( res => {
                 console.log(res)
                 if (res.data.success){
-                  this.hoseLists = res.data.result.list
+                  this.hoseLists = res.data.result
                 }else{
                   this.$toast({
                   message: res.data.errorMessage,
@@ -91,7 +98,7 @@
               .then( res => {
                 console.log(res)
                 if (res.data.success){
-                  this.hoseLists = res.data.result.list
+                  this.hoseLists = res.data.result
                 }else{
                   this.$toast({
                   message: res.data.errorMessage,
@@ -116,7 +123,7 @@
 <style lang="scss" scoped>
  .header-nav{
    position: relative;
-   border-bottom: 10px solid #f8f8f8;
+   border-bottom: 1 solid #f8f8f8;
    /*height: ;*/
    .go-back{
      position: absolute;
@@ -129,7 +136,7 @@
      width: 20rem;
      display: flex;
      li{
-       font-size: 16px;
+       font-size: 1.6rem;
        color: #424242;
        font-weight: bold;
        flex:1 1;

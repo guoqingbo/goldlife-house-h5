@@ -12,7 +12,7 @@
 					<span>房源地址：</span>
 					<span>{{ signDetail.address }}</span>
 				</h2>
-				<p>成交价格：<span class="price">￥{{ signDetail.price }}</span></p>
+				<p>成交价格：<span class="price">￥{{ signDetail.price|formatPrice }}</span></p>
 				<p>建筑面积：<span>{{ signDetail.buildarea }}㎡</span></p>
 				<p>签约时间：<span>{{ signDetail.signing_time|moment("YYYY/MM/DD") }}</span></p>
 				<div class="flag">
@@ -29,19 +29,20 @@
 					<span>{{ signDetail.owner_tel }}</span>
 				</p>
 			</div>
-			<div class="status">
+			<div class="status" v-if="signDetail.now_transfer != undefined">
 				<h2>当前签约状态：<span>{{ signDetail.now_transfer.stage_name }}</span></h2>
 
 				<div class="status_content">					
 					<p v-for="item in transfer">
-						<span></span>
+						<span v-if="item.step_id==signDetail.now_transfer.step_id" class="current"></span>
+						<span v-else-if="item.isComplete==1" class="complete"></span>
+						<span v-else class="uncomplete"></span>
 						<span>{{ item.stage_name }}</span>
 					</p>
 				</div>
 				
 			</div>
 
-			<el-button class="btn-receiver" @click="confirmReceive">确认收款</el-button>
 		</div>
 
 	</div>
@@ -95,13 +96,26 @@
 					console.log(err);
 				})
 			},
-			confirmReceive(){
-
-			}
 		},
 		components: {
           headTop
         },
+        filters: { //定义过滤器
+		  formatPrice: function (value) {
+ 			if(!value) return '0.00';
+			   var intPart = Number(value).toFixed(0); //获取整数部分
+				//将整数部分逢三一断
+			   var intPartFormat = intPart.toString().replace(/(\d)(?=(?:\d{3})+$)/g, '$1,'); 
+			   var valueStr = value + '';//先转换成字符串
+			   // 判断是否有小数
+			   if(valueStr.indexOf(".") >= 0){
+			   		var floatPart = valueStr.split(".")[1]; //预定义小数部分 
+			   		return intPartFormat + "." + floatPart;
+			   }else{
+			   		return intPartFormat;
+			   }			  
+		  }
+		},
 	}
 </script>
 <style lang="scss" scoped>
@@ -234,25 +248,35 @@
 		span{
 			font-size: 1.4rem;
 		}
-		span:first-child{
-			display: inline-block;
-			width: 2rem;
-			height: 2rem;
+		
+		.complete{
+			@extend .common;
 			background: url(../../assets/icon/circle2@2x.png) no-repeat left center;
-  			background-size: 1rem 1rem;
-  			position: absolute;
-  			left:-0.5rem;
+		}
+		.uncomplete{
+			@extend .common;
+			background: url(../../assets/icon/circle1@2x.png) no-repeat left center;
+		}
+		.current{
+			display: inline-block;
+			width: 2.2rem;
+			height: 2.2rem;		
+			position: absolute;
+			left:-1.2rem;
+			background: url(../../assets/icon/icon_now@2x.png) no-repeat left center;
+			background-size: 2.2rem 2.2rem;
 		}
 
 	}
 
-  	.btn-receiver{
-	    width: 100%;
-	    height: 5rem;
-	    background-color: #FFBB02;
-	    font-size: 16px;
-	    color: #ffffff;
-	  }
+  	.common{
+  		display: inline-block;
+		width: 2rem;
+		height: 2rem;
+		background-size: 1rem 1rem;
+		position: absolute;
+		left:-0.5rem;
+  	}
   }
 
 
