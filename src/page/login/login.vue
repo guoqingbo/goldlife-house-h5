@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="box">
         <head-top />
         <h1 class="nav-header">
           <span class="go-back" @click="$router.go(-1)"><i class="icon iconfont go-back-icon">&#xe60f;</i></span>
@@ -156,7 +156,9 @@
 
 <style lang="scss" scoped>
   @import '../../style/mixin';
-
+  .box{
+    font-size: 1.6rem;
+  }
   /**登录导航*/
   .nav-header{
     position: relative;

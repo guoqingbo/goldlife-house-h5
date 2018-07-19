@@ -3,7 +3,10 @@
   <div class="house-list">
     <ul>
       <li class="house-item clear" v-for="item in houseLists" :key="item.id">
-        <router-link to="/sellDetail"> <house-item :item="item" :houseType="houseType"/></router-link>
+        <router-link
+          :to="{name:houseTypeDetail[houseType], params:{cityId:'hz', houseId:item.id, userType:'customer', houseType:houseType}}">
+          <house-item :item="item" :houseType="houseType"/>
+        </router-link>
       </li>
     </ul>
   </div>
@@ -11,6 +14,14 @@
 <script>
   import houseItem from '../../components/common/houseItem'
   export default {
+    data(){
+        return {
+          houseTypeDetail:{
+            1:'houseBuyDetail',
+            2:'houseRentDetail'
+          }
+        }
+    },
     props:{
       houseLists:{},//房源列表
       houseType:{

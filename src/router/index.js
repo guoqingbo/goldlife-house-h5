@@ -143,17 +143,10 @@ const routes = [
     name:'home',//首页
     component: home,
   },
-  // {
-  //   path: '/login',
-  //   name: 'login',//登录页
-  //   component: login,
-  //   // meta: { keepAlive: false, requiresAuth: false },
-  // },
     {
       path: '/login',
       name: 'login',//登录页
       component: login,
-      // meta: { keepAlive: false, requiresAuth: false },
     },
     {
       path: '/logout',

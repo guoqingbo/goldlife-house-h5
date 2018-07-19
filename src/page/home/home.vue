@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="box">
       <!--房源列表页-->
       <div v-if="!isShowSearch">
         <head-top goBack="true"/>
@@ -476,6 +476,9 @@
 
 <style lang="scss" scoped>
 
+  .box{
+    font-size: 1.6rem;
+  }
   /*公用样式封装*/
   /*边框*/
   @mixin border {
