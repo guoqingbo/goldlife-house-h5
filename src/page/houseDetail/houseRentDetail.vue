@@ -276,9 +276,20 @@
               }else if(resultHouse.attentionState === '0'){
                 this.attentionStatus = '关注'
               }
+              var address = resultHouse.disrictName + ',' + resultHouse.streetName;
+              var point = new BMap.Point(this.center.lng, this.center.lat);
+              var marker = new BMap.Marker(point);
+              map.addOverlay(marker);
+              map.disableDragging();
+              map.centerAndZoom(point, 16);
+              map.panTo(point);
+              let lableInfor = new BMap.Label(address, {
+                position: point,
+                offset: new BMap.Size(-26, 0)
+              });
+              lableInfor.setStyle({backgroundColor: '#fff', padding: '0.5rem', border: '', fontSize: '.1rem',});
+              map.addOverlay(lableInfor)
 
-              console.log(this.maplng);
-              console.log(this.center.lng);
             } else {
               this.$message.error(res.data.errorMessage);
             }
@@ -385,34 +396,13 @@
         //window.location.href = 'tel://0755637'
       },
       ready() {
-        let map = new BMap.Map('allmap');
-        let point = new BMap.Point(this.center.lng, this.center.lat);
-        map.centerAndZoom(point, 10);
-        map.enableScrollWheelZoom(true);
-        map.enableDoubleClickZoom(true);
-        var geolocation = new BMap.Geolocation();
-        geolocation.getCurrentPosition((r) => {
-          if (r.point) {
-            //this.center.lng = r.longitude;
-            //this.center.lat = r.latitude;
-            let point = new BMap.Point(this.center.lng, this.center.lat);
-            console.log('point')
-            console.log(point);
-            console.log('r.point')
-            console.log(r.point);
-            let markers = new BMap.Marker(point);
-            map.addOverlay(markers);
-            map.panTo(point);
-            map.centerAndZoom(point, 16);
-            //向地图中添加缩放控件
-            var ctrl_nav = new BMap.NavigationControl({anchor: BMAP_ANCHOR_BOTTOM_RIGHT, isOpen: 1});
-            map.addControl(ctrl_nav);
-            //向地图中添加比例尺控件
-            var opts = {offset: new BMap.Size(1, 28)}
-            var ctrl_sca = new BMap.ScaleControl(opts);
-            map.addControl(ctrl_sca);
-          }
-        }, {enableHighAccuracy: true})
+        var map = new BMap.Map('allmap');
+        window.map = map;
+        var point = new BMap.Point(this.maplng, this.maplat);
+        var marker = new BMap.Marker(point);
+        map.addOverlay(marker);
+        map.disableDragging();
+        map.centerAndZoom(point, 16);
       }
     }
   }
