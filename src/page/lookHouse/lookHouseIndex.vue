@@ -7,72 +7,55 @@
           <span class="go-edit"><i class="icon iconfont editor-icon">&#xe62e;</i></span>
         </h1>
 		
-		<div class="box">
-			<div class="house-detail">
-				<img src="../../assets/icon/searcherror@2x.png">
-				<div>
-					<h3>
-						<span>约看小区&nbsp;</span>广厦天都城天星苑室内室内
-					</h3>
-					<p class="describ">3室1厅/120/朝北</p>
-					<p class="price">
-						<span>240万</span>
-						<span>&nbsp;&nbsp;43,345&nbsp;元/平</span>
+		<div class="box" v-for="i in houseList">
+			<!-- 线上房源 -->
+			<div v-if="i.lineType == 0">
+				<div class="house-detail" v-if="i.targetHouse != undefined">
+					<img :src="!!i.targetHouse.pic?i.targetHouse.pic:'./static/searcherror@2x.png'">
+					<div>
+						<h3>
+							<span>约看小区&nbsp;</span>
+							{{i.targetHouse.community_name}}
+						</h3>
+						<p class="describ">{{i.targetHouse.room}}室{{i.targetHouse.hall}}厅/{{i.targetHouse.buildarea}}㎡/朝{{i.targetHouse.forward}}</p>
+						<p class="price">
+							<span>{{i.targetHouse.price}}万</span>
+							<span>&nbsp;&nbsp;{{i.targetHouse.avgprice}}&nbsp;元/平</span>
+						</p>
+					</div>
+				</div>
+				<div class="house-status">
+					<p :class="'t'+i.state">
+						<span>{{ state[i.state] }}</span>
+						<span>{{ i.time|moment('MM月DD日 hh:mm') }}</span>
 					</p>
 				</div>
 			</div>
-			<div class="house-status">
-				<p class="reservation">
-					<span>预约中</span>
-					<span>12月08日15:00</span>
-				</p>
 
-			</div>
-		</div>
-
-		<div class="box">
-			<div class="house-detail">
-				<img src="../../assets/icon/searcherror@2x.png">
-				<div>
-					<h3>
-						<span>约看小区&nbsp;</span>广厦天都城天星苑室内室内
-					</h3>
-					<p class="describ">3室1厅/120/朝北</p>
-					<p class="price">
-						<span>240万</span>
-						<span>&nbsp;&nbsp;43,345&nbsp;元/平</span>
+			<!-- 线下房源 -->
+			<div v-else>
+				<div class="house-detail">
+					<img :src="!!i.targetHouse.pic?i.targetHouse.pic:'./static/searcherror@2x.png'">
+					<div>
+						<h3>线下房源</h3>
+						<p class="describ">请提前咨询确定房屋样式符合您的预期</p>
+						<p class="price">
+							<span>{{!!i.num?i.num:'0'}}</span>
+							<span>&nbsp;&nbsp;套</span>
+						</p>
+					</div>
+				</div>
+				<div class="house-status">
+					<p :class="'t'+i.state">
+						<span>{{ state[i.state] }}</span>
+						<span>{{ i.time|moment('MM/DD hh:mm') }}</span>
 					</p>
+
 				</div>
 			</div>
-			<div class="house-status">
-				<p class="defeat">
-					<span>预约失败</span>
-					<span>12月08日15:00</span>
-				</p>
 
-			</div>
 		</div>
 
-		<div class="box">
-			<div class="house-detail">
-				<img src="../../assets/icon/searcherror@2x.png">
-				<div>
-					<h3>线下房源</h3>
-					<p class="describ">请提前咨询确定房屋样式符合您的预期</p>
-					<p class="price">
-						<span>3</span>
-						<span>&nbsp;&nbsp;套</span>
-					</p>
-				</div>
-			</div>
-			<div class="house-status">
-				<p class="waitting">
-					<span>待看房</span>
-					<span>12月08日15:00</span>
-				</p>
-
-			</div>
-		</div>
 
 	</div>
 </template>
@@ -83,7 +66,14 @@
 		name:'lookHouseIndex',
 		data(){
 			return{
-				houseList:[]
+				houseList:[],
+				state:{
+					'1':'预约中',
+					'2':'预约中',
+					'3':'预约失败',
+					'4':'待看房',
+					'5':'看房结束',
+				}
 			}
 		},
 		created(){
@@ -101,6 +91,7 @@
 				.then(res=>{
 					if(res.data.success){
 						console.log(res.data);
+						this.houseList = res.data.result;
 
 					}else{
 						console.log(res.data);
@@ -201,15 +192,18 @@
 					color: #424242;
 				}
 			}
-			.reservation{
+			// .reservation{
+			.t1,.t2{ //状态码为1,2都显示预约中
 				background: url(../../assets/icon/icon_lighting@2x.png) no-repeat left center;
 				background-size: 2.2rem 2.2rem;
 			}
-			.defeat{
+			// .defeat{
+			.t3{
 				background: url(../../assets/icon/icon_bigredcancle@2x.png) no-repeat left center;
 				background-size: 2.2rem 2.2rem;
 			}
-			.waitting{
+			// .waitting{
+			.t4{
 				background: url(../../assets/icon/icon_right@2x.png) no-repeat left center;
 				background-size: 2.2rem 2.2rem;
 			}
