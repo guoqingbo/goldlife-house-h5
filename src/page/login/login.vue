@@ -163,7 +163,7 @@
   .nav-header{
     position: relative;
     background-color: #fff;
-    font-size: 16px;
+    font-size: 1.6rem;
     color: #424242;
     height: 4.4rem;
     line-height: 4.4rem;
@@ -190,10 +190,11 @@
       .input-telpnone{
         padding-top:4rem ;
         padding-bottom:1.45rem;
-        font-size: 16px;
+        font-size: 1.6rem;
         border-bottom: 1px solid #f5f5f5;
         input::placeholder{
           color: #424242;
+          font-size: 1.6rem;
         }
         span{
           font-size: 15px;
@@ -203,10 +204,11 @@
       .input-code{
         padding-top: 2rem;
         padding-bottom: 1.45rem;
-        font-size: 16px;
+        font-size: 1.6rem;
         border-bottom: 1px solid #f5f5f5;
         input::placeholder{
           color: #9a9c9d;
+          font-size: 1.6rem;
         }
       }
       .btn-login{
@@ -214,7 +216,7 @@
         width: 100%;
         height: 5rem;
         background-color: #ffc16b;
-        font-size: 16px;
+        font-size: 1.6rem;
         color: #754501;
       }
     }

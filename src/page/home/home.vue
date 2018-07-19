@@ -27,7 +27,7 @@
             <ul class="more-ul" v-if="morePopVisible">
               <li><i class="icon iconfont arrow">&#xe65d;</i></li>
               <li><router-link to="/myCare"><i class="icon iconfont my-care">&#xe609;</i>我的关注</router-link></li>
-              <li><router-link to="/lookHouseIndex"><i class="icon iconfont look-house">&#xe610;</i>看房预约</router-link></li>
+              <li><router-link to="/lookAppointment"><i class="icon iconfont look-house">&#xe610;</i>看房预约</router-link></li>
               <li><router-link to="/signSearch"><i class="icon iconfont sign-search">&#xe60b;</i>签约查询</router-link></li>
             </ul>
           </div>
@@ -523,7 +523,7 @@
       /*border:1px solid #f5f5f5;*/
       @include border;
       box-sizing: border-box;
-      font-size: 1.4rem;
+      font-size: 1.3rem;
 
     }
   }
@@ -686,6 +686,7 @@
         /*width: 16%;*/
         /*margin-left:5%;*/
         text-align: center;
+        font-size: 1.5rem;
         flex:1 1 ;
         .select-active-icon{
           color:#ffc16a;

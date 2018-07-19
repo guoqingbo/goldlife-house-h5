@@ -6,7 +6,7 @@
           <span class="header-title">看房日程</span>
           <span class="go-edit"><i class="icon iconfont editor-icon">&#xe62e;</i></span>
         </h1>
-		
+
 		<div class="box" v-for="i in houseList">
 			<!-- 线上房源 -->
 			<div v-if="i.lineType == 0">
@@ -111,7 +111,7 @@
   .nav-header{
     position: relative;
     background-color: #fff;
-    font-size: 16px;
+    font-size: 1.6rem;
     color: #424242;
     height: 4.4rem;
     line-height: 4.4rem;
@@ -138,7 +138,7 @@
 
 	.box{
 		width: 100%;
-    	font-family: PingFang-SC-Regular;		
+    	font-family: PingFang-SC-Regular;
 		background: #F8F8F8;
 		font-size: 1.3rem;
 		padding-bottom: 1rem;
@@ -166,12 +166,12 @@
 				}
 			}
 			.describ{
-				color:#C3C1C4; 
+				color:#C3C1C4;
 			}
 			.price{
 				margin-top: 2.5rem;
 				span:first-child{
-					color:#E10101; 
+					color:#E10101;
 				}
 			}
 		}
