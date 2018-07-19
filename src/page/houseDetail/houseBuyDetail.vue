@@ -1,9 +1,11 @@
 <template>
-  <div class="containt">
+  <div class="houseBuyDetail">
     <head-top goBack="true"/>
     <h1 class="nav-header">
       <span class="go-back" @click="$router.go(-1)"><i class="icon iconfont go-back-icon">&#xe60f;</i></span>
-      <span class="header-title"><span class="village">{{block_name}}</span><i @click="attention()" class="icon iconfont xl">&#xe657;</i>
+      <span class="header-title"><span class="village">{{block_name}}</span>
+        <i v-if="attentionStatus" @click="attention()" class="icon iconfont xl">&#xe609;</i>
+        <i v-else @click="attention()" class="icon iconfont xl">&#xe657;</i>
         <div class="badge">
             <img src="../../assets/icon/icon_topbar_hclist@2x.png">
             <div class="div2">4</div>
@@ -127,15 +129,18 @@
             <p>三室一厅/120㎡/朝北</p>
             <p><span style="color: #e10000">350万</span>&nbsp;&nbsp;&nbsp;45000元/平</p>
           </li>-->
-          <li v-if="isSell" v-for='sellImg in sellList' @click="getHomeDetail()">
+
+          <li v-if="isSell" v-for='sellImg in sellList' @click="getHomeDetail(sellImg.id)">
             <img :src="sellImg.pic"><br/>
             <p>{{sellImg.room_type}}|{{sellImg.buildarea}}|{{sellImg.forward}}</p>
             <p><span style="color: #e10000">{{sellImg.price}}</span>&nbsp;&nbsp;&nbsp;{{sellImg.avgprice}}</p>
           </li>
-          <li v-else-if="isRent" v-for='rentImg in rentList'>
+          <li v-if="isRent" v-for='rentImg in rentList'>
+            <router-link :to="{ name:'houseRentDetail',params: {cityId:cityId,houseId:houseId,userType:userType,houseType:houseType}}">
             <img :src="rentImg.pic"><br/>
             <p>{{rentImg.room_type}}|{{rentImg.buildarea}}|{{rentImg.forward}}</p>
             <p><span style="color: #e10000">{{rentImg.price}}</span></p>
+            </router-link>
           </li>
 
         </ul>
@@ -158,16 +163,13 @@
       <div class="sameArea">
         <p>周边小区</p>
         <ul class="category-head">
-          <!--<li v-for="ortherImg in otherImgAttr">
-            <img :src="ortherImg.imgUrl"><br/>
-            <p>3室1厅卫|120㎡|朝北</p>
-            <p><span style="color: #e10000">350万</span>&nbsp;&nbsp;&nbsp;45000元/平</p>
-          </li>-->
           <li v-for="ortherImg in communityAround">
+            <router-link :to="{ name:'villageDetail',params: {cityId:cityId,houseId:houseId,userType:userType,houseType:houseType}}">
             <img :src="ortherImg.surface_img?ortherImg.surface_img:require('../../assets/icon/icon_addtolist@2x.png')"><br/>
             <p style="color: #885D24;">{{ortherImg.build_date}}年建</p>
             <p>{{ortherImg.cmt_name}}</p>
             <p class="p-bottom"><span style="color: #e10000">{{ortherImg.averprice}}元/平</span></p>
+            </router-link>
           </li>
         </ul>
       </div>
@@ -188,9 +190,10 @@
           </el-col>
         </el-row>
       </div>
-
-
     </div>
+    <keep-alive>
+      <router-view></router-view>
+    </keep-alive>
   </div>
 
 </template>
@@ -250,6 +253,11 @@
         rentList: [],//在租
         //周边小区
         communityAround: [],//周边小区
+        attentionStatus: false,
+        cityId:'hz',
+        userType:'customer',
+        houseType:'1',
+        blockId:'1',
       }
     },
     created() {
@@ -277,11 +285,16 @@
     methods: {
       //房源详情
       getHouseDetail() {
+        //获取参数
+        /*this.cityId = this.$route.params.cityId;
+        this.houseId = this.$route.params.houseId;
+        this.userType = this.$route.params.userType;
+        this.houseType = this.$route.params.houseType;*/
         let params = {
-          cityId: "hz",
-          houseId: '1',
-          userType: '1',
-          houseType: '1'
+          cityId: this.cityId,
+          houseId: this.houseId,
+          userType: this.userType,
+          houseType: this.houseType
         };
         api.getHouseDetail(params)
           .then(res => {
@@ -305,6 +318,13 @@
               this.maplng = resultHouse.communityLocation.b_map_x;
               this.maplat = resultHouse.communityLocation.b_map_y;
               this.imgHouseAttr = resultHouse.img;
+              this.houseId = resultHouse.id;
+              this.cityId = resultHouse.cityId;
+              if(resultHouse.attentionState == '0'){
+                this.attentionStatus = false;
+              }else if(resultHouse.attentionState == '1'){
+                this.attentionStatus = true;
+              }
               this.center.lng = resultHouse.communityLocation.b_map_x;
               this.center.lat = resultHouse.communityLocation.b_map_y;
               var address = resultHouse.disrictName+','+resultHouse.streetName;
@@ -339,11 +359,16 @@
       },
       //小区详情
       getCommunityDetail() {
+        //获取参数
+        /*this.blockId = this.$route.params.blockId;
+        this.cityId = this.$route.params.cityId;
+        this.userType = this.$route.params.userType;
+        this.houseType = this.$route.params.houseType;*/
         let params = {
-          blockId: "1",
-          city: 'hz',
-          userType: '1',
-          houseType: '1'
+          blockId: this.blockId,
+          city: this.cityId,
+          userType: this.userType,
+          houseType: this.houseType
         };
         api.getCommunityDetail(params)
           .then(res => {
@@ -395,27 +420,53 @@
       },
       //关注
       attention(){
-        let attentionnfo = {
-          cityId:'hz',
-          businessNum:'hz'+this.houseId,
-          businessType:1,
-          sysType:1,
-          userId:1,
-          attentionState:1,
-        };
-        api.attention(attentionnfo)
-          .then(res =>{
-            console.log(res.data)
-            if (res.data.success){
-              console.log('关注成功')
-            }
-          })
-          .catch(function (response) {
-            console.log(response)
-          });
+        console.log(this.attentionStatus)
+        if (!this.attentionStatus) {
+          let attentionnfo = {
+            cityId: this.cityId,
+            businessNum: this.houseId,
+            businessType: '二手房',
+            sysType: 1,
+            attentionState: 1,
+          };
+          console.log(attentionnfo);
+          api.attention(attentionnfo)
+            .then(res => {
+              console.log(res.data)
+              if (res.data.success) {
+                console.log('关注成功')
+                this.attentionStatus = true;
+              }
+            })
+            .catch(function (response) {
+              console.log(response)
+            });
+          return
+        } else if (this.attentionStatus) {
+          let attentionnfo = {
+            cityId: this.cityId,
+            businessNum: this.houseId,
+            businessType: '二手房',
+            sysType: 1,
+            attentionState: 0,
+          };
+          api.attention(attentionnfo)
+            .then(res => {
+              console.log(res.data)
+              if (res.data.success) {
+                console.log('取消关注')
+                this.attentionStatus = false;
+              }
+            })
+            .catch(function (response) {
+              console.log(response)
+            });
+        }
       },
-      getHomeDetail(){
-        console.log('房源详情');
+      getHomeDetail(data){
+        this.houseId = data;
+        this.houseType = '1';
+        this.getHouseDetail();
       }
     }
   }
@@ -455,6 +506,7 @@
       .xl {
         position: absolute;
         right: 5rem;
+        color: #ffc16b;
       }
       .badge {
         width: 3rem;

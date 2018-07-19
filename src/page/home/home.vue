@@ -263,6 +263,11 @@
             if (this.houseType == 1){
               //获取出售房源列表
               let params = this.houseParams[this.houseType];
+              //openId:this.$route.query ? this.$route.query.openId:"",
+              params.openId = this.$route.query? this.$route.query.openId : "";
+              params.code = this.$route.query.code ? this.$route.query.code : "";
+
+              console.log(params)
               api.getSellHouseList(params)
                 .then( res => {
                     console.log(res)

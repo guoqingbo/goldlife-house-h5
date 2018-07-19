@@ -17,14 +17,18 @@
     <!-- 对应的内容 -->
     <div>
       <!--房源结果列表-->
-      <house-list :houseLists="hoseLists" :houseType="houseType"></house-list>
+      <ul>
+        <li class="house-item clear" v-for="item in houseLists" :key="item.id">
+          <router-link to="/sellDetail"> <house-item :item="item" :houseType="houseType"/></router-link>
+        </li>
+      </ul>
     </div>
   </div>
 </template>
 <script>
   import api from '../../api/axios'
   import headTop from '../../components/header/head';
-  import houseList from '../../components/common/houseList'
+  import houseItem from '../../components/common/houseItem'
 
   export default {
     props:[],
@@ -36,7 +40,7 @@
     },
     components: {
       headTop,
-      houseList,
+      houseItem,
     },
     created(){
       this.getAttention(this.houseType);
@@ -49,7 +53,16 @@
               .then( res => {
                 console.log(res)
                 if (res.data.success){
-                  this.hoseLists = res.data.result.list
+                    let hoseLists = [];
+                  res.data.result.forEach(item=>{
+                   let hoseItem = {
+                      title:item.cmt_name,
+                      describe:item.build_date?item.build_date+"年建":"",
+                      pic:item.surface_img
+                    }
+                    hoseLists.push(hoseItem)
+                  });
+                  this.hoseLists = hoseLists;
                 }else{
                   this.$toast({
                   message: res.data.errorMessage,
@@ -59,6 +72,7 @@
                 }
               })
               .catch(res =>{
+                  console.log(res)
                 this.$toast({
                   message: res.data.errorMessage,
                   position: 'bottom',
@@ -70,7 +84,7 @@
               .then( res => {
                 console.log(res)
                 if (res.data.success){
-                  this.hoseLists = res.data.result.list
+                  this.hoseLists = res.data.result
                 }else{
                   this.$toast({
                   message: res.data.errorMessage,
@@ -91,7 +105,7 @@
               .then( res => {
                 console.log(res)
                 if (res.data.success){
-                  this.hoseLists = res.data.result.list
+                  this.hoseLists = res.data.result
                 }else{
                   this.$toast({
                   message: res.data.errorMessage,
@@ -116,7 +130,7 @@
 <style lang="scss" scoped>
  .header-nav{
    position: relative;
-   border-bottom: 10px solid #f8f8f8;
+   border-bottom: 0.05rem solid #f8f8f8;
    /*height: ;*/
    .go-back{
      position: absolute;
@@ -129,7 +143,7 @@
      width: 20rem;
      display: flex;
      li{
-       font-size: 16px;
+       font-size: 1.6rem;
        color: #424242;
        font-weight: bold;
        flex:1 1;

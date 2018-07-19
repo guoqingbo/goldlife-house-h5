@@ -31,8 +31,13 @@
               </el-row>
             </el-col>
             <el-col :span="11">
-              <el-row class="el-houseDes">
+              <!--<el-row class="el-houseDes">
                 <span><i class="icon iconfont right">&#xe609;</i></span>
+              </el-row>-->
+              <el-row class="el-houseDes">
+                <span v-if="attentionStatus" @click="clkAttention()"><i v-if="attentionStatus"
+                                                                        class="icon iconfont right">&#xe609;</i></span>
+                <span v-else @click="clkAttention()"><i class="icon iconfont xl right">&#xe657;</i></span>
               </el-row>
             </el-col>
 
@@ -83,21 +88,28 @@
           </el-col>
         </el-row>
         <ul class="category-head" ref="ulDisplay">
-          <li v-if="isSell" v-for='sellImg in sellList' @click="getHomeDetail()">
-            <img :src="sellImg.pic"><br/>
-            <p>{{sellImg.room_type}}|{{sellImg.buildarea}}|{{sellImg.forward}}</p>
-            <p><span style="color: #e10000">{{sellImg.price}}</span>&nbsp;&nbsp;&nbsp;{{sellImg.avgprice}}</p>
+          <li v-if="isSell" v-for='sellImg in sellList' >
+            <router-link
+              :to="{ name:'houseBuyDetail',params: {cityId:cityId,houseId:sellImg.id,userType:userType,houseType:houseType}}">
+              <img :src="sellImg.pic"><br/>
+              <p>{{sellImg.room_type}}|{{sellImg.buildarea}}|{{sellImg.forward}}</p>
+              <p><span style="color: #e10000">{{sellImg.price}}</span>&nbsp;&nbsp;&nbsp;{{sellImg.avgprice}}</p>
+            </router-link>
           </li>
-          <li v-else-if="isRent" v-for='rentImg in rentList'>
-            <img :src="rentImg.pic"><br/>
-            <p>{{rentImg.room_type}}|{{rentImg.buildarea}}|{{rentImg.forward}}</p>
-            <p><span style="color: #e10000">{{rentImg.price}}</span></p>
+          <li v-if="isRent" v-for='rentImg in rentList'>
+            <router-link
+              :to="{ name:'houseRentDetail',params: {cityId:cityId,houseId:rentImg.id,userType:userType,houseType:houseType}}">
+              <img :src="rentImg.pic"><br/>
+              <p>{{rentImg.room_type}}|{{rentImg.buildarea}}|{{rentImg.forward}}</p>
+              <p><span style="color: #e10000">{{rentImg.price}}</span></p>
+            </router-link>
           </li>
         </ul>
       </div>
 
       <!--同小区在售10套-->
-      <router-link :to="{ name:'villageMore',params: { more: isSell?sellList:rentList,villageName:title,id:id,isOne:isSell}}">
+      <router-link
+        :to="{ name:'villageMore',params: { more: isSell?sellList:rentList,villageName:title,id:id,isOne:isSell}}">
         <div ref="sameSell" class="sameSells">
           <!--<div v-if="isSell"  >
             同小区在售{{sellList.length}}套
@@ -115,7 +127,7 @@
       <div class="sameArea">
         <p>周边小区</p>
         <ul class="category-head">
-          <li v-for="ortherImg in communityAround">
+          <li v-for="ortherImg in communityAround" @click="getOtherVillage(ortherImg.id)">
             <img
               :src="ortherImg.surface_img?ortherImg.surface_img:require('../../assets/icon/icon_addtolist@2x.png')"><br/>
             <p style="color: #885D24;">{{ortherImg.build_date}}年建</p>
@@ -126,6 +138,9 @@
       </div>
       <div class="empty"></div>
     </div>
+    <keep-alive>
+      <router-view></router-view>
+    </keep-alive>
   </div>
 
 </template>
@@ -148,22 +163,10 @@
           {imgUrl: 'http://image.qmango.com/hotelimg/dl1210/125708/181.jpeg'},
           {imgUrl: 'http://image.qmango.com/hotelimg/dl1210/119297/793.jpeg'}
         ],
-        sameImgAttr: [
-          {imgUrl: 'http://image.qmango.com/hotelimg/dl1210/109490/109.jpeg'},
-          {imgUrl: 'http://image.qmango.com/hotelimg/dl1210/125708/181.jpeg'},
-          {imgUrl: 'http://image.qmango.com/hotelimg/dl1210/119297/793.jpeg'},
-          {imgUrl: 'http://image.qmango.com/hotelimg/dl1210/119297/793.jpeg'}
-        ],
-        otherImgAttr: [
-          {imgUrl: 'http://image.qmango.com/hotelimg/dl1210/109490/109.jpeg'},
-          {imgUrl: 'http://image.qmango.com/hotelimg/dl1210/125708/181.jpeg'},
-          {imgUrl: 'http://image.qmango.com/hotelimg/dl1210/119297/793.jpeg'},
-          {imgUrl: 'http://image.qmango.com/hotelimg/dl1210/119297/793.jpeg'}
-        ],
-        id:'',
+        id: '',
         isSell: true,//是否在售
         isRent: false,//是否在租
-        center: {lng: 116.40387397, lat: 39.91488908},
+        center: {lng: 120.12, lat: 30.16},
         imgHouseAttr: ['', '', ''],//房源照片
         title: '',
         addressDetail: '',
@@ -176,7 +179,11 @@
         rentList: [],//在租
         //周边小区
         communityAround: [],//周边小区
-        attentionStatus: '关注',
+        attentionStatus: false,
+        cityId: 'hz',
+        blockId: '2',
+        userType: 'customer',
+        houseType: '1',
       }
     },
     created() {
@@ -203,11 +210,16 @@
     methods: {
       //小区详情
       getCommunityDetail() {
+        //获取参数
+        /*this.blockId = this.$route.params.blockId;
+        this.city = this.$route.params.city;
+        this.userType = this.$route.params.userType;
+        this.houseType = this.$route.params.houseType;*/
         let params = {
-          blockId: "2",
-          city: 'hz',
-          userType: '2',
-          houseType: '2'
+          blockId: this.blockId,
+          city: this.cityId,
+          userType: this.userType,
+          houseType: this.houseType
         };
         api.getCommunityDetail(params)
           .then(res => {
@@ -218,7 +230,9 @@
               this.id = resultHouse.id;
               this.sellList = resultHouse.houseInblock.sell.lists;
               this.rentList = resultHouse.houseInblock.rent.lists;
+              console.log('在售列表')
               console.log(this.sellList);
+              console.log('在租列表')
               console.log(this.rentList);
               this.communityAround = resultHouse.communityAround;
               this.address = resultHouse.disrictName + '区-' + resultHouse.streetName;
@@ -226,6 +240,15 @@
               this.builds = resultHouse.build_num;
               this.title = resultHouse.cmt_name;
               this.addressDetail = resultHouse.address.split('（')[0];
+              this.cityId = resultHouse.cityId;
+              console.log(this.id)
+              console.log('关注状态')
+              console.log(resultHouse.attentionState)
+              if (resultHouse.attentionState == '0') {
+                this.attentionStatus = false;
+              } else if (resultHouse.attentionState == '1') {
+                this.attentionStatus = true;
+              }
               this.center.lng = resultHouse.b_map_x;
               this.center.lat = resultHouse.b_map_y;
               var address = resultHouse.disrictName + ',' + resultHouse.streetName;
@@ -273,13 +296,12 @@
         }
       },
       clkAttention() {
-        if (this.attentionStatus === '关注') {
+        if (!this.attentionStatus) {
           let attentionnfo = {
-            cityId: 'hz',
-            businessNum: 'hz' + this.houseId,
-            businessType: 1,
+            cityId: this.cityId,
+            businessNum: this.id,
+            businessType: '小区',
             sysType: 1,
-            userId: 2,
             attentionState: 1,
           };
           console.log(attentionnfo);
@@ -288,20 +310,19 @@
               console.log(res.data)
               if (res.data.success) {
                 console.log('关注成功')
-                this.attentionStatus = '已关注';
+                this.attentionStatus = true;
               }
             })
             .catch(function (response) {
               console.log(response)
             });
           return
-        } else if (this.attentionStatus === '已关注') {
+        } else if (this.attentionStatus) {
           let attentionnfo = {
-            cityId: 'hz',
-            businessNum: 'hz' + this.houseId,
-            businessType: 1,
+            cityId: this.cityId,
+            businessNum: this.id,
+            businessType: '小区',
             sysType: 1,
-            userId: 2,
             attentionState: 0,
           };
           api.attention(attentionnfo)
@@ -309,7 +330,7 @@
               console.log(res.data)
               if (res.data.success) {
                 console.log('取消关注')
-                this.attentionStatus = '关注';
+                this.attentionStatus = false;
               }
             })
             .catch(function (response) {
@@ -317,8 +338,9 @@
             });
         }
       },
-      phoneCall() {
-        //window.location.href = 'tel://0755637'
+      getOtherVillage(data){
+        this.blockId = data;
+        this.getCommunityDetail();
       },
       ready() {
         var map = new BMap.Map('allmap');
@@ -423,6 +445,7 @@
       }
       .des {
         font-size: 14px;
+        color: #724600;
       }
     }
     .el-row {

@@ -76,6 +76,7 @@ export default {
   },
 
 // 用户登出
+ //logout(){
   logout(data){
     return axios.post(
       'user/logout?openId='+data.openId +'&code='+data.code,
@@ -164,6 +165,8 @@ export default {
         pageIndex:data.pageIndex,
         orderBy:data.orderBy,
         orderColumn:data.orderColumn,
+        openId:data.openId,
+        code:data.code,
       }
     })
   },
@@ -255,10 +258,10 @@ export default {
       'user/attention',
       qs.stringify({
         cityId:data.cityId,
-        businessNum:data.businessNum,//城市-业务id
-        businessType:data.businessType,//1二手房，2租房，3小区
+        businessNum:data.businessNum,//业务id
+        businessType:data.businessType,//二手房，租房，小区
         sysType:data.sysType,//1
-        userId:data.userId,
+        //userId:data.userId,
         attentionState:data.attentionState,//1关注，2取消
       })
     )
