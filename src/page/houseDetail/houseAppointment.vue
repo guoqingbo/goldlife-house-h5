@@ -57,7 +57,7 @@
         </div>
         <div class="span-input centenr">
           <span class="span-left">联系方式：</span>
-          <input class="input-right phone" placeholder="请填写联系方式" v-model="phone" ref="phone">
+          <input class="input-right phone" placeholder="请填写联系方式" v-model="phone" ref="phone" maxlength="11">
         </div>
         <div class="span-input dark centenr">
           <span class="span-left">验证码：</span>
@@ -152,7 +152,7 @@
         var elementButton = this.$refs.button;
         var timer = setInterval(function () {
           num--;
-          elementButton.innerHTML = num + 's';
+          elementButton.innerHTML = num + '秒';
           elementButton.disabled = ' disabled';
           if (num === 0) {
             elementButton.disabled = '';
@@ -240,6 +240,7 @@
             console.log(res.data)
             if (res.data.success) {
               console.log('提交成功')
+              //跳转看房日程
             }
           })
           .catch(function (response) {
