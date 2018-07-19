@@ -49,14 +49,14 @@
               .then( res => {
                 console.log(res)
                 if (res.data.success){
-                    let res = res.data.result;
-                    if(!!res){
-                      this.hoseLists = {
-
-                      }
-                      this.hoseLists = res.data.result
+                  res.data.result.forEach(function (item) {
+                   let hoseItem = {
+                      title:item.cmt_name,
+                      describe:item.build_date?item.build_date+"年建":"",
+                      pic:item.surface_img
                     }
-
+                    this.hoseLists.push(hoseItem);
+                  });
                 }else{
                   this.$toast({
                   message: res.data.errorMessage,
