@@ -1,7 +1,7 @@
 <template>
   <div>
       <head-top />
-      <h1 class="nav-header">     
+      <h1 class="nav-header">
         <span class="header-title">签约查询</span>
         <span class="go-back" @click="$router.go(-1)">返回</span>
       </h1>
@@ -55,6 +55,7 @@
       getSignSearch(){
         //从vuex中获取登录用户手机号
         var phoneNum = this.$store.state.userInfo.loginName;
+        console.log(phoneNum)
         api.signSearch(phoneNum).then(res=>{
           if(res.data.success){
             this.signList = res.data.result;
@@ -84,7 +85,7 @@
     display: flex;
     justify-content: space-between;
     background-color: #fff;
-    font-size: 16px;
+    font-size: 1.6rem;
     color: #424242;
     height: 4.4rem;
     line-height: 4.4rem;
@@ -138,10 +139,10 @@
       .status{
         color: #754501;
       }
-      
+
     }
   }
-  
+
 
 
 </style>

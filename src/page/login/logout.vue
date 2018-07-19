@@ -76,7 +76,7 @@
   .nav-header{
     position: relative;
     background-color: #fff;
-    font-size: 16px;
+    font-size: 1.6rem;
     color: #424242;
     height: 4.4rem;
     line-height: 4.4rem;
@@ -116,7 +116,7 @@
     width: 32.3rem;
     height: 5rem;
     background-color: #ffc16b;
-    font-size: 16px;
+    font-size: 1.6rem;
     color: #754501;
   }
 </style>

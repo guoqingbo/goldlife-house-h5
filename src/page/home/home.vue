@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="box">
       <!--房源列表页-->
       <div v-if="!isShowSearch">
         <head-top goBack="true"/>
@@ -12,7 +12,7 @@
                     {{houseType == 1?"二手房":'租房' }}<i class="el-icon-arrow-down el-icon--right"></i>
                   </div>
                   <ul v-if="isShowHouseType" class="house-type-ul">
-                    <li> <i class="icon iconfont arrow-top">&#xe62c;</i></li>
+                    <li> <i class="icon iconfont arrow-top">&#xe65d;</i></li>
                     <li :class="{'house-type-active':houseType==1}"><span @click='selectHouseType(1)'>二手房</span></li>
                     <li :class="{'house-type-active':houseType==2}"><span @click='selectHouseType(2)'>租房</span></li>
                   </ul>
@@ -28,6 +28,7 @@
               <li><i class="icon iconfont arrow">&#xe65d;</i></li>
               <li><router-link to="/myCare"><i class="icon iconfont my-care">&#xe609;</i>我的关注</router-link></li>
               <li><router-link to="/lookAppointment"><i class="icon iconfont look-house">&#xe610;</i>看房预约</router-link></li>
+              <li><router-link to="/signSearch"><i class="icon iconfont sign-search">&#xe60b;</i>签约查询</router-link></li>
             </ul>
           </div>
           <!--过滤导航-->
@@ -476,6 +477,9 @@
 
 <style lang="scss" scoped>
 
+  .box{
+    font-size: 1.6rem;
+  }
   /*公用样式封装*/
   /*边框*/
   @mixin border {
@@ -519,7 +523,7 @@
       /*border:1px solid #f5f5f5;*/
       @include border;
       box-sizing: border-box;
-      font-size: 1.4rem;
+      font-size: 1.3rem;
 
     }
   }
@@ -600,7 +604,7 @@
             top: -9px;
             left: 1rem;
             .arrow-top{
-              color:rgba(0,0,0,0.4);
+              color:#fff;
               font-size: 1.6rem;
             }
           }
@@ -661,6 +665,11 @@
           font-size: 2.2rem;
           margin: 0 1rem;
         }
+        .sign-search{
+          color:#eed7b5 ;
+          font-size: 1.9rem;
+          margin: 0 1rem;
+        }
       }
     }
 
@@ -677,6 +686,7 @@
         /*width: 16%;*/
         /*margin-left:5%;*/
         text-align: center;
+        font-size: 1.5rem;
         flex:1 1 ;
         .select-active-icon{
           color:#ffc16a;

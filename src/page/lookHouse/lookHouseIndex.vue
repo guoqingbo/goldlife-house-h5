@@ -6,7 +6,7 @@
           <span class="header-title">看房日程</span>
           <span class="go-edit"><i class="icon iconfont editor-icon">&#xe62e;</i></span>
         </h1>
-		
+
 		<div class="box" v-for="i in houseList">
 			<!-- 线上房源 -->
 			<div v-if="i.lineType == 0">
@@ -27,7 +27,7 @@
 				<div class="house-status">
 					<p :class="'t'+i.state">
 						<span>{{ state[i.state] }}</span>
-						<span>{{ i.time|moment('MM月DD日 hh:mm') }}</span>
+						<span>{{ (i.time)*1000 |moment('MM月DD日 hh:mm') }}</span>
 					</p>
 				</div>
 			</div>
@@ -48,7 +48,7 @@
 				<div class="house-status">
 					<p :class="'t'+i.state">
 						<span>{{ state[i.state] }}</span>
-						<span>{{ i.time|moment('MM/DD hh:mm') }}</span>
+						<span>{{ (i.time)*1000|moment('MM/DD hh:mm') }}</span>
 					</p>
 
 				</div>
@@ -81,20 +81,13 @@
 		},
 		methods:{
 			getLookHouseInfo(){
-				let _data = {
-					// openId:this.$route.query.openId,
-					// code:this.$route.query.code
-					openId:'test_open_id',
-					code:2334
-				}
-				api.lookHouseIndex(_data)
+				api.lookHouseIndex()
 				.then(res=>{
 					if(res.data.success){
-						console.log(res.data);
 						this.houseList = res.data.result;
 
 					}else{
-						console.log(res.data);
+						console.log(res.data.errorMessage);
 					}
 				})
 				.catch(err=>{
@@ -111,7 +104,7 @@
   .nav-header{
     position: relative;
     background-color: #fff;
-    font-size: 16px;
+    font-size: 1.6rem;
     color: #424242;
     height: 4.4rem;
     line-height: 4.4rem;
@@ -138,7 +131,7 @@
 
 	.box{
 		width: 100%;
-    	font-family: PingFang-SC-Regular;		
+    	font-family: PingFang-SC-Regular;
 		background: #F8F8F8;
 		font-size: 1.3rem;
 		padding-bottom: 1rem;
@@ -151,7 +144,7 @@
 				position: absolute;
 				left: 2rem;
 				width: 13rem;
-				height: 9.5rem;
+				height: 8.1rem;
 				border-radius: 0.5rem;
 			}
 			h3{
@@ -166,12 +159,12 @@
 				}
 			}
 			.describ{
-				color:#C3C1C4; 
+				color:#C3C1C4;
 			}
 			.price{
 				margin-top: 2.5rem;
 				span:first-child{
-					color:#E10101; 
+					color:#E10101;
 				}
 			}
 		}

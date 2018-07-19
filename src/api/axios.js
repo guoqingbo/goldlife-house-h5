@@ -1,7 +1,8 @@
 import axios from 'axios'
 import qs from 'qs'
+import { MessageBox } from 'mint-ui';
 // import store from '../store'
-// import router from '../router'
+import router from '../router'
 import envConfig from  '../config/env'
 
 //设置全局axios默认值
@@ -29,25 +30,40 @@ axios.defaults.headers.post['Content-Type'] = "application/x-www-form-urlencoded
 //     return Promise.reject(err);
 //   }
 // );
-//respone拦截器
-// instance.interceptors.response.use(
-//   response => {
-//     return response;
-//   },
-//   error => { //默认除了2XX之外的都是错误的，就会走这里
-//     if(error.response){
-//       switch(error.response.status){
-//         case 401:
-//           store.dispatch('UserLogout'); //可能是token过期，清除它
-//           router.replace({ //跳转到登录页面
-//             path: 'login',
-//             query: { redirect: router.currentRoute.fullPath } // 将跳转的路由path作为参数，登录成功后跳转到该路由
-//           });
-//       }
-//     }
-//     return Promise.reject(error.response);
-//   }
-// );
+// respone拦截器
+axios.interceptors.response.use(
+  response => {
+    if(response){
+      let res = response.data
+      switch(res.errorCode){
+        case 3001://跳出登录弹框
+          MessageBox({
+            title: '',
+            message: '请登录查看',
+            showCancelButton: true,
+            confirmButtonText:"登录"
+          }).then(action => {
+            if(action == "confirm"){
+              console.log(router)
+              router.replace({ //跳转到登录页面
+                path: 'login',
+                query: {
+                  redirect: router.currentRoute.fullPath, //将跳转的路由path作为参数，登录成功后跳转到该路由
+                  openId:res.result.openId,
+                  code:res.result.code
+                }
+              });
+            }
+          })
+          return;
+      }
+    }
+    return response;
+  },
+  error => {
+    return Promise.reject(error.response);
+  }
+);
 
 export default {
   //发送验证码
@@ -119,9 +135,16 @@ export default {
   },
 
   //看房日程
-  lookHouseIndex(data){
-    return axios.get('house/getHouseAppointmentList?openId='+data.openId +'&code='+data.code,{})
+  lookHouseIndex(){
+    return axios.get('house/getHouseAppointmentList',{})
   },
+
+
+  //看房记录
+  lookHouseHistory(data){
+    return axios.get('house/lookHouseHistory',{})
+  },
+
 
   // //区域板块
   // getDistrict(data){
@@ -260,7 +283,7 @@ export default {
         cityId:data.cityId,
         businessNum:data.businessNum,//业务id
         businessType:data.businessType,//二手房，租房，小区
-        sysType:data.sysType,//1
+        sysType:data.sysType,//默认传1
         //userId:data.userId,
         attentionState:data.attentionState,//1关注，2取消
       })
