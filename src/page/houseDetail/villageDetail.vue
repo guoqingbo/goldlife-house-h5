@@ -130,6 +130,9 @@
       </div>
       <div class="empty"></div>
     </div>
+    <keep-alive>
+      <router-view></router-view>
+    </keep-alive>
   </div>
 
 </template>
@@ -152,18 +155,6 @@
           {imgUrl: 'http://image.qmango.com/hotelimg/dl1210/125708/181.jpeg'},
           {imgUrl: 'http://image.qmango.com/hotelimg/dl1210/119297/793.jpeg'}
         ],
-        sameImgAttr: [
-          {imgUrl: 'http://image.qmango.com/hotelimg/dl1210/109490/109.jpeg'},
-          {imgUrl: 'http://image.qmango.com/hotelimg/dl1210/125708/181.jpeg'},
-          {imgUrl: 'http://image.qmango.com/hotelimg/dl1210/119297/793.jpeg'},
-          {imgUrl: 'http://image.qmango.com/hotelimg/dl1210/119297/793.jpeg'}
-        ],
-        otherImgAttr: [
-          {imgUrl: 'http://image.qmango.com/hotelimg/dl1210/109490/109.jpeg'},
-          {imgUrl: 'http://image.qmango.com/hotelimg/dl1210/125708/181.jpeg'},
-          {imgUrl: 'http://image.qmango.com/hotelimg/dl1210/119297/793.jpeg'},
-          {imgUrl: 'http://image.qmango.com/hotelimg/dl1210/119297/793.jpeg'}
-        ],
         id:'',
         isSell: true,//是否在售
         isRent: false,//是否在租
@@ -182,6 +173,9 @@
         communityAround: [],//周边小区
         attentionStatus: false,
         cityId:'hz',
+        blockId:'2',
+        userType:'customer',
+        houseType:'1',
       }
     },
     created() {
@@ -208,11 +202,16 @@
     methods: {
       //小区详情
       getCommunityDetail() {
+        //获取参数
+        /*this.blockId = this.$route.params.blockId;
+        this.city = this.$route.params.city;
+        this.userType = this.$route.params.userType;
+        this.houseType = this.$route.params.houseType;*/
         let params = {
-          blockId: "2",
-          city: 'hz',
-          userType: '2',
-          houseType: '2'
+          blockId: this.blockId,
+          city: this.cityId,
+          userType: this.userType,
+          houseType: this.houseType
         };
         api.getCommunityDetail(params)
           .then(res => {
@@ -435,6 +434,7 @@
       }
       .des {
         font-size: 14px;
+        color: #724600;
       }
     }
     .el-row {
