@@ -18,7 +18,8 @@
         return {
           houseTypeDetail:{
             1:'houseBuyDetail',
-            2:'houseRentDetail'
+            2:'houseRentDetail',
+            3:'villageDetail',
           }
         }
     },
