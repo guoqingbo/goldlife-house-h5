@@ -17,14 +17,18 @@
     <!-- 对应的内容 -->
     <div>
       <!--房源结果列表-->
-      <house-list :houseLists="hoseLists" :houseType="houseType"></house-list>
+      <ul>
+        <li class="house-item clear" v-for="item in houseLists" :key="item.id">
+          <router-link to="/sellDetail"> <house-item :item="item" :houseType="houseType"/></router-link>
+        </li>
+      </ul>
     </div>
   </div>
 </template>
 <script>
   import api from '../../api/axios'
   import headTop from '../../components/header/head';
-  import houseList from '../../components/common/houseList'
+  import houseItem from '../../components/common/houseItem'
 
   export default {
     props:[],
@@ -36,7 +40,7 @@
     },
     components: {
       headTop,
-      houseList,
+      houseItem,
     },
     created(){
       this.getAttention(this.houseType);
@@ -49,14 +53,16 @@
               .then( res => {
                 console.log(res)
                 if (res.data.success){
-                  res.data.result.forEach(function (item) {
+                    let hoseLists = [];
+                  res.data.result.forEach(item=>{
                    let hoseItem = {
                       title:item.cmt_name,
                       describe:item.build_date?item.build_date+"年建":"",
                       pic:item.surface_img
                     }
-                    this.hoseLists.push(hoseItem);
+                    hoseLists.push(hoseItem)
                   });
+                  this.hoseLists = hoseLists;
                 }else{
                   this.$toast({
                   message: res.data.errorMessage,
@@ -66,6 +72,7 @@
                 }
               })
               .catch(res =>{
+                  console.log(res)
                 this.$toast({
                   message: res.data.errorMessage,
                   position: 'bottom',
@@ -123,7 +130,7 @@
 <style lang="scss" scoped>
  .header-nav{
    position: relative;
-   border-bottom: 1 solid #f8f8f8;
+   border-bottom: 0.05rem solid #f8f8f8;
    /*height: ;*/
    .go-back{
      position: absolute;
