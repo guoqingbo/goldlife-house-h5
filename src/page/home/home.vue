@@ -12,7 +12,7 @@
                     {{houseType == 1?"二手房":'租房' }}<i class="el-icon-arrow-down el-icon--right"></i>
                   </div>
                   <ul v-if="isShowHouseType" class="house-type-ul">
-                    <li> <i class="icon iconfont arrow-top">&#xe62c;</i></li>
+                    <li> <i class="icon iconfont arrow-top">&#xe65d;</i></li>
                     <li :class="{'house-type-active':houseType==1}"><span @click='selectHouseType(1)'>二手房</span></li>
                     <li :class="{'house-type-active':houseType==2}"><span @click='selectHouseType(2)'>租房</span></li>
                   </ul>
@@ -604,7 +604,7 @@
             top: -9px;
             left: 1rem;
             .arrow-top{
-              color:rgba(0,0,0,0.4);
+              color:#fff;
               font-size: 1.6rem;
             }
           }
