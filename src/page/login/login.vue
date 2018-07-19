@@ -125,14 +125,16 @@
                   this.$store.commit('setUserInfo',{loginName:this.loginName,});
                   //获取登录后的跳转地址
                   let redirectUrl = res.data.result;
+                  //弹框确认登录后的跳回地址
+                  let redirect = decodeURIComponent(this.$route.query.redirect || '/home');
 //                  this.$messageBox.alert(redirectUrl, "回掉地址");
-                  if (redirectUrl){
+                  if (redirectUrl){ //请求中有跳转则跳转
                       window.location.href = redirectUrl;
+                  }else if(redirect){
+                    this.$router.push({
+                      path: redirect
+                    });
                   }
-//                  let redirect = decodeURIComponent(this.$route.query.redirect || '/');
-//                  this.$router.push({
-//                    path: redirect
-//                  });
                 }else{
                   this.$toast({
                     message: res.data.errorMessage,

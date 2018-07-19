@@ -82,7 +82,15 @@
       },
       //加入对比清单
       addToComparedList(){
-          this.addComparedHouse;
+          //获取用户名
+          let loginName = this.$store.state.userInfo.loginName;
+          //用户名为空跳出登录弹框
+          if (loginName){
+
+          }
+          console.log(loginName)
+          //在该用户加入对比清单
+          localStorage.setItem("comparedList_hz_"+loginName,JSON.stringify(this.addComparedHouse));
       }
     }
 

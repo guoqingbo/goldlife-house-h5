@@ -17,9 +17,18 @@
     <!-- 对应的内容 -->
     <div>
       <!--房源结果列表-->
-      <ul>
-        <li class="house-item clear" v-for="item in houseLists" :key="item.id">
-          <router-link to="/sellDetail"> <house-item :item="item" :houseType="houseType"/></router-link>
+      <ul v-if="houseLists.length>0">
+        <li class="" v-for="(item,index) in houseLists" :key="item.id">
+          <mt-cell-swipe
+            :right="[{
+                content: '取消关注',
+                style: { background: 'red', color: '#fff',textAlign:'center',width:'8rem',height:'11rem',lineHeight:'11rem'},
+                handler: () => attention(item.id,index)
+            }]">
+            <div class="house-item-box" slot="title">
+              <router-link to="/sellDetail"> <house-item :item="item" :houseType="houseType"/></router-link>
+            </div>
+          </mt-cell-swipe>
         </li>
       </ul>
     </div>
@@ -35,7 +44,15 @@
     data(){
       return {
         houseType:2, //1租房 2二手房 3楼盘
-        hoseLists:[],//收藏房源列表
+        houseLists:[],//收藏房源列表
+        cancelCareStyle:{
+
+//          font-size: 1.3rem;
+//          height: 11rem;
+//          line-height: 11rem;
+//          text-align: center;
+//          width: 8rem;
+      }
       }
     },
     components: {
@@ -46,23 +63,24 @@
       this.getAttention(this.houseType);
     },
     methods:{
+      //获取关注
       getAttention(houseType){
           this.houseType = houseType;
+          this.houseLists = [];
           if (houseType == 3){
             api.getCommunityAttention()
               .then( res => {
                 console.log(res)
                 if (res.data.success){
-                    let hoseLists = [];
+                    let houseLists = [];
                   res.data.result.forEach(item=>{
-                   let hoseItem = {
-                      title:item.cmt_name,
-                      describe:item.build_date?item.build_date+"年建":"",
-                      pic:item.surface_img
-                    }
-                    hoseLists.push(hoseItem)
+                    item.avgprice = item.averprice
+                    item.title=item.cmt_name
+                    item.describe =item.build_date?item.build_date+"年建":""
+                    item.pic=item.surface_img
+                    houseLists.push(item)
                   });
-                  this.hoseLists = hoseLists;
+                  this.houseLists = houseLists;
                 }else{
                   this.$toast({
                   message: res.data.errorMessage,
@@ -84,7 +102,7 @@
               .then( res => {
                 console.log(res)
                 if (res.data.success){
-                  this.hoseLists = res.data.result
+                  this.houseLists = res.data.result
                 }else{
                   this.$toast({
                   message: res.data.errorMessage,
@@ -105,7 +123,7 @@
               .then( res => {
                 console.log(res)
                 if (res.data.success){
-                  this.hoseLists = res.data.result
+                  this.houseLists = res.data.result
                 }else{
                   this.$toast({
                   message: res.data.errorMessage,
@@ -122,12 +140,53 @@
                 })
               });
           }
+      },
+      //取消关注
+      attention(businessNum,index){
+          let houseType  = {
+              1:"二手房",
+              2:"租房",
+              3:"小区",
+          }
+        let params = {
+            cityId:'hz',
+            businessNum:businessNum,//业务id
+            businessType:houseType[this.houseType],//二手房，租房，小区
+            sysType:1,//默认传1
+            attentionState:2,//1关注，2取消
+        };
+        api.attention(params)
+          .then( res => {
+            console.log(res)
+            if (res.data.success){
+              this.houseLists.splice(index,1)
+              this.$toast({
+                message: "取消关注成功",
+                position: 'bottom',
+                duration: 3000
+              });
+            }else{
+              this.$toast({
+                message: res.data.errorMessage,
+                position: 'bottom',
+                duration: 3000
+              });
+            }
+          })
+          .catch(res =>{
+            console.log(res)
+            this.$toast({
+              message: res.data.errorMessage,
+              position: 'bottom',
+              duration: 3000
+            });
+          });
       }
     }
-
   }
 </script>
 <style lang="scss" scoped>
+  //导航头
  .header-nav{
    position: relative;
    border-bottom: 0.05rem solid #f8f8f8;
@@ -158,4 +217,9 @@
      }
    }
  }
+  /*列表*/
+  .house-item-box{
+    position: relative;
+    padding: 0 2rem;
+  }
 </style>
