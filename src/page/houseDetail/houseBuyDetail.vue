@@ -217,7 +217,7 @@
         address_detail: null,
         //房源
         houseDetail: '',
-        houseId: '1',
+        houseId: this.$route.params.houseId?this.$route.params.houseId:this.$store.state.activeInfo.houseId,
         isSell: true,//是否在售
         isRent: false,//是否在租
         title: '',//小区名+户型
@@ -252,14 +252,11 @@
       }
     },
     created() {
-      //获取参数
-      this.cityId = this.$route.params.cityId;
-      this.houseId = this.$route.params.houseId;
-      this.userType = this.$route.params.userType;
-      this.houseType = this.$route.params.houseType;
       this.getHouseDetail();
-      //this.getCommunityDetail();
       this.getCompareNum();
+      //存储当前房源id
+      this.$store.commit("setActiveInfo",{houseId:this.houseId,houseType:this.houseType})
+
     },
     components: {
       headTop,
@@ -318,13 +315,13 @@
               var loginName = this.$store.state.userInfo.loginName;
               var list = localStorage.getItem("comparedList_hz_" + loginName);
               if (list != null) {
-                list = JSON.parse(list);
-                let idIndex = list.indexOf(this.houseId);
-                if (idIndex == '-1') {
-                  this.compareDesc = '加入对比'
-                } else {
+                if (JSON.parse(list)[this.houseId]) {
                   this.compareDesc = '取消对比'
+                } else {
+                  this.compareDesc = '加入对比'
                 }
+              }else{
+                this.compareDesc = '加入对比'
               }
               //初始化轮播
               this.$nextTick(function () {
@@ -348,6 +345,7 @@
             }
           })
           .catch(res => {
+              console.log(res)
             this.$message.error('房源详情=' + res.data.errorMessage);
           });
       },
@@ -461,36 +459,27 @@
         //获取用户名
         let loginName = this.$store.state.userInfo.loginName;
         //在该用户获取对比清单
-        var list = localStorage.getItem("comparedList_hz_" + loginName);
-        if (list != null) {
-          this.compareNum = JSON.parse(list).length;
+        var _length = Object.keys(localStorage.getItem("comparedList_hz_" + loginName));
+        if (_length>0) {
+          this.compareNum = _length;
         } else {
           this.compareNum = '';
         }
       },
       addCompare() {
         var loginName = this.$store.state.userInfo.loginName;
-        var list;
-        list = localStorage.getItem("comparedList_hz_" + loginName);
-        console.log('listyuan')
+        var list = Object.assign({},JSON.parse(localStorage.getItem("comparedList_hz_" + loginName)));
         console.log(list)
         if (this.compareDesc == '加入对比') {
-          if (list != null) {
-            list = JSON.parse(list);
-            list.push(this.houseId);
-          } else {
-            list = [this.houseId]
-          }
-          console.log('listhou')
+          list[this.houseId] =  this.houseDetail;
+
           console.log(list)
           //加入对比清单
           localStorage.setItem("comparedList_hz_" + loginName, JSON.stringify(list));
           this.compareDesc = '取消对比';
           this.getCompareNum();
         } else if (this.compareDesc == '取消对比') {
-          list = JSON.parse(list);
-          let index = list.indexOf(this.houseId);
-          list.splice(index, 1);
+          delete list[this.houseId]
           //对比清单移除
           localStorage.setItem("comparedList_hz_" + loginName, JSON.stringify(list));
           this.compareDesc = '加入对比';

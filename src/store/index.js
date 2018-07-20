@@ -5,7 +5,11 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    userInfo: localStorage.getItem('userInfo')?JSON.parse(localStorage.getItem('userInfo')):{}
+    userInfo: localStorage.getItem('userInfo')?JSON.parse(localStorage.getItem('userInfo')):{},//登录用户信息
+    activeInfo:{
+      houseId:'',//当前活动房源id
+      houseType:'',//当前活动房源类型
+    }
   },
   getters: {
     getUserInfo(state) {
@@ -21,6 +25,9 @@ export default new Vuex.Store({
     setUserInfo(state, userInfo) {
       localStorage.setItem('userInfo',JSON.stringify(userInfo))
       state.userInfo = userInfo;
+    },
+    setActiveInfo(state,activeInfo){
+      state.activeInfo = Object.assign(state.activeInfo,activeInfo);
     }
   },
   actions: {

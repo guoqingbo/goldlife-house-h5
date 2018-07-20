@@ -210,7 +210,7 @@
                   priceMax:"",//最大价格
                   filterIds:[],
                   pageSize:"",
-                  pageIndex:"",
+                  pageIndex:1,
                   orderBy:"",
                   orderColumn:'',
                 },//二手房房源请求参数
@@ -229,7 +229,7 @@
               },
               hoseLists:[],//房源列表
               recomment:0,//是否为推荐房源
-              houseType:1,//房源类型
+              houseType:this.$store.state.activeInfo.houseType?this.$store.state.activeInfo.houseType:1,//房源类型
               filterType:'',//过滤选项卡
               filterList:{},//获取过滤列表
               district:[],//区域板块列表

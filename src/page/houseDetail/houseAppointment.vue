@@ -298,7 +298,8 @@
     }
     .span-bottom {
       position: absolute;
-      top: 18rem;
+      top: 13.5rem;
+      left: 1rem;
     }
     div {
       float: left;
@@ -359,7 +360,7 @@
       }
       .xh {
         position: absolute;
-        top: 34.5rem;
+        top: 30.5rem;
         right: 14rem;
         span {
           padding-left: 0.3rem;
@@ -367,7 +368,7 @@
       }
       .dateDiv {
         position: absolute;
-        top: 26.5rem;
+        top: 22rem;
         right: 0;
         opacity: 0;
         z-index: 10;

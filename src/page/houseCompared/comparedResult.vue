@@ -99,8 +99,9 @@
 
 			getCompareData(){
 				// data为从上一页获取到的数据,最少2条，最多4条
-				var _data = [{'cityId':'hz','houseId':'36979'},{'cityId':'hz','houseId':'36980'}];
-
+//				let _data = [{'cityId':'hz','houseId':'36979'},{'cityId':'hz','houseId':'36980'}];
+        let _data = this.$route.params.data;
+        console.log(_data)
 				api.houseCompared(_data)
 				.then(res=>{
 					if(res.data.success){
