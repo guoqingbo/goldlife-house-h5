@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="box">
         <head-top />
         <h1 class="nav-header">
           <span class="go-back" @click="$router.go(-1)"><i class="icon iconfont go-back-icon">&#xe60f;</i></span>
@@ -125,14 +125,16 @@
                   this.$store.commit('setUserInfo',{loginName:this.loginName,});
                   //获取登录后的跳转地址
                   let redirectUrl = res.data.result;
+                  //弹框确认登录后的跳回地址
+                  let redirect = decodeURIComponent(this.$route.query.redirect || '/home');
 //                  this.$messageBox.alert(redirectUrl, "回掉地址");
-                  if (redirectUrl){
+                  if (redirectUrl){ //请求中有跳转则跳转
                       window.location.href = redirectUrl;
+                  }else if(redirect){
+                    this.$router.push({
+                      path: redirect
+                    });
                   }
-//                  let redirect = decodeURIComponent(this.$route.query.redirect || '/');
-//                  this.$router.push({
-//                    path: redirect
-//                  });
                 }else{
                   this.$toast({
                     message: res.data.errorMessage,
@@ -154,12 +156,14 @@
 
 <style lang="scss" scoped>
   @import '../../style/mixin';
-
+  .box{
+    font-size: 1.6rem;
+  }
   /**登录导航*/
   .nav-header{
     position: relative;
     background-color: #fff;
-    font-size: 16px;
+    font-size: 1.6rem;
     color: #424242;
     height: 4.4rem;
     line-height: 4.4rem;
@@ -186,23 +190,25 @@
       .input-telpnone{
         padding-top:4rem ;
         padding-bottom:1.45rem;
-        font-size: 16px;
-        border-bottom: 1px solid #f5f5f5;
+        font-size: 1.6rem;
+        border-bottom: 0.1rem solid #f5f5f5;
         input::placeholder{
           color: #424242;
+          font-size: 1.5rem;
         }
         span{
-          font-size: 15px;
+          font-size: 1.5rem;
           color: #ffc16b;
         }
       }
       .input-code{
         padding-top: 2rem;
         padding-bottom: 1.45rem;
-        font-size: 16px;
-        border-bottom: 1px solid #f5f5f5;
+        font-size: 1.6rem;
+        border-bottom: 0.1rem solid #f5f5f5;
         input::placeholder{
           color: #9a9c9d;
+          font-size: 1.5rem;
         }
       }
       .btn-login{
@@ -210,7 +216,7 @@
         width: 100%;
         height: 5rem;
         background-color: #ffc16b;
-        font-size: 16px;
+        font-size: 1.6rem;
         color: #754501;
       }
     }

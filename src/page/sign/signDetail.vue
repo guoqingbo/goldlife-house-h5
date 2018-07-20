@@ -5,7 +5,7 @@
           <span class="go-back" @click="$router.go(-1)"><i class="icon iconfont go-back-icon">&#xe60f;</i></span>
           <span class="header-title">签约详情</span>
         </h1>
-		
+
 		<div class="signBox">
 			<div class="addr">
 				<h2>
@@ -32,7 +32,7 @@
 			<div class="status" v-if="signDetail.now_transfer != undefined">
 				<h2>当前签约状态：<span>{{ signDetail.now_transfer.stage_name }}</span></h2>
 
-				<div class="status_content">					
+				<div class="status_content">
 					<p v-for="item in transfer">
 						<span v-if="item.step_id==signDetail.now_transfer.step_id" class="current"></span>
 						<span v-else-if="item.isComplete==1" class="complete"></span>
@@ -40,7 +40,7 @@
 						<span>{{ item.stage_name }}</span>
 					</p>
 				</div>
-				
+
 			</div>
 
 		</div>
@@ -76,7 +76,7 @@
 				var _data = {
 					'signId':this.signId,
 					'userType':this.userType
-				} 
+				}
 				api.signDetail(_data)
 				.then(res=>{
 					if(res.data.success){
@@ -105,15 +105,15 @@
  			if(!value) return '0.00';
 			   var intPart = Number(value).toFixed(0); //获取整数部分
 				//将整数部分逢三一断
-			   var intPartFormat = intPart.toString().replace(/(\d)(?=(?:\d{3})+$)/g, '$1,'); 
+			   var intPartFormat = intPart.toString().replace(/(\d)(?=(?:\d{3})+$)/g, '$1,');
 			   var valueStr = value + '';//先转换成字符串
 			   // 判断是否有小数
 			   if(valueStr.indexOf(".") >= 0){
-			   		var floatPart = valueStr.split(".")[1]; //预定义小数部分 
+			   		var floatPart = valueStr.split(".")[1]; //预定义小数部分
 			   		return intPartFormat + "." + floatPart;
 			   }else{
 			   		return intPartFormat;
-			   }			  
+			   }
 		  }
 		},
 	}
@@ -123,7 +123,7 @@
   .nav-header{
     position: relative;
     background-color: #fff;
-    font-size: 16px;
+    font-size: 1.6rem;
     color: #424242;
     height: 4.4rem;
     line-height: 4.4rem;
@@ -151,7 +151,7 @@
   	height: 100%;
   	h2{
   		font-family:PingFang-SC-Bold;
-  		font-size: 1.5rem; 
+  		font-size: 1.5rem;
   		color: #333333;
   		margin-bottom: 1.5rem;
   		font-weight: bold;
@@ -213,7 +213,7 @@
 			justify-content: space-between;
 			span{
 				font-size: 1.3rem;
-			}	
+			}
 			span:last-child{
 				color: #333333;
 			}
@@ -228,7 +228,7 @@
   		p{
   			font-size: 1.4rem;
   			margin-top: 2rem;
-  			
+
   		}
   		p:last-child{
   			margin-bottom: 1.75rem;
@@ -248,7 +248,7 @@
 		span{
 			font-size: 1.4rem;
 		}
-		
+
 		.complete{
 			@extend .common;
 			background: url(../../assets/icon/circle2@2x.png) no-repeat left center;
@@ -260,7 +260,7 @@
 		.current{
 			display: inline-block;
 			width: 2.2rem;
-			height: 2.2rem;		
+			height: 2.2rem;
 			position: absolute;
 			left:-1.2rem;
 			background: url(../../assets/icon/icon_now@2x.png) no-repeat left center;

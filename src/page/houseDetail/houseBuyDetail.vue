@@ -551,7 +551,7 @@
   .nav-header {
     position: relative;
     background-color: #fff;
-    font-size: 16px;
+    font-size: 1.6rem;
     color: #424242;
     height: 4.4rem;
     line-height: 4.4rem;
@@ -804,7 +804,7 @@
     }
     .span-icon {
       color: #ffc16b;
-      font-size: 16px;
+      font-size: 1.6rem;
     }
     .centenr {
       text-align: center;

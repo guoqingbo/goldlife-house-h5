@@ -178,7 +178,7 @@
           left: 1rem;
           .arrow-top{
             color:rgba(0,0,0,0.4);
-            font-size: 16px;
+            font-size: 1.6rem;
           }
         }
         .house-type-active{
@@ -244,7 +244,7 @@
     background-color: #fff;
     li{
       padding: 1rem 0;
-      font-size: 16px;
+      font-size: 1.6rem;
       @include border-top;
       &:first-child{
         padding: 2.5rem 0;
@@ -267,7 +267,7 @@
     background-color: #fff;
     li{
       padding: 1rem 0;
-      font-size: 16px;
+      font-size: 1.6rem;
       @include border-top;
       color:#424242;
     }
