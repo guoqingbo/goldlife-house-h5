@@ -6,39 +6,42 @@
           <!-- <span class="header-title" @click="postNode">确定</span> -->
         </h1>
 
-        <div class="reservaInfo">
+        <div class="reservaInfo" v-if="reservationInfo.targetHouse != undefined">
+        <!-- <div class="reservaInfo"> -->
         	<h2>看房预约</h2>
         	<div class="info">
         		<div class="info_left">
-	        		<p>12月08日 15：00</p>
-	        		<p>在 <span>广厦天都城天星苑</span> 约看</p>
+	        		<p>{{ (reservationInfo.time)*1000 |moment('MM月DD日 hh:mm') }}</p>
+	        		<p>在 <span>{{reservationInfo.targetHouse.block_name}}</span> 约看</p>
 	        	</div>
 	        	<div class="info_right">
-	        		<p></p>
-	        		<p>预约中</p>
+	        		<p class="res" v-if="reservationInfo.state==1 || reservationInfo.state==2"></p>
+	        		<p class="err" v-if="reservationInfo.state==3"></p>
+	        		<p class="vit" v-else></p>
+	        		<p>{{state[reservationInfo.state]}}</p>
 	        	</div>
         	</div>
         </div>
 
-        <div class="box">
+        <div class="box" v-if="reservationInfo.targetHouse != undefined">
 			<div class="house-detail">
-				<img src="../../assets/icon/searcherror@2x.png">
+				<img :src="!!reservationInfo.targetHouse.pic?reservationInfo.targetHouse.pic:'./static/searcherror@2x.png'">
 				<div>
-					<h3>广厦天都城天星苑 2室1厅室内室内</h3>
-					<p class="describ">90.23平方/南 北/中楼层  共18层</p>
+					<h3>{{reservationInfo.targetHouse.block_name}} {{reservationInfo.targetHouse.room}}室{{reservationInfo.targetHouse.hall}}厅</h3>
+					<p class="describ">{{reservationInfo.targetHouse.describe}}</p>
 					<p class="price">
-						<span>240万</span>
-						<span>&nbsp;&nbsp;43,345&nbsp;元/平</span>
+						<span>{{reservationInfo.targetHouse.price}}万</span>
+						<span>&nbsp;&nbsp;{{reservationInfo.targetHouse.avgprice}}&nbsp;元/平</span>
 					</p>
-					<p class="dayT">1天前发布</p>
+					<p class="dayT">{{reservationInfo.targetHouse.create_time*1000 |moment('MM月DD日 hh:mm')}}&nbsp;发布</p>
 				</div>
 			</div>
-			<p class="tips">带看经纪人将与您核实确认约看时间地点，确认预约。</p>
-			<!-- <p class="tips">经纪人与您核实预约情况反映，本次预约失败。感谢您的关注，请继续寻找核实房源</p> -->
-			<!-- <p class="tips">您已预约成功，如需修改预约时间请致电经纪人。</p> -->
+			<p class="tips" v-if="reservationInfo.state==1 || reservationInfo.state==2">带看经纪人将与您核实确认约看时间地点，确认预约。</p>
+			<p class="tips" v-if="reservationInfo.state==3">经纪人与您核实预约情况反映，本次预约失败。感谢您的关注，请继续寻找核实房源</p>
+			<p class="tips" v-else>您已预约成功，如需修改预约时间请致电经纪人。</p>
 		</div>
 
-		<p class="contact">一键电联经纪人</p>
+		<p class="contact" @click="phoneNum">一键电联经纪人</p>
 	</div>
 </template>
 <script type="text/javascript">
@@ -47,13 +50,62 @@
   	export default {
 		name:'lookHouseReservation',
 		data(){
-			return{		
+			return{	
+				reservationInfo:'',
+				state:{
+					'1':'预约中',
+					'2':'预约中',
+					'3':'预约失败',
+					'4':'待看房',
+					'5':'看房结束',
+				}	
 			}
 		},
 		created(){
-	
+			this.reservationInfo = this.$route.query.data
+			console.log(this.reservationInfo);
 		},
 		mounted(){
+			
+		},
+		methods:{
+			phoneNum(){
+
+			}
+		},
+		filters:{
+			/*getDateDiff(dateTimeStamp){
+				var minute = 1000 * 60;
+				var hour = minute * 60;
+				var day = hour * 24;
+				var halfamonth = day * 15;
+				var month = day * 30;
+				var now = new Date().getTime();
+				var diffValue = now - dateTimeStamp;
+				if(diffValue < 0){return;}
+				var monthC =diffValue/month;
+				var weekC =diffValue/(7*day);
+				var dayC =diffValue/day;
+				var hourC =diffValue/hour;
+				var minC =diffValue/minute;
+				if(monthC>=1){
+					result="" + parseInt(monthC) + "月前";
+				}
+				else if(weekC>=1){
+					result="" + parseInt(weekC) + "周前";
+				}
+				else if(dayC>=1){
+					result=""+ parseInt(dayC) +"天前";
+				}
+				else if(hourC>=1){
+					result=""+ parseInt(hourC) +"小时前";
+				}
+				else if(minC>=1){
+					result=""+ parseInt(minC) +"分钟前";
+				}else
+				result="刚刚";
+				return result;
+			}*/
 		},
 		components:{
 			headTop
@@ -119,7 +171,7 @@
 				width: 2.2rem;
 				height: 2.2rem;
 				margin: auto;
-				background: url(../../assets/icon/icon_lighterff997a@2x.png) no-repeat center;
+				// background: url(../../assets/icon/icon_lighterff997a@2x.png) no-repeat center;
 				background-size: 2.2rem 2.2rem;
 			}
 			.res{//预约中

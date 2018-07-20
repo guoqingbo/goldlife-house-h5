@@ -4,10 +4,10 @@
         <h1 class="nav-header">
           <span class="go-back" @click="$router.go(-1)"><i class="icon iconfont go-back-icon">&#xe60f;</i></span>
           <span class="header-title">看房日程</span>
-          <span class="go-edit"><i class="icon iconfont editor-icon">&#xe62e;</i></span>
+          <span class="go-edit"><i class="icon iconfont editor-icon" @click="lookHistory">&#xe62e;</i></span>
         </h1>
 
-		<div class="box" v-for="i in houseList">
+		<div class="box" v-for="i in houseList" @click="toDetail(i)">
 			<!-- 线上房源 -->
 			<div v-if="i.lineType == 0">
 				<div class="house-detail" v-if="i.targetHouse != undefined">
@@ -85,6 +85,7 @@
 				.then(res=>{
 					if(res.data.success){
 						this.houseList = res.data.result;
+						console.log(res.data);
 
 					}else{
 						console.log(res.data.errorMessage);
@@ -93,6 +94,12 @@
 				.catch(err=>{
 					console.log(err);
 				})
+			},
+			lookHistory(){
+				this.$router.push({path:'/lookHouseHistory'});
+			},
+			toDetail(houseData){
+				this.$router.push({path:'/lookHouseReservation',query:{data:houseData}});
 			}
 		},
 		components:{

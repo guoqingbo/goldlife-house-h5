@@ -50,7 +50,7 @@
 	import api from '../../api/axios'
   	import headTop from '../../components/header/head'
 	export default {
-		name:'lookHouseIndex',
+		name:'lookHouseHistory',
 		data(){
 			return{
 				houseList:[],			
