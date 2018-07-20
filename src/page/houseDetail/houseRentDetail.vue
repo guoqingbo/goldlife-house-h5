@@ -1,6 +1,6 @@
 <template>
   <div class="containt">
-    <head-top goBack="true"/>
+    <!--<head-top goBack="true"/>-->
     <h1 class="nav-header">
       <span class="go-back" @click="$router.go(-1)"><i class="icon iconfont go-back-icon">&#xe60f;</i></span>
       <span class="header-title">房源</span>
