@@ -18,12 +18,9 @@
     <div class="content">
       <!--顶部轮播图片-->
       <div class="imgDiv">
-        <router-link :to="{ name:'imgIncrease',params: { imgs: imgHouseAttr}}">
-          <div class="swiper-container">
+        <router-link :to="{ name:'imgIncrease',params: { imgs: imgHouseAttr,title:title}}">
+          <div v-if="imgHouseAttr.length>0" class="swiper-container">
             <div class="swiper-wrapper">
-              <!--<div v-for='i in arrItem' class="swiper-slide">
-                <img :src="i.imgUrl">
-              </div>-->
               <div v-for='i in imgHouseAttr' class="swiper-slide">
                 <img :src="i">
               </div>
@@ -31,6 +28,7 @@
             <!-- 如果需要分页器 -->
             <div class="swiper-pagination"></div>
           </div>
+          <div v-else><img src="../../assets/img/bg_bigphotonormal@2x.png"></div>
         </router-link>
       </div>
 
@@ -129,21 +127,15 @@
           </el-col>
         </el-row>
         <ul class="category-head" ref="ulDisplay">
-          <!--<li v-for='sameImg in sameImgAttr'>
-            <img :src="sameImg.imgUrl"><br/>
-            <p>三室一厅/120㎡/朝北</p>
-            <p><span style="color: #e10000">350万</span>&nbsp;&nbsp;&nbsp;45000元/平</p>
-          </li>-->
-
           <li v-if="isSell" v-for='sellImg in sellList' @click="getHomeDetail(sellImg.id)">
-            <img :src="sellImg.pic"><br/>
+            <img :src="sellImg.pic?sellImg.pic:require('../../assets/img/bg_smallphotonormal@3x.png')"><br/>
             <p>{{sellImg.room_type}}|{{sellImg.buildarea}}|{{sellImg.forward}}</p>
             <p><span style="color: #e10000">{{sellImg.price}}</span>&nbsp;&nbsp;&nbsp;{{sellImg.avgprice}}</p>
           </li>
           <li v-if="isRent" v-for='rentImg in rentList'>
             <router-link
               :to="{ name:'houseRentDetail',params: {cityId:cityId,houseId:houseId,userType:userType,houseType:houseType}}">
-              <img :src="rentImg.pic"><br/>
+              <img :src="rentImg.pic?rentImg.pic:require('../../assets/img/bg_smallphotonormal@3x.png')"><br/>
               <p>{{rentImg.room_type}}|{{rentImg.buildarea}}|{{rentImg.forward}}</p>
               <p><span style="color: #e10000">{{rentImg.price}}</span></p>
             </router-link>
@@ -173,7 +165,7 @@
             <router-link
               :to="{ name:'villageDetail',params: {blockId:blockId,cityId:cityId,userType:userType,houseType:houseType}}">
               <img
-                :src="ortherImg.surface_img?ortherImg.surface_img:require('../../assets/icon/icon_addtolist@2x.png')"><br/>
+                :src="ortherImg.surface_img?ortherImg.surface_img:require('../../assets/img/bg_smallphotonormal@3x.png')"><br/>
               <p style="color: #885D24;">{{ortherImg.build_date}}年建</p>
               <p>{{ortherImg.cmt_name}}</p>
               <p class="p-bottom"><span style="color: #e10000">{{ortherImg.averprice}}元/平</span></p>
@@ -215,28 +207,14 @@
   import Swiper from 'swiper'
 
   export default {
+    beforeCreate() {
+
+    },
     //参数
     data() {
       return {
         type: 'tab',
         address_detail: null,
-        arrItem: [
-          {imgUrl: 'http://image.qmango.com/hotelimg/dl1210/109490/109.jpeg'},
-          {imgUrl: 'http://image.qmango.com/hotelimg/dl1210/125708/181.jpeg'},
-          {imgUrl: 'http://image.qmango.com/hotelimg/dl1210/119297/793.jpeg'}
-        ],
-        sameImgAttr: [
-          {imgUrl: 'http://image.qmango.com/hotelimg/dl1210/109490/109.jpeg'},
-          {imgUrl: 'http://image.qmango.com/hotelimg/dl1210/125708/181.jpeg'},
-          {imgUrl: 'http://image.qmango.com/hotelimg/dl1210/119297/793.jpeg'},
-          {imgUrl: 'http://image.qmango.com/hotelimg/dl1210/119297/793.jpeg'}
-        ],
-        otherImgAttr: [
-          {imgUrl: 'http://image.qmango.com/hotelimg/dl1210/109490/109.jpeg'},
-          {imgUrl: 'http://image.qmango.com/hotelimg/dl1210/125708/181.jpeg'},
-          {imgUrl: 'http://image.qmango.com/hotelimg/dl1210/119297/793.jpeg'},
-          {imgUrl: 'http://image.qmango.com/hotelimg/dl1210/119297/793.jpeg'}
-        ],
         //房源
         houseDetail: '',
         houseId: '1',
@@ -256,7 +234,7 @@
         maplng: '',//坐标x
         maplat: '',//坐标y
         center: {lng: 120.12, lat: 30.16},
-        imgHouseAttr: ['', '', ''],//房源照片
+        imgHouseAttr: [],//房源照片
         //同小区
         sellList: [],//在售
         rentList: [],//在租
@@ -270,6 +248,7 @@
         compareNum: '',
         compareDesc: '加入对比',
         brokerPhone: '',
+        address: '',//地图标注地址
       }
     },
     created() {
@@ -287,23 +266,11 @@
     },
     mounted() {
       this.getBaiduMap();
-      var mySwiper = new Swiper('.swiper-container', {
-        loop: true,
-        autoplay: {
-          delay: 3000,//3秒切换一次
-        },
-        // 如果需要分页器
-        pagination: {
-          el: '.swiper-pagination',
-          type: 'fraction',
-        },
-      });
     },
 
     methods: {
       //房源详情
       getHouseDetail() {
-
         let params = {
           cityId: this.cityId,
           houseId: this.houseId,
@@ -313,10 +280,11 @@
         api.getHouseDetail(params)
           .then(res => {
             if (res.data.success) {
-              console.log(res.data.result);
               var resultHouse = res.data.result;
               this.houseDetail = resultHouse;
-              console.log('houseDetail')
+              console.log('二手房params')
+              console.log(params)
+              console.log('二手房result')
               console.log(this.houseDetail);
               this.title = resultHouse.title;
               this.price = resultHouse.price;
@@ -343,22 +311,10 @@
               }
               this.center.lng = resultHouse.communityLocation.b_map_x;
               this.center.lat = resultHouse.communityLocation.b_map_y;
-              var address = resultHouse.disrictName + ',' + resultHouse.streetName;
-              var point = new BMap.Point(this.maplng, this.maplat);
-              var marker = new BMap.Marker(point);
-              map.addOverlay(marker);
-              map.disableDragging();
-              map.centerAndZoom(point, 16);
-              map.panTo(point);
-
-
-              let lableInfor = new BMap.Label(address, {
-                position: point,
-                offset: new BMap.Size(-26, 0)
-              });
-              lableInfor.setStyle({backgroundColor: '#fff', padding: '0.5rem', border: '', fontSize: '.1rem',});
-              map.addOverlay(lableInfor);
-
+              this.address = resultHouse.disrictName + ',' + resultHouse.streetName;
+              //重置地图
+              this.resetMap();
+              //对比按钮
               var loginName = this.$store.state.userInfo.loginName;
               var list = localStorage.getItem("comparedList_hz_" + loginName);
               if (list != null) {
@@ -370,6 +326,20 @@
                   this.compareDesc = '取消对比'
                 }
               }
+              //初始化轮播
+              this.$nextTick(function () {
+                var mySwiper = new Swiper('.swiper-container', {
+                  loop: true,
+                  autoplay: {
+                    delay: 3000,//3秒切换一次
+                  },
+                  // 如果需要分页器
+                  pagination: {
+                    el: '.swiper-pagination',
+                    type: 'fraction',
+                  },
+                });
+              });
               //房源小区
               this.getCommunityDetail();
 
@@ -383,8 +353,6 @@
       },
       //小区详情
       getCommunityDetail() {
-
-
         let params = {
           blockId: this.blockId,
           city: this.cityId,
@@ -394,10 +362,10 @@
         api.getCommunityDetail(params)
           .then(res => {
             if (res.data.success) {
-              console.log('小区params');
+              console.log('二手房小区params');
               console.log(params)
               var resultHouse = res.data.result;
-              console.log('小区res');
+              console.log('二手房小区res');
               console.log(resultHouse)
               this.sellList = resultHouse.houseInblock.sell.lists;
               this.rentList = resultHouse.houseInblock.rent.lists;
@@ -445,7 +413,6 @@
       },
       //关注
       attention() {
-        console.log(this.attentionStatus)
         if (!this.attentionStatus) {
           let attentionnfo = {
             cityId: this.cityId,
@@ -454,10 +421,8 @@
             sysType: 1,
             attentionState: 1,
           };
-          console.log(attentionnfo);
           api.attention(attentionnfo)
             .then(res => {
-              console.log(res.data)
               if (res.data.success) {
                 console.log('关注成功')
                 this.attentionStatus = true;
@@ -477,7 +442,6 @@
           };
           api.attention(attentionnfo)
             .then(res => {
-              console.log(res.data)
               if (res.data.success) {
                 console.log('取消关注')
                 this.attentionStatus = false;
@@ -498,8 +462,6 @@
         let loginName = this.$store.state.userInfo.loginName;
         //在该用户获取对比清单
         var list = localStorage.getItem("comparedList_hz_" + loginName);
-        console.log(localStorage)
-        console.log(list)
         if (list != null) {
           this.compareNum = JSON.parse(list).length;
         } else {
@@ -507,7 +469,6 @@
         }
       },
       addCompare() {
-        console.log(this.$store)
         var loginName = this.$store.state.userInfo.loginName;
         var list;
         list = localStorage.getItem("comparedList_hz_" + loginName);
@@ -549,6 +510,20 @@
         }).catch(() => {
 
         });
+      },
+      resetMap(){
+        var point = new BMap.Point(this.maplng, this.maplat);
+        var marker = new BMap.Marker(point);
+        map.addOverlay(marker);
+        map.disableDragging();
+        map.centerAndZoom(point, 16);
+        map.panTo(point);
+        let lableInfor = new BMap.Label(this.address, {
+          position: point,
+          offset: new BMap.Size(-26, 0)
+        });
+        lableInfor.setStyle({backgroundColor: '#fff', padding: '0.5rem', border: '', fontSize: '.1rem',});
+        map.addOverlay(lableInfor);
       },
     }
   }
