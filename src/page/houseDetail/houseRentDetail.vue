@@ -231,6 +231,7 @@
         userType:'customer',
         houseType:'2',
         blockId:'1',
+        brokerPhone: '',
       }
     },
     created() {
@@ -296,6 +297,7 @@
               this.center.lat = resultHouse.communityLocation.b_map_y;
               this.cityId = resultHouse.cityId;
               this.blockId = resultHouse.block_id;
+              this.brokerPhone = resultHouse.brokerPhone;
               if (resultHouse.attentionState === '1') {
                 this.attentionStatus = '已关注'
               } else if (resultHouse.attentionState === '0') {
@@ -420,7 +422,18 @@
         }
       },
       phoneCall() {
-        window.location.href = 'tel://0755637'
+        this.$confirm('呼叫：'+this.brokerPhone,  {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          cancelButtonClass: 'cancelButtonClass',
+          confirmButtonClass: 'confirmButtonClass',
+          customClass: 'customClass',
+          center: true
+        }).then(() => {
+          window.location.href = 'tel://'+this.brokerPhone
+        }).catch(() => {
+
+        });
       },
       getHomeDetail(data){
         this.houseId = data;
@@ -442,11 +455,26 @@
 
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   @import '../../style/mixin';
   @import "../../../static/css/swiper.min.css";
   .containt{
     font-size: 1.6rem;
+  }
+  .customClass{
+    width: 80%;
+    padding-bottom:4rem;
+    p{
+      font-weight: bold;
+    }
+    .cancelButtonClass{
+      width: 40%;
+      height: 4rem;
+    }
+    .confirmButtonClass{
+      width: 40%;
+      height: 4rem;
+    }
   }
   /**导航*/
   .nav-header {

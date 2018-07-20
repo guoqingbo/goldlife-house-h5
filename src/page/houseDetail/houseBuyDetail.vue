@@ -195,7 +195,7 @@
             </el-col>
           </router-link>
           <el-col :span="8">
-            <div class="grid-bt-content bg-bt centenr"><span>联系经纪人</span></div>
+            <div class="grid-bt-content bg-bt centenr" @click="phoneCall"><span>联系经纪人</span></div>
           </el-col>
         </el-row>
       </div>
@@ -269,6 +269,7 @@
         blockId: '1',
         compareNum: '',
         compareDesc: '加入对比',
+        brokerPhone: '',
       }
     },
     created() {
@@ -334,6 +335,7 @@
               this.houseId = resultHouse.id;
               this.cityId = resultHouse.cityId;
               this.blockId = resultHouse.block_id;
+              this.brokerPhone = resultHouse.brokerPhone;
               if (resultHouse.attentionState == '0') {
                 this.attentionStatus = false;
               } else if (resultHouse.attentionState == '1') {
@@ -534,20 +536,48 @@
           this.getCompareNum();
         }
       },
+      phoneCall() {
+        this.$confirm('呼叫：'+this.brokerPhone,  {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          cancelButtonClass: 'cancelButtonClass',
+          confirmButtonClass: 'confirmButtonClass',
+          customClass: 'customClass',
+          center: true
+        }).then(() => {
+          window.location.href = 'tel://'+this.brokerPhone
+        }).catch(() => {
+
+        });
+      },
     }
   }
 
 
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss" >
   @import '../../style/mixin';
   @import "../../../static/css/swiper.min.css";
 
   .houseBuyDetail {
     font-size: 1.6rem;
   }
-
+  .customClass{
+    width: 80%;
+    padding-bottom:4rem;
+    p{
+      font-weight: bold;
+    }
+    .cancelButtonClass{
+      width: 40%;
+      height: 4rem;
+    }
+    .confirmButtonClass{
+      width: 40%;
+      height: 4rem;
+    }
+  }
   /**导航*/
   .nav-header {
     position: relative;
