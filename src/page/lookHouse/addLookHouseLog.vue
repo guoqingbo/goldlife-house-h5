@@ -17,8 +17,8 @@
 		<div class="lableNode">
 			<p>标签备注</p>
 			<div class="lable">
-				<!-- <p v-for="(item,index) in labelList" @click="chooseLable(index)" :value="item" :class="{'select':flag}">{{ item }}</p> -->
-				<p v-for="(item,index) in labelList" @click="chooseLable(index)" :value="item" :key="index">{{ item }}</p>
+				<p v-for="(item,index) in labelList" @click="chooseLable(index)" :value="item" :class="{'select':index}">{{ item }}</p>
+				<!-- <p v-for="(item,index) in labelList" @click="chooseLable(index)" :value="item" :key="index">{{ item }}</p> -->
 
 			</div>
 		</div>

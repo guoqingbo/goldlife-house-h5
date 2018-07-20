@@ -116,6 +116,15 @@ const addLookHouseLog = resolve => {
 };
 
 
+// 看房预约
+const lookHouseReservation = resolve => {
+  require.ensure(['../page/lookHouse/lookHouseReservation'], () => {
+    resolve(require('../page/lookHouse/lookHouseReservation'));
+  });
+};
+
+
+
 const imgIncrease = resolve => {
   require.ensure(['../page/houseDetail/imgIncrease'], () => {
     resolve(require('../page/houseDetail/imgIncrease'));
@@ -266,6 +275,16 @@ const routes = [
     name: 'addLookHouseLog',
     component: addLookHouseLog,
   },
+
+   // 看房预约中
+  {
+    path: '/lookHouseReservation',
+    name: 'lookHouseReservation',
+    component: lookHouseReservation,
+  },
+
+
+  
 
 ];
 

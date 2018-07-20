@@ -44,7 +44,6 @@ axios.interceptors.response.use(
             confirmButtonText:"登录"
           }).then(action => {
             if(action == "confirm"){
-              console.log(router)
               router.replace({ //跳转到登录页面
                 path: 'login',
                 query: {
@@ -297,7 +296,7 @@ export default {
   //关注房源
   attention(data){
     return axios.post(
-      'user/attention',
+      '/user/attention',
       qs.stringify({
         cityId:data.cityId,
         businessNum:data.businessNum,//业务id
@@ -312,7 +311,7 @@ export default {
   //用户看房预约
   houseAppointment(data){
     return axios.post(
-      'house/houseAppointment',
+      '/house/houseAppointment',
       qs.stringify({
         cityId:data.cityId,
         houseId:data.houseId,
@@ -325,5 +324,14 @@ export default {
       })
     )
   },
+  //清除失效房源
+  clearInvalidHouse(data){
+    return axios.post(
+      '/house/clearInvalidHouse',
+      qs.stringify({
+        data:JSON.stringify(data),
+      })
+    )
+  }
 
 }
