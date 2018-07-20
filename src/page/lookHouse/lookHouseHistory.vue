@@ -29,11 +29,12 @@
 						<span>{{ i.brokerName }}经纪人带看</span>
 						<span>{{ i.time|moment('MM月DD日 hh:mm') }}</span>
 					</p>
-					没有看房笔记时
-					<p class="addNode">添加看房笔记</p>
-					有看房笔记
+					
+					<mt-button size="large">添加看房笔记</mt-button>
+				
 					<div class="label">
-						<p>性价比高...前面添加小圆点</p>
+						<p>性价比高...</p>
+						<p>这是用户手动添加的备注</p>
 					</div>
 			
 				</div>
@@ -53,15 +54,17 @@
 			</div>
 			<div class="house-status">
 				<p >
-					<span><b>罗罗</b>经纪人带看</span>
+					<span><b>罗罗</b>&nbsp;经纪人带看</span>
 					<span>7月7日</span>
 				</p>
 				
-				<p class="addNode">添加看房笔记</p>
 				
-				<!-- <div class="label">
-					<p>性价比高...前面添加小圆点</p>
-				</div> -->
+				<!-- <mt-button size="large">添加看房笔记</mt-button> -->
+				
+				<div class="label">
+					<p>性价比高...</p>
+					<p>这是用户手动添加的备注</p>
+				</div>
 		
 			</div>
 
@@ -188,17 +191,28 @@
 					font-weight: bold;
 					color: #424242;
 				}
+				b{
+					color: #754501;
+					font-weight: bold;
+				}
 			}
-			p:first-child{
+			>p:first-child{
 				margin-bottom: 1.5rem;
 			}
 
-			.addNode{
+			.label{
 				font-size: 1.5rem;
 				color: #9a9c9d;
 				background: #F8F8F8;
-				text-align: center;
-				padding: 1rem 0;
+				// text-align: center;
+				padding: 1rem;
+				border-radius: 0.5rem;
+				p{
+					margin-bottom: 1rem;
+					padding-left: 1.5rem;
+					background: url(../../assets/icon/circle2@2x.png) no-repeat left center;
+					background-size: 0.5rem 0.5rem;
+				}
 			}
 
 		}
