@@ -270,7 +270,7 @@
     },
     created() {
       this.getHouseDetail();
-      this.getCommunityDetail();
+      //this.getCommunityDetail();
       this.getCompareNum();
     },
     components: {
@@ -295,10 +295,10 @@
       //房源详情
       getHouseDetail() {
         //获取参数
-        /*this.cityId = this.$route.params.cityId;
+        this.cityId = this.$route.params.cityId;
         this.houseId = this.$route.params.houseId;
         this.userType = this.$route.params.userType;
-        this.houseType = this.$route.params.houseType;*/
+        this.houseType = this.$route.params.houseType;
         let params = {
           cityId: this.cityId,
           houseId: this.houseId,
@@ -329,6 +329,7 @@
               this.imgHouseAttr = resultHouse.img;
               this.houseId = resultHouse.id;
               this.cityId = resultHouse.cityId;
+              this.blockId = resultHouse.block_id;
               if (resultHouse.attentionState == '0') {
                 this.attentionStatus = false;
               } else if (resultHouse.attentionState == '1') {
@@ -343,15 +344,15 @@
               map.disableDragging();
               map.centerAndZoom(point, 16);
               map.panTo(point);
-              /*var opts = {
-                width : 0,
-                height: 0,
-                enableAutoPan: false,
-                enableCloseOnClick:false,
-                enableMessage:false,
-              }
-              var infoWindow = new BMap.InfoWindow(address, opts);  // 创建信息窗口对象
-              map.openInfoWindow(infoWindow, point);*/
+
+
+
+
+
+
+
+
+
               let lableInfor = new BMap.Label(address, {
                 position: point,
                 offset: new BMap.Size(-26, 0)
@@ -370,6 +371,8 @@
                   this.compareDesc = '取消对比'
                 }
               }
+              //房源小区
+              this.getCommunityDetail();
 
             } else {
               this.$message.error(res.data.errorMessage);
@@ -381,11 +384,11 @@
       },
       //小区详情
       getCommunityDetail() {
-        //获取参数
-        /*this.blockId = this.$route.params.blockId;
-        this.cityId = this.$route.params.cityId;
-        this.userType = this.$route.params.userType;
-        this.houseType = this.$route.params.houseType;*/
+
+
+
+
+
         let params = {
           blockId: this.blockId,
           city: this.cityId,
@@ -395,7 +398,11 @@
         api.getCommunityDetail(params)
           .then(res => {
             if (res.data.success) {
+              console.log('小区params');
+              console.log(params)
               var resultHouse = res.data.result;
+              console.log('小区res');
+              console.log(resultHouse)
               this.sellList = resultHouse.houseInblock.sell.lists;
               this.rentList = resultHouse.houseInblock.rent.lists;
               this.communityAround = resultHouse.communityAround;

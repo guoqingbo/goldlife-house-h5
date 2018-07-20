@@ -106,9 +106,9 @@
         <ul class="category-head" ref="ulDisplay">
           <li v-if="isSell" v-for='sellImg in sellList' >
             <router-link :to="{ name:'houseBuyDetail',params: {cityId:cityId,houseId:houseId,userType:userType,houseType:houseType}}">
-            <img :src="sellImg.pic"><br/>
-            <p>{{sellImg.room_type}}|{{sellImg.buildarea}}|{{sellImg.forward}}</p>
-            <p><span style="color: #e10000">{{sellImg.price}}</span>&nbsp;&nbsp;&nbsp;{{sellImg.avgprice}}</p>
+              <img :src="sellImg.pic"><br/>
+              <p>{{sellImg.room_type}}|{{sellImg.buildarea}}|{{sellImg.forward}}</p>
+              <p><span style="color: #e10000">{{sellImg.price}}</span>&nbsp;&nbsp;&nbsp;{{sellImg.avgprice}}</p>
             </router-link>
           </li>
           <li v-if="isRent" v-for='rentImg in rentList' @click="getHomeDetail(rentImg.id)">
@@ -201,8 +201,8 @@
         //房源
         houseDetail: '',
         houseId: '1',
-        isSell: true,//是否在售
-        isRent: false,//是否在租
+        isSell: false,//是否在售
+        isRent: true,//是否在租
         title: '',//小区名+户型
         price: '',//售价
         buildarea: '',//建筑面积
@@ -232,7 +232,7 @@
     },
     created() {
       this.getHouseDetail();
-      this.getCommunityDetail();
+      //this.getCommunityDetail();
     },
     components: {
       headTop,
@@ -256,10 +256,10 @@
       //房源详情
       getHouseDetail() {
         //获取参数
-        /*this.blockId = this.$route.params.blockId;
-        this.city = this.$route.params.city;
+        this.cityId = this.$route.params.cityId;
+        this.houseId = this.$route.params.houseId;
         this.userType = this.$route.params.userType;
-        this.houseType = this.$route.params.houseType;*/
+        this.houseType = this.$route.params.houseType;
         let params = {
           cityId: this.cityId,
           houseId: this.houseId,
@@ -291,6 +291,7 @@
               this.center.lng = resultHouse.communityLocation.b_map_x;
               this.center.lat = resultHouse.communityLocation.b_map_y;
               this.cityId = resultHouse.cityId;
+              this.blockId = resultHouse.block_id;
               if (resultHouse.attentionState === '1') {
                 this.attentionStatus = '已关注'
               } else if (resultHouse.attentionState === '0') {
@@ -308,7 +309,10 @@
                 offset: new BMap.Size(-26, 0)
               });
               lableInfor.setStyle({backgroundColor: '#fff', padding: '0.5rem', border: '', fontSize: '.1rem',});
-              map.addOverlay(lableInfor)
+              map.addOverlay(lableInfor);
+
+              //房源小区
+              this.getCommunityDetail();
 
             } else {
               this.$message.error(res.data.errorMessage);
@@ -320,6 +324,7 @@
       },
       //小区详情
       getCommunityDetail() {
+
         let params = {
           blockId: this.blockId,
           city: this.cityId,
@@ -675,5 +680,3 @@
 
 
 </style>
-
-

@@ -211,10 +211,10 @@
       //小区详情
       getCommunityDetail() {
         //获取参数
-        /*this.blockId = this.$route.params.blockId;
+        this.blockId = this.$route.params.blockId;
         this.city = this.$route.params.city;
         this.userType = this.$route.params.userType;
-        this.houseType = this.$route.params.houseType;*/
+        this.houseType = this.$route.params.houseType;
         let params = {
           blockId: this.blockId,
           city: this.cityId,
@@ -575,5 +575,3 @@
 
 
 </style>
-
-
