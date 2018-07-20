@@ -217,7 +217,7 @@
         address_detail: null,
         //房源
         houseDetail: '',
-        houseId: this.$route.params.houseId?this.$route.params.houseId:this.$store.state.activeHouseId,
+        houseId: this.$route.params.houseId?this.$route.params.houseId:this.$store.state.activeInfo.houseId,
         isSell: true,//是否在售
         isRent: false,//是否在租
         title: '',//小区名+户型
@@ -255,7 +255,7 @@
       this.getHouseDetail();
       this.getCompareNum();
       //存储当前房源id
-      this.$store.commit("setActiveHouseId",this.houseId)
+      this.$store.commit("setActiveInfo",{houseId:this.houseId,houseType:this.houseType})
 
     },
     components: {

@@ -188,7 +188,7 @@
         center: {lng: 116.40387397, lat: 39.91488908},
         //房源
         houseDetail: '',
-        houseId: this.$route.params.houseId?this.$route.params.houseId:this.$store.state.activeHouseId,
+        houseId: this.$route.params.houseId?this.$route.params.houseId:this.$store.state.activeInfo.houseId,
         isSell: false,//是否在售
         isRent: true,//是否在租
         title: '',//小区名+户型
@@ -224,7 +224,7 @@
       this.getHouseDetail();
       //this.getCommunityDetail();
       //设置当前活动房源id
-      this.$store.commit('setActiveHouseId',this.houseId);
+      this.$store.commit("setActiveInfo",{houseId:this.houseId,houseType:this.houseType})
     },
     components: {
       headTop,
