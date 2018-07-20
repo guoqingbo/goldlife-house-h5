@@ -108,6 +108,13 @@ const lookHouseHistory = resolve => {
   });
 };
 
+// 添加看房笔记
+const addLookHouseLog = resolve => {
+  require.ensure(['../page/lookHouse/addLookHouseLog'], () => {
+    resolve(require('../page/lookHouse/addLookHouseLog'));
+  });
+};
+
 
 const imgIncrease = resolve => {
   require.ensure(['../page/houseDetail/imgIncrease'], () => {
@@ -251,6 +258,13 @@ const routes = [
     path: '/lookHouseHistory',
     name: 'lookHouseHistory',
     component: lookHouseHistory,
+  },
+
+  // 添加看房笔记
+  {
+    path: '/addLookHouseLog',
+    name: 'addLookHouseLog',
+    component: addLookHouseLog,
   },
 
 ];

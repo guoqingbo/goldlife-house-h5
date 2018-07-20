@@ -145,6 +145,25 @@ export default {
     return axios.get('house/lookHouseHistory',{})
   },
 
+//获取看房备注标签
+  lookHouseLabel(){
+    return axios.get('house/getLabelNotes',{})
+  },
+
+
+  //添加看房笔记
+  saveHouseLog(data){
+    return axios.post('house/saveHouseLog',
+      qs.stringify({
+        orderDetailId:data.orderDetailId,
+        lable:data.lable,
+        text:data.text,
+      })
+    )
+  },
+
+
+
 
   // //区域板块
   // getDistrict(data){
