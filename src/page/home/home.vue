@@ -27,7 +27,7 @@
             <ul class="more-ul" v-if="morePopVisible">
               <li><i class="icon iconfont arrow">&#xe65d;</i></li>
               <li><router-link to="/myCare"><i class="icon iconfont my-care">&#xe609;</i>我的关注</router-link></li>
-              <li><router-link to="/lookAppointment"><i class="icon iconfont look-house">&#xe610;</i>看房预约</router-link></li>
+              <li><router-link to="/lookHouseIndex"><i class="icon iconfont look-house">&#xe610;</i>看房预约</router-link></li>
               <li><router-link to="/signSearch"><i class="icon iconfont sign-search">&#xe60b;</i>签约查询</router-link></li>
             </ul>
           </div>
@@ -437,6 +437,9 @@
           },
           //更多菜单
           toggleMore(){
+              if(this.filterType){
+                return
+              }
               this.morePopVisible = !this.morePopVisible
           },
           //展示搜索页
@@ -641,7 +644,7 @@
           height: 3.5rem;
           line-height: 3.5rem;
           padding-right: 1rem;
-          &:nth-child(3){
+          &:nth-child(n+3){
             @include border-top;
           }
           a{
@@ -708,7 +711,7 @@
         clear: both;
         margin:0 2rem 1rem 2rem;
         line-height: 2rem;
-        height: 2rem;
+        height: 2.5rem;
         input{
           height: 100%;
           text-align: center;

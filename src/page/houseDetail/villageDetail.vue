@@ -1,6 +1,6 @@
 <template>
   <div class="containt">
-    <head-top goBack="true"/>
+    <!--<head-top goBack="true"/>-->
     <h1 class="nav-header">
       <span class="go-back" @click="$router.go(-1)"><i class="icon iconfont go-back-icon">&#xe60f;</i></span>
       <span class="header-title">{{title}}</span>
@@ -187,6 +187,10 @@
       }
     },
     created() {
+      this.blockId = this.$route.params.blockId;
+      this.cityId = this.$route.params.cityId;
+      this.userType = this.$route.params.userType;
+      this.houseType = this.$route.params.houseType;
       this.getCommunityDetail();
     },
     components: {
@@ -212,7 +216,7 @@
       getCommunityDetail() {
         //获取参数
         /*this.blockId = this.$route.params.blockId;
-        this.city = this.$route.params.city;
+        this.cityId = this.$route.params.cityId;
         this.userType = this.$route.params.userType;
         this.houseType = this.$route.params.houseType;*/
         let params = {
@@ -360,6 +364,9 @@
 <style lang="scss" scoped>
   @import '../../style/mixin';
   @import "../../../static/css/swiper.min.css";
+  .containt{
+    font-size: 1.6rem;
+  }
   /**导航*/
   .nav-header {
     position: relative;
@@ -575,5 +582,3 @@
 
 
 </style>
-
-

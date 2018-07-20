@@ -1,6 +1,6 @@
 <template>
   <div class="villageMore">
-    <head-top goBack="true"/>
+    <!--<head-top goBack="true"/>-->
     <h1 class="nav-header">
       <span class="go-back" @click="$router.go(-1)"><i class="icon iconfont go-back-icon">&#xe60f;</i></span>
       <span class="header-title">{{this.$route.params.villageName}}</span>
@@ -197,6 +197,9 @@
 
 <style lang="scss" scoped>
   @import '../../style/mixin';
+  .villageMore{
+    font-size: 1.6rem;
+  }
   /**导航*/
   .nav-header {
     position: relative;

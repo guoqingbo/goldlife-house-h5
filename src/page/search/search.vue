@@ -129,7 +129,7 @@
   .my-search{
     margin-top: 1.2rem;
     height: 3.5rem;
-    font-size: 13px;
+    font-size: 1.3rem;
     padding:0 2rem;
     div{
       height: 3.5rem;
@@ -139,21 +139,22 @@
       background-color: #f5f5f5;
       border-radius: 6px;
       padding-left: 1rem;
+      width:85%;
       // width: 29rem;
     }
     /*下拉样式*/
     .my-search-dropdown{
       position: relative;
-      font-size: 13px;
+      width: 30%;
+      font-size: 1.3rem;
       .house-type-ul{
         width: 9rem;
         top: 5rem;
         position: absolute;
         z-index: 6;
         /*left: 2rem;*/
-
         background-color: #fff;
-        font-size: 13px;
+        font-size: 1.3rem;
         border-radius: 2px;
         box-shadow: 0px 0px 10px -3px rgba(0,0,0,0.5);
         li:not(:first-child){
@@ -177,7 +178,7 @@
           top: -9px;
           left: 1rem;
           .arrow-top{
-            color:rgba(0,0,0,0.4);
+            color:#fff;
             font-size: 1.6rem;
           }
         }
@@ -190,7 +191,7 @@
     .my-search-input{
       /*border: 0;*/
       padding-left: 0.5rem;
-      width: 17rem;
+      width: 70%;
       color: #424242;
       input{
         background-color: transparent;
@@ -198,6 +199,8 @@
       }
     }
     .my-search-right{
+      width: 15%;
+      text-align: right;
       .iconfont-more{font-size: 2.5rem};
     }
     .more-ul{
@@ -206,7 +209,7 @@
       right: 2rem;
       top: 10rem;
       background-color: #fff;
-      font-size: 13px;
+      font-size: 1.3rem;
       border-radius: 6px;
       li:not(:first-child){
         height: 3.5rem;
@@ -222,22 +225,28 @@
       .arrow{
         color:#fff;
         position: absolute;
-        top: -16px;
+        top: -1.6rem;
         right: 0.5rem;
-        font-size: 25px;
+        font-size: 2.5rem;
       }
       .my-care{
         color:#ffc16b ;
-        font-size: 19px;
+        font-size: 1.9rem;
         margin: 0 1rem;
       }
       .look-house{
         color:#5c5990 ;
-        font-size: 22px;
+        font-size: 2.2rem;
+        margin: 0 1rem;
+      }
+      .sign-search{
+        color:#eed7b5 ;
+        font-size: 1.9rem;
         margin: 0 1rem;
       }
     }
   }
+
   /*搜索历史*/
   .search-history{
     padding:0  2rem;

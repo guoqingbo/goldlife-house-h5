@@ -1,6 +1,6 @@
 <template>
   <div class="houseBuyDetail">
-    <head-top goBack="true"/>
+    <!--<head-top goBack="true"/>-->
     <h1 class="nav-header">
       <span class="go-back" @click="$router.go(-1)"><i class="icon iconfont go-back-icon">&#xe60f;</i></span>
       <span class="header-title"><span class="village">{{block_name}}</span>
@@ -86,7 +86,10 @@
               <p>楼层： {{floor}}</p>
             </el-row>
             <el-row class="el-detailDes">
-              <p>小区： <span style="color: #ffc16b">{{block_name}}</span></p>
+              <router-link
+                :to="{ name:'villageDetail',params: {blockId:blockId,cityId:cityId,userType:userType,houseType:houseType}}">
+                <p>小区： <span style="color: #ffc16b">{{block_name}}</span></p>
+              </router-link>
             </el-row>
 
           </el-col>
@@ -168,7 +171,7 @@
         <ul class="category-head">
           <li v-for="ortherImg in communityAround">
             <router-link
-              :to="{ name:'villageDetail',params: {cityId:cityId,houseId:houseId,userType:userType,houseType:houseType}}">
+              :to="{ name:'villageDetail',params: {blockId:blockId,cityId:cityId,userType:userType,houseType:houseType}}">
               <img
                 :src="ortherImg.surface_img?ortherImg.surface_img:require('../../assets/icon/icon_addtolist@2x.png')"><br/>
               <p style="color: #885D24;">{{ortherImg.build_date}}年建</p>
@@ -192,7 +195,7 @@
             </el-col>
           </router-link>
           <el-col :span="8">
-            <div class="grid-bt-content bg-bt centenr"><span>联系经纪人</span></div>
+            <div class="grid-bt-content bg-bt centenr" @click="phoneCall"><span>联系经纪人</span></div>
           </el-col>
         </el-row>
       </div>
@@ -266,11 +269,17 @@
         blockId: '1',
         compareNum: '',
         compareDesc: '加入对比',
+        brokerPhone: '',
       }
     },
     created() {
+      //获取参数
+      this.cityId = this.$route.params.cityId;
+      this.houseId = this.$route.params.houseId;
+      this.userType = this.$route.params.userType;
+      this.houseType = this.$route.params.houseType;
       this.getHouseDetail();
-      this.getCommunityDetail();
+      //this.getCommunityDetail();
       this.getCompareNum();
     },
     components: {
@@ -294,11 +303,7 @@
     methods: {
       //房源详情
       getHouseDetail() {
-        //获取参数
-        /*this.cityId = this.$route.params.cityId;
-        this.houseId = this.$route.params.houseId;
-        this.userType = this.$route.params.userType;
-        this.houseType = this.$route.params.houseType;*/
+
         let params = {
           cityId: this.cityId,
           houseId: this.houseId,
@@ -329,6 +334,8 @@
               this.imgHouseAttr = resultHouse.img;
               this.houseId = resultHouse.id;
               this.cityId = resultHouse.cityId;
+              this.blockId = resultHouse.block_id;
+              this.brokerPhone = resultHouse.brokerPhone;
               if (resultHouse.attentionState == '0') {
                 this.attentionStatus = false;
               } else if (resultHouse.attentionState == '1') {
@@ -343,15 +350,8 @@
               map.disableDragging();
               map.centerAndZoom(point, 16);
               map.panTo(point);
-              /*var opts = {
-                width : 0,
-                height: 0,
-                enableAutoPan: false,
-                enableCloseOnClick:false,
-                enableMessage:false,
-              }
-              var infoWindow = new BMap.InfoWindow(address, opts);  // 创建信息窗口对象
-              map.openInfoWindow(infoWindow, point);*/
+
+
               let lableInfor = new BMap.Label(address, {
                 position: point,
                 offset: new BMap.Size(-26, 0)
@@ -370,6 +370,8 @@
                   this.compareDesc = '取消对比'
                 }
               }
+              //房源小区
+              this.getCommunityDetail();
 
             } else {
               this.$message.error(res.data.errorMessage);
@@ -381,11 +383,8 @@
       },
       //小区详情
       getCommunityDetail() {
-        //获取参数
-        /*this.blockId = this.$route.params.blockId;
-        this.cityId = this.$route.params.cityId;
-        this.userType = this.$route.params.userType;
-        this.houseType = this.$route.params.houseType;*/
+
+
         let params = {
           blockId: this.blockId,
           city: this.cityId,
@@ -395,7 +394,11 @@
         api.getCommunityDetail(params)
           .then(res => {
             if (res.data.success) {
+              console.log('小区params');
+              console.log(params)
               var resultHouse = res.data.result;
+              console.log('小区res');
+              console.log(resultHouse)
               this.sellList = resultHouse.houseInblock.sell.lists;
               this.rentList = resultHouse.houseInblock.rent.lists;
               this.communityAround = resultHouse.communityAround;
@@ -533,20 +536,48 @@
           this.getCompareNum();
         }
       },
+      phoneCall() {
+        this.$confirm('呼叫：'+this.brokerPhone,  {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          cancelButtonClass: 'cancelButtonClass',
+          confirmButtonClass: 'confirmButtonClass',
+          customClass: 'customClass',
+          center: true
+        }).then(() => {
+          window.location.href = 'tel://'+this.brokerPhone
+        }).catch(() => {
+
+        });
+      },
     }
   }
 
 
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss" >
   @import '../../style/mixin';
   @import "../../../static/css/swiper.min.css";
 
   .houseBuyDetail {
     font-size: 1.6rem;
   }
-
+  .customClass{
+    width: 80%;
+    padding-bottom:4rem;
+    p{
+      font-weight: bold;
+    }
+    .cancelButtonClass{
+      width: 40%;
+      height: 4rem;
+    }
+    .confirmButtonClass{
+      width: 40%;
+      height: 4rem;
+    }
+  }
   /**导航*/
   .nav-header {
     position: relative;

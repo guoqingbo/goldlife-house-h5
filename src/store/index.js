@@ -5,7 +5,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    userInfo: sessionStorage.getItem('userInfo')?JSON.parse(sessionStorage.getItem('userInfo')):{}
+    userInfo: localStorage.getItem('userInfo')?JSON.parse(localStorage.getItem('userInfo')):{}
   },
   getters: {
     getUserInfo(state) {

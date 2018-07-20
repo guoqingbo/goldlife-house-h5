@@ -1,6 +1,6 @@
 <template>
   <div class="containt">
-    <head-top goBack="true"/>
+    <!--<head-top goBack="true"/>-->
     <h1 class="nav-header">
       <span class="go-back" @click="$router.go(-1)"><i class="icon iconfont go-back-icon">&#xe60f;</i></span>
       <span class="header-title">房源</span>
@@ -69,7 +69,10 @@
               <p>年代： {{buildyear}}</p>
             </el-row>
             <el-row class="el-detailDes">
-              <p>小区： <span style="color: #ffc16b">{{block_name}}</span></p>
+              <router-link
+                :to="{ name:'villageDetail',params: {blockId:blockId,cityId:cityId,userType:userType,houseType:houseType}}">
+              <p>小区： <span style="color: #ffc16b" >{{block_name}}</span></p>
+              </router-link>
             </el-row>
 
           </el-col>
@@ -106,9 +109,9 @@
         <ul class="category-head" ref="ulDisplay">
           <li v-if="isSell" v-for='sellImg in sellList' >
             <router-link :to="{ name:'houseBuyDetail',params: {cityId:cityId,houseId:houseId,userType:userType,houseType:houseType}}">
-            <img :src="sellImg.pic"><br/>
-            <p>{{sellImg.room_type}}|{{sellImg.buildarea}}|{{sellImg.forward}}</p>
-            <p><span style="color: #e10000">{{sellImg.price}}</span>&nbsp;&nbsp;&nbsp;{{sellImg.avgprice}}</p>
+              <img :src="sellImg.pic"><br/>
+              <p>{{sellImg.room_type}}|{{sellImg.buildarea}}|{{sellImg.forward}}</p>
+              <p><span style="color: #e10000">{{sellImg.price}}</span>&nbsp;&nbsp;&nbsp;{{sellImg.avgprice}}</p>
             </router-link>
           </li>
           <li v-if="isRent" v-for='rentImg in rentList' @click="getHomeDetail(rentImg.id)">
@@ -137,7 +140,7 @@
         <ul class="category-head">
           <li v-for="ortherImg in communityAround">
             <router-link
-              :to="{ name:'villageDetail',params: {cityId:cityId,houseId:houseId,userType:userType,houseType:houseType}}">
+              :to="{ name:'villageDetail',params: {blockId:blockId,cityId:cityId,userType:userType,houseType:houseType}}">
               <img
                 :src="ortherImg.surface_img?ortherImg.surface_img:require('../../assets/icon/icon_addtolist@2x.png')"><br/>
               <p style="color: #885D24;">{{ortherImg.build_date}}年建</p>
@@ -201,8 +204,8 @@
         //房源
         houseDetail: '',
         houseId: '1',
-        isSell: true,//是否在售
-        isRent: false,//是否在租
+        isSell: false,//是否在售
+        isRent: true,//是否在租
         title: '',//小区名+户型
         price: '',//售价
         buildarea: '',//建筑面积
@@ -228,11 +231,17 @@
         userType:'customer',
         houseType:'2',
         blockId:'1',
+        brokerPhone: '',
       }
     },
     created() {
+      //获取参数
+      this.cityId = this.$route.params.cityId;
+      this.houseId = this.$route.params.houseId;
+      this.userType = this.$route.params.userType;
+      this.houseType = this.$route.params.houseType;
       this.getHouseDetail();
-      this.getCommunityDetail();
+      //this.getCommunityDetail();
     },
     components: {
       headTop,
@@ -255,11 +264,7 @@
     methods: {
       //房源详情
       getHouseDetail() {
-        //获取参数
-        /*this.blockId = this.$route.params.blockId;
-        this.city = this.$route.params.city;
-        this.userType = this.$route.params.userType;
-        this.houseType = this.$route.params.houseType;*/
+
         let params = {
           cityId: this.cityId,
           houseId: this.houseId,
@@ -291,6 +296,8 @@
               this.center.lng = resultHouse.communityLocation.b_map_x;
               this.center.lat = resultHouse.communityLocation.b_map_y;
               this.cityId = resultHouse.cityId;
+              this.blockId = resultHouse.block_id;
+              this.brokerPhone = resultHouse.brokerPhone;
               if (resultHouse.attentionState === '1') {
                 this.attentionStatus = '已关注'
               } else if (resultHouse.attentionState === '0') {
@@ -308,7 +315,10 @@
                 offset: new BMap.Size(-26, 0)
               });
               lableInfor.setStyle({backgroundColor: '#fff', padding: '0.5rem', border: '', fontSize: '.1rem',});
-              map.addOverlay(lableInfor)
+              map.addOverlay(lableInfor);
+
+              //房源小区
+              this.getCommunityDetail();
 
             } else {
               this.$message.error(res.data.errorMessage);
@@ -320,6 +330,7 @@
       },
       //小区详情
       getCommunityDetail() {
+
         let params = {
           blockId: this.blockId,
           city: this.cityId,
@@ -411,7 +422,18 @@
         }
       },
       phoneCall() {
-        //window.location.href = 'tel://0755637'
+        this.$confirm('呼叫：'+this.brokerPhone,  {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          cancelButtonClass: 'cancelButtonClass',
+          confirmButtonClass: 'confirmButtonClass',
+          customClass: 'customClass',
+          center: true
+        }).then(() => {
+          window.location.href = 'tel://'+this.brokerPhone
+        }).catch(() => {
+
+        });
       },
       getHomeDetail(data){
         this.houseId = data;
@@ -433,9 +455,27 @@
 
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   @import '../../style/mixin';
   @import "../../../static/css/swiper.min.css";
+  .containt{
+    font-size: 1.6rem;
+  }
+  .customClass{
+    width: 80%;
+    padding-bottom:4rem;
+    p{
+      font-weight: bold;
+    }
+    .cancelButtonClass{
+      width: 40%;
+      height: 4rem;
+    }
+    .confirmButtonClass{
+      width: 40%;
+      height: 4rem;
+    }
+  }
   /**导航*/
   .nav-header {
     position: relative;
@@ -675,5 +715,3 @@
 
 
 </style>
-
-

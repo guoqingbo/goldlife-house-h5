@@ -126,13 +126,14 @@
                   //获取登录后的跳转地址
                   let redirectUrl = res.data.result;
                   //弹框确认登录后的跳回地址
-                  let redirect = decodeURIComponent(this.$route.query.redirect || '/home');
+                  let redirect = decodeURIComponent(this.$route.query.redirect || '/');
 //                  this.$messageBox.alert(redirectUrl, "回掉地址");
                   if (redirectUrl){ //请求中有跳转则跳转
                       window.location.href = redirectUrl;
                   }else if(redirect){
                     this.$router.push({
-                      path: redirect
+                      query:this.$route.query,
+                      path: redirect,
                     });
                   }
                 }else{
@@ -192,6 +193,9 @@
         padding-bottom:1.45rem;
         font-size: 1.6rem;
         border-bottom: 0.1rem solid #f5f5f5;
+        input{
+          height: 100%;
+        }
         input::placeholder{
           color: #424242;
           font-size: 1.5rem;
@@ -206,6 +210,9 @@
         padding-bottom: 1.45rem;
         font-size: 1.6rem;
         border-bottom: 0.1rem solid #f5f5f5;
+        input{
+          height: 100%;
+        }
         input::placeholder{
           color: #9a9c9d;
           font-size: 1.5rem;
