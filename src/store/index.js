@@ -9,7 +9,8 @@ export default new Vuex.Store({
   },
   getters: {
     getUserInfo(state) {
-      let userInfo = sessionStorage.getItem('userInfo')
+      // let userInfo = sessionStorage.getItem('userInfo')
+      let userInfo = localStorage.getItem('userInfo')
        if (userInfo){
          state.userInfo = JSON.parse(userInfo);
        }
@@ -18,7 +19,7 @@ export default new Vuex.Store({
   },
   mutations: {
     setUserInfo(state, userInfo) {
-      sessionStorage.setItem('userInfo',JSON.stringify(userInfo))
+      localStorage.setItem('userInfo',JSON.stringify(userInfo))
       state.userInfo = userInfo;
     }
   },

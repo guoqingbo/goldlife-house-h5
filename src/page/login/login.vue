@@ -191,13 +191,13 @@
         padding-top:4rem ;
         padding-bottom:1.45rem;
         font-size: 1.6rem;
-        border-bottom: 1px solid #f5f5f5;
+        border-bottom: 0.1rem solid #f5f5f5;
         input::placeholder{
           color: #424242;
-          font-size: 1.6rem;
+          font-size: 1.5rem;
         }
         span{
-          font-size: 15px;
+          font-size: 1.5rem;
           color: #ffc16b;
         }
       }
@@ -205,10 +205,10 @@
         padding-top: 2rem;
         padding-bottom: 1.45rem;
         font-size: 1.6rem;
-        border-bottom: 1px solid #f5f5f5;
+        border-bottom: 0.1rem solid #f5f5f5;
         input::placeholder{
           color: #9a9c9d;
-          font-size: 1.6rem;
+          font-size: 1.5rem;
         }
       }
       .btn-login{
