@@ -161,6 +161,7 @@
   }
   //地图
   .homeMap {
+    margin-top: 0;
     height: 100%;
     #allmap {
       width: 100%;
@@ -182,7 +183,7 @@
       text-align:center;
       color: #888888;
       line-height: 3rem;
-      margin-top: -2rem;
+      //margin-top: -2rem;
     }
     .class-color{
       color:#ffc16b;

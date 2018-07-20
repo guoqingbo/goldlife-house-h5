@@ -9,7 +9,7 @@
     <h1 class="nav-header">
       <span class="go-back" @click="$router.go(-1)"><i class="icon iconfont go-back-icon">&#xe60f;</i></span>
       <span class="header-title">
-        小区名称
+        {{this.$route.params.title}}
       </span>
 
     </h1>
@@ -49,9 +49,9 @@
     mounted() {
       var mySwiper = new Swiper('.swiper-container', {
         loop: true,
-        autoplay: {
+        /*autoplay: {
           delay: 3000,//3秒切换一次
-        },
+        },*/
         // 如果需要分页器
         pagination: {
           el: '.swiper-pagination',
