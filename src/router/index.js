@@ -108,6 +108,22 @@ const lookHouseHistory = resolve => {
   });
 };
 
+// 添加看房笔记
+const addLookHouseLog = resolve => {
+  require.ensure(['../page/lookHouse/addLookHouseLog'], () => {
+    resolve(require('../page/lookHouse/addLookHouseLog'));
+  });
+};
+
+
+// 看房预约
+const lookHouseReservation = resolve => {
+  require.ensure(['../page/lookHouse/lookHouseReservation'], () => {
+    resolve(require('../page/lookHouse/lookHouseReservation'));
+  });
+};
+
+
 
 const imgIncrease = resolve => {
   require.ensure(['../page/houseDetail/imgIncrease'], () => {
@@ -252,6 +268,23 @@ const routes = [
     name: 'lookHouseHistory',
     component: lookHouseHistory,
   },
+
+  // 添加看房笔记
+  {
+    path: '/addLookHouseLog',
+    name: 'addLookHouseLog',
+    component: addLookHouseLog,
+  },
+
+   // 看房预约中
+  {
+    path: '/lookHouseReservation',
+    name: 'lookHouseReservation',
+    component: lookHouseReservation,
+  },
+
+
+  
 
 ];
 

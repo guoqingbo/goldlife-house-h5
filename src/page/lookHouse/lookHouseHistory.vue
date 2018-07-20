@@ -6,10 +6,10 @@
           <span class="header-title">看房记录</span>
         </h1>
 		
-		<div class="box">
-		<!-- <div class="box" v-for="i in houseList"> -->
+		<!-- <div class="box"> -->
+		<div class="box" v-for="i in houseList">
 			
-			<!-- <div>
+			<div>
 				<div class="house-detail" v-if="i.targetHouse != undefined">
 					<img :src="!!i.targetHouse.pic?i.targetHouse.pic:'./static/searcherror@2x.png'">
 					<div>
@@ -24,47 +24,22 @@
 						</p>
 					</div>
 				</div>
-				<div class="house-status">
+				<div class="house-status" v-if="i.lookHouseLog != undefined">
 					<p >
-						<span>{{ i.brokerName }}经纪人带看</span>
-						<span>{{ i.time|moment('MM月DD日 hh:mm') }}</span>
+						<span><b>{{ i.brokerName }}</b>&nbsp;经纪人带看</span>
+						<span>{{ (i.time)/1000 |moment('MM月DD日 hh:mm') }}</span>
 					</p>
-					没有看房笔记时
-					<p class="addNode">添加看房笔记</p>
-					有看房笔记
-					<div class="label">
-						<p>性价比高...前面添加小圆点</p>
+					
+					<mt-button v-if="i.lookHouseLog.lable==''&&i.lookHouseLog.text==''" size="large" @click="addNode(i)">添加看房笔记</mt-button>
+				
+					<div v-else class="label" @click="editNode(i)">
+						<p v-show="!!i.lookHouseLog.lable">{{i.lookHouseLog.lable}}</p>
+						<p v-show="!!i.lookHouseLog.text">{{i.lookHouseLog.text}}</p>
 					</div>
 			
 				</div>
-			</div> -->
-			<div class="house-detail">
-				<img src="../../assets/icon/searcherror@2x.png">
-				<div>
-					<h3>
-						<span>约看小区&nbsp;</span>广厦天都城天星苑室内室内
-					</h3>
-					<p class="describ">3室1厅/120/朝北</p>
-					<p class="price">
-						<span>240万</span>
-						<span>&nbsp;&nbsp;43,345&nbsp;元/平</span>
-					</p>
-				</div>
 			</div>
-			<div class="house-status">
-				<p >
-					<span><b>罗罗</b>经纪人带看</span>
-					<span>7月7日</span>
-				</p>
-				
-				<p class="addNode">添加看房笔记</p>
-				
-				<!-- <div class="label">
-					<p>性价比高...前面添加小圆点</p>
-				</div> -->
-		
-			</div>
-
+			
 
 		</div>
 
@@ -82,7 +57,7 @@
 			}
 		},
 		created(){
-			// this.getLookHouseInfo();
+			this.getLookHouseInfo();
 		},
 		methods:{
 			getLookHouseInfo(){
@@ -99,6 +74,28 @@
 				.catch(err=>{
 					console.log(err);
 				})
+			},
+			addNode(houseData){
+				let _data = {
+					orderDetailId:houseData.lookHouseLog.orderDetailId,
+					room:houseData.room,
+					hall:houseData.hall,
+					price:houseData.price,
+					blockName:houseData.block_name
+				}
+				this.$router.push({name:'addLookHouseLog',parmas:{data:_data}})
+			},
+			editNode(data){
+				let _data = {
+					orderDetailId:data.lookHouseLog.orderDetailId,
+					room:data.targetHouse.room,
+					hall:data.targetHouse.hall,
+					price:data.targetHouse.price,
+					blockName:data.targetHouse.block_name,
+					text:data.lookHouseLog.text,
+					lable:data.lookHouseLog.lable,
+				}
+				this.$router.push({path:'/addLookHouseLog',query:{data:_data}})
 			}
 		},
 		components:{
@@ -188,17 +185,28 @@
 					font-weight: bold;
 					color: #424242;
 				}
+				b{
+					color: #754501;
+					font-weight: bold;
+				}
 			}
-			p:first-child{
+			>p:first-child{
 				margin-bottom: 1.5rem;
 			}
 
-			.addNode{
+			.label{
 				font-size: 1.5rem;
 				color: #9a9c9d;
 				background: #F8F8F8;
-				text-align: center;
-				padding: 1rem 0;
+				// text-align: center;
+				padding: 1rem;
+				border-radius: 0.5rem;
+				p{
+					margin-bottom: 1rem;
+					padding-left: 1.5rem;
+					background: url(../../assets/icon/circle2@2x.png) no-repeat left center;
+					background-size: 0.5rem 0.5rem;
+				}
 			}
 
 		}

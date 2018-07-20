@@ -1,6 +1,6 @@
 <template>
   <div class="containt">
-    <head-top goBack="true"/>
+    <!--<head-top goBack="true"/>-->
     <h1 class="nav-header">
       <span class="go-back" @click="$router.go(-1)"><i class="icon iconfont go-back-icon">&#xe60f;</i></span>
       <span class="header-title">{{title}}</span>
@@ -8,16 +8,18 @@
     <div class="content">
       <!--顶部轮播图片-->
       <div class="imgDiv">
-        <div class="swiper-container">
-          <div class="swiper-wrapper">
-            <!--动态获取图片展示-->
-            <div v-for='i in arrItem' class="swiper-slide">
-              <img :src="i.imgUrl">
+        <router-link :to="{ name:'imgIncrease',params: { imgs: imgHouseAttr,title:title}}">
+          <div v-if="imgHouseAttr.length>0" class="swiper-container">
+            <div class="swiper-wrapper">
+              <div v-for='i in imgHouseAttr' class="swiper-slide">
+                <img :src="i?i:require('../../assets/img/bg_smallphotonormal@3x.png')">
+              </div>
             </div>
+            <!-- 如果需要分页器 -->
+            <div  class="swiper-pagination"></div>
           </div>
-          <!-- 如果需要分页器 -->
-          <div class="swiper-pagination"></div>
-        </div>
+          <div v-else><img src="../../assets/img/bg_bigphotonormal@2x.png"></div>
+        </router-link>
       </div>
 
 
@@ -91,7 +93,7 @@
           <li v-if="isSell" v-for='sellImg in sellList' >
             <router-link
               :to="{ name:'houseBuyDetail',params: {cityId:cityId,houseId:sellImg.id,userType:userType,houseType:houseType}}">
-              <img :src="sellImg.pic"><br/>
+              <img :src="sellImg.pic?sellImg.pic:require('../../assets/img/bg_smallphotonormal@3x.png')"><br/>
               <p>{{sellImg.room_type}}|{{sellImg.buildarea}}|{{sellImg.forward}}</p>
               <p><span style="color: #e10000">{{sellImg.price}}</span>&nbsp;&nbsp;&nbsp;{{sellImg.avgprice}}</p>
             </router-link>
@@ -99,7 +101,7 @@
           <li v-if="isRent" v-for='rentImg in rentList'>
             <router-link
               :to="{ name:'houseRentDetail',params: {cityId:cityId,houseId:rentImg.id,userType:userType,houseType:houseType}}">
-              <img :src="rentImg.pic"><br/>
+              <img :src="rentImg.pic?rentImg.pic:require('../../assets/img/bg_smallphotonormal@3x.png')"><br/>
               <p>{{rentImg.room_type}}|{{rentImg.buildarea}}|{{rentImg.forward}}</p>
               <p><span style="color: #e10000">{{rentImg.price}}</span></p>
             </router-link>
@@ -129,7 +131,7 @@
         <ul class="category-head">
           <li v-for="ortherImg in communityAround" @click="getOtherVillage(ortherImg.id)">
             <img
-              :src="ortherImg.surface_img?ortherImg.surface_img:require('../../assets/icon/icon_addtolist@2x.png')"><br/>
+              :src="ortherImg.surface_img?ortherImg.surface_img:require('../../assets/img/bg_smallphotonormal@3x.png')"><br/>
             <p style="color: #885D24;">{{ortherImg.build_date}}年建</p>
             <p>{{ortherImg.cmt_name}}</p>
             <p class="p-bottom"><span style="color: #e10000">{{ortherImg.averprice}}元/平</span></p>
@@ -167,7 +169,7 @@
         isSell: true,//是否在售
         isRent: false,//是否在租
         center: {lng: 120.12, lat: 30.16},
-        imgHouseAttr: ['', '', ''],//房源照片
+        imgHouseAttr: [],//房源照片
         title: '',
         addressDetail: '',
         address: '',
@@ -184,9 +186,14 @@
         blockId: '2',
         userType: 'customer',
         houseType: '1',
+        address: '',//地图标注地址
       }
     },
     created() {
+      this.blockId = this.$route.params.blockId;
+      this.cityId = this.$route.params.cityId;
+      this.userType = this.$route.params.userType;
+      this.houseType = this.$route.params.houseType;
       this.getCommunityDetail();
     },
     components: {
@@ -194,27 +201,16 @@
     },
     mounted() {
       this.ready();
-      var mySwiper = new Swiper('.swiper-container', {
-        loop: true,
-        autoplay: {
-          delay: 3000,//3秒切换一次
-        },
-        // 如果需要分页器
-        pagination: {
-          el: '.swiper-pagination',
-          type: 'fraction',
-        },
-      });
     },
 
     methods: {
       //小区详情
       getCommunityDetail() {
         //获取参数
-        this.blockId = this.$route.params.blockId;
-        this.city = this.$route.params.city;
+        /*this.blockId = this.$route.params.blockId;
+        this.cityId = this.$route.params.cityId;
         this.userType = this.$route.params.userType;
-        this.houseType = this.$route.params.houseType;
+        this.houseType = this.$route.params.houseType;*/
         let params = {
           blockId: this.blockId,
           city: this.cityId,
@@ -251,19 +247,24 @@
               }
               this.center.lng = resultHouse.b_map_x;
               this.center.lat = resultHouse.b_map_y;
-              var address = resultHouse.disrictName + ',' + resultHouse.streetName;
-              var point = new BMap.Point(this.center.lng, this.center.lat);
-              var marker = new BMap.Marker(point);
-              map.addOverlay(marker);
-              map.disableDragging();
-              map.centerAndZoom(point, 16);
-              map.panTo(point);
-              let lableInfor = new BMap.Label(address, {
-                position: point,
-                offset: new BMap.Size(-26, 0)
+
+              this.address = resultHouse.disrictName + ',' + resultHouse.streetName;
+              //重置地图
+              this.resetMap();
+              //初始化轮播
+              this.$nextTick(function () {
+                var mySwiper = new Swiper('.swiper-container', {
+                  loop: true,
+                  autoplay: {
+                    delay: 3000,//3秒切换一次
+                  },
+                  // 如果需要分页器
+                  pagination: {
+                    el: '.swiper-pagination',
+                    type: 'fraction',
+                  },
+                });
               });
-              lableInfor.setStyle({backgroundColor: '#fff', padding: '0.5rem', border: '', fontSize: '.1rem',});
-              map.addOverlay(lableInfor)
             } else {
               this.$message.error(res.data.errorMessage);
             }
@@ -350,7 +351,21 @@
         map.addOverlay(marker);
         map.disableDragging();
         map.centerAndZoom(point, 16);
-      }
+      },
+      resetMap(){
+        var point = new BMap.Point(this.center.lng, this.center.lat);
+        var marker = new BMap.Marker(point);
+        map.addOverlay(marker);
+        map.disableDragging();
+        map.centerAndZoom(point, 16);
+        map.panTo(point);
+        let lableInfor = new BMap.Label(this.address, {
+          position: point,
+          offset: new BMap.Size(-26, 0)
+        });
+        lableInfor.setStyle({backgroundColor: '#fff', padding: '0.5rem', border: '', fontSize: '.1rem',});
+        map.addOverlay(lableInfor);
+      },
     }
   }
 
@@ -360,6 +375,9 @@
 <style lang="scss" scoped>
   @import '../../style/mixin';
   @import "../../../static/css/swiper.min.css";
+  .containt{
+    font-size: 1.6rem;
+  }
   /**导航*/
   .nav-header {
     position: relative;

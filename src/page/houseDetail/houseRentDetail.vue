@@ -1,6 +1,6 @@
 <template>
   <div class="containt">
-    <head-top goBack="true"/>
+    <!--<head-top goBack="true"/>-->
     <h1 class="nav-header">
       <span class="go-back" @click="$router.go(-1)"><i class="icon iconfont go-back-icon">&#xe60f;</i></span>
       <span class="header-title">房源</span>
@@ -8,16 +8,18 @@
     <div class="content">
       <!--顶部轮播图片-->
       <div class="imgDiv">
-        <div class="swiper-container">
-          <div class="swiper-wrapper">
-            <!--动态获取图片展示-->
-            <div v-for='i in arrItem' class="swiper-slide">
-              <img :src="i.imgUrl">
+        <router-link :to="{ name:'imgIncrease',params: { imgs: imgHouseAttr,title:title}}">
+          <div v-if="imgHouseAttr.length>0" class="swiper-container">
+            <div class="swiper-wrapper">
+              <div v-for='i in imgHouseAttr' class="swiper-slide">
+                <img :src="i">
+              </div>
             </div>
+            <!-- 如果需要分页器 -->
+            <div class="swiper-pagination"></div>
           </div>
-          <!-- 如果需要分页器 -->
-          <div class="swiper-pagination"></div>
-        </div>
+          <div v-else><img src="../../assets/img/bg_bigphotonormal@2x.png"></div>
+        </router-link>
       </div>
 
 
@@ -69,7 +71,10 @@
               <p>年代： {{buildyear}}</p>
             </el-row>
             <el-row class="el-detailDes">
-              <p>小区： <span style="color: #ffc16b">{{block_name}}</span></p>
+              <router-link
+                :to="{ name:'villageDetail',params: {blockId:blockId,cityId:cityId,userType:userType,houseType:houseType}}">
+              <p>小区： <span style="color: #ffc16b" >{{block_name}}</span></p>
+              </router-link>
             </el-row>
 
           </el-col>
@@ -106,13 +111,13 @@
         <ul class="category-head" ref="ulDisplay">
           <li v-if="isSell" v-for='sellImg in sellList' >
             <router-link :to="{ name:'houseBuyDetail',params: {cityId:cityId,houseId:houseId,userType:userType,houseType:houseType}}">
-              <img :src="sellImg.pic"><br/>
+              <img :src="sellImg.pic?sellImg.pic:require('../../assets/img/bg_smallphotonormal@3x.png')"><br/>
               <p>{{sellImg.room_type}}|{{sellImg.buildarea}}|{{sellImg.forward}}</p>
               <p><span style="color: #e10000">{{sellImg.price}}</span>&nbsp;&nbsp;&nbsp;{{sellImg.avgprice}}</p>
             </router-link>
           </li>
           <li v-if="isRent" v-for='rentImg in rentList' @click="getHomeDetail(rentImg.id)">
-            <img :src="rentImg.pic"><br/>
+            <img :src="rentImg.pic?rentImg.pic:require('../../assets/img/bg_smallphotonormal@3x.png')"><br/>
             <p>{{rentImg.room_type}}|{{rentImg.buildarea}}|{{rentImg.forward}}</p>
             <p><span style="color: #e10000">{{rentImg.price}}</span></p>
           </li>
@@ -137,9 +142,9 @@
         <ul class="category-head">
           <li v-for="ortherImg in communityAround">
             <router-link
-              :to="{ name:'villageDetail',params: {cityId:cityId,houseId:houseId,userType:userType,houseType:houseType}}">
+              :to="{ name:'villageDetail',params: {blockId:blockId,cityId:cityId,userType:userType,houseType:houseType}}">
               <img
-                :src="ortherImg.surface_img?ortherImg.surface_img:require('../../assets/icon/icon_addtolist@2x.png')"><br/>
+                :src="ortherImg.surface_img?ortherImg.surface_img:require('../../assets/img/bg_smallphotonormal@3x.png')"><br/>
               <p style="color: #885D24;">{{ortherImg.build_date}}年建</p>
               <p>{{ortherImg.cmt_name}}</p>
               <p class="p-bottom"><span style="color: #e10000">{{ortherImg.averprice}}元/平</span></p>
@@ -181,23 +186,6 @@
         type: 'tab',
         address_detail: null,
         center: {lng: 116.40387397, lat: 39.91488908},
-        arrItem: [
-          {imgUrl: 'http://image.qmango.com/hotelimg/dl1210/109490/109.jpeg'},
-          {imgUrl: 'http://image.qmango.com/hotelimg/dl1210/125708/181.jpeg'},
-          {imgUrl: 'http://image.qmango.com/hotelimg/dl1210/119297/793.jpeg'}
-        ],
-        sameImgAttr: [
-          {imgUrl: 'http://image.qmango.com/hotelimg/dl1210/109490/109.jpeg'},
-          {imgUrl: 'http://image.qmango.com/hotelimg/dl1210/125708/181.jpeg'},
-          {imgUrl: 'http://image.qmango.com/hotelimg/dl1210/119297/793.jpeg'},
-          {imgUrl: 'http://image.qmango.com/hotelimg/dl1210/119297/793.jpeg'}
-        ],
-        otherImgAttr: [
-          {imgUrl: 'http://image.qmango.com/hotelimg/dl1210/109490/109.jpeg'},
-          {imgUrl: 'http://image.qmango.com/hotelimg/dl1210/125708/181.jpeg'},
-          {imgUrl: 'http://image.qmango.com/hotelimg/dl1210/119297/793.jpeg'},
-          {imgUrl: 'http://image.qmango.com/hotelimg/dl1210/119297/793.jpeg'}
-        ],
         //房源
         houseDetail: '',
         houseId: '1',
@@ -217,7 +205,7 @@
         maplng: '',//坐标x
         maplat: '',//坐标y
         center: {lng: 120.12, lat: 30.16},
-        imgHouseAttr: ['', '', ''],//房源照片
+        imgHouseAttr: [],//房源照片
         //同小区
         sellList: [],//在售
         rentList: [],//在租
@@ -228,9 +216,16 @@
         userType:'customer',
         houseType:'2',
         blockId:'1',
+        brokerPhone: '',
+        address: '',//地图标注地址
       }
     },
     created() {
+      //获取参数
+      this.cityId = this.$route.params.cityId;
+      this.houseId = this.$route.params.houseId;
+      this.userType = this.$route.params.userType;
+      this.houseType = this.$route.params.houseType;
       this.getHouseDetail();
       //this.getCommunityDetail();
     },
@@ -239,27 +234,12 @@
     },
     mounted() {
       this.ready();
-      var mySwiper = new Swiper('.swiper-container', {
-        loop: true,
-        autoplay: {
-          delay: 3000,//3秒切换一次
-        },
-        // 如果需要分页器
-        pagination: {
-          el: '.swiper-pagination',
-          type: 'fraction',
-        },
-      });
     },
 
     methods: {
       //房源详情
       getHouseDetail() {
-        //获取参数
-        this.cityId = this.$route.params.cityId;
-        this.houseId = this.$route.params.houseId;
-        this.userType = this.$route.params.userType;
-        this.houseType = this.$route.params.houseType;
+
         let params = {
           cityId: this.cityId,
           houseId: this.houseId,
@@ -292,24 +272,29 @@
               this.center.lat = resultHouse.communityLocation.b_map_y;
               this.cityId = resultHouse.cityId;
               this.blockId = resultHouse.block_id;
+              this.brokerPhone = resultHouse.brokerPhone;
               if (resultHouse.attentionState === '1') {
                 this.attentionStatus = '已关注'
               } else if (resultHouse.attentionState === '0') {
                 this.attentionStatus = '关注'
               }
-              var address = resultHouse.disrictName + ',' + resultHouse.streetName;
-              var point = new BMap.Point(this.center.lng, this.center.lat);
-              var marker = new BMap.Marker(point);
-              map.addOverlay(marker);
-              map.disableDragging();
-              map.centerAndZoom(point, 16);
-              map.panTo(point);
-              let lableInfor = new BMap.Label(address, {
-                position: point,
-                offset: new BMap.Size(-26, 0)
+              this.address = resultHouse.disrictName + ',' + resultHouse.streetName;
+              //重置地图
+              this.resetMap();
+              //初始化轮播
+              this.$nextTick(function () {
+                var mySwiper = new Swiper('.swiper-container', {
+                  loop: true,
+                  autoplay: {
+                    delay: 3000,//3秒切换一次
+                  },
+                  // 如果需要分页器
+                  pagination: {
+                    el: '.swiper-pagination',
+                    type: 'fraction',
+                  },
+                });
               });
-              lableInfor.setStyle({backgroundColor: '#fff', padding: '0.5rem', border: '', fontSize: '.1rem',});
-              map.addOverlay(lableInfor);
 
               //房源小区
               this.getCommunityDetail();
@@ -416,7 +401,18 @@
         }
       },
       phoneCall() {
-        //window.location.href = 'tel://0755637'
+        this.$confirm('呼叫：'+this.brokerPhone,  {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          cancelButtonClass: 'cancelButtonClass',
+          confirmButtonClass: 'confirmButtonClass',
+          customClass: 'customClass',
+          center: true
+        }).then(() => {
+          window.location.href = 'tel://'+this.brokerPhone
+        }).catch(() => {
+
+        });
       },
       getHomeDetail(data){
         this.houseId = data;
@@ -431,16 +427,48 @@
         map.addOverlay(marker);
         map.disableDragging();
         map.centerAndZoom(point, 16);
-      }
+      },
+      resetMap(){
+        var point = new BMap.Point(this.maplng, this.maplat);
+        var marker = new BMap.Marker(point);
+        map.addOverlay(marker);
+        map.disableDragging();
+        map.centerAndZoom(point, 16);
+        map.panTo(point);
+        let lableInfor = new BMap.Label(this.address, {
+          position: point,
+          offset: new BMap.Size(-26, 0)
+        });
+        lableInfor.setStyle({backgroundColor: '#fff', padding: '0.5rem', border: '', fontSize: '.1rem',});
+        map.addOverlay(lableInfor);
+      },
     }
   }
 
 
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   @import '../../style/mixin';
   @import "../../../static/css/swiper.min.css";
+  .containt{
+    font-size: 1.6rem;
+  }
+  .customClass{
+    width: 80%;
+    padding-bottom:4rem;
+    p{
+      font-weight: bold;
+    }
+    .cancelButtonClass{
+      width: 40%;
+      height: 4rem;
+    }
+    .confirmButtonClass{
+      width: 40%;
+      height: 4rem;
+    }
+  }
   /**导航*/
   .nav-header {
     position: relative;
