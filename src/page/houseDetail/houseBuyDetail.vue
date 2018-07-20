@@ -86,7 +86,10 @@
               <p>楼层： {{floor}}</p>
             </el-row>
             <el-row class="el-detailDes">
-              <p>小区： <span style="color: #ffc16b">{{block_name}}</span></p>
+              <router-link
+                :to="{ name:'villageDetail',params: {blockId:blockId,cityId:cityId,userType:userType,houseType:houseType}}">
+                <p>小区： <span style="color: #ffc16b">{{block_name}}</span></p>
+              </router-link>
             </el-row>
 
           </el-col>
@@ -168,7 +171,7 @@
         <ul class="category-head">
           <li v-for="ortherImg in communityAround">
             <router-link
-              :to="{ name:'villageDetail',params: {cityId:cityId,houseId:houseId,userType:userType,houseType:houseType}}">
+              :to="{ name:'villageDetail',params: {blockId:blockId,cityId:cityId,userType:userType,houseType:houseType}}">
               <img
                 :src="ortherImg.surface_img?ortherImg.surface_img:require('../../assets/icon/icon_addtolist@2x.png')"><br/>
               <p style="color: #885D24;">{{ortherImg.build_date}}年建</p>
@@ -269,6 +272,11 @@
       }
     },
     created() {
+      //获取参数
+      this.cityId = this.$route.params.cityId;
+      this.houseId = this.$route.params.houseId;
+      this.userType = this.$route.params.userType;
+      this.houseType = this.$route.params.houseType;
       this.getHouseDetail();
       //this.getCommunityDetail();
       this.getCompareNum();
@@ -294,11 +302,7 @@
     methods: {
       //房源详情
       getHouseDetail() {
-        //获取参数
-        this.cityId = this.$route.params.cityId;
-        this.houseId = this.$route.params.houseId;
-        this.userType = this.$route.params.userType;
-        this.houseType = this.$route.params.houseType;
+
         let params = {
           cityId: this.cityId,
           houseId: this.houseId,
@@ -346,13 +350,6 @@
               map.panTo(point);
 
 
-
-
-
-
-
-
-
               let lableInfor = new BMap.Label(address, {
                 position: point,
                 offset: new BMap.Size(-26, 0)
@@ -384,9 +381,6 @@
       },
       //小区详情
       getCommunityDetail() {
-
-
-
 
 
         let params = {

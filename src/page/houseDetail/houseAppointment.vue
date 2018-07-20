@@ -258,6 +258,9 @@
   @import '../../style/mixin';
   @import "../../../static/css/swiper.min.css";
 
+  .houseAppointment{
+    font-size: 1.6rem;
+  }
   /**导航*/
   .nav-header {
     position: relative;

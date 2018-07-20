@@ -197,6 +197,9 @@
 
 <style lang="scss" scoped>
   @import '../../style/mixin';
+  .villageMore{
+    font-size: 1.6rem;
+  }
   /**导航*/
   .nav-header {
     position: relative;
