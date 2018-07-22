@@ -1,7 +1,7 @@
 <template>
   <!--房源结果列表-->
-  <div class="house-list">
-    <ul>
+  <div>
+    <ul class="house-list">
       <li class="house-item clear" v-for="item in houseLists" :key="item.id">
         <router-link
           :to="{name:houseTypeDetail[houseType], params:{cityId:'hz', houseId:item.id, userType:'customer', houseType:houseType}}">
@@ -42,13 +42,10 @@
   }
   /**列表*/
   .house-list {
-    ul {
       padding: 0 2rem;
       li {
         @include border-top;
         /*background-color: #ccc;*/
       }
-    }
-
   }
 </style>

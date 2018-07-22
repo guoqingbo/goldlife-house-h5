@@ -13,8 +13,8 @@
       </span>
     </div>
     <!--房源结果列表-->
-    <div>
-      <ul class="house-list">
+    <div class="house-list">
+      <ul>
         <li class="house-item clear" v-for="item in houseLists" :key="item.id" @click="selectedHouse(item.id)">
           <house-item :item="item" :houseType="1" :checkBox="true">
             <div slot="checkBox" class="check-box-div">

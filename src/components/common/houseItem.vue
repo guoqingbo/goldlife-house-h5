@@ -33,7 +33,7 @@
         if (value) {
           return value;
         }else{
-          return "http://118.178.230.141/group1/M00/00/04/drLmjVsZ-cmAIWmKAASWd8wn0zs229.jpg"
+          return "/static/img/bg_bigphotonormal@2x.f7b270e.png"
         }
       },
       price(value,houseType){
