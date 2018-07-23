@@ -9,6 +9,7 @@ export default new Vuex.Store({
     activeInfo:{
       houseId:'',//当前活动房源id
       houseType:'',//当前活动房源类型
+      blockId:'',//当前活动小区id
     }
   },
   getters: {

@@ -72,16 +72,16 @@
         <el-row>
           <el-col :span="11">
             <el-row class="el-detailDes">
-              <p>单价： {{avgprice}}</p>
+              <p>单价： <span class="data-show">{{avgprice}}</span></p>
             </el-row>
             <el-row class="el-detailDes">
-              <p>朝向： {{forward}}</p>
+              <p>朝向： <span class="data-show">{{forward}}</span></p>
             </el-row>
             <el-row class="el-detailDes">
-              <p>类型： {{sell_type}}</p>
+              <p>类型： <span class="data-show">{{sell_type}}</span></p>
             </el-row>
             <el-row class="el-detailDes">
-              <p>楼层： {{floor}}</p>
+              <p>楼层： <span class="data-show">{{floor}}</span></p>
             </el-row>
             <el-row class="el-detailDes">
               <router-link
@@ -94,13 +94,13 @@
 
           <el-col :span="11">
             <el-row class="el-detailDes">
-              <p>挂牌： {{createtime}}</p>
+              <p>挂牌： <span class="data-show">{{createtime}}</span></p>
             </el-row>
             <el-row class="el-detailDes">
-              <p>装修： {{fitment}}</p>
+              <p>装修： <span class="data-show">{{fitment}}</span></p>
             </el-row>
             <el-row class="el-detailDes">
-              <p>年代： {{buildyear}}</p>
+              <p>年代： <span class="data-show">{{buildyear}}</span></p>
             </el-row>
           </el-col>
         </el-row>
@@ -459,9 +459,14 @@
         //获取用户名
         let loginName = this.$store.state.userInfo.loginName;
         //在该用户获取对比清单
-        var _length = Object.keys(localStorage.getItem("comparedList_hz_" + loginName));
-        if (_length>0) {
-          this.compareNum = _length;
+        var compareArr = localStorage.getItem("comparedList_hz_" + loginName);
+        var len = 0;
+        if(compareArr != null){
+          len = Object.keys(compareArr).length;
+        }
+        //var _length = Object.keys(localStorage.getItem("comparedList_hz_" + loginName));
+        if (len>0) {
+          this.compareNum = len;
         } else {
           this.compareNum = '';
         }
@@ -707,6 +712,9 @@
     }
     p {
       color: #9c9a9d;
+    }
+    .data-show{
+      color: #424242;
     }
   }
 

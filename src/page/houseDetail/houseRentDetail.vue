@@ -62,13 +62,13 @@
         <el-row>
           <el-col :span="11">
             <el-row class="el-detailDes">
-              <p>朝向： {{forward}}</p>
+              <p>朝向： <span class="data-show">{{forward}}</span></p>
             </el-row>
             <el-row class="el-detailDes">
-              <p>类型： {{sell_type}}</p>
+              <p>类型： <span class="data-show">{{sell_type}}</span></p>
             </el-row>
             <el-row class="el-detailDes">
-              <p>年代： {{buildyear}}</p>
+              <p>年代： <span class="data-show">{{buildyear}}</span></p>
             </el-row>
             <el-row class="el-detailDes">
               <router-link
@@ -81,10 +81,10 @@
 
           <el-col :span="11">
             <el-row class="el-detailDes">
-              <p>挂牌： {{createtime}}</p>
+              <p>挂牌： <span class="data-show">{{createtime}}</span></p>
             </el-row>
             <el-row class="el-detailDes">
-              <p>装修： {{fitment}}</p>
+              <p>装修： <span class="data-show">{{fitment}}</span></p>
             </el-row>
           </el-col>
         </el-row>
@@ -594,6 +594,9 @@
     }
     p {
       color: #9c9a9d;
+    }
+    .data-show{
+      color: #424242;
     }
   }
 
