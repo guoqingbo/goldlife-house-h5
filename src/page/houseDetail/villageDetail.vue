@@ -56,16 +56,16 @@
         <el-row>
           <el-col :span="11">
             <el-row class="el-detailDes">
-              <p>位置： {{address}}</p>
+              <p>位置： <span class="data-show">{{address}}</span></p>
             </el-row>
             <el-row class="el-detailDes">
-              <p>栋数： {{builds}}栋</p>
+              <p>栋数： <span class="data-show">{{builds}}栋</span></p>
             </el-row>
           </el-col>
 
           <el-col :span="11">
             <el-row class="el-detailDes">
-              <p>年代： {{buildYear}}年</p>
+              <p>年代： <span class="data-show">{{buildYear}}年</span></p>
             </el-row>
           </el-col>
         </el-row>
@@ -462,9 +462,9 @@
     .div-houseDes {
       margin-top: 0.5rem;
       .div-line {
-        width: 0.1rem;
+        width: 0.2rem;
         height: 6rem;
-        background: #000;
+        background: #f5f5f5;
       }
       .des {
         font-size: 14px;
@@ -517,6 +517,9 @@
       p {
         color: #9c9a9d;
       }
+    }
+    .data-show{
+      color: #424242;
     }
   }
 

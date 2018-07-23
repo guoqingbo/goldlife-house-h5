@@ -552,9 +552,9 @@
     .div-houseDes {
       margin-top: 2rem;
       .div-line {
-        width: 0.1rem;
+        width: 0.2rem;
         height: 6rem;
-        background: #000;
+        background: #f5f5f5;
       }
       .des {
         font-size: 14px;
