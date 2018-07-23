@@ -17,14 +17,13 @@
 		<div class="lableNode">
 			<p>标签备注</p>
 			<div class="lable">
-				<p v-for="(item,index) in labelList" @click="chooseLable(index)" :value="item" :class="{'select':index}">{{ item }}</p>
-				<!-- <p v-for="(item,index) in labelList" @click="chooseLable(index)" :value="item" :key="index">{{ item }}</p> -->
+				<p v-for="(item,index) in labelList" @click="chooseLable($event,item)" :value="item">{{ item }}</p>
 
 			</div>
 		</div>
 		<div class="textNode">
 			<p>文字备注</p>
-			<textarea placeholder="备注"></textarea>
+			<textarea placeholder="备注" v-model="textLable"></textarea>
 		</div>
 	</div>
 </template>
@@ -36,15 +35,17 @@
 		data(){
 			return{
 				labelList:[],
-				flag:''		
+				flag:false,
+				selectedLable:[],
+				textLable:'',
+				allLableContent:''		
 			}
 		},
 		created(){
-			this.getLabel();
-			
+			this.getLabel();			
 		},
 		mounted(){
-			console.log(this.$route.query);
+			this.haveLable();
 		},
 		methods:{
 			getLabel(){//获取标签
@@ -65,14 +66,15 @@
 				})
 			},
 			postNode(){//点击确定，提交备注
+				 
+				 let lableObj = this.selectedLable.join(',');
 
-				/*let _orderDetailId = this.$route.params.data.orderDetailId;
-				let _lable = 
 				let lableInfo = {
-					orderDetailId:,
-			        lable:'',
-			        text:'',
-				}*/
+					orderDetailId:this.$route.query.data.orderDetailId,
+			        // lable:this.selectedLable,
+			        lable:lableObj,
+			        text:this.textLable,
+				}
 
 				api.saveHouseLog(lableInfo).then(res=>{
 					if(res.data.success){
@@ -90,9 +92,47 @@
 				})
 				
 			},
-			chooseLable(data){
-				// this.flag = !this.flag;
-				console.log(data);
+			chooseLable(data){//选择标签备注
+
+				let removeArr = [];
+
+				if(data.target.className){
+					data.target.className = ''
+					removeArr.push(data.target.innerHTML)
+				}else{
+					data.target.className = 'select'
+					this.selectedLable.push(data.target.innerHTML)
+				}
+
+				//将选中又取消的标签从数组中移除
+				for(var i=0; i<removeArr.length; i++){
+						for(var j=0; j<this.selectedLable.length; j++){
+							if(this.selectedLable[j]==removeArr[i]){
+								this.selectedLable.splice(j,1);
+							}
+						}
+						
+					}
+				
+			},
+			haveLable(){//修改备注时，将原有的备注携带过来
+				let _text = this.$route.query.data.text;
+				let _lable = this.$route.query.data.lable;
+				if(_text){
+					this.textLable = _text;
+				}else{
+					this.textLable = '';
+				}
+
+				if(_lable){
+					// 将字符串转成数组
+					let lableArr = _lable.split(',');
+					// 如何获取所有的标签？？？
+				}else{
+					
+				}
+
+
 			}
 		},
 		components:{

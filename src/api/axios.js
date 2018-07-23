@@ -95,10 +95,6 @@ export default {
   logout(data){
     return axios.post(
       'user/logout?openId='+data.openId +'&code='+data.code,
-      // qs.stringify({
-      //   openId:JSON.stringify(data.openId),
-      //   code:JSON.stringify(data.code),
-      // })
     )
   },
 
