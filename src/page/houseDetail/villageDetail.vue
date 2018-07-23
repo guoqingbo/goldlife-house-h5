@@ -120,14 +120,16 @@
             同小区在租{{rentList.length}}套
           </div>-->
           <span v-if="(isRent&&rentList.length>3)||(isSell&&sellList.length>3)">查看更多</span>
-          <span v-else>暂无{{isRent?'在租':'在售'}}房源</span>
+          <span v-else><span v-if="(isRent&&rentList.length<1)">暂无在租房源</span>
+            <span v-if="(isSell&&sellList.length<1)">暂无在售房源</span>
+            <!--{{isRent?'在租':'在售'}}--></span>
         </div>
       </router-link>
       <!--分割2-->
       <div class="divide2">
       </div>
       <!--周边房源-->
-      <div class="sameArea">
+      <div class="sameArea" v-if="communityAround.length>0">
         <p>周边小区</p>
         <ul class="category-head">
           <li v-for="ortherImg in communityAround" @click="getOtherVillage(ortherImg.id)">
