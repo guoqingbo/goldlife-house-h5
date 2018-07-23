@@ -6,7 +6,6 @@
           <span class="header-title">看房记录</span>
         </h1>
 		
-		<!-- <div class="box"> -->
 		<div class="box" v-for="i in houseList">
 			
 			<div>
@@ -30,10 +29,11 @@
 						<span>{{ (i.time)/1000 |moment('MM月DD日 hh:mm') }}</span>
 					</p>
 					
-					<mt-button v-if="i.lookHouseLog.lable==''&&i.lookHouseLog.text==''" size="large" @click="addNode(i)">添加看房笔记</mt-button>
+					<mt-button v-if="i.lookHouseLog.lable==''&&i.lookHouseLog.text==''" size="large" @click="editNode(i)">添加看房笔记</mt-button>
 				
 					<div v-else class="label" @click="editNode(i)">
-						<p v-show="!!i.lookHouseLog.lable">{{i.lookHouseLog.lable}}</p>
+						
+						<p v-show="!!i.lookHouseLog.lable">{{i.lookHouseLog.lable}}。</p>
 						<p v-show="!!i.lookHouseLog.text">{{i.lookHouseLog.text}}</p>
 					</div>
 			
@@ -64,7 +64,6 @@
 				api.lookHouseHistory()
 				.then(res=>{
 					if(res.data.success){
-						console.log(res.data);
 						this.houseList = res.data.result;
 
 					}else{
@@ -75,7 +74,7 @@
 					console.log(err);
 				})
 			},
-			addNode(houseData){
+			/*addNode(houseData){
 				let _data = {
 					orderDetailId:houseData.lookHouseLog.orderDetailId,
 					room:houseData.room,
@@ -83,8 +82,8 @@
 					price:houseData.price,
 					blockName:houseData.block_name
 				}
-				this.$router.push({name:'addLookHouseLog',parmas:{data:_data}})
-			},
+				this.$router.push({name:'addLookHouseLog',query:{data:_data}})
+			},*/
 			editNode(data){
 				let _data = {
 					orderDetailId:data.lookHouseLog.orderDetailId,

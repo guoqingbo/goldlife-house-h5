@@ -33,11 +33,12 @@
 						<span>{{reservationInfo.targetHouse.price}}万</span>
 						<span>&nbsp;&nbsp;{{reservationInfo.targetHouse.avgprice}}&nbsp;元/平</span>
 					</p>
-					<p class="dayT">{{reservationInfo.targetHouse.create_time*1000 |moment('MM月DD日 hh:mm')}}&nbsp;发布</p>
+					<!-- <p class="dayT">{{reservationInfo.targetHouse.create_time*1000 |moment('MM月DD日 hh:mm')}}&nbsp;发布</p> -->
+					<p class="dayT">{{reservationInfo.targetHouse.create_time*1000 |getDateDiff}}&nbsp;发布</p>
 				</div>
 			</div>
 			<p class="tips" v-if="reservationInfo.state==1 || reservationInfo.state==2">带看经纪人将与您核实确认约看时间地点，确认预约。</p>
-			<p class="tips" v-if="reservationInfo.state==3">经纪人与您核实预约情况反映，本次预约失败。感谢您的关注，请继续寻找核实房源</p>
+			<p class="tips" v-else-if="reservationInfo.state==3">经纪人与您核实预约情况反映，本次预约失败。感谢您的关注，请继续寻找核实房源</p>
 			<p class="tips" v-else>您已预约成功，如需修改预约时间请致电经纪人。</p>
 		</div>
 
@@ -69,12 +70,25 @@
 			
 		},
 		methods:{
+			
 			phoneNum(){
+				this.$confirm('呼叫：'+this.reservationInfo.phone,  {
+		          confirmButtonText: '确定',
+		          cancelButtonText: '取消',
+		          cancelButtonClass: 'cancelButtonClass',
+		          confirmButtonClass: 'confirmButtonClass',
+		          customClass: 'customClass',
+		          center: true
+		        }).then(() => {
+		          window.location.href = 'tel://'+this.reservationInfo.phone
+		        }).catch(() => {
 
+		        });
 			}
 		},
 		filters:{
-			/*getDateDiff(dateTimeStamp){
+			getDateDiff(dateTimeStamp){
+				var result;
 				var minute = 1000 * 60;
 				var hour = minute * 60;
 				var day = hour * 24;
@@ -105,7 +119,7 @@
 				}else
 				result="刚刚";
 				return result;
-			}*/
+			}
 		},
 		components:{
 			headTop
@@ -113,6 +127,25 @@
 	}
 </script>
 <style lang="scss" scoped>
+
+	// 联系经纪人按钮
+
+	.customClass{
+	    width: 80%;
+	    padding-bottom:4rem;
+	    p{
+	      font-weight: bold;
+	    }
+	    .cancelButtonClass{
+	      width: 40%;
+	      height: 4rem;
+	    }
+	    .confirmButtonClass{
+	      width: 40%;
+	      height: 4rem;
+	    }
+	  }
+
 	.nav-header{
 	    position: relative;
 	    background-color: #fff;
@@ -131,6 +164,8 @@
     }
     
   }
+
+
 
   .reservaInfo{
   	width: 100%;
