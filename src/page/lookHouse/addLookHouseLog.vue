@@ -10,14 +10,15 @@
 			<h2>看房备注</h2>
 			<p>{{this.$route.query.data.blockName}}</p>
 			<p>
-				<span>{{this.$route.query.data.room}}室{{this.$route.query.data.hall}}厅</span> 
+				<span>{{this.$route.query.data.room}}室{{this.$route.query.data.hall}}厅</span>
 				<span>{{this.$route.query.data.price}}万</span>
 			</p>
 		</div>
 		<div class="lableNode">
 			<p>标签备注</p>
 			<div class="lable">
-				<p v-for="(item,index) in labelList" @click="chooseLable($event,item)" :value="item">{{ item }}</p>
+				<p :class="{'select':selectedLable.indexOf(item)>=0}"
+          v-for="(item,index) in labelList" @click="chooseLable($event,item)" :value="item">{{ item }}</p>
 
 			</div>
 		</div>
@@ -38,11 +39,11 @@
 				flag:false,
 				selectedLable:[],
 				textLable:'',
-				allLableContent:''		
+				allLableContent:''
 			}
 		},
 		created(){
-			this.getLabel();			
+			this.getLabel();
 		},
 		mounted(){
 			this.haveLable();
@@ -66,7 +67,7 @@
 				})
 			},
 			postNode(){//点击确定，提交备注
-				 
+
 				 let lableObj = this.selectedLable.join(',');
 
 				let lableInfo = {
@@ -90,7 +91,7 @@
 				.catch(err=>{
 					console.log(err);
 				})
-				
+
 			},
 			chooseLable(data){//选择标签备注
 
@@ -111,9 +112,9 @@
 								this.selectedLable.splice(j,1);
 							}
 						}
-						
+
 					}
-				
+
 			},
 			haveLable(){//修改备注时，将原有的备注携带过来
 				let _text = this.$route.query.data.text;
@@ -129,7 +130,7 @@
 					let lableArr = _lable.split(',');
 					// 如何获取所有的标签？？？
 				}else{
-					
+
 				}
 
 
@@ -144,7 +145,7 @@
 
 .box{
 	width: 100%;
-	font-family: PingFang-SC-Regular;		
+	font-family: PingFang-SC-Regular;
 	background: #F8F8F8;
 
 	.nav-header{
@@ -200,7 +201,7 @@
   	background: #ffffff;
   	padding: 1.5rem 0.5rem 1rem 2rem;
   	margin-bottom: 1rem;
-  	
+
   	>p{
   		@extend .labelTitle;
   	}
@@ -241,7 +242,7 @@
   	}
   }
 }
-	
+
 
 .labelTitle{
 	font-family: PingFang-SC-Bold;
