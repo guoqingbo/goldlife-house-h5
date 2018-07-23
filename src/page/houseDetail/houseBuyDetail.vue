@@ -475,15 +475,19 @@
       },
       getCompareNum() {
         //获取用户名
+        console.log(this.$store.state)
         let loginName = this.$store.state.userInfo.loginName;
         //在该用户获取对比清单
         var compareArr = localStorage.getItem("comparedList_hz_" + loginName);
         console.log('aompareArr');
-        console.log(compareArr)
+        console.log(JSON.parse(compareArr));
+
+
         var len = 0;
         if(compareArr != null){
-          len = Object.keys(compareArr).length;
-          console.log(Object.keys(compareArr))
+
+          len = Object.keys(JSON.parse(compareArr)).length;
+          console.log(Object.keys(JSON.parse(compareArr)))
           console.log(len)
         }
         //var _length = Object.keys(localStorage.getItem("comparedList_hz_" + loginName));
@@ -501,16 +505,19 @@
               var loginName = this.$store.state.userInfo.loginName;
               var list = Object.assign({},JSON.parse(localStorage.getItem("comparedList_hz_" + loginName)));
               console.log('localStorage-compare')
-              console.log(list)
+              console.log(list);
+              var addList = JSON.parse(localStorage.getItem("comparedList_hz_" + loginName));
+              console.log(addList);
               if (this.compareDesc == '加入对比') {
                 list[this.houseId] =  this.houseDetail;
 
-                console.log(list)
+                console.log(list);
                 //加入对比清单
                 localStorage.setItem("comparedList_hz_" + loginName, JSON.stringify(list));
                 this.compareDesc = '取消对比';
                 this.getCompareNum();
               } else if (this.compareDesc == '取消对比') {
+                delete list[6]
                 delete list[this.houseId]
                 //对比清单移除
                 localStorage.setItem("comparedList_hz_" + loginName, JSON.stringify(list));
