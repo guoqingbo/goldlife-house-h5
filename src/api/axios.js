@@ -330,7 +330,7 @@ export default {
     )
   },
   //判断用户是否登录
-  clearInvalidHouse(){
+  isLogin(){
     return axios.post(
       '/user/isLogin',
       qs.stringify({
