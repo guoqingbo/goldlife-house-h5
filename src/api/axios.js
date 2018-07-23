@@ -328,6 +328,15 @@ export default {
         data:JSON.stringify(data),
       })
     )
-  }
+  },
+  //判断用户是否登录
+  clearInvalidHouse(){
+    return axios.post(
+      '/user/isLogin',
+      qs.stringify({
+
+      })
+    )
+  },
 
 }
