@@ -6,11 +6,11 @@
       <span class="header-title"><span class="village">{{block_name}}</span>
         <i v-if="attentionStatus" @click="attention()" class="icon iconfont xl">&#xe609;</i>
         <i v-else @click="attention()" class="icon iconfont xl">&#xe657;</i>
-        <div class="badge">
-          <router-link :to="{ name:'houseCompared',params: { }}">
+        <div class="badge" @click="toCompare()">
+          <!--<router-link :to="{ name:'houseCompared',params: { }}">-->
             <img src="../../assets/icon/icon_topbar_hclist@2x.png">
             <div v-if="compareNum!=''" class="div2">{{compareNum}}</div>
-          </router-link>
+          <!--</router-link>-->
         </div>
       </span>
 
@@ -81,7 +81,7 @@
               <p>类型： <span class="data-show">{{sell_type}}</span></p>
             </el-row>
             <el-row class="el-detailDes">
-              <p>楼层： <span class="data-show">{{floor}}</span></p>
+              <p>楼层： <span class="data-show">{{floor}}/{{totalfloor}}</span></p>
             </el-row>
             <el-row class="el-detailDes">
               <router-link
@@ -178,14 +178,14 @@
       <div class="button-bottom">
         <el-row class="el-bt">
           <el-col :span="8" class="grid-bt-content bg-bt-light">
-            <div @click="addCompare()"><img src="../../assets/icon/icon_addtolist@2x.png"><br><span class="span-icon">{{compareDesc}}</span>
+            <div @click="addCompare()"><img src="../../assets/icon/icon_addtolist@2x.png"><br><span class="span-icon span-left">{{compareDesc}}</span>
             </div>
           </el-col>
-          <router-link :to="{ name:'houseAppointment',params: { homes: houseDetail}}">
+          <!--<router-link :to="{ name:'houseAppointment',params: { homes: houseDetail}}">-->
             <el-col :span="8" class="grid-bt-content bg-bt-m centenr">
-              <div><span class="span-icon">预约看房</span></div>
+              <div @click="appoint()"><span class="span-icon">预约看房</span></div>
             </el-col>
-          </router-link>
+          <!--</router-link>-->
           <el-col :span="8">
             <div class="grid-bt-content bg-bt centenr" @click="phoneCall"><span>联系经纪人</span></div>
           </el-col>
@@ -227,6 +227,7 @@
         forward: '',//朝向
         sell_type: '',//类型
         floor: '',//楼层
+        totalfloor:'',//总楼层
         block_name: '',//小区
         createtime: '',//挂牌
         fitment: '',//装修
@@ -301,6 +302,7 @@
               this.cityId = resultHouse.cityId;
               this.blockId = resultHouse.block_id;
               this.brokerPhone = resultHouse.brokerPhone;
+              this.totalfloor = resultHouse.totalfloor;
               if (resultHouse.attentionState == '0') {
                 this.attentionStatus = false;
               } else if (resultHouse.attentionState == '1') {
@@ -411,44 +413,60 @@
       },
       //关注
       attention() {
-        if (!this.attentionStatus) {
-          let attentionnfo = {
-            cityId: this.cityId,
-            businessNum: this.houseId,
-            businessType: '二手房',
-            sysType: 1,
-            attentionState: 1,
-          };
-          api.attention(attentionnfo)
-            .then(res => {
-              if (res.data.success) {
-                console.log('关注成功')
-                this.attentionStatus = true;
+        api.isLogin()
+          .then(res => {
+            if (res.data.success) {
+              console.log(res)
+              if (!this.attentionStatus) {
+                let attentionnfo = {
+                  cityId: this.cityId,
+                  businessNum: this.houseId,
+                  businessType: '二手房',
+                  sysType: 1,
+                  attentionState: 1,
+                };
+                api.attention(attentionnfo)
+                  .then(res => {
+                    if (res.data.success) {
+                      console.log('关注成功')
+                      this.attentionStatus = true;
+                    }
+                  })
+                  .catch(function (response) {
+                    console.log(response)
+                  });
+                return
+              } else if (this.attentionStatus) {
+                let attentionnfo = {
+                  cityId: this.cityId,
+                  businessNum: this.houseId,
+                  businessType: '二手房',
+                  sysType: 1,
+                  attentionState: 0,
+                };
+                api.attention(attentionnfo)
+                  .then(res => {
+                    if (res.data.success) {
+                      console.log('取消关注')
+                      this.attentionStatus = false;
+                    }
+                  })
+                  .catch(function (response) {
+                    console.log(response)
+                  });
               }
-            })
-            .catch(function (response) {
-              console.log(response)
-            });
-          return
-        } else if (this.attentionStatus) {
-          let attentionnfo = {
-            cityId: this.cityId,
-            businessNum: this.houseId,
-            businessType: '二手房',
-            sysType: 1,
-            attentionState: 0,
-          };
-          api.attention(attentionnfo)
-            .then(res => {
-              if (res.data.success) {
-                console.log('取消关注')
-                this.attentionStatus = false;
-              }
-            })
-            .catch(function (response) {
-              console.log(response)
-            });
-        }
+            }
+          });
+
+      },
+      toCompare(){
+        api.isLogin()
+          .then(res => {
+            if (res.data.success) {
+              console.log(res)
+              this.$router.push({ name: 'houseCompared', params: {}});
+            }
+          });
       },
       getHomeDetail(data) {
         this.houseId = data;
@@ -457,12 +475,20 @@
       },
       getCompareNum() {
         //获取用户名
+        console.log(this.$store.state)
         let loginName = this.$store.state.userInfo.loginName;
         //在该用户获取对比清单
         var compareArr = localStorage.getItem("comparedList_hz_" + loginName);
+        console.log('aompareArr');
+        console.log(JSON.parse(compareArr));
+
+
         var len = 0;
         if(compareArr != null){
-          len = Object.keys(compareArr).length;
+
+          len = Object.keys(JSON.parse(compareArr)).length;
+          console.log(Object.keys(JSON.parse(compareArr)))
+          console.log(len)
         }
         //var _length = Object.keys(localStorage.getItem("comparedList_hz_" + loginName));
         if (len>0) {
@@ -472,24 +498,34 @@
         }
       },
       addCompare() {
-        var loginName = this.$store.state.userInfo.loginName;
-        var list = Object.assign({},JSON.parse(localStorage.getItem("comparedList_hz_" + loginName)));
-        console.log(list)
-        if (this.compareDesc == '加入对比') {
-          list[this.houseId] =  this.houseDetail;
+        api.isLogin()
+          .then(res => {
+            if (res.data.success) {
+              console.log(res)
+              var loginName = this.$store.state.userInfo.loginName;
+              var list = Object.assign({},JSON.parse(localStorage.getItem("comparedList_hz_" + loginName)));
+              console.log('localStorage-compare')
+              console.log(list);
+              var addList = JSON.parse(localStorage.getItem("comparedList_hz_" + loginName));
+              console.log(addList);
+              if (this.compareDesc == '加入对比') {
+                list[this.houseId] =  this.houseDetail;
 
-          console.log(list)
-          //加入对比清单
-          localStorage.setItem("comparedList_hz_" + loginName, JSON.stringify(list));
-          this.compareDesc = '取消对比';
-          this.getCompareNum();
-        } else if (this.compareDesc == '取消对比') {
-          delete list[this.houseId]
-          //对比清单移除
-          localStorage.setItem("comparedList_hz_" + loginName, JSON.stringify(list));
-          this.compareDesc = '加入对比';
-          this.getCompareNum();
-        }
+                console.log(list);
+                //加入对比清单
+                localStorage.setItem("comparedList_hz_" + loginName, JSON.stringify(list));
+                this.compareDesc = '取消对比';
+                this.getCompareNum();
+              } else if (this.compareDesc == '取消对比') {
+                delete list[6]
+                delete list[this.houseId]
+                //对比清单移除
+                localStorage.setItem("comparedList_hz_" + loginName, JSON.stringify(list));
+                this.compareDesc = '加入对比';
+                this.getCompareNum();
+              }
+            }
+          });
       },
       phoneCall() {
         this.$confirm('呼叫：'+this.brokerPhone,  {
@@ -504,6 +540,16 @@
         }).catch(() => {
 
         });
+      },
+      appoint(){
+        api.isLogin()
+          .then(res => {
+            if (res.data.success) {
+              console.log(res)
+              //跳转看房预约{ name:'houseAppointment',params: { homes: houseDetail}}
+              this.$router.push({ name:'houseAppointment',params: { homes: this.houseDetail}});
+            }
+          });
       },
       resetMap(){
         var point = new BMap.Point(this.maplng, this.maplat);
@@ -663,9 +709,9 @@
     .div-houseDes {
       margin-top: 2rem;
       .div-line {
-        width: 0.1rem;
+        width: 0.2rem;
         height: 6rem;
-        background: #000;
+        background: #f5f5f5;
       }
       .des {
         font-size: 14px;
@@ -798,12 +844,12 @@
     position: fixed;
     bottom: 0;
     .grid-bt-content {
-      height: 5rem;
+      height: 6rem;
       line-height: 2rem;
     }
     img {
-      height: 1.6rem;
-      width: 2rem;
+      height: 2.7rem;
+      width: 3rem;
     }
     .span-icon {
       color: #ffc16b;
@@ -811,7 +857,7 @@
     }
     .centenr {
       text-align: center;
-      line-height: 5rem;
+      line-height: 6rem;
       span {
         color: #754501;
       }
@@ -825,6 +871,12 @@
     }
     .bg-bt {
       background-color: #ffc16b;
+    }
+    .span-left{
+      position: absolute;
+      bottom: 1rem;
+      left: 3rem;
+      font-size: 1.4rem;
     }
   }
 
