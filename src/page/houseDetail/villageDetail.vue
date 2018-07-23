@@ -1,5 +1,5 @@
 <template>
-  <div class="containt">
+  <div class="villageDetail">
     <!--<head-top goBack="true"/>-->
     <h1 class="nav-header">
       <span class="go-back" @click="$router.go(-1)"><i class="icon iconfont go-back-icon">&#xe60f;</i></span>
