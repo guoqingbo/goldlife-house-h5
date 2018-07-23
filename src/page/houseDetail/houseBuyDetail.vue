@@ -81,7 +81,7 @@
               <p>类型： <span class="data-show">{{sell_type}}</span></p>
             </el-row>
             <el-row class="el-detailDes">
-              <p>楼层： <span class="data-show">{{floor}}</span></p>
+              <p>楼层： <span class="data-show">{{floor}}/{{totalfloor}}</span></p>
             </el-row>
             <el-row class="el-detailDes">
               <router-link
@@ -227,6 +227,7 @@
         forward: '',//朝向
         sell_type: '',//类型
         floor: '',//楼层
+        totalfloor:'',//总楼层
         block_name: '',//小区
         createtime: '',//挂牌
         fitment: '',//装修
@@ -301,6 +302,7 @@
               this.cityId = resultHouse.cityId;
               this.blockId = resultHouse.block_id;
               this.brokerPhone = resultHouse.brokerPhone;
+              this.totalfloor = resultHouse.totalfloor;
               if (resultHouse.attentionState == '0') {
                 this.attentionStatus = false;
               } else if (resultHouse.attentionState == '1') {
@@ -460,9 +462,13 @@
         let loginName = this.$store.state.userInfo.loginName;
         //在该用户获取对比清单
         var compareArr = localStorage.getItem("comparedList_hz_" + loginName);
+        console.log('aompareArr');
+        console.log(compareArr)
         var len = 0;
         if(compareArr != null){
           len = Object.keys(compareArr).length;
+          console.log(Object.keys(compareArr))
+          console.log(len)
         }
         //var _length = Object.keys(localStorage.getItem("comparedList_hz_" + loginName));
         if (len>0) {
@@ -474,6 +480,7 @@
       addCompare() {
         var loginName = this.$store.state.userInfo.loginName;
         var list = Object.assign({},JSON.parse(localStorage.getItem("comparedList_hz_" + loginName)));
+        console.log('localStorage-compare')
         console.log(list)
         if (this.compareDesc == '加入对比') {
           list[this.houseId] =  this.houseDetail;
