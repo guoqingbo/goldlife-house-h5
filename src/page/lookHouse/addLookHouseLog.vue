@@ -17,8 +17,7 @@
 		<div class="lableNode">
 			<p>标签备注</p>
 			<div class="lable">
-				<p :class="{'select':selectedLable.indexOf(item)>=0}"
-          v-for="(item,index) in labelList" @click="chooseLable($event,item)" :value="item">{{ item }}</p>
+				<p  v-for="(item,index) in labelList" @click="chooseLable($event,item)" :value="item" :class="{'select':$route.query.data.lable.indexOf(item)>=0}">{{ item }}</p>
 
 			</div>
 		</div>
@@ -47,6 +46,8 @@
 		},
 		mounted(){
 			this.haveLable();
+			console.log(this.selectedLable);
+
 		},
 		methods:{
 			getLabel(){//获取标签
@@ -68,29 +69,38 @@
 			},
 			postNode(){//点击确定，提交备注
 
-				 let lableObj = this.selectedLable.join(',');
+				 //标签备注和文字备注都必填
 
-				let lableInfo = {
-					orderDetailId:this.$route.query.data.orderDetailId,
-			        // lable:this.selectedLable,
-			        lable:lableObj,
-			        text:this.textLable,
-				}
+				if(this.textLable.trim()!='' && this.selectedLable !=''){
+					let lableObj = this.selectedLable.join(',');
 
-				api.saveHouseLog(lableInfo).then(res=>{
-					if(res.data.success){
-						this.$router.push({path:'/lookHouseHistory'})
-					}else{
-						this.$toast({
-			              message: res.data.errorMessage,
-			              position: 'middle',
-			              duration: 3000
-			            })
+					let lableInfo = {
+						orderDetailId:this.$route.query.data.orderDetailId,
+				        lable:lableObj,
+				        text:this.textLable,
 					}
-				})
-				.catch(err=>{
-					console.log(err);
-				})
+
+					api.saveHouseLog(lableInfo).then(res=>{
+						if(res.data.success){
+							this.$router.push({path:'/lookHouseHistory'})
+						}else{
+							this.$toast({
+				              message: res.data.errorMessage,
+				              position: 'middle',
+				              duration: 3000
+				            })
+						}
+					})
+					.catch(err=>{
+						console.log(err);
+					})
+				}else{
+					this.$toast({
+		              message: "标签和文字均不能为空",
+		              position: 'middle',
+		              duration: 3000
+		            })
+				}
 
 			},
 			chooseLable(data){//选择标签备注
@@ -128,12 +138,11 @@
 				if(_lable){
 					// 将字符串转成数组
 					let lableArr = _lable.split(',');
-					// 如何获取所有的标签？？？
+					this.selectedLable = lableArr;
+
 				}else{
 
 				}
-
-
 			}
 		},
 		components:{

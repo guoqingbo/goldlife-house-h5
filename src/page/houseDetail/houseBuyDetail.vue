@@ -102,6 +102,16 @@
             <el-row class="el-detailDes">
               <p>年代： <span class="data-show">{{buildyear}}</span></p>
             </el-row>
+            <br>
+            <el-row class="el-detailDes">
+              <p></p>
+            </el-row>
+            <el-row class="el-detailDes">
+              <router-link
+                :to="{ name:'villageDetail',params: {blockId:blockId,cityId:cityId,userType:userType,houseType:houseType}}">
+              <p><span class="span-bold"><i class="icon iconfont right">&#xe6da;</i></span></p>
+              </router-link>
+            </el-row>
           </el-col>
         </el-row>
       </div>
@@ -145,6 +155,8 @@
       </div>
 
       <!--同小区在售10套-->
+      <router-link
+        :to="{ name:'villageMore',params: { more: isSell?sellList:rentList,villageName:title,id:blockId,houseType:houseType}}">
       <div ref="sameSell" class="sameSells">
         <div v-if="isSell">
           同小区在售{{sellList.length}}套
@@ -153,12 +165,13 @@
           同小区在租{{rentList.length}}套
         </div>
       </div>
+      </router-link>
 
       <!--分割2-->
       <div class="divide2">
       </div>
       <!--周边房源-->
-      <div class="sameArea">
+      <div class="sameArea" v-if="communityAround.length>0">
         <p>周边小区</p>
         <ul class="category-head">
           <li v-for="ortherImg in communityAround">
@@ -577,308 +590,312 @@
 
   .houseBuyDetail {
     font-size: 1.6rem;
-  }
-  .customClass{
-    width: 80%;
-    padding-bottom:4rem;
-    p{
-      font-weight: bold;
-    }
-    .cancelButtonClass{
-      width: 40%;
-      height: 4rem;
-    }
-    .confirmButtonClass{
-      width: 40%;
-      height: 4rem;
-    }
-  }
-  /**导航*/
-  .nav-header {
-    position: relative;
-    background-color: #fff;
-    font-size: 1.6rem;
-    color: #424242;
-    height: 4.4rem;
-    line-height: 4.4rem;
-    border-bottom: solid .6rem #f8f8f8;
-    .go-back {
-      position: absolute;
-      left: $contentPadding;
-    }
-    .go-back-icon {
-      font-size: 2rem;
-    }
-    .header-title {
-      display: inline-block;
-      width: 100%;
-      font-weight: bold;
-      text-align: center;
-      .village {
-        position: absolute;
-        left: 41%;
+    .customClass{
+      width: 80%;
+      padding-bottom:4rem;
+      p{
         font-weight: bold;
       }
-      .xl {
-        position: absolute;
-        right: 5rem;
-        color: #ffc16b;
-      }
-      .badge {
-        width: 3rem;
+      .cancelButtonClass{
+        width: 40%;
         height: 4rem;
-        margin-right: 2rem;
-        float: left;
-        img {
-          height: 2rem;
-          width: 2rem;
-          margin-top: 1rem;
-          position: absolute;
-          right: 1.5rem;
-        }
-        .div2 {
-          margin-top: 1rem;
-          background: #ffc16b;
-          height: 1rem;
-          width: 1.5rem;
-          border-radius: 0.3rem;
-          line-height: 1rem;
-          position: absolute;
-          right: 0.6rem;
-          text-align: center;
-          font-size: 0.9rem;
-        }
       }
-      img {
-        margin-top: 0.8rem;
-        height: 2.4rem;
-        width: 2rem;
-      }
-      .right {
-        //transform: rotate(90deg);
-        position: absolute;
-        right: 1.4rem;
-      }
-
-      .iconfont {
-        font-size: 20px;
+      .confirmButtonClass{
+        width: 40%;
+        height: 4rem;
       }
     }
-
-  }
-
-  .imgDiv {
-    .swiper-container {
-      width: 100%;
-      height: 20rem;
-    }
-    .swiper-pagination {
-      height: 4rem;
-      width: 4rem;
-      border-radius: 2rem;
-      background-color: #303133;
-      opacity: 0.7;
-      text-align: center;
-      line-height: 4rem;
-      left: 85%;
-      color: #f0f0f0;
-    }
-    img {
-      width: 100%;
-      height: 20rem;
-    }
-
-  }
-
-  .el-row {
-    margin-bottom: 1.5rem;
-    &:last-child {
-      margin-bottom: 0;
-    }
-  }
-
-  .grid-content {
-    height: 3rem;
-    border-radius: 0.5rem;
-    text-align: center;
-    line-height: 3rem;
-  }
-
-  //售价和建筑面积
-  .house-content {
-    .div-houseDes {
-      margin-top: 2rem;
-      .div-line {
-        width: 0.2rem;
-        height: 6rem;
-        background: #f5f5f5;
-      }
-      .des {
-        font-size: 14px;
-      }
-    }
-    .el-row {
-      //margin-bottom: 20px;
-      &:last-child {
-        margin-bottom: 0;
-      }
-    }
-    .el-houseDes {
-      height: 2rem;
-      text-align: center;
-      line-height: 2rem;
-    }
-    p {
-      font-size: 20px;
-    }
-    .villageName {
-      margin-top: 1.5rem;
-      font-weight: bold;
-      margin-left: 2rem;
-    }
-  }
-
-  //分割
-  .divide {
-    margin-top: 1rem;
-    height: 2rem;
-    width: 100%;
-    background-color: #f5f5f5;
-  }
-
-  //详细描述
-  .detailDes {
-    margin-top: 2rem;
-    margin-left: 2rem;
-    .el-row {
-      //margin-bottom: 20px;
-      &:last-child {
-        margin-bottom: 0;
-      }
-    }
-    p {
-      color: #9c9a9d;
-    }
-    .data-show{
+    /**导航*/
+    .nav-header {
+      position: relative;
+      background-color: #fff;
+      font-size: 1.6rem;
       color: #424242;
-    }
-  }
-
-  //地图
-  .homeMap {
-    margin-top: 2rem;
-    #allmap {
-      width: 100%;
-      height: 22rem;
-    }
-  }
-
-  //同小区房源
-  .sameArea {
-    margin-top: 1.5rem;
-    margin-left: 2rem;
-    .class-color {
-      color: #ffc16b;
-    }
-    .category-head {
-      width: 100%;
-      display: inline;
-      white-space: nowrap; /*规定段落中的文本不进行换行*/
-      overflow-x: scroll; /*水平方向，超出部分添加滚动机制*/
-      float: left; /*一定要设置左侧浮动*/
-      overflow-y: hidden;
-      li {
-        img {
-          height: 9rem;
-          width: 12rem;
-          border-radius: 0.5rem;
+      height: 4.4rem;
+      line-height: 4.4rem;
+      border-bottom: solid .6rem #f8f8f8;
+      .go-back {
+        position: absolute;
+        left: $contentPadding;
+      }
+      .go-back-icon {
+        font-size: 2rem;
+      }
+      .header-title {
+        display: inline-block;
+        width: 100%;
+        font-weight: bold;
+        text-align: center;
+        .village {
+          position: absolute;
+          left: 41%;
+          font-weight: bold;
         }
-        p {
-          font-size: 1rem;
-          width: 12rem;
-          overflow: hidden;
-          white-space: nowrap;
-          text-overflow: ellipsis;
-          span {
-            font-size: 1rem;
+        .xl {
+          position: absolute;
+          right: 5rem;
+          color: #ffc16b;
+        }
+        .badge {
+          width: 3rem;
+          height: 4rem;
+          margin-right: 2rem;
+          float: left;
+          img {
+            height: 2rem;
+            width: 2rem;
+            margin-top: 1rem;
+            position: absolute;
+            right: 1.5rem;
+          }
+          .div2 {
+            margin-top: 1rem;
+            background: #ffc16b;
+            height: 1rem;
+            width: 1.5rem;
+            border-radius: 0.3rem;
+            line-height: 1rem;
+            position: absolute;
+            right: 0.6rem;
+            text-align: center;
+            font-size: 0.9rem;
           }
         }
-        margin-top: 1rem;
-        display: inline-block; /*既可以水平排列，又可以设置宽高和边距*/
-        padding-left: 1.5rem;
+        img {
+          margin-top: 0.8rem;
+          height: 2.4rem;
+          width: 2rem;
+        }
+        .right {
+          //transform: rotate(90deg);
+          position: absolute;
+          right: 1.4rem;
+        }
+
+        .iconfont {
+          font-size: 20px;
+        }
       }
-      li:first-child {
-        padding-left: 0rem;
+
+    }
+
+    .imgDiv {
+      .swiper-container {
+        width: 100%;
+        height: 20rem;
       }
-      .p-bottom {
-        margin-top: 0.5rem;
+      .swiper-pagination {
+        height: 4rem;
+        width: 4rem;
+        border-radius: 2rem;
+        background-color: #303133;
+        opacity: 0.7;
+        text-align: center;
+        line-height: 4rem;
+        left: 85%;
+        color: #f0f0f0;
+      }
+      img {
+        width: 100%;
+        height: 20rem;
+      }
+
+    }
+
+    .el-row {
+      margin-bottom: 1.5rem;
+      &:last-child {
+        margin-bottom: 0;
       }
     }
-  }
 
-  /*同小区在售*/
-  .sameSells {
-    height: 3rem;
-    background-color: #f5f5f5;
-    margin-top: 16rem;
-    margin-left: 2rem;
-    margin-right: 2rem;
-    text-align: center;
-    line-height: 3rem;
-    color: #885D24;
-  }
-
-  .divide2 {
-    height: 1rem;
-    margin-top: 1rem;
-    background-color: #f5f5f5;
-  }
-
-  .empty {
-    margin-top: 18rem;
-    height: 3rem;
-  }
-
-  .button-bottom {
-    width: 100%;
-    position: fixed;
-    bottom: 0;
-    .grid-bt-content {
-      height: 6rem;
-      line-height: 2rem;
-    }
-    img {
-      height: 2.7rem;
-      width: 3rem;
-    }
-    .span-icon {
-      color: #ffc16b;
-      font-size: 1.6rem;
-    }
-    .centenr {
+    .grid-content {
+      height: 3rem;
+      border-radius: 0.5rem;
       text-align: center;
-      line-height: 6rem;
-      span {
-        color: #754501;
+      line-height: 3rem;
+    }
+
+    //售价和建筑面积
+    .house-content {
+      .div-houseDes {
+        margin-top: 2rem;
+        .div-line {
+          width: 0.2rem;
+          height: 6rem;
+          background: #f5f5f5;
+        }
+        .des {
+          font-size: 14px;
+        }
+      }
+      .el-row {
+        //margin-bottom: 20px;
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+      .el-houseDes {
+        height: 2rem;
+        text-align: center;
+        line-height: 2rem;
+      }
+      p {
+        font-size: 20px;
+      }
+      .villageName {
+        margin-top: 1.5rem;
+        font-weight: bold;
+        margin-left: 2rem;
       }
     }
-    .bg-bt-light {
-      background-color: #424242;
+
+    //分割
+    .divide {
+      margin-top: 1rem;
+      height: 2rem;
+      width: 100%;
+      background-color: #f5f5f5;
+    }
+
+    //详细描述
+    .detailDes {
+      margin-top: 2rem;
+      margin-left: 2rem;
+      .el-row {
+        //margin-bottom: 20px;
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+      p {
+        color: #9c9a9d;
+      }
+      .data-show{
+        color: #424242;
+      }
+      .span-bold{
+        i{
+          font-weight: bold;
+        }
+      }
+    }
+
+    //地图
+    .homeMap {
+      margin-top: 2rem;
+      #allmap {
+        width: 100%;
+        height: 22rem;
+      }
+    }
+
+    //同小区房源
+    .sameArea {
+      margin-top: 1.5rem;
+      margin-left: 2rem;
+      .class-color {
+        color: #ffc16b;
+      }
+      .category-head {
+        width: 100%;
+        display: inline;
+        white-space: nowrap; /*规定段落中的文本不进行换行*/
+        overflow-x: scroll; /*水平方向，超出部分添加滚动机制*/
+        float: left; /*一定要设置左侧浮动*/
+        overflow-y: hidden;
+        li {
+          img {
+            height: 9rem;
+            width: 12rem;
+            border-radius: 0.5rem;
+          }
+          p {
+            font-size: 1rem;
+            width: 12rem;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            span {
+              font-size: 1rem;
+            }
+          }
+          margin-top: 1rem;
+          display: inline-block; /*既可以水平排列，又可以设置宽高和边距*/
+          padding-left: 1.5rem;
+        }
+        li:first-child {
+          padding-left: 0rem;
+        }
+        .p-bottom {
+          margin-top: 0.5rem;
+        }
+      }
+    }
+
+    /*同小区在售*/
+    .sameSells {
+      height: 3rem;
+      background-color: #f5f5f5;
+      margin-top: 16rem;
+      margin-left: 2rem;
+      margin-right: 2rem;
       text-align: center;
+      line-height: 3rem;
+      color: #885D24;
     }
-    .bg-bt-m {
-      background-color: #F39B77;
+
+    .divide2 {
+      height: 1rem;
+      margin-top: 1rem;
+      background-color: #f5f5f5;
     }
-    .bg-bt {
-      background-color: #ffc16b;
+
+    .empty {
+      margin-top: 18rem;
+      height: 3rem;
     }
-    .span-left{
-      position: absolute;
-      bottom: 1rem;
-      left: 3rem;
-      font-size: 1.4rem;
+
+    .button-bottom {
+      width: 100%;
+      position: fixed;
+      bottom: 0;
+      .grid-bt-content {
+        height: 6rem;
+        line-height: 2rem;
+      }
+      img {
+        height: 2.7rem;
+        width: 3rem;
+      }
+      .span-icon {
+        color: #ffc16b;
+        font-size: 1.6rem;
+      }
+      .centenr {
+        text-align: center;
+        line-height: 6rem;
+        span {
+          color: #754501;
+        }
+      }
+      .bg-bt-light {
+        background-color: #424242;
+        text-align: center;
+      }
+      .bg-bt-m {
+        background-color: #F39B77;
+      }
+      .bg-bt {
+        background-color: #ffc16b;
+      }
+      .span-left{
+        position: absolute;
+        bottom: 0.6rem;
+        left: 3rem;
+        font-size: 1.2rem;
+      }
     }
   }
-
 
 </style>
