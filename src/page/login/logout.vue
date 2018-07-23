@@ -33,7 +33,9 @@
 					 code:this.$route.query.code
 //					openId:'test_open_id',
 //					code:2334
-				}
+				};
+				//清空本地用户信息
+        this.$store.commit('setUserInfo',{});
 
 				api.logout(_data)
 				.then(res=>{

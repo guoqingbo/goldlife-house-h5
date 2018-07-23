@@ -66,18 +66,41 @@
           <!--房源结果列表-->
           <!--<house-list :houseLists="houseLists" :houseType="houseType" @loadMore="loadMore" :loading="loading"></house-list>-->
           <!--房源结果列表-->
-          <div style="overflow: scroll">
-            <mt-loadmore :bottom-method="loadBottom" :bottom-all-loaded="false" ref="loadmore" :auto-fill="false">
-              <ul class="house-list">
-                <li class="house-item clear" v-for="item in houseLists" :key="item.id">
-                  <router-link
-                    :to="{name:houseTypeDetail[houseType], params:{cityId:'hz', houseId:item.id, userType:'customer', houseType:houseType}}">
-                    <house-item :item="item" :houseType="houseType"/>
-                  </router-link>
-                </li>
-              </ul>
-            </mt-loadmore>
+          <!--<div style="overflow: scroll" :style="{'-webkit-overflow-scrolling': scrollMode}">-->
+            <!--<mt-loadmore :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" ref="loadmore" :auto-fill="false">-->
+              <!--<ul class="house-list">-->
+                <!--<li class="house-item clear" v-for="item in houseLists" :key="item.id">-->
+                  <!--<router-link-->
+                    <!--:to="{name:houseTypeDetail[houseType], params:{cityId:'hz', houseId:item.id, userType:'customer', houseType:houseType}}">-->
+                    <!--<house-item :item="item" :houseType="houseType"/>-->
+                  <!--</router-link>-->
+                <!--</li>-->
+              <!--</ul>-->
+            <!--</mt-loadmore>-->
+          <!--</div>-->
+          <p class="loading-more"><span class="loading-more-span"><i class="icon iconfont loading-more-icon">&#xe6ae;</i></span>加载更多</p>
+          <div v-if="houseLists.length>0">
+            <ul class="house-list"
+                v-infinite-scroll="loadMore"
+                infinite-scroll-disabled="loading"
+                infinite-scroll-distance="0">
+              <li class="house-item clear" v-for="item in houseLists" :key="item.id">
+                <router-link
+                  :to="{name:houseTypeDetail[houseType], params:{cityId:'hz', houseId:item.id, userType:'customer', houseType:houseType}}">
+                  <house-item :item="item" :houseType="houseType"/>
+                </router-link>
+              </li>
+            </ul>
+
           </div>
+            <!--<ul-->
+                <!--v-infinite-scroll="loadMore"-->
+                <!--infinite-scroll-disabled="loading"-->
+                <!--infinite-scroll-distance="0">-->
+              <!--<li v-for="item in list">{{ item }}</li>-->
+            <!--</ul>-->
+            <!--<p  style="background-color: #a71d5d">加载中...</p>-->
+
 
           <!--价格-->
           <div v-if="filterType == 'price'" class="filter-price"  @touchmove.prevent>
@@ -262,6 +285,10 @@
                 2:'houseRentDetail',
                 3:'villageDetail',
               },//详情类型
+              allLoaded: false, //是否可以上拉属性，false可以上拉，true为禁止上拉，就是不让往上划加载数据了
+              scrollMode:"auto", //移动端弹性滚动效果，touch为弹性滚动，auto是非弹性滚动
+              list:[1,2,3,4,5],
+              loading:false
             }
         },
         components: {
@@ -292,10 +319,20 @@
                   if (res.data.success){
                         if(isLoadMore){
                           this.houseLists = this.houseLists.concat(res.data.result.list);
+                          if (res.data.result.list.length == 0){
+                            this.loading = true
+                          }else{
+                            this.loading = false
+                          }
                           console.log(this.houseLists)
                         }else{
                           this.houseLists = res.data.result.list;
                           this.recomment = res.data.result.recomment;
+                          if (res.data.result.list.length<10){ //小于默认条数
+                            this.loading = true
+                          }else{
+                            this.loading = false
+                          }
                         }
                   }else{
                     this.$toast({
@@ -327,6 +364,7 @@
                     }else{
                       this.houseLists = res.data.result.list;
                     }
+                    this.houseLists = res.data.result.list
                   }else{
                     this.$toast({
                       message: res.data.errorMessage,
@@ -496,7 +534,29 @@
             this.houseParams[this.houseType].pageIndex++;
             console.log(this.houseParams[this.houseType].pageIndex)
             this.gethouseLists(true)
+
             this.$refs.loadmore.onBottomLoaded();
+          },
+//          loadMore() {
+//            this.loading = true;
+//            setTimeout(() => {
+//              let last = this.list[this.list.length - 1];
+//              for (let i = 1; i <= 10; i++) {
+//                this.list.push(last + i);
+//              }
+//              this.loading = false;
+//            }, 2500);
+//            console.log(123)
+//          },
+          loadMore() {
+            this.loading = true;
+            setTimeout(() => {
+              this.houseParams[this.houseType].pageIndex++;
+              console.log(this.houseParams[this.houseType].pageIndex)
+              this.gethouseLists(true)
+//              this.loading = false;
+            }, 2500);
+            console.log(123)
           }
         },
         watch:{
@@ -905,5 +965,20 @@
       /*background-color: #ccc;*/
     }
   }
+/*加载中*/
+  .loading-more{
 
+    @keyframes loading {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+    .loading-more-span{
+      display: inline-block;
+      animation:loading 1.2s infinite linear  both
+    }
+  }
 </style>
