@@ -194,13 +194,14 @@
         font-size: 1.6rem;
         border-bottom: 0.1rem solid #f5f5f5;
         input{
-          height: 100%;
+          height: 2rem;
         }
         input::placeholder{
           color: #424242;
           font-size: 1.5rem;
         }
         span{
+          height: 2rem;
           font-size: 1.5rem;
           color: #ffc16b;
         }
@@ -212,6 +213,7 @@
         border-bottom: 0.1rem solid #f5f5f5;
         input{
           height: 100%;
+          height: 2rem;
         }
         input::placeholder{
           color: #9a9c9d;

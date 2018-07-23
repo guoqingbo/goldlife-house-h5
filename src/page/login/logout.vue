@@ -29,10 +29,10 @@
 			confirmOut(){
 				//从url获取openId和code
 				let _data = {
-					// openId:this.$route.query.openId,
-					// code:this.$route.query.code
-					openId:'test_open_id',
-					code:2334
+					 openId:this.$route.query.openId,
+					 code:this.$route.query.code
+//					openId:'test_open_id',
+//					code:2334
 				}
 
 				api.logout(_data)
