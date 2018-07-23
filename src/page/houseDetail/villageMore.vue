@@ -3,11 +3,11 @@
     <!--<head-top goBack="true"/>-->
     <h1 class="nav-header">
       <span class="go-back" @click="$router.go(-1)"><i class="icon iconfont go-back-icon">&#xe60f;</i></span>
-      <span class="header-title">{{this.$route.params.villageName}}</span>
+      <span class="header-title">{{this.title}}</span>
     </h1>
 
     <div class="search">
-      <span class="left">{{this.$route.params.villageName}}</span>
+      <span class="left">{{this.title}}</span>
       <span class="right" @click='opentFilter("filterOrder")'>综合排序
           <i class="icon iconfont" :class="{'select-active-icon':filterType == 'filterOrder'}">&#xe656;</i>
       </span>
@@ -64,7 +64,7 @@
         communityAround: [],//周边小区
         attentionStatus: '关注',
         hoseLists: [],
-        houseType: 2,
+        houseType: this.$route.params.houseType?this.$route.params.houseType:this.$store.state.activeInfo.houseType,
         filterType: '',//过滤选项卡
         orderFilter: [
           {orderColumn: "id", orderBy: "desc", describe: "最新发布"},
@@ -114,10 +114,12 @@
 
     methods: {
       getHoseLists(){
-        if(this.$route.params.isOne){
+        /*if(this.$route.params.isOne){
           this.houseType = 1;
-        }
-        this.houseParams[this.houseType].communityId = this.$route.params.id;
+        }*/
+        //this.houseParams[this.houseType].communityId = this.$route.params.id;
+        this.houseParams[this.houseType].communityId = this.$route.params.id?this.$route.params.id:this.$store.state.activeInfo.blockId;
+
         console.log('id')
         console.log(this.$route.params.id)
         console.log(this.houseType)
@@ -131,8 +133,12 @@
               console.log('出售结果')
               console.log(res)
               if (res.data.success){
-                this.hoseLists = res.data.result.list;
-                this.recomment = res.data.result.recomment;
+                var resultHouse = res.data.result;
+                this.hoseLists = resultHouse.list;
+                if(this.hoseLists.length>0){
+                  this.title = this.hoseLists[0].block_name;
+                }
+                this.recomment = resultHouse.recomment;
               }else{
                 this.$toast({
                   message: res.data.errorMessage,
@@ -152,12 +158,18 @@
         else if(this.houseType == 2){
           //获取租房源列表
           let params = this.houseParams[this.houseType];
-          console.log(params)
           api.getRentHouseList(params)
             .then( res => {
+              console.log('出租params')
+              console.log(params)
+              console.log('出租结果')
               console.log(res)
               if (res.data.success){
-                this.hoseLists = res.data.result.list
+                var resultHouse = res.data.result;
+                this.hoseLists = resultHouse.list;
+                if(this.hoseLists.length>0){
+                  this.title = this.hoseLists[0].block_name;
+                }
               }else{
                 this.$toast({
                   message: res.data.errorMessage,
@@ -174,6 +186,7 @@
               });
             });
         }
+        this.$store.commit("setActiveInfo",{blockId:this.houseParams[this.houseType].communityId,houseType:this.houseType})
       },
       opentFilter(filterType) {
         if (this.filterType) {
