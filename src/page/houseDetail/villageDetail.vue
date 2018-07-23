@@ -27,12 +27,12 @@
         <h2 class="villageName">{{title}}</h2>
         <div class="div-houseDes">
           <el-row>
-            <el-col :span="11">
+            <el-col :span="16">
               <el-row class="el-houseDes">
                 <p class="des">{{addressDetail}}</p>
               </el-row>
             </el-col>
-            <el-col :span="11">
+            <el-col :span="6">
               <!--<el-row class="el-houseDes">
                 <span><i class="icon iconfont right">&#xe609;</i></span>
               </el-row>-->
@@ -112,14 +112,15 @@
       <!--同小区在售10套-->
       <router-link
         :to="{ name:'villageMore',params: { more: isSell?sellList:rentList,villageName:title,id:id,houseType:houseType}}">
-        <div ref="sameSell" class="sameSells">
+        <div ref="sameSell" class="sameSells" >
           <!--<div v-if="isSell"  >
             同小区在售{{sellList.length}}套
           </div>
           <div v-else-if="isRent">
             同小区在租{{rentList.length}}套
           </div>-->
-          查看更多
+          <span v-if="(isRent&&rentList.length>3)||(isSell&&sellList.length>3)">查看更多</span>
+          <span v-else>暂无{{isRent?'在租':'在售'}}房源</span>
         </div>
       </router-link>
       <!--分割2-->
@@ -469,6 +470,7 @@
       .des {
         font-size: 14px;
         color: #724600;
+        margin-right: 6rem;
       }
     }
     .el-row {

@@ -86,6 +86,16 @@
             <el-row class="el-detailDes">
               <p>装修： <span class="data-show">{{fitment}}</span></p>
             </el-row>
+            <br>
+            <el-row class="el-detailDes">
+              <p></p>
+            </el-row>
+            <el-row class="el-detailDes">
+              <router-link
+                :to="{ name:'villageDetail',params: {blockId:blockId,cityId:cityId,userType:userType,houseType:houseType}}">
+                <p><span class="span-bold"><i class="icon iconfont right">&#xe6da;</i></span></p>
+              </router-link>
+            </el-row>
           </el-col>
         </el-row>
       </div>
@@ -604,6 +614,11 @@
     }
     .data-show{
       color: #424242;
+    }
+    .span-bold{
+      i{
+        font-weight: bold;
+      }
     }
   }
 
