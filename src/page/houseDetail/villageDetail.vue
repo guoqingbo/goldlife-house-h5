@@ -111,7 +111,7 @@
 
       <!--同小区在售10套-->
       <router-link
-        :to="{ name:'villageMore',params: { more: isSell?sellList:rentList,villageName:title,id:id,isOne:isSell}}">
+        :to="{ name:'villageMore',params: { more: isSell?sellList:rentList,villageName:title,id:id,houseType:houseType}}">
         <div ref="sameSell" class="sameSells">
           <!--<div v-if="isSell"  >
             同小区在售{{sellList.length}}套
@@ -183,18 +183,16 @@
         communityAround: [],//周边小区
         attentionStatus: false,
         cityId: 'hz',
-        blockId: '2',
+        blockId: this.$route.params.blockId?this.$route.params.blockId:this.$store.state.activeInfo.blockId,
         userType: 'customer',
-        houseType: '1',
+        houseType: this.$route.params.houseType?this.$route.params.houseType:this.$store.state.activeInfo.houseType,
         address: '',//地图标注地址
       }
     },
     created() {
-      this.blockId = this.$route.params.blockId;
-      this.cityId = this.$route.params.cityId;
-      this.userType = this.$route.params.userType;
-      this.houseType = this.$route.params.houseType;
       this.getCommunityDetail();
+      //存储当前小区id和房源类型
+      this.$store.commit("setActiveInfo",{blockId:this.blockId,houseType:this.houseType})
     },
     components: {
       headTop,
