@@ -241,6 +241,7 @@
             if (res.data.success) {
               console.log('提交成功')
               //跳转看房日程
+              this.$router.push({ name: 'lookHouseIndex', params: {}});
             }
           })
           .catch(function (response) {
