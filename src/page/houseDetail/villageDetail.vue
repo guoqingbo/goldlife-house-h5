@@ -1,5 +1,5 @@
 <template>
-  <div class="containt">
+  <div class="villageDetail">
     <!--<head-top goBack="true"/>-->
     <h1 class="nav-header">
       <span class="go-back" @click="$router.go(-1)"><i class="icon iconfont go-back-icon">&#xe60f;</i></span>
@@ -27,12 +27,12 @@
         <h2 class="villageName">{{title}}</h2>
         <div class="div-houseDes">
           <el-row>
-            <el-col :span="11">
+            <el-col :span="16">
               <el-row class="el-houseDes">
                 <p class="des">{{addressDetail}}</p>
               </el-row>
             </el-col>
-            <el-col :span="11">
+            <el-col :span="6">
               <!--<el-row class="el-houseDes">
                 <span><i class="icon iconfont right">&#xe609;</i></span>
               </el-row>-->
@@ -56,16 +56,16 @@
         <el-row>
           <el-col :span="11">
             <el-row class="el-detailDes">
-              <p>位置： {{address}}</p>
+              <p>位置： <span class="data-show">{{address}}</span></p>
             </el-row>
             <el-row class="el-detailDes">
-              <p>栋数： {{builds}}栋</p>
+              <p>栋数： <span class="data-show">{{builds}}栋</span></p>
             </el-row>
           </el-col>
 
           <el-col :span="11">
             <el-row class="el-detailDes">
-              <p>年代： {{buildYear}}年</p>
+              <p>年代： <span class="data-show">{{buildYear}}年</span></p>
             </el-row>
           </el-col>
         </el-row>
@@ -112,21 +112,24 @@
       <!--同小区在售10套-->
       <router-link
         :to="{ name:'villageMore',params: { more: isSell?sellList:rentList,villageName:title,id:id,houseType:houseType}}">
-        <div ref="sameSell" class="sameSells">
+        <div ref="sameSell" class="sameSells" >
           <!--<div v-if="isSell"  >
             同小区在售{{sellList.length}}套
           </div>
           <div v-else-if="isRent">
             同小区在租{{rentList.length}}套
           </div>-->
-          查看更多
+          <span v-if="(isRent&&rentList.length>3)||(isSell&&sellList.length>3)">查看更多</span>
+          <span v-else><span v-if="(isRent&&rentList.length<1)">暂无在租房源</span>
+            <span v-if="(isSell&&sellList.length<1)">暂无在售房源</span>
+            <!--{{isRent?'在租':'在售'}}--></span>
         </div>
       </router-link>
       <!--分割2-->
       <div class="divide2">
       </div>
       <!--周边房源-->
-      <div class="sameArea">
+      <div class="sameArea" v-if="communityAround.length>0">
         <p>周边小区</p>
         <ul class="category-head">
           <li v-for="ortherImg in communityAround" @click="getOtherVillage(ortherImg.id)">
@@ -295,47 +298,54 @@
         }
       },
       clkAttention() {
-        if (!this.attentionStatus) {
-          let attentionnfo = {
-            cityId: this.cityId,
-            businessNum: this.id,
-            businessType: '小区',
-            sysType: 1,
-            attentionState: 1,
-          };
-          console.log(attentionnfo);
-          api.attention(attentionnfo)
-            .then(res => {
-              console.log(res.data)
-              if (res.data.success) {
-                console.log('关注成功')
-                this.attentionStatus = true;
+        api.isLogin()
+          .then(res => {
+            if (res.data.success) {
+              console.log(res)
+              if (!this.attentionStatus) {
+                let attentionnfo = {
+                  cityId: this.cityId,
+                  businessNum: this.id,
+                  businessType: '小区',
+                  sysType: 1,
+                  attentionState: 1,
+                };
+                console.log(attentionnfo);
+                api.attention(attentionnfo)
+                  .then(res => {
+                    console.log(res.data)
+                    if (res.data.success) {
+                      console.log('关注成功')
+                      this.attentionStatus = true;
+                    }
+                  })
+                  .catch(function (response) {
+                    console.log(response)
+                  });
+                return
+              } else if (this.attentionStatus) {
+                let attentionnfo = {
+                  cityId: this.cityId,
+                  businessNum: this.id,
+                  businessType: '小区',
+                  sysType: 1,
+                  attentionState: 0,
+                };
+                api.attention(attentionnfo)
+                  .then(res => {
+                    console.log(res.data)
+                    if (res.data.success) {
+                      console.log('取消关注')
+                      this.attentionStatus = false;
+                    }
+                  })
+                  .catch(function (response) {
+                    console.log(response)
+                  });
               }
-            })
-            .catch(function (response) {
-              console.log(response)
-            });
-          return
-        } else if (this.attentionStatus) {
-          let attentionnfo = {
-            cityId: this.cityId,
-            businessNum: this.id,
-            businessType: '小区',
-            sysType: 1,
-            attentionState: 0,
-          };
-          api.attention(attentionnfo)
-            .then(res => {
-              console.log(res.data)
-              if (res.data.success) {
-                console.log('取消关注')
-                this.attentionStatus = false;
-              }
-            })
-            .catch(function (response) {
-              console.log(response)
-            });
-        }
+            }
+          });
+
       },
       getOtherVillage(data){
         this.blockId = data;
@@ -455,13 +465,14 @@
     .div-houseDes {
       margin-top: 0.5rem;
       .div-line {
-        width: 0.1rem;
+        width: 0.2rem;
         height: 6rem;
-        background: #000;
+        background: #f5f5f5;
       }
       .des {
         font-size: 14px;
         color: #724600;
+        margin-right: 6rem;
       }
     }
     .el-row {
@@ -510,6 +521,9 @@
       p {
         color: #9c9a9d;
       }
+    }
+    .data-show{
+      color: #424242;
     }
   }
 

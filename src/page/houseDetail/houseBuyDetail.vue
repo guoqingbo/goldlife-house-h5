@@ -6,11 +6,11 @@
       <span class="header-title"><span class="village">{{block_name}}</span>
         <i v-if="attentionStatus" @click="attention()" class="icon iconfont xl">&#xe609;</i>
         <i v-else @click="attention()" class="icon iconfont xl">&#xe657;</i>
-        <div class="badge">
-          <router-link :to="{ name:'houseCompared',params: { }}">
+        <div class="badge" @click="toCompare()">
+          <!--<router-link :to="{ name:'houseCompared',params: { }}">-->
             <img src="../../assets/icon/icon_topbar_hclist@2x.png">
             <div v-if="compareNum!=''" class="div2">{{compareNum}}</div>
-          </router-link>
+          <!--</router-link>-->
         </div>
       </span>
 
@@ -81,7 +81,7 @@
               <p>类型： <span class="data-show">{{sell_type}}</span></p>
             </el-row>
             <el-row class="el-detailDes">
-              <p>楼层： <span class="data-show">{{floor}}</span></p>
+              <p>楼层： <span class="data-show">{{floor}}/{{totalfloor}}</span></p>
             </el-row>
             <el-row class="el-detailDes">
               <router-link
@@ -101,6 +101,16 @@
             </el-row>
             <el-row class="el-detailDes">
               <p>年代： <span class="data-show">{{buildyear}}</span></p>
+            </el-row>
+            <br>
+            <el-row class="el-detailDes">
+              <p></p>
+            </el-row>
+            <el-row class="el-detailDes">
+              <router-link
+                :to="{ name:'villageDetail',params: {blockId:blockId,cityId:cityId,userType:userType,houseType:houseType}}">
+              <p><span class="span-bold"><i class="icon iconfont right">&#xe6da;</i></span></p>
+              </router-link>
             </el-row>
           </el-col>
         </el-row>
@@ -145,6 +155,8 @@
       </div>
 
       <!--同小区在售10套-->
+      <router-link
+        :to="{ name:'villageMore',params: { more: isSell?sellList:rentList,villageName:title,id:blockId,houseType:houseType}}">
       <div ref="sameSell" class="sameSells">
         <div v-if="isSell">
           同小区在售{{sellList.length}}套
@@ -153,12 +165,13 @@
           同小区在租{{rentList.length}}套
         </div>
       </div>
+      </router-link>
 
       <!--分割2-->
       <div class="divide2">
       </div>
       <!--周边房源-->
-      <div class="sameArea">
+      <div class="sameArea" v-if="communityAround.length>0">
         <p>周边小区</p>
         <ul class="category-head">
           <li v-for="ortherImg in communityAround">
@@ -178,14 +191,14 @@
       <div class="button-bottom">
         <el-row class="el-bt">
           <el-col :span="8" class="grid-bt-content bg-bt-light">
-            <div @click="addCompare()"><img src="../../assets/icon/icon_addtolist@2x.png"><br><span class="span-icon">{{compareDesc}}</span>
+            <div @click="addCompare()"><img src="../../assets/icon/icon_addtolist@2x.png"><br><span class="span-icon span-left">{{compareDesc}}</span>
             </div>
           </el-col>
-          <router-link :to="{ name:'houseAppointment',params: { homes: houseDetail}}">
+          <!--<router-link :to="{ name:'houseAppointment',params: { homes: houseDetail}}">-->
             <el-col :span="8" class="grid-bt-content bg-bt-m centenr">
-              <div><span class="span-icon">预约看房</span></div>
+              <div @click="appoint()"><span class="span-icon">预约看房</span></div>
             </el-col>
-          </router-link>
+          <!--</router-link>-->
           <el-col :span="8">
             <div class="grid-bt-content bg-bt centenr" @click="phoneCall"><span>联系经纪人</span></div>
           </el-col>
@@ -227,6 +240,7 @@
         forward: '',//朝向
         sell_type: '',//类型
         floor: '',//楼层
+        totalfloor:'',//总楼层
         block_name: '',//小区
         createtime: '',//挂牌
         fitment: '',//装修
@@ -301,6 +315,7 @@
               this.cityId = resultHouse.cityId;
               this.blockId = resultHouse.block_id;
               this.brokerPhone = resultHouse.brokerPhone;
+              this.totalfloor = resultHouse.totalfloor;
               if (resultHouse.attentionState == '0') {
                 this.attentionStatus = false;
               } else if (resultHouse.attentionState == '1') {
@@ -373,7 +388,7 @@
             }
           })
           .catch(res => {
-            this.$message.error('小区详情' + res.data.errorMessage);
+            this.$message.error(res);
           });
       },
       getBaiduMap() {
@@ -411,44 +426,60 @@
       },
       //关注
       attention() {
-        if (!this.attentionStatus) {
-          let attentionnfo = {
-            cityId: this.cityId,
-            businessNum: this.houseId,
-            businessType: '二手房',
-            sysType: 1,
-            attentionState: 1,
-          };
-          api.attention(attentionnfo)
-            .then(res => {
-              if (res.data.success) {
-                console.log('关注成功')
-                this.attentionStatus = true;
+        api.isLogin()
+          .then(res => {
+            if (res.data.success) {
+              console.log(res)
+              if (!this.attentionStatus) {
+                let attentionnfo = {
+                  cityId: this.cityId,
+                  businessNum: this.houseId,
+                  businessType: '二手房',
+                  sysType: 1,
+                  attentionState: 1,
+                };
+                api.attention(attentionnfo)
+                  .then(res => {
+                    if (res.data.success) {
+                      console.log('关注成功')
+                      this.attentionStatus = true;
+                    }
+                  })
+                  .catch(function (response) {
+                    console.log(response)
+                  });
+                return
+              } else if (this.attentionStatus) {
+                let attentionnfo = {
+                  cityId: this.cityId,
+                  businessNum: this.houseId,
+                  businessType: '二手房',
+                  sysType: 1,
+                  attentionState: 0,
+                };
+                api.attention(attentionnfo)
+                  .then(res => {
+                    if (res.data.success) {
+                      console.log('取消关注')
+                      this.attentionStatus = false;
+                    }
+                  })
+                  .catch(function (response) {
+                    console.log(response)
+                  });
               }
-            })
-            .catch(function (response) {
-              console.log(response)
-            });
-          return
-        } else if (this.attentionStatus) {
-          let attentionnfo = {
-            cityId: this.cityId,
-            businessNum: this.houseId,
-            businessType: '二手房',
-            sysType: 1,
-            attentionState: 0,
-          };
-          api.attention(attentionnfo)
-            .then(res => {
-              if (res.data.success) {
-                console.log('取消关注')
-                this.attentionStatus = false;
-              }
-            })
-            .catch(function (response) {
-              console.log(response)
-            });
-        }
+            }
+          });
+
+      },
+      toCompare(){
+        api.isLogin()
+          .then(res => {
+            if (res.data.success) {
+              console.log(res)
+              this.$router.push({ name: 'houseCompared', params: {}});
+            }
+          });
       },
       getHomeDetail(data) {
         this.houseId = data;
@@ -457,12 +488,20 @@
       },
       getCompareNum() {
         //获取用户名
+        console.log(this.$store.state)
         let loginName = this.$store.state.userInfo.loginName;
         //在该用户获取对比清单
         var compareArr = localStorage.getItem("comparedList_hz_" + loginName);
+        console.log('aompareArr');
+        console.log(JSON.parse(compareArr));
+
+
         var len = 0;
         if(compareArr != null){
-          len = Object.keys(compareArr).length;
+
+          len = Object.keys(JSON.parse(compareArr)).length;
+          console.log(Object.keys(JSON.parse(compareArr)))
+          console.log(len)
         }
         //var _length = Object.keys(localStorage.getItem("comparedList_hz_" + loginName));
         if (len>0) {
@@ -472,24 +511,34 @@
         }
       },
       addCompare() {
-        var loginName = this.$store.state.userInfo.loginName;
-        var list = Object.assign({},JSON.parse(localStorage.getItem("comparedList_hz_" + loginName)));
-        console.log(list)
-        if (this.compareDesc == '加入对比') {
-          list[this.houseId] =  this.houseDetail;
+        api.isLogin()
+          .then(res => {
+            if (res.data.success) {
+              console.log(res)
+              var loginName = this.$store.state.userInfo.loginName;
+              var list = Object.assign({},JSON.parse(localStorage.getItem("comparedList_hz_" + loginName)));
+              console.log('localStorage-compare')
+              console.log(list);
+              var addList = JSON.parse(localStorage.getItem("comparedList_hz_" + loginName));
+              console.log(addList);
+              if (this.compareDesc == '加入对比') {
+                list[this.houseId] =  this.houseDetail;
 
-          console.log(list)
-          //加入对比清单
-          localStorage.setItem("comparedList_hz_" + loginName, JSON.stringify(list));
-          this.compareDesc = '取消对比';
-          this.getCompareNum();
-        } else if (this.compareDesc == '取消对比') {
-          delete list[this.houseId]
-          //对比清单移除
-          localStorage.setItem("comparedList_hz_" + loginName, JSON.stringify(list));
-          this.compareDesc = '加入对比';
-          this.getCompareNum();
-        }
+                console.log(list);
+                //加入对比清单
+                localStorage.setItem("comparedList_hz_" + loginName, JSON.stringify(list));
+                this.compareDesc = '取消对比';
+                this.getCompareNum();
+              } else if (this.compareDesc == '取消对比') {
+                delete list[6]
+                delete list[this.houseId]
+                //对比清单移除
+                localStorage.setItem("comparedList_hz_" + loginName, JSON.stringify(list));
+                this.compareDesc = '加入对比';
+                this.getCompareNum();
+              }
+            }
+          });
       },
       phoneCall() {
         this.$confirm('呼叫：'+this.brokerPhone,  {
@@ -504,6 +553,16 @@
         }).catch(() => {
 
         });
+      },
+      appoint(){
+        api.isLogin()
+          .then(res => {
+            if (res.data.success) {
+              console.log(res)
+              //跳转看房预约{ name:'houseAppointment',params: { homes: houseDetail}}
+              this.$router.push({ name:'houseAppointment',params: { homes: this.houseDetail}});
+            }
+          });
       },
       resetMap(){
         var point = new BMap.Point(this.maplng, this.maplat);
@@ -531,302 +590,312 @@
 
   .houseBuyDetail {
     font-size: 1.6rem;
-  }
-  .customClass{
-    width: 80%;
-    padding-bottom:4rem;
-    p{
-      font-weight: bold;
-    }
-    .cancelButtonClass{
-      width: 40%;
-      height: 4rem;
-    }
-    .confirmButtonClass{
-      width: 40%;
-      height: 4rem;
-    }
-  }
-  /**导航*/
-  .nav-header {
-    position: relative;
-    background-color: #fff;
-    font-size: 1.6rem;
-    color: #424242;
-    height: 4.4rem;
-    line-height: 4.4rem;
-    border-bottom: solid .6rem #f8f8f8;
-    .go-back {
-      position: absolute;
-      left: $contentPadding;
-    }
-    .go-back-icon {
-      font-size: 2rem;
-    }
-    .header-title {
-      display: inline-block;
-      width: 100%;
-      font-weight: bold;
-      text-align: center;
-      .village {
-        position: absolute;
-        left: 41%;
+    .customClass{
+      width: 80%;
+      padding-bottom:4rem;
+      p{
         font-weight: bold;
       }
-      .xl {
-        position: absolute;
-        right: 5rem;
-        color: #ffc16b;
-      }
-      .badge {
-        width: 3rem;
+      .cancelButtonClass{
+        width: 40%;
         height: 4rem;
-        margin-right: 2rem;
-        float: left;
-        img {
-          height: 2rem;
-          width: 2rem;
-          margin-top: 1rem;
-          position: absolute;
-          right: 1.5rem;
-        }
-        .div2 {
-          margin-top: 1rem;
-          background: #ffc16b;
-          height: 1rem;
-          width: 1.5rem;
-          border-radius: 0.3rem;
-          line-height: 1rem;
-          position: absolute;
-          right: 0.6rem;
-          text-align: center;
-          font-size: 0.9rem;
-        }
       }
-      img {
-        margin-top: 0.8rem;
-        height: 2.4rem;
-        width: 2rem;
-      }
-      .right {
-        //transform: rotate(90deg);
-        position: absolute;
-        right: 1.4rem;
-      }
-
-      .iconfont {
-        font-size: 20px;
+      .confirmButtonClass{
+        width: 40%;
+        height: 4rem;
       }
     }
-
-  }
-
-  .imgDiv {
-    .swiper-container {
-      width: 100%;
-      height: 20rem;
-    }
-    .swiper-pagination {
-      height: 4rem;
-      width: 4rem;
-      border-radius: 2rem;
-      background-color: #303133;
-      opacity: 0.7;
-      text-align: center;
-      line-height: 4rem;
-      left: 85%;
-      color: #f0f0f0;
-    }
-    img {
-      width: 100%;
-      height: 20rem;
-    }
-
-  }
-
-  .el-row {
-    margin-bottom: 1.5rem;
-    &:last-child {
-      margin-bottom: 0;
-    }
-  }
-
-  .grid-content {
-    height: 3rem;
-    border-radius: 0.5rem;
-    text-align: center;
-    line-height: 3rem;
-  }
-
-  //售价和建筑面积
-  .house-content {
-    .div-houseDes {
-      margin-top: 2rem;
-      .div-line {
-        width: 0.1rem;
-        height: 6rem;
-        background: #000;
-      }
-      .des {
-        font-size: 14px;
-      }
-    }
-    .el-row {
-      //margin-bottom: 20px;
-      &:last-child {
-        margin-bottom: 0;
-      }
-    }
-    .el-houseDes {
-      height: 2rem;
-      text-align: center;
-      line-height: 2rem;
-    }
-    p {
-      font-size: 20px;
-    }
-    .villageName {
-      margin-top: 1.5rem;
-      font-weight: bold;
-      margin-left: 2rem;
-    }
-  }
-
-  //分割
-  .divide {
-    margin-top: 1rem;
-    height: 2rem;
-    width: 100%;
-    background-color: #f5f5f5;
-  }
-
-  //详细描述
-  .detailDes {
-    margin-top: 2rem;
-    margin-left: 2rem;
-    .el-row {
-      //margin-bottom: 20px;
-      &:last-child {
-        margin-bottom: 0;
-      }
-    }
-    p {
-      color: #9c9a9d;
-    }
-    .data-show{
+    /**导航*/
+    .nav-header {
+      position: relative;
+      background-color: #fff;
+      font-size: 1.6rem;
       color: #424242;
-    }
-  }
-
-  //地图
-  .homeMap {
-    margin-top: 2rem;
-    #allmap {
-      width: 100%;
-      height: 22rem;
-    }
-  }
-
-  //同小区房源
-  .sameArea {
-    margin-top: 1.5rem;
-    margin-left: 2rem;
-    .class-color {
-      color: #ffc16b;
-    }
-    .category-head {
-      width: 100%;
-      display: inline;
-      white-space: nowrap; /*规定段落中的文本不进行换行*/
-      overflow-x: scroll; /*水平方向，超出部分添加滚动机制*/
-      float: left; /*一定要设置左侧浮动*/
-      overflow-y: hidden;
-      li {
-        img {
-          height: 9rem;
-          width: 12rem;
-          border-radius: 0.5rem;
+      height: 4.4rem;
+      line-height: 4.4rem;
+      border-bottom: solid .6rem #f8f8f8;
+      .go-back {
+        position: absolute;
+        left: $contentPadding;
+      }
+      .go-back-icon {
+        font-size: 2rem;
+      }
+      .header-title {
+        display: inline-block;
+        width: 100%;
+        font-weight: bold;
+        text-align: center;
+        .village {
+          position: absolute;
+          left: 41%;
+          font-weight: bold;
         }
-        p {
-          font-size: 1rem;
-          width: 12rem;
-          overflow: hidden;
-          white-space: nowrap;
-          text-overflow: ellipsis;
-          span {
-            font-size: 1rem;
+        .xl {
+          position: absolute;
+          right: 5rem;
+          color: #ffc16b;
+        }
+        .badge {
+          width: 3rem;
+          height: 4rem;
+          margin-right: 2rem;
+          float: left;
+          img {
+            height: 2rem;
+            width: 2rem;
+            margin-top: 1rem;
+            position: absolute;
+            right: 1.5rem;
+          }
+          .div2 {
+            margin-top: 1rem;
+            background: #ffc16b;
+            height: 1rem;
+            width: 1.5rem;
+            border-radius: 0.3rem;
+            line-height: 1rem;
+            position: absolute;
+            right: 0.6rem;
+            text-align: center;
+            font-size: 0.9rem;
           }
         }
-        margin-top: 1rem;
-        display: inline-block; /*既可以水平排列，又可以设置宽高和边距*/
-        padding-left: 1.5rem;
+        img {
+          margin-top: 0.8rem;
+          height: 2.4rem;
+          width: 2rem;
+        }
+        .right {
+          //transform: rotate(90deg);
+          position: absolute;
+          right: 1.4rem;
+        }
+
+        .iconfont {
+          font-size: 20px;
+        }
       }
-      li:first-child {
-        padding-left: 0rem;
+
+    }
+
+    .imgDiv {
+      .swiper-container {
+        width: 100%;
+        height: 20rem;
       }
-      .p-bottom {
-        margin-top: 0.5rem;
+      .swiper-pagination {
+        height: 4rem;
+        width: 4rem;
+        border-radius: 2rem;
+        background-color: #303133;
+        opacity: 0.7;
+        text-align: center;
+        line-height: 4rem;
+        left: 85%;
+        color: #f0f0f0;
+      }
+      img {
+        width: 100%;
+        height: 20rem;
+      }
+
+    }
+
+    .el-row {
+      margin-bottom: 1.5rem;
+      &:last-child {
+        margin-bottom: 0;
       }
     }
-  }
 
-  /*同小区在售*/
-  .sameSells {
-    height: 3rem;
-    background-color: #f5f5f5;
-    margin-top: 16rem;
-    margin-left: 2rem;
-    margin-right: 2rem;
-    text-align: center;
-    line-height: 3rem;
-    color: #885D24;
-  }
-
-  .divide2 {
-    height: 1rem;
-    margin-top: 1rem;
-    background-color: #f5f5f5;
-  }
-
-  .empty {
-    margin-top: 18rem;
-    height: 3rem;
-  }
-
-  .button-bottom {
-    width: 100%;
-    position: fixed;
-    bottom: 0;
-    .grid-bt-content {
-      height: 5rem;
-      line-height: 2rem;
-    }
-    img {
-      height: 1.6rem;
-      width: 2rem;
-    }
-    .span-icon {
-      color: #ffc16b;
-      font-size: 1.6rem;
-    }
-    .centenr {
+    .grid-content {
+      height: 3rem;
+      border-radius: 0.5rem;
       text-align: center;
-      line-height: 5rem;
-      span {
-        color: #754501;
+      line-height: 3rem;
+    }
+
+    //售价和建筑面积
+    .house-content {
+      .div-houseDes {
+        margin-top: 2rem;
+        .div-line {
+          width: 0.2rem;
+          height: 6rem;
+          background: #f5f5f5;
+        }
+        .des {
+          font-size: 14px;
+        }
+      }
+      .el-row {
+        //margin-bottom: 20px;
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+      .el-houseDes {
+        height: 2rem;
+        text-align: center;
+        line-height: 2rem;
+      }
+      p {
+        font-size: 20px;
+      }
+      .villageName {
+        margin-top: 1.5rem;
+        font-weight: bold;
+        margin-left: 2rem;
       }
     }
-    .bg-bt-light {
-      background-color: #424242;
+
+    //分割
+    .divide {
+      margin-top: 1rem;
+      height: 2rem;
+      width: 100%;
+      background-color: #f5f5f5;
+    }
+
+    //详细描述
+    .detailDes {
+      margin-top: 2rem;
+      margin-left: 2rem;
+      .el-row {
+        //margin-bottom: 20px;
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+      p {
+        color: #9c9a9d;
+      }
+      .data-show{
+        color: #424242;
+      }
+      .span-bold{
+        i{
+          font-weight: bold;
+        }
+      }
+    }
+
+    //地图
+    .homeMap {
+      margin-top: 2rem;
+      #allmap {
+        width: 100%;
+        height: 22rem;
+      }
+    }
+
+    //同小区房源
+    .sameArea {
+      margin-top: 1.5rem;
+      margin-left: 2rem;
+      .class-color {
+        color: #ffc16b;
+      }
+      .category-head {
+        width: 100%;
+        display: inline;
+        white-space: nowrap; /*规定段落中的文本不进行换行*/
+        overflow-x: scroll; /*水平方向，超出部分添加滚动机制*/
+        float: left; /*一定要设置左侧浮动*/
+        overflow-y: hidden;
+        li {
+          img {
+            height: 9rem;
+            width: 12rem;
+            border-radius: 0.5rem;
+          }
+          p {
+            font-size: 1rem;
+            width: 12rem;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            span {
+              font-size: 1rem;
+            }
+          }
+          margin-top: 1rem;
+          display: inline-block; /*既可以水平排列，又可以设置宽高和边距*/
+          padding-left: 1.5rem;
+        }
+        li:first-child {
+          padding-left: 0rem;
+        }
+        .p-bottom {
+          margin-top: 0.5rem;
+        }
+      }
+    }
+
+    /*同小区在售*/
+    .sameSells {
+      height: 3rem;
+      background-color: #f5f5f5;
+      margin-top: 16rem;
+      margin-left: 2rem;
+      margin-right: 2rem;
       text-align: center;
+      line-height: 3rem;
+      color: #885D24;
     }
-    .bg-bt-m {
-      background-color: #F39B77;
+
+    .divide2 {
+      height: 1rem;
+      margin-top: 1rem;
+      background-color: #f5f5f5;
     }
-    .bg-bt {
-      background-color: #ffc16b;
+
+    .empty {
+      margin-top: 18rem;
+      height: 3rem;
+    }
+
+    .button-bottom {
+      width: 100%;
+      position: fixed;
+      bottom: 0;
+      .grid-bt-content {
+        height: 6rem;
+        line-height: 2rem;
+      }
+      img {
+        height: 2.7rem;
+        width: 3rem;
+      }
+      .span-icon {
+        color: #ffc16b;
+        font-size: 1.6rem;
+      }
+      .centenr {
+        text-align: center;
+        line-height: 6rem;
+        span {
+          color: #754501;
+        }
+      }
+      .bg-bt-light {
+        background-color: #424242;
+        text-align: center;
+      }
+      .bg-bt-m {
+        background-color: #F39B77;
+      }
+      .bg-bt {
+        background-color: #ffc16b;
+      }
+      .span-left{
+        position: absolute;
+        bottom: 0.6rem;
+        left: 3rem;
+        font-size: 1.2rem;
+      }
     }
   }
-
 
 </style>
