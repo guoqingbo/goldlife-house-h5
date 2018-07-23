@@ -66,16 +66,18 @@
           <!--房源结果列表-->
           <!--<house-list :houseLists="houseLists" :houseType="houseType" @loadMore="loadMore" :loading="loading"></house-list>-->
           <!--房源结果列表-->
-          <mt-loadmore :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" ref="loadmore">
-            <ul class="house-list">
-              <li class="house-item clear" v-for="item in houseLists" :key="item.id">
-                <router-link
-                  :to="{name:houseTypeDetail[houseType], params:{cityId:'hz', houseId:item.id, userType:'customer', houseType:houseType}}">
-                  <house-item :item="item" :houseType="houseType"/>
-                </router-link>
-              </li>
-            </ul>
-          </mt-loadmore>
+          <div style="overflow: scroll">
+            <mt-loadmore :bottom-method="loadBottom" :bottom-all-loaded="false" ref="loadmore" :auto-fill="false">
+              <ul class="house-list">
+                <li class="house-item clear" v-for="item in houseLists" :key="item.id">
+                  <router-link
+                    :to="{name:houseTypeDetail[houseType], params:{cityId:'hz', houseId:item.id, userType:'customer', houseType:houseType}}">
+                    <house-item :item="item" :houseType="houseType"/>
+                  </router-link>
+                </li>
+              </ul>
+            </mt-loadmore>
+          </div>
 
           <!--价格-->
           <div v-if="filterType == 'price'" class="filter-price"  @touchmove.prevent>
@@ -221,7 +223,7 @@
                   priceMax:"",//最大价格
                   filterIds:[],
                   pageSize:"",
-                  pageIndex:0,
+                  pageIndex:1,
                   orderBy:"",
                   orderColumn:'',
                 },//二手房房源请求参数
@@ -255,13 +257,11 @@
               morePopVisible:false,//更多菜单弹出选项
               isShowSearch:false,//展示搜索页
               isShowHouseType:false,//展示房源类型弹框
-              loading:true,//加载更多
               houseTypeDetail:{
                 1:'houseBuyDetail',
                 2:'houseRentDetail',
                 3:'villageDetail',
               },//详情类型
-              allLoaded:true,//
             }
         },
         components: {
@@ -270,7 +270,7 @@
           houseItem,
         },
         created(){
-//          this.gethouseLists();
+          this.gethouseLists();
           this.getFilterList();
           this.getDistrict();
         },
@@ -291,7 +291,6 @@
                     console.log(isLoadMore)
                   if (res.data.success){
                         if(isLoadMore){
-//                          this.allLoaded = true;
                           this.houseLists = this.houseLists.concat(res.data.result.list);
                           console.log(this.houseLists)
                         }else{
@@ -322,8 +321,7 @@
                 .then( res => {
                     console.log(res)
                   if (res.data.success){
-                    if(this.loading){
-                      this.loading =false
+                    if(isLoadMore){
                       this.houseLists.push(res.data.result.list);
                     }else{
                       this.houseLists = res.data.result.list;
@@ -339,10 +337,10 @@
                 })
                 .catch(res =>{
                   this.$toast({
-                  message: res.data.errorMessage,
-                  position: 'bottom',
-                  duration: 3000
-                });
+                    message: res.data.errorMessage,
+                    position: 'bottom',
+                    duration: 3000
+                  });
                 });
             }
           },
@@ -495,10 +493,10 @@
           },
           //加载更多
           loadBottom(){
-
             this.houseParams[this.houseType].pageIndex++;
             console.log(this.houseParams[this.houseType].pageIndex)
             this.gethouseLists(true)
+            this.$refs.loadmore.onBottomLoaded();
           }
         },
         watch:{
