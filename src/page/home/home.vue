@@ -235,7 +235,7 @@
                   priceMax:"",//最大价格
                   filterIds:[],
                   pageSize:"",
-                  pageIndex:"",
+                  pageIndex:1,
                   orderBy:"",
                   orderColumn:'',
                 },//租房房源请求参数
@@ -279,6 +279,7 @@
         },
         methods: {
           gethouseLists(isLoadMore){
+            console.log(isLoadMore)
             if (this.houseType == 1){
               //获取出售房源列表
               let params = this.houseParams[this.houseType];
@@ -288,7 +289,6 @@
 
               api.getSellHouseList(params)
                 .then( res => {
-                    console.log(isLoadMore)
                   if (res.data.success){
                         if(isLoadMore){
                           this.houseLists = this.houseLists.concat(res.data.result.list);
@@ -322,17 +322,17 @@
                     console.log(res)
                   if (res.data.success){
                     if(isLoadMore){
-                      this.houseLists.push(res.data.result.list);
+                      this.houseLists = this.houseLists.concat(res.data.result.list);
+                      console.log(this.houseLists)
                     }else{
                       this.houseLists = res.data.result.list;
                     }
-                    this.houseLists = res.data.result.list
                   }else{
                     this.$toast({
-                  message: res.data.errorMessage,
-                  position: 'bottom',
-                  duration: 3000
-                });
+                      message: res.data.errorMessage,
+                      position: 'bottom',
+                      duration: 3000
+                    });
                   }
                 })
                 .catch(res =>{

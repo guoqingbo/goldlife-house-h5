@@ -72,7 +72,7 @@
     width: 100%;
     .img {
       width: 42%;
-      height: 8rem;
+      height: 8.5rem;
       /*border-radius: .5rem;*/
       img {
         width: 100%;
