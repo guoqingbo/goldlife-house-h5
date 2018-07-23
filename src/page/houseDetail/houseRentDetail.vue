@@ -355,47 +355,54 @@
         }
       },
       clkAttention() {
-        if (this.attentionStatus === '关注') {
-          let attentionnfo = {
-            cityId: this.cityId,
-            businessNum: this.houseId,
-            businessType: '租房',
-            sysType: 1,
-            attentionState: 1,
-          };
-          console.log(attentionnfo);
-          api.attention(attentionnfo)
-            .then(res => {
-              console.log(res.data)
-              if (res.data.success) {
-                console.log('关注成功')
-                this.attentionStatus = '已关注';
+        api.isLogin()
+          .then(res => {
+            if (res.data.success) {
+              console.log(res)
+              if (this.attentionStatus === '关注') {
+                let attentionnfo = {
+                  cityId: this.cityId,
+                  businessNum: this.houseId,
+                  businessType: '租房',
+                  sysType: 1,
+                  attentionState: 1,
+                };
+                console.log(attentionnfo);
+                api.attention(attentionnfo)
+                  .then(res => {
+                    console.log(res.data)
+                    if (res.data.success) {
+                      console.log('关注成功')
+                      this.attentionStatus = '已关注';
+                    }
+                  })
+                  .catch(function (response) {
+                    console.log(response)
+                  });
+                return
+              } else if (this.attentionStatus === '已关注') {
+                let attentionnfo = {
+                  cityId: this.cityId,
+                  businessNum: this.houseId,
+                  businessType: '租房',
+                  sysType: 1,
+                  attentionState: 0,
+                };
+                api.attention(attentionnfo)
+                  .then(res => {
+                    console.log(res.data)
+                    if (res.data.success) {
+                      console.log('取消关注')
+                      this.attentionStatus = '关注';
+                    }
+                  })
+                  .catch(function (response) {
+                    console.log(response)
+                  });
               }
-            })
-            .catch(function (response) {
-              console.log(response)
-            });
-          return
-        } else if (this.attentionStatus === '已关注') {
-          let attentionnfo = {
-            cityId: this.cityId,
-            businessNum: this.houseId,
-            businessType: '租房',
-            sysType: 1,
-            attentionState: 0,
-          };
-          api.attention(attentionnfo)
-            .then(res => {
-              console.log(res.data)
-              if (res.data.success) {
-                console.log('取消关注')
-                this.attentionStatus = '关注';
-              }
-            })
-            .catch(function (response) {
-              console.log(response)
-            });
-        }
+            }
+          });
+
       },
       phoneCall() {
         this.$confirm('呼叫：'+this.brokerPhone,  {
