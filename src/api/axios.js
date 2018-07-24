@@ -339,4 +339,16 @@ export default {
     )
   },
 
+
+
+  // 经纪人模块
+  //新房详情
+  newHouseSharePage(data){
+    return axios.get('house/newHouseDetail',{
+      params:{
+        buildingId:data
+      }
+    })
+  },
+
 }

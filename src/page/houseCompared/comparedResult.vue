@@ -27,13 +27,6 @@
         	</div>
         </div>
         <div class="houseDetail">
-        	<!-- <div class="swiper-container">
-        				  <div class="swiper-wrapper">
-        				    <div class="swiper-slide">slider1</div>
-        				    <div class="swiper-slide">slider2</div>
-        				    <div class="swiper-slide">slider3</div>
-        				  </div>
-        				</div> -->
 
         	<div class="compared" v-for="item in houseList">
         		<h4>{{ !!item.title?item.title:'暂无信息'}}</h4>
@@ -54,32 +47,13 @@
 	              </ul>
         	</div>
 
-        	<!--
-        	<div class="compared">
-        		<h4>武林府</h4>
-        		              <p>650万</p>
-        		              <img src="../../assets/icon/icon_topbar_hclist@3x.png" height="140" width="120" alt="">
-        		              <ul class="first_ul">
-        		              	  <li>67.99</li>
-        			              <li>38888</li>
-        			              <li>两室一厅</li>
-        			              <li>南</li>
-        			              <li>精装</li>
-        			              <li>高楼层/共19层</li>
-        		              </ul>
-        		              <ul>
-        		              	  <li>拱墅</li>
-        			              <li>朝晖五区</li>
-        			              <li>住宅</li>
-        		              </ul>
-        	</div> -->
         </div>
 	</div>
 </template>
 <script>
 	import api from '../../api/axios'
 	import headTop from '../../components/header/head'
-	import Swiper from 'swiper'
+
 	export default {
     name:'comparedResult',
 		data(){
@@ -92,14 +66,10 @@
 		created(){
 			this.getCompareData();
 		},
-		mounted(){
-			/*var mySwiper = new Swiper('.swiper-container', {loop: false,});*/
-		},
+		mounted(){},
 		methods:{
-
 			getCompareData(){
-				// data为从上一页获取到的数据,最少2条，最多4条
-//				let _data = [{'cityId':'hz','houseId':'36979'},{'cityId':'hz','houseId':'36980'}];
+				// _data为从上一页获取到的数据,最少2条，最多4条
         let _data = this.$route.params.data;
         console.log(_data)
 				api.houseCompared(_data)
@@ -108,10 +78,10 @@
 						this.houseList = res.data.result;
 					}else{
 						this.$toast({
-	                    message: res.data.errorMessage,
-	                    position: 'middle',
-	                    duration: 3000
-	                  })
+                message: res.data.errorMessage,
+                position: 'middle',
+                duration: 3000
+              })
 					}
 				})
 				.catch(err=>{
@@ -160,7 +130,6 @@
   	padding-left:2rem;
   	text-align: left;
   	padding-bottom:6rem;
-	// position: fixed;
 	position: absolute;
 	top:8.8rem;
 	left:0;
