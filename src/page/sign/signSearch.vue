@@ -12,7 +12,7 @@
         </div>
         <div class="detail">
           <p class="status">{{ bargainStatus[item.bargain_status] }}</p>
-          <p>金额：<span>{{ item.price|formatPrice }}</span></p>
+          <p>金额：<span>{{ item.price|formatPrice }}元</span></p>
           <p>门店：<span>{{ !!item.agency_name?item.agency_name:'无' }}</span></p>
           <p>经纪人：<span>{{ !!item.broker_name?item.broker_name:'无' }}</span></p>
           <p>当前签约状态 ：<span class="signStatus">{{ item.now_transfer_name }}</span></p>
