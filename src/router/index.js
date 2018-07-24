@@ -156,24 +156,25 @@ const villageMore = resolve => {
 };
 
 
+
 //经纪人模块
 
 const newHouseSharePage = resolve => {
-  require.ensure(['../blocker/newHouse/newHouseSharePage'], () => {
-    resolve(require('../blocker/newHouse/newHouseSharePage'));
+  require.ensure(['../broker/newHouse/newHouseSharePage'], () => {
+    resolve(require('../broker/newHouse/newHouseSharePage'));
   });
 };
 
 
 const newHouseAllDetail = resolve => {
-  require.ensure(['../blocker/newHouse/newHouseAllDetail'], () => {
-    resolve(require('../blocker/newHouse/newHouseAllDetail'));
+  require.ensure(['../broker/newHouse/newHouseAllDetail'], () => {
+    resolve(require('../broker/newHouse/newHouseAllDetail'));
   });
 };
 
 const recommend = resolve => {
-  require.ensure(['../blocker/recommendFriend/recommend'], () => {
-    resolve(require('../blocker/recommendFriend/recommend'));
+  require.ensure(['../broker/recommendFriend/recommend'], () => {
+    resolve(require('../broker/recommendFriend/recommend'));
   });
 };
 
