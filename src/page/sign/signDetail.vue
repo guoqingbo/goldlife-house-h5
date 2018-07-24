@@ -31,7 +31,7 @@
 			</div>
 			<div class="status" v-if="signDetail.now_transfer != undefined">
 				<h2>当前签约状态：<span>{{ signDetail.now_transfer.stage_name }}</span></h2>
-
+			
 				<div class="status_content">
 					<p v-for="item in transfer">
 						<span v-if="item.step_id==signDetail.now_transfer.step_id" class="current"></span>
@@ -40,7 +40,7 @@
 						<span>{{ item.stage_name }}</span>
 					</p>
 				</div>
-
+			
 			</div>
 
 		</div>
@@ -56,10 +56,10 @@
 			return{
 				signDetail:{},
 				transfer:[],
-				signId:'',
+				// signId:'',
 				userType:2, //用户身份固定为2客户
 				bargainStatus:{
-		          '1':'处理中',
+		          '1':'办理中',
 		          '2':'结案',
 		          '3':'作废'
 		        }
@@ -71,10 +71,9 @@
 		methods:{
 			getSignDetail(){
 				//获取签约ID
-				// this.signId = window.location.href.split('id=')[1];
-				this.signId = 2733
+				let signId = this.$route.query.houseId;
 				var _data = {
-					'signId':this.signId,
+					'signId':signId,
 					'userType':this.userType
 				}
 				api.signDetail(_data)
@@ -205,6 +204,7 @@
   		}
   	}
   	.contact{
+  		width: 100%;
   		background: #fff;
 		padding: 1.5rem;
 		margin-bottom: 1rem;

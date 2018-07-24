@@ -10,13 +10,13 @@
 			
 			<div>
 				<div class="house-detail" v-if="i.targetHouse != undefined">
-					<img :src="!!i.targetHouse.pic?i.targetHouse.pic:'./static/searcherror@2x.png'">
+					<img :src="!!i.targetHouse.pic?i.targetHouse.pic:'./static/bg_smallphotonormal@2x.png'">
 					<div>
 						<h3>
 							<span>约看小区&nbsp;</span>
 							{{i.targetHouse.community_name}}
 						</h3>
-						<p class="describ">{{i.targetHouse.room}}室{{i.targetHouse.hall}}厅/{{i.targetHouse.buildarea}}㎡/朝{{i.targetHouse.forward}}</p>
+						<p class="describ">{{i.targetHouse.room}}室{{i.targetHouse.hall}}厅{{i.targetHouse.toilet}}卫/{{i.targetHouse.buildarea}}㎡/朝{{i.targetHouse.forward}}</p>
 						<p class="price">
 							<span>{{i.targetHouse.price}}万</span>
 							<span>&nbsp;&nbsp;{{i.targetHouse.avgprice}}&nbsp;元/平</span>
@@ -29,7 +29,8 @@
 						<span>{{ (i.time)/1000 |moment('MM月DD日 hh:mm') }}</span>
 					</p>
 					
-					<mt-button v-if="i.lookHouseLog.lable==''&&i.lookHouseLog.text==''" size="large" @click="editNode(i)">添加看房笔记</mt-button>
+					<!-- <mt-button v-if="i.lookHouseLog.lable==''&&i.lookHouseLog.text==''" size="large" @click="editNode(i)">添加看房笔记</mt-button> -->
+					<span class="add" v-if="i.lookHouseLog.lable==''&&i.lookHouseLog.text==''"  @click="editNode(i)">添加看房笔记</span>
 				
 					<div v-else class="label" @click="editNode(i)">
 						
@@ -191,6 +192,16 @@
 			}
 			>p:first-child{
 				margin-bottom: 1.5rem;
+			}
+			.add{
+				display: inline-block;
+				width: 100%;
+				background: #F8F8F8;
+				font-size: 1.5rem;
+				color: #9a9c9d;
+				text-align: center;
+				padding: 1rem 0;
+				border-radius: 0.5rem;
 			}
 
 			.label{

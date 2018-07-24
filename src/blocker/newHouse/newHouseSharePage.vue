@@ -3,18 +3,19 @@
 		<div class="share-box">
 			<head-top />
 			<h1 class="nav-header">
-				<span class="go-back" @click="$router.go(-1)"><i class="icon iconfont go-back-icon">&#xe60f;</i></span>
+				<!-- <span class="go-back" @click="$router.go(-1)"><i class="icon iconfont go-back-icon">&#xe60f;</i></span> -->
 				<span class="header-title">新房推荐</span>
-				<span class="share"><img src="../../assets/icon/icon_topbar_share@2x.png"></span>
+				<!-- <span class="share"><img src="../../assets/icon/icon_topbar_share@2x.png"></span> -->
 			</h1>
 
 			<div class="content">
 				<!--顶部轮播图片-->
 				<div class="imgDiv">
-					<router-link :to="{ name:'imgIncrease',params: { imgs: imgHouseAttr,title:title}}">
-						<div v-if="imgHouseAttr.length>0" class="swiper-container">
+					<router-link :to="{ name:'imgIncrease',params: { imgs: houseData.screenPic,title:houseData.buildName}}">
+						
+						<div v-if="!!houseData.screenPic" class="swiper-container">
 							<div class="swiper-wrapper">
-								<div v-for='i in imgHouseAttr' class="swiper-slide">
+								<div v-for='i in houseData.screenPic' class="swiper-slide">
 									<img :src="i">
 								</div>
 							</div>
@@ -25,11 +26,11 @@
 					</router-link>
 
 					<div class="blockInfo">
-						<h2>绿城雄凯国际</h2>
-						<p class="addr">地址：<span>萧山萧绍路通惠路子交汇处</span></p>
+						<h2>{{houseData.buildName}}</h2>
+						<p class="addr">地址：<span>{{houseData.address}}</span></p>
 						<p class="price">
-							<span>40000元/平</span>
-							<span>2018年6月</span>
+							<span>{{houseData.avgPrice}}元/平</span>
+							<span>{{houseData.openTime}}</span>
 						</p>
 						<p class="price_name">
 							<span>均价</span>
@@ -44,11 +45,11 @@
 						<span>楼盘信息</span>
 						<span @click="lookAll">查看全部<i class="icon iconfont">&#xe6da;</i></span>
 					</h3>
-					<p>开发商：<span>杭州雄凯实业有限公司</span></p>
-					<p>最新开盘：<span>2018年6月</span></p>
-					<p>交房时间：<span>暂无信息</span></p>
-					<p>产权年限：<span>40年</span></p>
-					<p>许可证：<span>楼盘暂未取得预售许可证</span></p>
+					<p>开发商：<span>{{houseData.company}}</span></p>
+					<p>最新开盘：<span>{{houseData.openTime}}</span></p>
+					<p>交房时间：<span>{{!!houseData.finishTime?houseData.finishTime:'暂无信息'}}</span></p>
+					<p>产权年限：<span>{{!!houseData.propertyYear?houseData.propertyYear:'暂无信息'}}</span></p>
+					<p>许可证：<span>{{houseData.licence}}</span></p>
 				</div>
 
 
@@ -61,9 +62,9 @@
 
 				<div class="remark">
 					<h3>备注</h3>
-					<p>房子不错</p>
-					<p>嗯</p>
-					<p>很好</p>
+					<!-- <p>房子不错</p> -->
+					<p>{{houseData.remark}}</p>
+					
 				</div>
 
 				<p class="contact" @click="phoneNum">电话咨询</p>
@@ -77,46 +78,68 @@
   	import headTop from '../../components/header/head'
   	import BMap from 'BMap'
   	import Swiper from 'swiper'
+  	import { MessageBox } from 'mint-ui';
 	export default {
 		name:'newHouseSharePage',
 		data(){
 			return{
+				houseData:{},
 				maplng: '',//坐标x
 		        maplat: '',//坐标y
 		        center: {lng: 120.12, lat: 30.16},
-		        imgHouseAttr: [],//房源照片
 		        address: '',//地图标注地址
 			}
 		},
+		created(){
+			this.getNewHouseInfo();
+		},
 		mounted(){
-			this.getBaiduMap();
+			this.getBaiduMap();	
 		},
 		methods:{
 			getNewHouseInfo(){
-				this.maplng = resultHouse.communityLocation.b_map_x;
-                this.maplat = resultHouse.communityLocation.b_map_y;
-                this.center.lng = resultHouse.communityLocation.b_map_x;
-                this.center.lat = resultHouse.communityLocation.b_map_y;
-                this.address = resultHouse.disrictName + ',' + resultHouse.streetName;
-                //重置地图
-                this.resetMap();
+				//从地址栏中获取楼盘ID
+				let buildingId = this.$route.query.buildingId;
+				// let buildingId = 1; //暂时写死，调数据
+
+				api.newHouseSharePage(buildingId).then(res=>{
+					if(res.data.success){
+						this.houseData = res.data.result;
+
+						this.maplng = res.data.result.mapLongitude;
+		                this.maplat = res.data.result.mapLatitude;
+		                this.center.lng = res.data.result.mapLongitude;
+		                this.center.lat = res.data.result.mapLatitude;
+		                this.address = res.data.result.area + ',' + res.data.result.address;
+		                //重置地图
+		                this.resetMap();
 
 
-                //初始化轮播
-              this.$nextTick(function () {
-                var mySwiper = new Swiper('.swiper-container', {
-                  loop: true,
-                  autoplay: {
-                    delay: 3000,//3秒切换一次
-                  },
-                  // 如果需要分页器
-                  pagination: {
-                    el: '.swiper-pagination',
-                    type: 'fraction',
-                  },
-                });
-              });
+		                //初始化轮播
+		              this.$nextTick(function () {
+		                var mySwiper = new Swiper('.swiper-container', {
+		                  loop: true,
+		                  autoplay: {
+		                    delay: 3000,//3秒切换一次
+		                  },
+		                  // 如果需要分页器
+		                  pagination: {
+		                    el: '.swiper-pagination',
+		                    type: 'fraction',
+		                  },
+		                });
+		              });
 
+					}else{
+						this.$toast({
+			              message: res.data.errorMessage,
+			              position: 'middle',
+			              duration: 3000
+			            })
+					}
+				}).catch(err=>{
+					console.log(err);
+				})
 
 			},
 			getBaiduMap() {
@@ -144,21 +167,19 @@
 		        map.addOverlay(lableInfor);
 		      },
 		      phoneNum() {
-		        this.$confirm('呼叫：'+this.brokerPhone,  {
-		          confirmButtonText: '确定',
-		          cancelButtonText: '取消',
-		          cancelButtonClass: 'cancelButtonClass',
-		          confirmButtonClass: 'confirmButtonClass',
-		          customClass: 'customClass',
-		          center: true
-		        }).then(() => {
-		          window.location.href = 'tel://'+this.brokerPhone
-		        }).catch(() => {
-
+		      	MessageBox({
+				  title: '呼叫',
+				  message: this.houseData.contactPhone,
+				  showCancelButton: true
+				}).then(action => {
+					if(action == "confirm"){
+						window.location.href = 'tel://'+this.reservationInfo.phone
+					}     
 		        });
+
 		      },
 		      lookAll(){
-		      	this.$router.push({path:'/newHouseAllDetail'});
+		      	this.$router.push({path:'/newHouseAllDetail',query:{data:this.houseData}});
 		      }
 		},
 		components: {
@@ -166,7 +187,7 @@
 	    },
 	}
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 
 	.customClass{
     width: 80%!important;
@@ -361,6 +382,7 @@
 			background: #162E6C;
 			position: fixed;
 			bottom: 0;
+			z-index: 66;
 		}
  	 
   }

@@ -171,6 +171,12 @@ const newHouseAllDetail = resolve => {
   });
 };
 
+const recommend = resolve => {
+  require.ensure(['../blocker/recommendFriend/recommend'], () => {
+    resolve(require('../blocker/recommendFriend/recommend'));
+  });
+};
+
 
 
 const routes = [
@@ -316,8 +322,13 @@ const routes = [
     name: 'newHouseAllDetail',
     component: newHouseAllDetail,
   },
+  {//新房查看全部
+    path: '/recommend',
+    name: 'recommend',
+    component: recommend,
+  },
 
-  
+
 
 ];
 

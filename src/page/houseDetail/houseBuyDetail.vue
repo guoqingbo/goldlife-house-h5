@@ -165,6 +165,7 @@
   import headTop from '../../components/header/head'
   import BMap from 'BMap'
   import Swiper from 'swiper'
+  import { MessageBox } from 'mint-ui';
 
   export default {
     beforeCreate() {
@@ -491,18 +492,16 @@
           });
       },
       phoneCall() {
-        this.$confirm('呼叫：'+this.brokerPhone,  {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          cancelButtonClass: 'cancelButtonClass',
-          confirmButtonClass: 'confirmButtonClass',
-          customClass: 'customClass',
-          center: true
-        }).then(() => {
-          window.location.href = 'tel://'+this.brokerPhone
-        }).catch(() => {
 
-        });
+        MessageBox({
+          title: '',
+          message: '呼叫：'+this.brokerPhone,
+          showCancelButton: true,
+        }).then(action => {
+          if(action == "confirm"){
+            window.location.href = 'tel://'+this.brokerPhone
+          }
+        })
       },
       clkVillage(){
         if((this.isSell&&this.sellList.length>0)||(this.isRent&&this.rentList.length>0)){
@@ -550,21 +549,7 @@
 
   .houseBuyDetail {
     font-size: 1.6rem;
-    .customClass{
-      width: 80%;
-      padding-bottom:4rem;
-      p{
-        font-weight: bold;
-      }
-      .cancelButtonClass{
-        width: 40%;
-        height: 4rem;
-      }
-      .confirmButtonClass{
-        width: 40%;
-        height: 4rem;
-      }
-    }
+
     /**导航*/
     .nav-header {
       position: relative;

@@ -27,9 +27,9 @@
           <span class="span-left ">姓名：</span>
           <input class="input-right name" placeholder="看房人" v-model="name" ref="name">
         </div>
-        <div class="span-input dark centenr">
+        <div class="span-input dark centenr" @click="openPicker">
           <span class="span-left">看房时间：</span>
-          <input class="input-right date dark" placeholder="请选择看房时间" v-model="dateValue" ref="date" @click="openPicker">
+          <input class="input-right date dark" placeholder="请选择看房时间" v-model="dateValue" ref="date" disabled="disabled">
           <i class="icon iconfont go-back-icon i-right">&#xe6da;</i>
         </div>
         <div class="span-input centenr">
@@ -64,7 +64,7 @@
         >
         </mt-datetime-picker>
       </div>
-      <div class="button-bottom" @click="sendAppointment()">提交</div>
+      <div class="button-bottom" @click="sendAppointment()" v-show="isOriginHei">提交</div>
     </div>
 
     <keep-alive>
@@ -100,6 +100,9 @@
         datestamp: '',
         pickerValue:'',
         startDate: new Date(),
+        isOriginHei: true,
+        screenHeight: document.documentElement.clientHeight,        //此处也可能是其他获取方法
+        originHeight: document.documentElement.clientHeight,
       }
     },
     watch: {
@@ -121,11 +124,17 @@
           this.$refs.phone.style.width = 12 + 'rem';
         }
       },
-
+      screenHeight (val) {
+        if(this.originHeight > val + 100) {        //加100为了兼容华为的返回键
+          this.isOriginHei = false;
+        }else{
+          this.isOriginHei = true;
+        }
+      }
     },
     created() {
       if(this.$route.params.homes == null){
-        this.$router.push({ name:'houseBuyDetail',params: { }});
+        this.$router.push({ name:'home',params: { }});
       }
 
     },
@@ -133,7 +142,12 @@
       headTop,
     },
     mounted() {
-
+      let self = this;
+      window.onresize = function() {
+        return (function(){
+          self.screenHeight = document.documentElement.clientHeight;
+        })()
+      }
     },
 
     methods: {
@@ -155,7 +169,13 @@
           strDate = "0" + strDate;
         }
         var hour = data.getHours();
+        if (hour >= 0 && hour <= 9) {
+          hour = "0" + hour;
+        }
         var minutes = data.getMinutes();
+        if (minutes >= 0 && minutes <= 9) {
+          minutes = "0" + minutes;
+        }
         var currentdate = year + '/' + month + '/' + strDate + ' ' + hour + ':' + minutes;
         return currentdate;
       },
