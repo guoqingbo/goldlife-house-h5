@@ -630,6 +630,7 @@
       }
       .span-bold{
         i{
+          margin-top: 0.5rem;
           font-weight: bold;
         }
       }

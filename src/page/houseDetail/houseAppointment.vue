@@ -56,6 +56,11 @@
           ref="picker"
           @confirm="handleConfirm"
           :startDate="startDate"
+          yearFormat="{value}"
+          monthFormat="{value}月"
+          dateFormat="{value}日"
+          hourFormat="{value}时"
+          minuteFormat="{value}分"
         >
         </mt-datetime-picker>
       </div>
@@ -119,6 +124,9 @@
 
     },
     created() {
+      if(this.$route.params.homes == null){
+        this.$router.push({ name:'houseBuyDetail',params: { }});
+      }
 
     },
     components: {
@@ -265,138 +273,138 @@
 
   .houseAppointment{
     font-size: 1.6rem;
-  }
-  /**导航*/
-  .nav-header {
-    position: relative;
-    background-color: #fff;
-    font-size: 1.6rem;
-    color: #424242;
-    height: 4.4rem;
-    line-height: 4.4rem;
-    //border-bottom: solid .6rem #f8f8f8;
-    .go-back {
-      position: absolute;
-      left: $contentPadding;
-    }
-    .go-back-icon {
-      font-size: 2rem;
-    }
-    .header-title {
-      display: inline-block;
-      width: 100%;
-      font-weight: bold;
-      text-align: center;
-    }
-  }
-
-  .houseDetail {
-    margin-top: 2rem;
-    height: 10rem;
-    margin-left: 1rem;
-    .span-top {
-      font-weight: bold;
-    }
-    .span-small {
-      font-size: 15px;
-      color: #A19FA2;
-    }
-    .span-bottom {
-      position: absolute;
-      top: 13.5rem;
-      left: 1rem;
-    }
-    div {
-      float: left;
-    }
-    img {
-      height: 9rem;
-      width: 12rem;
-      border-radius: 0.5rem;
-      position: absolute;
-      right: 2rem;
-    }
-  }
-
-  .form {
-    margin-top: 2rem;
-
-    .span-input {
-      height: 3.5rem;
-      padding-top: 0.6rem;
-      .center {
-        line-height: 3.5rem;
-      }
-      .span-left {
-        margin-left: 1rem;
-      }
-      .i-right {
+    /**导航*/
+    .nav-header {
+      position: relative;
+      background-color: #fff;
+      font-size: 1.6rem;
+      color: #424242;
+      height: 4.4rem;
+      line-height: 4.4rem;
+      //border-bottom: solid .6rem #f8f8f8;
+      .go-back {
         position: absolute;
-        right: 1rem;
-        margin-top: 0.2rem;
+        left: $contentPadding;
       }
-      .input-right {
+      .go-back-icon {
+        font-size: 2rem;
+      }
+      .header-title {
+        display: inline-block;
+        width: 100%;
+        font-weight: bold;
+        text-align: center;
+      }
+    }
+
+    .houseDetail {
+      margin-top: 2rem;
+      height: 10rem;
+      margin-left: 1rem;
+      .span-top {
+        font-weight: bold;
+      }
+      .span-small {
+        font-size: 15px;
+        color: #A19FA2;
+      }
+      .span-bottom {
         position: absolute;
-        right: 1rem;
-        font-size: 1.6rem;
+        top: 13.5rem;
+        left: 1rem;
       }
-      .el-date-editor {
-        border: none;
+      div {
+        float: left;
       }
-      .name {
-        width: 5rem;
-      }
-      .phone {
+      img {
+        height: 9rem;
         width: 12rem;
-      }
-      .date {
-        margin-top: 0.2rem;
-        width: 15rem;
-      }
-      button {
-        color: #ffc16b;
-        background-color: #424242;
-        height: 3.4rem;
-        width: 10rem;
-        margin-top: -0.5rem;
-      }
-      .yan {
+        border-radius: 0.5rem;
         position: absolute;
-        width: 6rem;
-        right: 14rem;
-        z-index: 10;
-        font-size: 1.6rem;
+        right: 2rem;
       }
-      .xh {
-        position: absolute;
-        top: 30.5rem;
-        right: 14rem;
-        span {
-          padding-left: 0.3rem;
+    }
+
+    .form {
+      margin-top: 2rem;
+
+      .span-input {
+        height: 3.5rem;
+        padding-top: 0.6rem;
+        .center {
+          line-height: 3.5rem;
         }
+        .span-left {
+          margin-left: 1rem;
+        }
+        .i-right {
+          position: absolute;
+          right: 1rem;
+          margin-top: 0.2rem;
+        }
+        .input-right {
+          position: absolute;
+          right: 1rem;
+          font-size: 1.6rem;
+        }
+        .el-date-editor {
+          border: none;
+        }
+        .name {
+          width: 5rem;
+        }
+        .phone {
+          width: 12rem;
+        }
+        .date {
+          margin-top: 0.2rem;
+          width: 15rem;
+        }
+        button {
+          color: #ffc16b;
+          background-color: #424242;
+          height: 3.4rem;
+          width: 10rem;
+          margin-top: -0.5rem;
+        }
+        .yan {
+          position: absolute;
+          width: 6rem;
+          right: 14rem;
+          z-index: 10;
+          font-size: 1.6rem;
+        }
+        .xh {
+          position: absolute;
+          top: 30.5rem;
+          right: 14rem;
+          span {
+            padding-left: 0.3rem;
+          }
+        }
+
       }
-
+      .dark {
+        background-color: #f8f8f8;
+      }
+      .noteDiv {
+        height: 18rem;
+        width: 100%;
+      }
+      .button-bottom {
+        height: 4rem;
+        width: 100%;
+        position: absolute;
+        bottom: 0;
+        background-color: #424242;
+        text-align: center;
+        line-height: 4rem;
+        color: #ffc16b;
+        font-size: 2rem;
+      }
     }
-    .dark {
-      background-color: #f8f8f8;
-    }
-    .noteDiv {
-      height: 18rem;
-      width: 100%;
-    }
-    .button-bottom {
-      height: 4rem;
-      width: 100%;
-      position: absolute;
-      bottom: 0;
-      background-color: #424242;
-      text-align: center;
-      line-height: 4rem;
-      color: #ffc16b;
-      font-size: 2rem;
-    }
-
   }
+
 
 
 </style>
