@@ -177,6 +177,18 @@ const recommend = resolve => {
   });
 };
 
+const recommendRegist = resolve => {
+  require.ensure(['../blocker/recommendFriend/recommendRegist'], () => {
+    resolve(require('../blocker/recommendFriend/recommendRegist'));
+  });
+};
+
+const registSuccess = resolve => {
+  require.ensure(['../blocker/recommendFriend/registSuccess'], () => {
+    resolve(require('../blocker/recommendFriend/registSuccess'));
+  });
+};
+
 
 
 const routes = [
@@ -322,10 +334,20 @@ const routes = [
     name: 'newHouseAllDetail',
     component: newHouseAllDetail,
   },
-  {//新房查看全部
+  {//邀请好友
     path: '/recommend',
     name: 'recommend',
     component: recommend,
+  },
+  {//推荐注册
+    path: '/recommendRegist',
+    name: 'recommendRegist',
+    component: recommendRegist,
+  },
+  {//注册成功
+    path: '/registSuccess',
+    name: 'registSuccess',
+    component: registSuccess,
   },
 
 
