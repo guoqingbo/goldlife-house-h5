@@ -99,8 +99,8 @@
 		methods:{
 			getNewHouseInfo(){
 				//从地址栏中获取楼盘ID
-				// let buildingId = this.$route.query.buildingId;
-				let buildingId = 1; //暂时写死，调数据
+				let buildingId = this.$route.query.buildingId;
+				// let buildingId = 1; //暂时写死，调数据
 
 				api.newHouseSharePage(buildingId).then(res=>{
 					if(res.data.success){
@@ -141,9 +141,6 @@
 					console.log(err);
 				})
 
-				
-
-
 			},
 			getBaiduMap() {
 		        var map = new BMap.Map('allmap');
@@ -153,20 +150,6 @@
 		        map.addOverlay(marker);
 		        map.disableDragging();
 		        map.centerAndZoom(point, 16);
-
-
-		        // 信息窗的配置信息
-				/*var opts ={
-				width :250,
-				height:75,
-				title :"地址：",
-				}
-				var infoWindow =newBMap.InfoWindow(this.address, opts);// 创建信息窗口对象
-				marker.addEventListener("click",function(){
-				map.openInfoWindow(infoWindow,point);
-				});
-				map.enableScrollWheelZoom(true);
-				map.openInfoWindow(infoWindow,point);//开启信息窗口*/
 
 		      },
 		    resetMap(){
@@ -204,7 +187,7 @@
 	    },
 	}
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 
 	.customClass{
     width: 80%!important;
