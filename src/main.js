@@ -26,10 +26,13 @@ import Mint from 'mint-ui';
 // import 'mint-ui/lib/style.css';
 Vue.use(Mint);
 
-//引入ElementUI框架
-import ElementUI from 'element-ui';
-Vue.use(ElementUI)
-// import 'element-ui/lib/theme-chalk/index.css';
+//引入ElementUI框架(目前不用)
+import {Row,Col,TimePicker,Button} from 'element-ui';
+Vue.use(Row);
+Vue.use(Col);
+Vue.use(TimePicker);
+Vue.use(Button);
+import 'element-ui/lib/theme-chalk/index.css';
 
 //引入阿里图标库
 import './assets/iconfont/iconfont.css'

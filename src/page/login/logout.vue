@@ -1,15 +1,15 @@
 <template>
 	<div>
-		<head-top />
+		<!--<head-top />-->
         <h1 class="nav-header">
-          <span class="go-back" @click="$router.go(-1)"><i class="icon iconfont go-back-icon">&#xe60f;</i></span>
+          <!--<span class="go-back" @click="$router.go(-1)"><i class="icon iconfont go-back-icon">&#xe60f;</i></span>-->
           <span class="header-title">退出</span>
         </h1>
 		<div class="ifCheck">
 			<img src="../../assets/icon/icon_questionmark@2x.png" alt="">
 			<p style="margin-bottom: 0.7rem;">是否确认退出</p>
 			<p>当前 {{(!!this.$store.state.userInfo.loginName?this.$store.state.userInfo.loginName:'')}} 的账号？</p>
-			<el-button class="btn-logout" @click="confirmOut">确认退出</el-button>
+			<button class="btn-logout" @click="confirmOut">确认退出</button>
 		</div>
 
 	</div>
@@ -69,7 +69,7 @@
 			}
 		},
 		components: {
-          headTop
+//          headTop
         },
 	}
 </script>
@@ -100,6 +100,7 @@
 
   .ifCheck{
   	text-align: center;
+    padding: 0 2rem;
   	img{
   		width: 11.5rem;
   		height: 11.5rem;
@@ -115,7 +116,7 @@
 
   .btn-logout{
     margin-top: 11.5rem;
-    width: 32.3rem;
+    width: 100%;
     height: 5rem;
     background-color: #ffc16b;
     font-size: 1.6rem;
