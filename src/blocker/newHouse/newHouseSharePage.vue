@@ -78,6 +78,7 @@
   	import headTop from '../../components/header/head'
   	import BMap from 'BMap'
   	import Swiper from 'swiper'
+  	import { MessageBox } from 'mint-ui';
 	export default {
 		name:'newHouseSharePage',
 		data(){
@@ -183,18 +184,16 @@
 		        map.addOverlay(lableInfor);
 		      },
 		      phoneNum() {
-		        this.$confirm('呼叫：'+this.houseData.contactPhone,  {
-		          confirmButtonText: '确定',
-		          cancelButtonText: '取消',
-		          cancelButtonClass: 'cancelButtonClass',
-		          confirmButtonClass: 'confirmButtonClass',
-		          customClass: 'customClass',
-		          center: true
-		        }).then(() => {
-		          window.location.href = 'tel://'+this.houseData.contactPhone
-		        }).catch(() => {
-
+		      	MessageBox({
+				  title: '呼叫',
+				  message: this.houseData.contactPhone,
+				  showCancelButton: true
+				}).then(action => {
+					if(action == "confirm"){
+						window.location.href = 'tel://'+this.reservationInfo.phone
+					}     
 		        });
+
 		      },
 		      lookAll(){
 		      	this.$router.push({path:'/newHouseAllDetail',query:{data:this.houseData}});

@@ -45,7 +45,7 @@
 <script type="text/javascript">
 	import api from '../../api/axios'
   	import headTop from '../../components/header/head'
-
+  	import { MessageBox } from 'mint-ui';
 	export default {
 		name:'newHouseAllDetail',
 		data(){
@@ -55,18 +55,17 @@
 		},
 		methods:{
 			phoneNum(){
-				this.$confirm('呼叫：'+this.houseAllInfo.contactPhone,  {
-		          confirmButtonText: '确定',
-		          cancelButtonText: '取消',
-		          cancelButtonClass: 'cancelButtonClass',
-		          confirmButtonClass: 'confirmButtonClass',
-		          customClass: 'customClass',
-		          center: true
-		        }).then(() => {
-		          window.location.href = 'tel://'+this.houseAllInfo.contactPhone
-		        }).catch(() => {
 
+				MessageBox({
+				  title: '呼叫',
+				  message: this.houseAllInfo.contactPhone,
+				  showCancelButton: true
+				}).then(action => {
+					if(action == "confirm"){
+						window.location.href = 'tel://'+this.reservationInfo.phone
+					}     
 		        });
+
 			}
 		},
 		components: {
