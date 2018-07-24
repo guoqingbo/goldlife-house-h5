@@ -12,25 +12,13 @@
         </div>
         <div class="detail">
           <p class="status">{{ bargainStatus[item.bargain_status] }}</p>
-          <p>金额：<span>{{ !!item.price?item.price:'无' }}</span></p>
+          <p>金额：<span>{{ item.price|formatPrice }}</span></p>
           <p>门店：<span>{{ !!item.agency_name?item.agency_name:'无' }}</span></p>
           <p>经纪人：<span>{{ !!item.broker_name?item.broker_name:'无' }}</span></p>
           <p>当前签约状态 ：<span class="signStatus">{{ item.now_transfer_name }}</span></p>
         </div>
       </div>
 
-      <!-- <div class="box" @click="toDetail(2733)">
-        <div class="title">
-          <div class="title_info">朝晖五区29号3单元201....</div>
-        </div>
-        <div class="detail">
-          <p class="status">办理中</p>
-          <p>金额：<span>29846</span></p>
-          <p>门店：<span>科地五区</span></p>
-          <p>经纪人：<span>张三</span></p>
-          <p>当前签约状态 ：<span class="signStatus">房管及不动产受理</span></p>
-        </div>
-      </div> -->
   </div>
 </template>
 <script type="text/javascript">
@@ -42,7 +30,7 @@
       return{
         signList:[],
         bargainStatus:{
-          '1':'处理中',
+          '1':'办理中',
           '2':'结案',
           '3':'作废'
         }
@@ -55,7 +43,7 @@
       getSignSearch(){
         //从vuex中获取登录用户手机号
         var phoneNum = this.$store.state.userInfo.loginName;
-        console.log(phoneNum)
+        // console.log(phoneNum)
         api.signSearch(phoneNum).then(res=>{
           if(res.data.success){
             this.signList = res.data.result;
@@ -72,7 +60,24 @@
         })
       },
       toDetail(id){
-        this.$router.push({path:'/signDetail?id='+id})
+        // this.$router.push({path:'/signDetail?id='+id})
+        this.$router.push({path:'/signDetail',query:{houseId:id}})
+      }
+    },
+    filters: { //定义过滤器
+      formatPrice: function (value) {
+      if(!value) return '0.00';
+         var intPart = Number(value).toFixed(0); //获取整数部分
+        //将整数部分逢三一断
+         var intPartFormat = intPart.toString().replace(/(\d)(?=(?:\d{3})+$)/g, '$1,');
+         var valueStr = value + '';//先转换成字符串
+         // 判断是否有小数
+         if(valueStr.indexOf(".") >= 0){
+            var floatPart = valueStr.split(".")[1]; //预定义小数部分
+            return intPartFormat + "." + floatPart;
+         }else{
+            return intPartFormat;
+         }
       }
     },
     components: {

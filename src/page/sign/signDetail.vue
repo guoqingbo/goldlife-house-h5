@@ -56,10 +56,10 @@
 			return{
 				signDetail:{},
 				transfer:[],
-				signId:'',
+				// signId:'',
 				userType:2, //用户身份固定为2客户
 				bargainStatus:{
-		          '1':'处理中',
+		          '1':'办理中',
 		          '2':'结案',
 		          '3':'作废'
 		        }
@@ -71,10 +71,9 @@
 		methods:{
 			getSignDetail(){
 				//获取签约ID
-				// this.signId = window.location.href.split('id=')[1];
-				this.signId = 2733
+				let signId = this.$route.query.houseId;
 				var _data = {
-					'signId':this.signId,
+					'signId':signId,
 					'userType':this.userType
 				}
 				api.signDetail(_data)
