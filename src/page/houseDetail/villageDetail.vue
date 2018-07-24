@@ -501,7 +501,7 @@
 
   //分割
   .divide {
-    margin-top: 1rem;
+    margin-top: 2rem;
     height: 2rem;
     width: 100%;
     background-color: #f5f5f5;
