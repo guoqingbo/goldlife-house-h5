@@ -141,7 +141,8 @@
           </li>
         </ul>
       </div>
-      <div class="empty"></div>
+      <div class="empty" v-if="communityAround.length>0"></div>
+      <div class="empty2" v-else></div>
     </div>
     <keep-alive>
       <router-view></router-view>
@@ -193,6 +194,7 @@
       }
     },
     created() {
+      this.menu();
       this.getCommunityDetail();
       //存储当前小区id和房源类型
       this.$store.commit("setActiveInfo",{blockId:this.blockId,houseType:this.houseType})
@@ -227,6 +229,10 @@
               this.id = resultHouse.id;
               this.sellList = resultHouse.houseInblock.sell.lists;
               this.rentList = resultHouse.houseInblock.rent.lists;
+              if(this.sellList.length<1 || this.rentList.length<1){
+                this.$refs.ulDisplay.style.display = 'none';
+                this.$refs.sameSell.style.marginTop = '2rem';
+              }
               console.log('在售列表')
               console.log(this.sellList);
               console.log('在租列表')
@@ -274,28 +280,51 @@
             this.$message.error('小区详情' + res.data.errorMessage);
           });
       },
+      menu() {
+        window.scrollTo(0,0);
+      },
       clickSell() {
         this.isSell = true;
         this.isRent = false;
-        if (this.sellList.length > 0) {
+        if(this.sellList.length > 3){
           this.$refs.ulDisplay.style.display = '';
           this.$refs.sameSell.style.marginTop = '16rem';
-        } else {
+          this.$refs.sameSell.style.backgroundColor='#f5f5f5';
+        }else if(this.sellList.length > 0 && this.sellList.length < 4){
+          this.$refs.ulDisplay.style.display = '';
+          this.$refs.sameSell.style.marginTop = '12rem';
+          this.$refs.sameSell.style.backgroundColor='#fff';
+        }else {
           this.$refs.ulDisplay.style.display = 'none';
           this.$refs.sameSell.style.marginTop = '2rem';
+          this.$refs.sameSell.style.backgroundColor='#f5f5f5';
         }
+
 
       },
       clickRent() {
         this.isSell = false;
         this.isRent = true;
-        if (this.rentList.length > 0) {
+        if(this.rentList.length > 3){
+          this.$refs.ulDisplay.style.display = '';
+          this.$refs.sameSell.style.marginTop = '16rem';
+          this.$refs.sameSell.style.backgroundColor='#f5f5f5';
+        }else if(this.rentList.length > 0 && this.rentList.length < 4){
+          this.$refs.ulDisplay.style.display = '';
+          this.$refs.sameSell.style.marginTop = '12rem';
+          this.$refs.sameSell.style.backgroundColor='#fff';
+        }else {
+          this.$refs.ulDisplay.style.display = 'none';
+          this.$refs.sameSell.style.marginTop = '2rem';
+          this.$refs.sameSell.style.backgroundColor='#f5f5f5';
+        }
+        /*if (this.rentList.length > 0) {
           this.$refs.ulDisplay.style.display = '';
           this.$refs.sameSell.style.marginTop = '16rem';
         } else {
           this.$refs.ulDisplay.style.display = 'none';
           this.$refs.sameSell.style.marginTop = '2rem';
-        }
+        }*/
       },
       clkAttention() {
         api.isLogin()
@@ -383,7 +412,7 @@
 <style lang="scss" scoped>
   @import '../../style/mixin';
   @import "../../../static/css/swiper.min.css";
-  .containt{
+  .villageDetail{
     font-size: 1.6rem;
   }
   /**导航*/

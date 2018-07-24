@@ -183,7 +183,8 @@
           </li>
         </ul>
       </div>
-      <div class="empty"></div>
+      <div class="empty" v-if="communityAround.length>0"></div>
+      <div class="empty2" v-else></div>
       <!--底部按钮-->
       <div class="button-bottom">
         <el-row class="el-bt">
@@ -263,6 +264,7 @@
       }
     },
     created() {
+      this.menu();
       this.getHouseDetail();
       this.getCompareNum();
       //存储当前房源id
@@ -559,6 +561,9 @@
           this.$router.push({ name:'villageMore',params: { more: this.isSell?this.sellList:this.rentList,villageName:this.title,id:this.blockId,houseType:this.houseType}});
         }
 
+      },
+      menu() {
+        window.scrollTo(0,0);
       },
       appoint(){
         api.isLogin()
@@ -861,17 +866,22 @@
       margin-top: 18rem;
       height: 3rem;
     }
+    .empty2 {
+      margin-top: 1rem;
+      height: 3rem;
+    }
 
     .button-bottom {
       width: 100%;
       position: fixed;
       bottom: 0;
       .grid-bt-content {
-        height: 6rem;
+        height: 5rem;
         line-height: 2rem;
       }
       img {
-        height: 2.7rem;
+        margin-top: 0.4rem;
+        height: 2.2rem;
         width: 3rem;
       }
       .span-icon {
@@ -880,7 +890,7 @@
       }
       .centenr {
         text-align: center;
-        line-height: 6rem;
+        line-height: 5rem;
         span {
           color: #754501;
         }
@@ -897,8 +907,8 @@
       }
       .span-left{
         position: absolute;
-        bottom: 0.6rem;
-        left: 3rem;
+        bottom: 0.4rem;
+        left: 3.6rem;
         font-size: 1.2rem;
       }
     }

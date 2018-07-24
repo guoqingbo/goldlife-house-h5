@@ -162,7 +162,8 @@
           </li>
         </ul>
       </div>
-      <div class="empty"></div>
+      <div class="empty" v-if="communityAround.length>0"></div>
+      <div class="empty2" v-else></div>
       <!--底部按钮-->
       <div class="button-bottom">
         <el-row class="el-bt">
@@ -231,6 +232,7 @@
       }
     },
     created() {
+      this.menu();
       this.getHouseDetail();
       //this.getCommunityDetail();
       //设置当前活动房源id
@@ -415,6 +417,9 @@
             }
           });
 
+      },
+      menu() {
+        window.scrollTo(0,0);
       },
       phoneCall() {
         this.$confirm('呼叫：'+this.brokerPhone,  {
@@ -702,6 +707,10 @@
 
     .empty {
       margin-top: 18rem;
+      height: 3rem;
+    }
+    .empty2 {
+      margin-top: 1rem;
       height: 3rem;
     }
 
