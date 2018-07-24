@@ -10,14 +10,14 @@
 			<h2>看房备注</h2>
 			<p>{{this.$route.query.data.blockName}}</p>
 			<p>
-				<span>{{this.$route.query.data.room}}室{{this.$route.query.data.hall}}厅</span> 
+				<span>{{this.$route.query.data.room}}室{{this.$route.query.data.hall}}厅</span>
 				<span>{{this.$route.query.data.price}}万</span>
 			</p>
 		</div>
 		<div class="lableNode">
 			<p>标签备注</p>
 			<div class="lable">
-				<p v-for="(item,index) in labelList" @click="chooseLable($event,item)" :value="item">{{ item }}</p>
+				<p  v-for="(item,index) in labelList" @click="chooseLable($event,item)" :value="item" :class="{'select':$route.query.data.lable.indexOf(item)>=0}">{{ item }}</p>
 
 			</div>
 		</div>
@@ -38,14 +38,16 @@
 				flag:false,
 				selectedLable:[],
 				textLable:'',
-				allLableContent:''		
+				allLableContent:''
 			}
 		},
 		created(){
-			this.getLabel();			
+			this.getLabel();
 		},
 		mounted(){
 			this.haveLable();
+			console.log(this.selectedLable);
+
 		},
 		methods:{
 			getLabel(){//获取标签
@@ -66,31 +68,40 @@
 				})
 			},
 			postNode(){//点击确定，提交备注
-				 
-				 let lableObj = this.selectedLable.join(',');
 
-				let lableInfo = {
-					orderDetailId:this.$route.query.data.orderDetailId,
-			        // lable:this.selectedLable,
-			        lable:lableObj,
-			        text:this.textLable,
+				 //标签备注和文字备注都必填
+
+				if(this.textLable.trim()!='' && this.selectedLable !=''){
+					let lableObj = this.selectedLable.join(',');
+
+					let lableInfo = {
+						orderDetailId:this.$route.query.data.orderDetailId,
+				        lable:lableObj,
+				        text:this.textLable,
+					}
+
+					api.saveHouseLog(lableInfo).then(res=>{
+						if(res.data.success){
+							this.$router.push({path:'/lookHouseHistory'})
+						}else{
+							this.$toast({
+				              message: res.data.errorMessage,
+				              position: 'middle',
+				              duration: 3000
+				            })
+						}
+					})
+					.catch(err=>{
+						console.log(err);
+					})
+				}else{
+					this.$toast({
+		              message: "标签和文字均不能为空",
+		              position: 'middle',
+		              duration: 3000
+		            })
 				}
 
-				api.saveHouseLog(lableInfo).then(res=>{
-					if(res.data.success){
-						this.$router.push({path:'/lookHouseHistory'})
-					}else{
-						this.$toast({
-			              message: res.data.errorMessage,
-			              position: 'middle',
-			              duration: 3000
-			            })
-					}
-				})
-				.catch(err=>{
-					console.log(err);
-				})
-				
 			},
 			chooseLable(data){//选择标签备注
 
@@ -111,9 +122,9 @@
 								this.selectedLable.splice(j,1);
 							}
 						}
-						
+
 					}
-				
+
 			},
 			haveLable(){//修改备注时，将原有的备注携带过来
 				let _text = this.$route.query.data.text;
@@ -127,12 +138,11 @@
 				if(_lable){
 					// 将字符串转成数组
 					let lableArr = _lable.split(',');
-					// 如何获取所有的标签？？？
+					this.selectedLable = lableArr;
+
 				}else{
-					
+
 				}
-
-
 			}
 		},
 		components:{
@@ -144,7 +154,7 @@
 
 .box{
 	width: 100%;
-	font-family: PingFang-SC-Regular;		
+	font-family: PingFang-SC-Regular;
 	background: #F8F8F8;
 
 	.nav-header{
@@ -200,7 +210,7 @@
   	background: #ffffff;
   	padding: 1.5rem 0.5rem 1rem 2rem;
   	margin-bottom: 1rem;
-  	
+
   	>p{
   		@extend .labelTitle;
   	}
@@ -241,7 +251,7 @@
   	}
   }
 }
-	
+
 
 .labelTitle{
 	font-family: PingFang-SC-Bold;

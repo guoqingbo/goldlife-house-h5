@@ -1,50 +1,52 @@
 <template>
 	<div>
-		<head-top />
-        <h1 class="nav-header">
-          <span class="go-back" @click="$router.go(-1)"><i class="icon iconfont go-back-icon">&#xe60f;</i></span>
-          <!-- <span class="header-title" @click="postNode">确定</span> -->
-        </h1>
+		<div class="res-box">
+			<head-top />
+			<h1 class="nav-header">
+				<span class="go-back" @click="$router.go(-1)"><i class="icon iconfont go-back-icon">&#xe60f;</i></span>
+				<!-- <span class="header-title" @click="postNode">确定</span> -->
+			</h1>
 
-        <div class="reservaInfo" v-if="reservationInfo.targetHouse != undefined">
-        <!-- <div class="reservaInfo"> -->
-        	<h2>看房预约</h2>
-        	<div class="info">
-        		<div class="info_left">
-	        		<p>{{ (reservationInfo.time)*1000 |moment('MM月DD日 hh:mm') }}</p>
-	        		<p>在 <span>{{reservationInfo.targetHouse.block_name}}</span> 约看</p>
-	        	</div>
-	        	<div class="info_right">
-	        		<p class="res" v-if="reservationInfo.state==1 || reservationInfo.state==2"></p>
-	        		<p class="err" v-if="reservationInfo.state==3"></p>
-	        		<p class="vit" v-else></p>
-	        		<p>{{state[reservationInfo.state]}}</p>
-	        	</div>
-        	</div>
-        </div>
-
-        <div class="box" v-if="reservationInfo.targetHouse != undefined">
-			<div class="house-detail">
-				<img :src="!!reservationInfo.targetHouse.pic?reservationInfo.targetHouse.pic:'./static/searcherror@2x.png'">
-				<div>
-					<h3>{{reservationInfo.targetHouse.block_name}} {{reservationInfo.targetHouse.room}}室{{reservationInfo.targetHouse.hall}}厅</h3>
-					<p class="describ">{{reservationInfo.targetHouse.describe}}</p>
-					<p class="price">
-						<span>{{reservationInfo.targetHouse.price}}万</span>
-						<span>&nbsp;&nbsp;{{reservationInfo.targetHouse.avgprice}}&nbsp;元/平</span>
-					</p>
-					<!-- <p class="dayT">{{reservationInfo.targetHouse.create_time*1000 |moment('MM月DD日 hh:mm')}}&nbsp;发布</p> -->
-					<p class="dayT">{{reservationInfo.targetHouse.create_time*1000 |getDateDiff}}&nbsp;发布</p>
+			<div class="reservaInfo" v-if="reservationInfo.targetHouse != undefined">
+				<!-- <div class="reservaInfo"> -->
+					<h2>看房预约</h2>
+					<div class="info">
+						<div class="info_left">
+							<p>{{ (reservationInfo.time)*1000 |moment('MM月DD日 hh:mm') }}</p>
+							<p>在 <span>{{reservationInfo.targetHouse.block_name}}</span> 约看</p>
+						</div>
+						<div class="info_right">
+							<p class="res" v-if="reservationInfo.state==1 || reservationInfo.state==2"></p>
+							<p class="err" v-if="reservationInfo.state==3"></p>
+							<p class="vit" v-else></p>
+							<p>{{state[reservationInfo.state]}}</p>
+						</div>
+					</div>
 				</div>
-			</div>
-			<p class="tips" v-if="reservationInfo.state==1 || reservationInfo.state==2">带看经纪人将与您核实确认约看时间地点，确认预约。</p>
-			<p class="tips" v-else-if="reservationInfo.state==3">经纪人与您核实预约情况反映，本次预约失败。感谢您的关注，请继续寻找核实房源</p>
-			<p class="tips" v-else>您已预约成功，如需修改预约时间请致电经纪人。</p>
-		</div>
 
-		<p class="contact" @click="phoneNum">一键电联经纪人</p>
-	</div>
-</template>
+				<div class="box" v-if="reservationInfo.targetHouse != undefined">
+					<div class="house-detail">
+						<img :src="!!reservationInfo.targetHouse.pic?reservationInfo.targetHouse.pic:'./static/searcherror@2x.png'">
+						<div>
+							<h3>{{reservationInfo.targetHouse.block_name}} {{reservationInfo.targetHouse.room}}室{{reservationInfo.targetHouse.hall}}厅</h3>
+							<p class="describ">{{reservationInfo.targetHouse.describe}}</p>
+							<p class="price">
+								<span>{{reservationInfo.targetHouse.price}}万</span>
+								<span>&nbsp;&nbsp;{{reservationInfo.targetHouse.avgprice}}&nbsp;元/平</span>
+							</p>
+							<!-- <p class="dayT">{{reservationInfo.targetHouse.create_time*1000 |moment('MM月DD日 hh:mm')}}&nbsp;发布</p> -->
+							<p class="dayT">{{reservationInfo.targetHouse.create_time*1000 |getDateDiff}}&nbsp;发布</p>
+						</div>
+					</div>
+					<p class="tips" v-if="reservationInfo.state==1 || reservationInfo.state==2">带看经纪人将与您核实确认约看时间地点，确认预约。</p>
+					<p class="tips" v-else-if="reservationInfo.state==3">经纪人与您核实预约情况反映，本次预约失败。感谢您的关注，请继续寻找核实房源</p>
+					<p class="tips" v-else>您已预约成功，如需修改预约时间请致电经纪人。</p>
+				</div>
+
+				<p class="contact" @click="phoneNum">一键电联经纪人</p>
+			</div>
+		</div>
+	</template>
 <script type="text/javascript">
 	import api from '../../api/axios'
   	import headTop from '../../components/header/head'
@@ -126,7 +128,7 @@
 		}
 	}
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 
 	// 联系经纪人按钮
 

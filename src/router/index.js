@@ -155,6 +155,24 @@ const villageMore = resolve => {
   });
 };
 
+
+//经纪人模块
+
+const newHouseSharePage = resolve => {
+  require.ensure(['../blocker/newHouse/newHouseSharePage'], () => {
+    resolve(require('../blocker/newHouse/newHouseSharePage'));
+  });
+};
+
+
+const newHouseAllDetail = resolve => {
+  require.ensure(['../blocker/newHouse/newHouseAllDetail'], () => {
+    resolve(require('../blocker/newHouse/newHouseAllDetail'));
+  });
+};
+
+
+
 const routes = [
     {
       path: '/',
@@ -283,6 +301,21 @@ const routes = [
     component: lookHouseReservation,
   },
 
+
+
+//经纪人模块
+
+  {//新房详情
+    path: '/newHouseSharePage',
+    name: 'newHouseSharePage',
+    component: newHouseSharePage,
+  },
+
+  {//新房查看全部
+    path: '/newHouseAllDetail',
+    name: 'newHouseAllDetail',
+    component: newHouseAllDetail,
+  },
 
   
 
