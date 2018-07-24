@@ -10,16 +10,6 @@
     </h1>
 
     <div class="houseDetail">
-      <!--<li>
-        <div >
-          <span class="span-top">广厦天都城天星苑 3室1厅卫</span>
-          <br>
-          <span class="span-small">100平方/南 北/中楼层 共20层</span>
-          <span class="span-bottom"><span style="color: #e10000">350万</span>&nbsp;&nbsp;&nbsp;45000元/平</span>
-        </div>
-
-        <img src="http://image.qmango.com/hotelimg/dl1210/109490/109.jpeg"><br/>
-      </li>-->
       <li>
         <div>
           <span class="span-top">{{$route.params.homes.title}}</span>
@@ -39,21 +29,8 @@
         </div>
         <div class="span-input dark centenr">
           <span class="span-left">看房时间：</span>
-          <input class="input-right date dark" placeholder="请选择看房时间" v-model="dateValue" ref="date">
+          <input class="input-right date dark" placeholder="请选择看房时间" v-model="dateValue" ref="date" @click="openPicker">
           <i class="icon iconfont go-back-icon i-right">&#xe6da;</i>
-          <div class="dateDiv">
-            <span class="input-right">
-              <el-date-picker
-                v-model="dateValue"
-                type="datetime"
-                placeholder="请选择看房时间"
-                :picker-options="pickerOptions0"
-                value-format="yyyy/MM/dd HH:mm"
-                align="right"
-                size="small">
-              </el-date-picker>
-            </span>
-          </div>
         </div>
         <div class="span-input centenr">
           <span class="span-left">联系方式：</span>
@@ -72,6 +49,15 @@
         <div class="span-input dark noteDiv">
           <textarea class="span-left dark" placeholder="请填写备注" v-model="desc"></textarea>
         </div>
+      </div>
+      <div class="datePicker">
+        <mt-datetime-picker
+          type="datetime"
+          ref="picker"
+          @confirm="handleConfirm"
+          :startDate="startDate"
+        >
+        </mt-datetime-picker>
       </div>
       <div class="button-bottom" @click="sendAppointment()">提交</div>
     </div>
@@ -105,6 +91,8 @@
         houseId: '',
         verCode: '',
         datestamp: '',
+        pickerValue:'',
+        startDate: new Date(),
       }
     },
     watch: {
@@ -126,15 +114,7 @@
           this.$refs.phone.style.width = 12 + 'rem';
         }
       },
-      /*date(){
-        var text_length = this.date.length;//获取当前文本框的长度
-        var current_width = parseInt(text_length);
-        if(current_width > 0){
-          this.$refs.date.style.width = current_width+'rem';
-        }else{
-          this.$refs.date.style.width = 12+'rem';
-        }
-      }*/
+
     },
     created() {
 
@@ -147,6 +127,28 @@
     },
 
     methods: {
+      openPicker () {
+        this.$refs.picker.open()
+      },
+      handleConfirm (data) {
+        this.dateValue = this.getDate(data);   //获取的时间为时间戳，getdata是自己写的一个转换时间的方法
+        console.log(this.dateValue)
+      },
+      getDate(data){
+        var year = data.getFullYear();
+        var month = data.getMonth() + 1;
+        var strDate = data.getDate();
+        if (month >= 1 && month <= 9) {
+          month = "0" + month;
+        }
+        if (strDate >= 0 && strDate <= 9) {
+          strDate = "0" + strDate;
+        }
+        var hour = data.getHours();
+        var minutes = data.getMinutes();
+        var currentdate = year + '/' + month + '/' + strDate + ' ' + hour + ':' + minutes;
+        return currentdate;
+      },
       getCode() {
         var num = 60;
         var elementButton = this.$refs.button;
@@ -329,10 +331,12 @@
       .i-right {
         position: absolute;
         right: 1rem;
+        margin-top: 0.2rem;
       }
       .input-right {
         position: absolute;
         right: 1rem;
+        font-size: 1.6rem;
       }
       .el-date-editor {
         border: none;
@@ -344,6 +348,7 @@
         width: 12rem;
       }
       .date {
+        margin-top: 0.2rem;
         width: 15rem;
       }
       button {
@@ -358,6 +363,7 @@
         width: 6rem;
         right: 14rem;
         z-index: 10;
+        font-size: 1.6rem;
       }
       .xh {
         position: absolute;
@@ -367,14 +373,7 @@
           padding-left: 0.3rem;
         }
       }
-      .dateDiv {
-        position: absolute;
-        top: 22rem;
-        right: 0;
-        opacity: 0;
-        z-index: 10;
 
-      }
     }
     .dark {
       background-color: #f8f8f8;
