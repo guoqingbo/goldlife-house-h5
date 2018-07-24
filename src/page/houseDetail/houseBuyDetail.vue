@@ -36,84 +36,38 @@
       <div class="house-content">
         <h2 class="villageName">{{title}}</h2>
         <div class="div-houseDes">
-          <el-row>
-            <el-col :span="11">
-              <el-row class="el-houseDes">
-                <p style="color: red">{{price}}</p>
-              </el-row>
-              <el-row class="el-houseDes">
-                <p class="des">售价</p>
-              </el-row>
-            </el-col>
-
-            <el-col :span="1">
-              <el-row>
-                <div class="div-line"></div>
-              </el-row>
-            </el-col>
-
-            <el-col :span="11">
-              <el-row class="el-houseDes">
-                <p style="color: red">{{buildarea}}</p>
-              </el-row>
-              <el-row class="el-houseDes">
-                <p class="des">建筑面积</p>
-              </el-row>
-            </el-col>
-
-          </el-row>
+            <div>
+                <p class="houseDes" style="color: red">{{price}}</p>
+                <p class="houseDes des" >售价</p>
+            </div>
+            <div>
+                <p  class="houseDes" style="color: red">{{buildarea}}</p>
+                <p class="houseDes des">建筑面积</p>
+            </div>
         </div>
       </div>
       <!--分割-->
       <div class="divide">
       </div>
       <!--详细描述-->
-      <div class="detailDes">
-        <el-row>
-          <el-col :span="11">
-            <el-row class="el-detailDes">
-              <p>单价： <span class="data-show">{{avgprice}}</span></p>
-            </el-row>
-            <el-row class="el-detailDes">
-              <p>朝向： <span class="data-show">{{forward}}</span></p>
-            </el-row>
-            <el-row class="el-detailDes">
-              <p>类型： <span class="data-show">{{sell_type}}</span></p>
-            </el-row>
-            <el-row class="el-detailDes">
-              <p>楼层： <span class="data-show">{{floor}}/{{totalfloor}}</span></p>
-            </el-row>
-            <el-row class="el-detailDes">
-              <router-link
-                :to="{ name:'villageDetail',params: {blockId:blockId,cityId:cityId,userType:userType,houseType:houseType}}">
-                <p>小区： <span style="color: #ffc16b">{{block_name}}</span></p>
-              </router-link>
-            </el-row>
-
-          </el-col>
-
-          <el-col :span="11">
-            <el-row class="el-detailDes">
-              <p>挂牌： <span class="data-show">{{createtime}}</span></p>
-            </el-row>
-            <el-row class="el-detailDes">
-              <p>装修： <span class="data-show">{{fitment}}</span></p>
-            </el-row>
-            <el-row class="el-detailDes">
-              <p>年代： <span class="data-show">{{buildyear}}</span></p>
-            </el-row>
-            <br>
-            <el-row class="el-detailDes">
-              <p></p>
-            </el-row>
-            <el-row class="el-detailDes">
-              <router-link
-                :to="{ name:'villageDetail',params: {blockId:blockId,cityId:cityId,userType:userType,houseType:houseType}}">
-              <p><span class="span-bold"><i class="icon iconfont right">&#xe6da;</i></span></p>
-              </router-link>
-            </el-row>
-          </el-col>
-        </el-row>
+      <div class="detailDesBox">
+        <div class="detailDes">
+          <div>
+            <p>单价： <span class="data-show">{{avgprice}}</span></p>
+            <p>朝向： <span class="data-show">{{forward}}</span></p>
+            <p>类型： <span class="data-show">{{sell_type}}</span></p>
+            <p>楼层： <span class="data-show">{{floor}}/{{totalfloor}}</span></p>
+          </div>
+          <div>
+            <p>挂牌： <span class="data-show">{{createtime}}</span></p>
+            <p>装修： <span class="data-show">{{fitment}}</span></p>
+            <p>年代： <span class="data-show">{{buildyear}}</span></p>
+          </div>
+        </div>
+        <router-link
+          :to="{ name:'villageDetail',params: {blockId:blockId,cityId:cityId,userType:userType,houseType:houseType}}">
+          <p class="community-p">小区： <span style="color: #ffc16b">{{block_name}}</span><span><i class="icon iconfont right">&#xe6da;</i></span></p>
+        </router-link>
       </div>
       <!--百度地图-->
 
@@ -125,17 +79,13 @@
 
       <!--同小区房源-->
       <div class="sameArea">
-        <el-row>
-          <el-col :span="16">
-            <p>同小区房源</p>
-          </el-col>
-          <el-col :span="4">
-            <p :class="{ 'class-color': isSell}" @click="clickSell()">在售</p>
-          </el-col>
-          <el-col :span="4">
-            <p :class="{ 'class-color': isRent}" @click="clickRent()">在租</p>
-          </el-col>
-        </el-row>
+        <div class="house-in-community">
+          <div><p>同小区房源</p></div>
+          <div>
+            <span :class="{ 'class-color': isSell}" @click="clickSell()">在售</span>
+            <span :class="{ 'class-color': isRent}" @click="clickRent()">在租</span>
+          </div>
+        </div>
         <ul class="category-head" ref="ulDisplay">
           <li v-if="isSell" v-for='sellImg in sellList' @click="getHomeDetail(sellImg.id)">
             <img :src="sellImg.pic?sellImg.pic:require('../../assets/img/bg_smallphotonormal@3x.png')"><br/>
@@ -150,7 +100,6 @@
               <p><span style="color: #e10000">{{rentImg.price}}</span></p>
             </router-link>
           </li>
-
         </ul>
       </div>
 
@@ -360,7 +309,7 @@
           })
           .catch(res => {
               console.log(res)
-            this.$message.error('房源详情=' + res.data.errorMessage);
+            this.$message.error(res);
           });
       },
       //小区详情
@@ -730,11 +679,16 @@
     //售价和建筑面积
     .house-content {
       .div-houseDes {
+        display: flex;
         margin-top: 2rem;
-        .div-line {
-          width: 0.2rem;
-          height: 6rem;
-          background: #f5f5f5;
+        >div{
+          flex: 1 1 auto;
+          p:last-child{
+            padding-top: 1.5rem;
+          }
+        }
+        div:first-child{
+          border-right: 0.2rem solid #f5f5f5;
         }
         .des {
           font-size: 14px;
@@ -746,8 +700,8 @@
           margin-bottom: 0;
         }
       }
-      .el-houseDes {
-        height: 2rem;
+      .houseDes {
+        /*height: 2rem;*/
         text-align: center;
         line-height: 2rem;
       }
@@ -770,27 +724,38 @@
     }
 
     //详细描述
-    .detailDes {
-      margin-top: 2rem;
-      margin-left: 2rem;
-      .el-row {
-        //margin-bottom: 20px;
-        &:last-child {
-          margin-bottom: 0;
+    .detailDesBox{
+      padding: 0 2rem;
+      .detailDes {
+        margin-top: 2rem;
+        display:flex;
+        >div{
+          flex: 1 1 auto;
+        }
+        p {
+          color: #9c9a9d;
+          margin-bottom: 1rem;
+        }
+        .el-row {
+          //margin-bottom: 20px;
+          &:last-child {
+            margin-bottom: 0;
+          }
+        }
+        .data-show{
+          color: #424242;
+        }
+        .span-bold{
+          i{
+            font-weight: bold;
+          }
         }
       }
-      p {
+      .community-p{
         color: #9c9a9d;
       }
-      .data-show{
-        color: #424242;
-      }
-      .span-bold{
-        i{
-          font-weight: bold;
-        }
-      }
     }
+
 
     //地图
     .homeMap {
@@ -804,7 +769,19 @@
     //同小区房源
     .sameArea {
       margin-top: 1.5rem;
-      margin-left: 2rem;
+      padding: 0 2rem;
+      .house-in-community{
+        display: flex;
+        >div{
+          flex: 1 1 auto;
+        }
+        >div:last-child{
+          text-align: right;
+          span{
+            margin-left: 1.5rem;
+          }
+        }
+      }
       .class-color {
         color: #ffc16b;
       }

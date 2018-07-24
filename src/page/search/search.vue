@@ -5,7 +5,7 @@
       <div class="my-searchbar-inner left clear">
         <div class="my-search-dropdown left" >
           <div class="" @click="isShowHouseType = !isShowHouseType">
-            {{searchHouseType == 1?"二手房":'租房' }}<i class="el-icon-arrow-down el-icon--right"></i>
+            {{searchHouseType == 1?"二手房":'租房' }}<i class="icon iconfont">&#xe62d;</i>
           </div>
           <ul v-if="isShowHouseType" class="house-type-ul">
             <li> <i class="icon iconfont arrow-top">&#xe62c;</i></li>
