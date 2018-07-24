@@ -438,6 +438,7 @@
               .then( res => {
                 if (res.data.success){
                     let district = res.data.result;
+                    let streetInDistrictIds = {}
                   district.unshift({district:'不限',street:[]});
                   district.forEach((value)=>{
                     value.street.unshift({id:0,name:'不限'})
