@@ -31,7 +31,7 @@
 			</div>
 			<div class="status" v-if="signDetail.now_transfer != undefined">
 				<h2>当前签约状态：<span>{{ signDetail.now_transfer.stage_name }}</span></h2>
-
+			
 				<div class="status_content">
 					<p v-for="item in transfer">
 						<span v-if="item.step_id==signDetail.now_transfer.step_id" class="current"></span>
@@ -40,7 +40,7 @@
 						<span>{{ item.stage_name }}</span>
 					</p>
 				</div>
-
+			
 			</div>
 
 		</div>
@@ -204,6 +204,7 @@
   		}
   	}
   	.contact{
+  		width: 100%;
   		background: #fff;
 		padding: 1.5rem;
 		margin-bottom: 1rem;

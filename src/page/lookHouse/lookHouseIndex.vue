@@ -4,20 +4,20 @@
         <h1 class="nav-header">
           <span class="go-back" @click="$router.go(-1)"><i class="icon iconfont go-back-icon">&#xe60f;</i></span>
           <span class="header-title">看房日程</span>
-          <span class="go-edit"><i class="icon iconfont editor-icon" @click="lookHistory">&#xe62e;</i></span>
+          <span class="go-edit" @click="lookHistory"><i class="icon iconfont editor-icon">&#xe62e;</i></span>
         </h1>
 
 		<div class="box" v-for="i in houseList" @click="toDetail(i)">
 			<!-- 线上房源 -->
 			<div v-if="i.lineType == 0">
 				<div class="house-detail" v-if="i.targetHouse != undefined">
-					<img :src="!!i.targetHouse.pic?i.targetHouse.pic:'./static/searcherror@2x.png'">
+					<img :src="!!i.targetHouse.pic?i.targetHouse.pic:'./static/bg_smallphotonormal@2x.png'">
 					<div>
 						<h3>
 							<span>约看小区&nbsp;</span>
 							{{i.targetHouse.community_name}}
 						</h3>
-						<p class="describ">{{i.targetHouse.room}}室{{i.targetHouse.hall}}厅/{{i.targetHouse.buildarea}}㎡/朝{{i.targetHouse.forward}}</p>
+						<p class="describ">{{i.targetHouse.room}}室{{i.targetHouse.hall}}厅{{i.targetHouse.toilet}}卫/{{i.targetHouse.buildarea}}㎡/朝{{i.targetHouse.forward}}</p>
 						<p class="price">
 							<span>{{i.targetHouse.price}}万</span>
 							<span>&nbsp;&nbsp;{{i.targetHouse.avgprice}}&nbsp;元/平</span>
@@ -27,7 +27,7 @@
 				<div class="house-status">
 					<p :class="'t'+i.state">
 						<span>{{ state[i.state] }}</span>
-						<span>{{ (i.time)*1000 |moment('MM月DD日 hh:mm') }}</span>
+						<span>{{ (i.time)/1000 |moment('MM月DD日 hh:mm') }}</span>
 					</p>
 				</div>
 			</div>
@@ -35,7 +35,7 @@
 			<!-- 线下房源 -->
 			<div v-else>
 				<div class="house-detail">
-					<img :src="!!i.targetHouse.pic?i.targetHouse.pic:'./static/searcherror@2x.png'">
+					<img :src="!!i.targetHouse.pic?i.targetHouse.pic:'./static/bg_smallphotonormal@2x.png'">
 					<div>
 						<h3>线下房源</h3>
 						<p class="describ">请提前咨询确定房屋样式符合您的预期</p>
@@ -48,7 +48,7 @@
 				<div class="house-status">
 					<p :class="'t'+i.state">
 						<span>{{ state[i.state] }}</span>
-						<span>{{ (i.time)*1000|moment('MM/DD hh:mm') }}</span>
+						<span>{{ (i.time)/1000|moment('MM/DD hh:mm') }}</span>
 					</p>
 
 				</div>
@@ -124,6 +124,7 @@
     	position: absolute;
     	right: 1.5rem;
     	top: 0;
+    	z-index: 22;
     }
     .go-back-icon,.editor-icon{
       font-size: 2rem;
