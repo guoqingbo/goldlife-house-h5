@@ -18,6 +18,7 @@ if (process.env.NODE_ENV == 'development') {
 
 }else if(process.env.NODE_ENV == 'production'){
   baseUrl = 'http://101.37.27.156:7090';
+  // baseUrl = 'http://10.157.59.28:7090';
   weixinRederectUrl = 'http://wxtest.cd121.com';
   routerMode = 'history'
 }

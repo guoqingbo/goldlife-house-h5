@@ -48,14 +48,28 @@
       },
       publishTime(value){
         if (value) {
-          function add0(m) {
-            return m < 10 ? '0' + m : m
+          if(value.toString().length < 11){
+            value = value*1000
           }
-          let time = new Date(parseInt(value)*1000);
-          let y = time.getFullYear();
-          let m = time.getMonth() + 1;
-          let d = time.getDate();
-          return y + '年' + add0(m) + '月' + add0(m)+ "日"+"发布";
+          let nowTime =  new Date().getTime();//当前时间
+          let leave1 = nowTime % (24 * 3600*1000)   //计算天数后剩余的毫秒数
+          let diffTime = nowTime -leave1- value;
+          let diffDay = Math.ceil(diffTime/(24 * 3600 * 1000))
+          if(diffTime <= 0){//当天发布时
+            let date = new Date(value)
+            let fullYear = date.getFullYear(); // 获取完整的年份(4位,1970)
+            let month = date.getMonth()+1<10?'0'+(date.getMonth()+1):date.getMonth()+1; // 获取月份(0-11,0代表1月,用的时候记得加上1)
+            let day = date.getDate()<10?'0'+date.getDate():date.getDate(); // 获取日(1-31)
+//            date.getTime(); // 获取时间(从1970.1.1开始的毫秒数)
+//            date.getHours(); // 获取小时数(0-23)
+//            date.getMinutes(); // 获取分钟数(0-59)
+//            date.getSeconds(); // 获取秒数(0-59)
+            return fullYear+'年'+month+'月'+day+'日'+ '发布';
+          }else if (diffDay>15){
+            return '15天以上';
+          }else{
+            return diffDay+"天前发布";
+          }
         }
       }
     },
