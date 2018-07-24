@@ -124,6 +124,9 @@
 
     },
     created() {
+      if(this.$route.params.homes == null){
+        this.$router.push({ name:'houseBuyDetail',params: { }});
+      }
 
     },
     components: {
