@@ -130,7 +130,6 @@
             <div class="clear">
               <!--区域-->
               <ul class="district-ul left" @touchmove.stop>
-                <li :class="{'select-font-active': activDistrictIndex < 0}">不限</li>
                 <li v-for="(districtItem,index) in district"
                     :class="{'select-font-active': activDistrictIndex == index}"
                     @click="setCheckDistrictValue($event,index)">
@@ -139,14 +138,11 @@
               </ul>
               <!--板块-->
               <ul class="street-ul left clear" @touchmove.stop>
-                <li  :class="{'street-active': activDistrictIndex < 0}" v-if="activDistrictIndex< 0">不限</li>
-
-                <li v-else v-for="streetItem in district[activDistrictIndex].street"
+                <li v-for="streetItem in district[activDistrictIndex].street"
                     @click="setCheckStreetValue($event,streetItem.id)"
                     :class="{'street-active': houseParams[houseType].areaIds == streetItem.id}">
                   {{streetItem.name}}
                 </li>
-
               </ul>
             </div>
             <!--遮罩-->
@@ -271,7 +267,7 @@
               filterType:'',//过滤选项卡
               filterList:{},//获取过滤列表
               district:[],//区域板块列表
-              activDistrictIndex:-1,//选中的小区
+              activDistrictIndex:0,//选中的小区
               orderFilter:{
                   1:[
                     {orderColumn:"id",orderBy:"desc",describe:"最新发布"},
@@ -313,14 +309,17 @@
         },
         methods: {
           gethouseLists(isLoadMore){
-            console.log(isLoadMore)
+            if(!isLoadMore){ //不是加载更多时
+              this.houseParams[this.houseType].pageIndex = 1
+            }
             if (this.houseType == 1){
+
               //获取出售房源列表
               let params = this.houseParams[this.houseType];
               //openId:this.$route.query ? this.$route.query.openId:"",
               params.openId = this.$route.query? this.$route.query.openId : "";
               params.code = this.$route.query.code ? this.$route.query.code : "";
-
+              console.log(params)
               api.getSellHouseList(params)
                 .then( res => {
                   if (res.data.success){
@@ -438,7 +437,12 @@
             api.getDistrict(params)
               .then( res => {
                 if (res.data.success){
-                  this.district = res.data.result;
+                    let district = res.data.result;
+                  district.unshift({district:'不限',street:[]});
+                  district.forEach((value)=>{
+                    value.street.unshift({id:0,name:'不限'})
+                  });
+                  this.district = district;
                   console.log(this.district)
                 }else{
                   this.$toast({
@@ -449,8 +453,9 @@
                 }
               })
               .catch(res =>{
+                  console.log(res)
                 this.$toast({
-                  message: res.data.errorMessage,
+                  message: res,
                   position: 'bottom',
                   duration: 3000
                 });
