@@ -29,7 +29,7 @@
         </div>
         <div class="span-input dark centenr">
           <span class="span-left">看房时间：</span>
-          <input class="input-right date dark" placeholder="请选择看房时间" v-model="dateValue" ref="date" @click="openPicker">
+          <input class="input-right date dark" placeholder="请选择看房时间" v-model="dateValue" ref="date" @click="openPicker" value="readonly">
           <i class="icon iconfont go-back-icon i-right">&#xe6da;</i>
         </div>
         <div class="span-input centenr">
