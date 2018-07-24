@@ -109,6 +109,7 @@
       houseList,
     },
     mounted() {
+      this.menu();
       this.getHoseLists();
     },
 
@@ -201,6 +202,9 @@
         this.houseParams[this.houseType].orderColumn = orderItem.orderColumn;
         this.getHoseLists();
         this.filterType = ''
+      },
+      menu() {
+        window.scrollTo(0,0);
       },
     }
   }

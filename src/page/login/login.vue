@@ -1,8 +1,8 @@
 <template>
     <div class="box">
-        <head-top />
+        <!--<head-top />-->
         <h1 class="nav-header">
-          <span class="go-back" @click="$router.go(-1)"><i class="icon iconfont go-back-icon">&#xe60f;</i></span>
+          <!--<span class="go-back" @click="$router.go(-1)"><i class="icon iconfont go-back-icon">&#xe60f;</i></span>-->
           <span class="header-title">登录</span>
         </h1>
         <form class="loginForm">
@@ -14,17 +14,19 @@
           <div class="input-code">
             <input  placeholder="请输入验证码" v-model="mobileCodeInput"/>
           </div>
-          <el-button class="btn-login" @click="userLogin">立即登录</el-button>
+          <button class="btn-login" @click="userLogin">立即登录</button>
         </form>
     </div>
 </template>
 
 <script>
     import api from '../../api/axios' //后台数据接口
-    import headTop from '../../components/header/head'
+//    import headTop from '../../components/header/head'
 //    import $alert from '../../components/common/alert/alert.js'
 //    import { Toast } from 'mint-ui';
 //    import { MessageBox } from 'mint-ui';
+    import {Button} from 'element-ui';
+
     export default {
         data(){
             return {
@@ -41,8 +43,8 @@
 //          console.log(this.$route.params);
         },
         components: {
-          headTop,
-          alert,
+//          headTop,
+//          alert,
         },
         computed: {
 

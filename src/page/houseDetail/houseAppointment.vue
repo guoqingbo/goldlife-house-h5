@@ -10,16 +10,6 @@
     </h1>
 
     <div class="houseDetail">
-      <!--<li>
-        <div >
-          <span class="span-top">广厦天都城天星苑 3室1厅卫</span>
-          <br>
-          <span class="span-small">100平方/南 北/中楼层 共20层</span>
-          <span class="span-bottom"><span style="color: #e10000">350万</span>&nbsp;&nbsp;&nbsp;45000元/平</span>
-        </div>
-
-        <img src="http://image.qmango.com/hotelimg/dl1210/109490/109.jpeg"><br/>
-      </li>-->
       <li>
         <div>
           <span class="span-top">{{$route.params.homes.title}}</span>
@@ -37,23 +27,10 @@
           <span class="span-left ">姓名：</span>
           <input class="input-right name" placeholder="看房人" v-model="name" ref="name">
         </div>
-        <div class="span-input dark centenr">
+        <div class="span-input dark centenr" @click="openPicker">
           <span class="span-left">看房时间：</span>
-          <input class="input-right date dark" placeholder="请选择看房时间" v-model="dateValue" ref="date">
+          <input class="input-right date dark" placeholder="请选择看房时间" v-model="dateValue" ref="date" disabled="disabled">
           <i class="icon iconfont go-back-icon i-right">&#xe6da;</i>
-          <div class="dateDiv">
-            <span class="input-right">
-              <el-date-picker
-                v-model="dateValue"
-                type="datetime"
-                placeholder="请选择看房时间"
-                :picker-options="pickerOptions0"
-                value-format="yyyy/MM/dd HH:mm"
-                align="right"
-                size="small">
-              </el-date-picker>
-            </span>
-          </div>
         </div>
         <div class="span-input centenr">
           <span class="span-left">联系方式：</span>
@@ -73,7 +50,21 @@
           <textarea class="span-left dark" placeholder="请填写备注" v-model="desc"></textarea>
         </div>
       </div>
-      <div class="button-bottom" @click="sendAppointment()">提交</div>
+      <div class="datePicker">
+        <mt-datetime-picker
+          type="datetime"
+          ref="picker"
+          @confirm="handleConfirm"
+          :startDate="startDate"
+          yearFormat="{value}"
+          monthFormat="{value}月"
+          dateFormat="{value}日"
+          hourFormat="{value}时"
+          minuteFormat="{value}分"
+        >
+        </mt-datetime-picker>
+      </div>
+      <div class="button-bottom" @click="sendAppointment()" v-show="isOriginHei">提交</div>
     </div>
 
     <keep-alive>
@@ -85,6 +76,8 @@
 <script>
   import api from '../../api/axios'
   import headTop from '../../components/header/head'
+  //引入element组键（后续要去掉）
+
 
   export default {
     //参数
@@ -105,6 +98,11 @@
         houseId: '',
         verCode: '',
         datestamp: '',
+        pickerValue:'',
+        startDate: new Date(),
+        isOriginHei: true,
+        screenHeight: document.documentElement.clientHeight,        //此处也可能是其他获取方法
+        originHeight: document.documentElement.clientHeight,
       }
     },
     watch: {
@@ -126,27 +124,61 @@
           this.$refs.phone.style.width = 12 + 'rem';
         }
       },
-      /*date(){
-        var text_length = this.date.length;//获取当前文本框的长度
-        var current_width = parseInt(text_length);
-        if(current_width > 0){
-          this.$refs.date.style.width = current_width+'rem';
+      screenHeight (val) {
+        if(this.originHeight > val + 100) {        //加100为了兼容华为的返回键
+          this.isOriginHei = false;
         }else{
-          this.$refs.date.style.width = 12+'rem';
+          this.isOriginHei = true;
         }
-      }*/
+      }
     },
     created() {
+      if(this.$route.params.homes == null){
+        this.$router.push({ name:'houseBuyDetail',params: { }});
+      }
 
     },
     components: {
       headTop,
     },
     mounted() {
-
+      let self = this;
+      window.onresize = function() {
+        return (function(){
+          self.screenHeight = document.documentElement.clientHeight;
+        })()
+      }
     },
 
     methods: {
+      openPicker () {
+        this.$refs.picker.open()
+      },
+      handleConfirm (data) {
+        this.dateValue = this.getDate(data);   //获取的时间为时间戳，getdata是自己写的一个转换时间的方法
+        console.log(this.dateValue)
+      },
+      getDate(data){
+        var year = data.getFullYear();
+        var month = data.getMonth() + 1;
+        var strDate = data.getDate();
+        if (month >= 1 && month <= 9) {
+          month = "0" + month;
+        }
+        if (strDate >= 0 && strDate <= 9) {
+          strDate = "0" + strDate;
+        }
+        var hour = data.getHours();
+        if (hour >= 0 && hour <= 9) {
+          hour = "0" + hour;
+        }
+        var minutes = data.getMinutes();
+        if (minutes >= 0 && minutes <= 9) {
+          minutes = "0" + minutes;
+        }
+        var currentdate = year + '/' + month + '/' + strDate + ' ' + hour + ':' + minutes;
+        return currentdate;
+      },
       getCode() {
         var num = 60;
         var elementButton = this.$refs.button;
@@ -261,141 +293,138 @@
 
   .houseAppointment{
     font-size: 1.6rem;
-  }
-  /**导航*/
-  .nav-header {
-    position: relative;
-    background-color: #fff;
-    font-size: 1.6rem;
-    color: #424242;
-    height: 4.4rem;
-    line-height: 4.4rem;
-    //border-bottom: solid .6rem #f8f8f8;
-    .go-back {
-      position: absolute;
-      left: $contentPadding;
-    }
-    .go-back-icon {
-      font-size: 2rem;
-    }
-    .header-title {
-      display: inline-block;
-      width: 100%;
-      font-weight: bold;
-      text-align: center;
-    }
-  }
-
-  .houseDetail {
-    margin-top: 2rem;
-    height: 10rem;
-    margin-left: 1rem;
-    .span-top {
-      font-weight: bold;
-    }
-    .span-small {
-      font-size: 15px;
-      color: #A19FA2;
-    }
-    .span-bottom {
-      position: absolute;
-      top: 13.5rem;
-      left: 1rem;
-    }
-    div {
-      float: left;
-    }
-    img {
-      height: 9rem;
-      width: 12rem;
-      border-radius: 0.5rem;
-      position: absolute;
-      right: 2rem;
-    }
-  }
-
-  .form {
-    margin-top: 2rem;
-
-    .span-input {
-      height: 3.5rem;
-      padding-top: 0.6rem;
-      .center {
-        line-height: 3.5rem;
-      }
-      .span-left {
-        margin-left: 1rem;
-      }
-      .i-right {
+    /**导航*/
+    .nav-header {
+      position: relative;
+      background-color: #fff;
+      font-size: 1.6rem;
+      color: #424242;
+      height: 4.4rem;
+      line-height: 4.4rem;
+      //border-bottom: solid .6rem #f8f8f8;
+      .go-back {
         position: absolute;
-        right: 1rem;
+        left: $contentPadding;
       }
-      .input-right {
+      .go-back-icon {
+        font-size: 2rem;
+      }
+      .header-title {
+        display: inline-block;
+        width: 100%;
+        font-weight: bold;
+        text-align: center;
+      }
+    }
+
+    .houseDetail {
+      margin-top: 2rem;
+      height: 10rem;
+      margin-left: 1rem;
+      .span-top {
+        font-weight: bold;
+      }
+      .span-small {
+        font-size: 15px;
+        color: #A19FA2;
+      }
+      .span-bottom {
         position: absolute;
-        right: 1rem;
+        top: 13.5rem;
+        left: 1rem;
       }
-      .el-date-editor {
-        border: none;
+      div {
+        float: left;
       }
-      .name {
-        width: 5rem;
-      }
-      .phone {
+      img {
+        height: 9rem;
         width: 12rem;
-      }
-      .date {
-        width: 15rem;
-      }
-      button {
-        color: #ffc16b;
-        background-color: #424242;
-        height: 3.4rem;
-        width: 10rem;
-        margin-top: -0.5rem;
-      }
-      .yan {
+        border-radius: 0.5rem;
         position: absolute;
-        width: 6rem;
-        right: 14rem;
-        z-index: 10;
+        right: 2rem;
       }
-      .xh {
-        position: absolute;
-        top: 30.5rem;
-        right: 14rem;
-        span {
-          padding-left: 0.3rem;
+    }
+
+    .form {
+      margin-top: 2rem;
+
+      .span-input {
+        height: 3.5rem;
+        padding-top: 0.6rem;
+        .center {
+          line-height: 3.5rem;
         }
+        .span-left {
+          margin-left: 1rem;
+        }
+        .i-right {
+          position: absolute;
+          right: 1rem;
+          margin-top: 0.2rem;
+        }
+        .input-right {
+          position: absolute;
+          right: 1rem;
+          font-size: 1.6rem;
+        }
+        .el-date-editor {
+          border: none;
+        }
+        .name {
+          width: 5rem;
+        }
+        .phone {
+          width: 12rem;
+        }
+        .date {
+          margin-top: 0.2rem;
+          width: 15rem;
+        }
+        button {
+          color: #ffc16b;
+          background-color: #424242;
+          height: 3.4rem;
+          width: 10rem;
+          margin-top: -0.5rem;
+        }
+        .yan {
+          position: absolute;
+          width: 6rem;
+          right: 14rem;
+          z-index: 10;
+          font-size: 1.6rem;
+        }
+        .xh {
+          position: absolute;
+          top: 30.5rem;
+          right: 14rem;
+          span {
+            padding-left: 0.3rem;
+          }
+        }
+
       }
-      .dateDiv {
+      .dark {
+        background-color: #f8f8f8;
+      }
+      .noteDiv {
+        height: 18rem;
+        width: 100%;
+      }
+      .button-bottom {
+        height: 4rem;
+        width: 100%;
         position: absolute;
-        top: 22rem;
-        right: 0;
-        opacity: 0;
-        z-index: 10;
-
+        bottom: 0;
+        background-color: #424242;
+        text-align: center;
+        line-height: 4rem;
+        color: #ffc16b;
+        font-size: 2rem;
       }
     }
-    .dark {
-      background-color: #f8f8f8;
-    }
-    .noteDiv {
-      height: 18rem;
-      width: 100%;
-    }
-    .button-bottom {
-      height: 4rem;
-      width: 100%;
-      position: absolute;
-      bottom: 0;
-      background-color: #424242;
-      text-align: center;
-      line-height: 4rem;
-      color: #ffc16b;
-      font-size: 2rem;
-    }
-
   }
+
 
 
 </style>

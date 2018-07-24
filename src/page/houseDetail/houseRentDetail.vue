@@ -135,9 +135,7 @@
       </div>
 
       <!--同小区在售10套-->
-      <router-link
-        :to="{ name:'villageMore',params: { more: isSell?sellList:rentList,villageName:title,id:blockId,houseType:houseType}}">
-      <div ref="sameSell" class="sameSells">
+      <div ref="sameSell" class="sameSells" @click="clkVillage()">
         <div v-if="isSell">
           同小区在售{{sellList.length}}套
         </div>
@@ -145,7 +143,6 @@
           同小区在租{{rentList.length}}套
         </div>
       </div>
-      </router-link>
       <!--分割2-->
       <div class="divide2">
       </div>
@@ -165,7 +162,8 @@
           </li>
         </ul>
       </div>
-      <div class="empty"></div>
+      <div class="empty" v-if="communityAround.length>0"></div>
+      <div class="empty2" v-else></div>
       <!--底部按钮-->
       <div class="button-bottom">
         <el-row class="el-bt">
@@ -234,6 +232,7 @@
       }
     },
     created() {
+      this.menu();
       this.getHouseDetail();
       //this.getCommunityDetail();
       //设置当前活动房源id
@@ -345,6 +344,7 @@
           });
       },
       clickSell() {
+        this.houseType = 1;
         this.isSell = true;
         this.isRent = false;
         if (this.sellList.length > 0) {
@@ -357,6 +357,7 @@
 
       },
       clickRent() {
+        this.houseType = 2;
         this.isSell = false;
         this.isRent = true;
         if (this.rentList.length > 0) {
@@ -417,6 +418,9 @@
           });
 
       },
+      menu() {
+        window.scrollTo(0,0);
+      },
       phoneCall() {
         this.$confirm('呼叫：'+this.brokerPhone,  {
           confirmButtonText: '确定',
@@ -430,6 +434,13 @@
         }).catch(() => {
 
         });
+      },
+      clkVillage(){
+        if((this.isSell&&this.sellList.length>0)||(this.isRent&&this.rentList.length>0)){
+          console.log(this.isSell)
+          this.$router.push({ name:'villageMore',params: { more: this.isSell?this.sellList:this.rentList,villageName:this.title,id:this.blockId,houseType:this.houseType}});
+        }
+
       },
       getHomeDetail(data){
         this.houseId = data;
@@ -619,6 +630,7 @@
       }
       .span-bold{
         i{
+          margin-top: 0.5rem;
           font-weight: bold;
         }
       }
@@ -696,6 +708,10 @@
 
     .empty {
       margin-top: 18rem;
+      height: 3rem;
+    }
+    .empty2 {
+      margin-top: 1rem;
       height: 3rem;
     }
 

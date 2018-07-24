@@ -8,8 +8,8 @@
           <div class="my-search clear">
             <div class="my-searchbar-inner left clear">
               <div class="my-search-dropdown left" >
-                  <div class="" @click="isShowHouseType = !isShowHouseType">
-                    {{houseType == 1?"二手房":'租房' }}<i class="el-icon-arrow-down el-icon--right"></i>
+                  <div class="" @click="openHouseTypePop">
+                    {{houseType == 1?"二手房":'租房' }}<i class="icon iconfont">&#xe62d;</i>
                   </div>
                   <ul v-if="isShowHouseType" class="house-type-ul">
                     <li> <i class="icon iconfont arrow-top">&#xe65d;</i></li>
@@ -66,18 +66,41 @@
           <!--房源结果列表-->
           <!--<house-list :houseLists="houseLists" :houseType="houseType" @loadMore="loadMore" :loading="loading"></house-list>-->
           <!--房源结果列表-->
-          <div style="overflow: scroll">
-            <mt-loadmore :bottom-method="loadBottom" :bottom-all-loaded="false" ref="loadmore" :auto-fill="false">
-              <ul class="house-list">
-                <li class="house-item clear" v-for="item in houseLists" :key="item.id">
-                  <router-link
-                    :to="{name:houseTypeDetail[houseType], params:{cityId:'hz', houseId:item.id, userType:'customer', houseType:houseType}}">
-                    <house-item :item="item" :houseType="houseType"/>
-                  </router-link>
-                </li>
-              </ul>
-            </mt-loadmore>
+          <!--<div style="overflow: scroll" :style="{'-webkit-overflow-scrolling': scrollMode}">-->
+            <!--<mt-loadmore :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" ref="loadmore" :auto-fill="false">-->
+              <!--<ul class="house-list">-->
+                <!--<li class="house-item clear" v-for="item in houseLists" :key="item.id">-->
+                  <!--<router-link-->
+                    <!--:to="{name:houseTypeDetail[houseType], params:{cityId:'hz', houseId:item.id, userType:'customer', houseType:houseType}}">-->
+                    <!--<house-item :item="item" :houseType="houseType"/>-->
+                  <!--</router-link>-->
+                <!--</li>-->
+              <!--</ul>-->
+            <!--</mt-loadmore>-->
+          <!--</div>-->
+          <div v-if="houseLists.length>0">
+            <ul class="house-list"
+                v-infinite-scroll="loadMore"
+                infinite-scroll-disabled="loading"
+                infinite-scroll-distance="0">
+              <li class="house-item clear" v-for="item in houseLists" :key="item.id">
+                <router-link
+                  :to="{name:houseTypeDetail[houseType], params:{cityId:'hz', houseId:item.id, userType:'customer', houseType:houseType}}">
+                  <house-item :item="item" :houseType="houseType"/>
+                </router-link>
+              </li>
+            </ul>
+            <p v-if="!isLoadAll" class="loading-more"><span class="loading-more-span"><i class="icon iconfont loading-more-icon">&#xe6ae;</i></span><span class="loading-more-text">加载更多</span></p>
+            <p v-if="isLoadAll" class="loading-more">没有更多数据了！</p>
           </div>
+            <!--<ul-->
+                <!--v-infinite-scroll="loadMore"-->
+                <!--infinite-scroll-disabled="loading"-->
+                <!--infinite-scroll-distance="0">-->
+              <!--<li v-for="item in list">{{ item }}</li>-->
+            <!--</ul>-->
+            <!--<p  style="background-color: #a71d5d">加载中...</p>-->
+
 
           <!--价格-->
           <div v-if="filterType == 'price'" class="filter-price"  @touchmove.prevent>
@@ -107,7 +130,6 @@
             <div class="clear">
               <!--区域-->
               <ul class="district-ul left" @touchmove.stop>
-                <li :class="{'select-font-active': activDistrictIndex < 0}">不限</li>
                 <li v-for="(districtItem,index) in district"
                     :class="{'select-font-active': activDistrictIndex == index}"
                     @click="setCheckDistrictValue($event,index)">
@@ -116,8 +138,7 @@
               </ul>
               <!--板块-->
               <ul class="street-ul left clear" @touchmove.stop>
-                <li  :class="{'street-active': activDistrictIndex < 0}" v-if="activDistrictIndex< 0">不限</li>
-                <li v-else v-for="streetItem in district[activDistrictIndex].street"
+                <li v-for="streetItem in district[activDistrictIndex].street"
                     @click="setCheckStreetValue($event,streetItem.id)"
                     :class="{'street-active': houseParams[houseType].areaIds == streetItem.id}">
                   {{streetItem.name}}
@@ -181,7 +202,7 @@
           <div v-if="filterType == 'filterOrder'" class="filter-order">
             <div class="clear">
               <ul class="filter-order-ul left">
-                <li v-for="(item,index) in orderFilter"
+                <li v-for="(item,index) in orderFilter[houseType]"
                     :class="{'select-font-active': houseParams[houseType].orderColumn == item.orderColumn&&houseParams[houseType].orderBy == item.orderBy}"
                     @click="setOrderValue($event,item)">
                   {{item.describe}}
@@ -222,7 +243,7 @@
                   priceMin:"",//最小价格
                   priceMax:"",//最大价格
                   filterIds:[],
-                  pageSize:"",
+                  pageSize:10,
                   pageIndex:1,
                   orderBy:"",
                   orderColumn:'',
@@ -234,7 +255,7 @@
                   priceMin:"",//最小价格
                   priceMax:"",//最大价格
                   filterIds:[],
-                  pageSize:"",
+                  pageSize:10,
                   pageIndex:1,
                   orderBy:"",
                   orderColumn:'',
@@ -246,14 +267,21 @@
               filterType:'',//过滤选项卡
               filterList:{},//获取过滤列表
               district:[],//区域板块列表
-              activDistrictIndex:-1,//选中的小区
-              orderFilter:[
-                {orderColumn:"id",orderBy:"desc",describe:"最新发布"},
-                {orderColumn:"price",orderBy:"asc",describe:"总价从低到高"},
-                {orderColumn:"price",orderBy:"desc",describe:"总价从高到底"},
-                {orderColumn:"avgprice",orderBy:"asc",describe:"单价从低到高"},
-                {orderColumn:"buildarea",orderBy:"asc",describe:"面积从大到小"},
-              ],
+              activDistrictIndex:0,//选中的小区
+              orderFilter:{
+                  1:[
+                    {orderColumn:"id",orderBy:"desc",describe:"最新发布"},
+                    {orderColumn:"price",orderBy:"asc",describe:"总价从低到高"},
+                    {orderColumn:"price",orderBy:"desc",describe:"总价从高到底"},
+                    {orderColumn:"avgprice",orderBy:"asc",describe:"单价从低到高"},
+                    {orderColumn:"buildarea",orderBy:"asc",describe:"面积从大到小"},
+                  ],
+                2:[
+                  {orderColumn:"id",orderBy:"desc",describe:"最新发布"},
+                  {orderColumn:"price",orderBy:"asc",describe:"租金从低到高"},
+                  {orderColumn:"price",orderBy:"desc",describe:"租金从高到底"},
+                ],
+              },
               morePopVisible:false,//更多菜单弹出选项
               isShowSearch:false,//展示搜索页
               isShowHouseType:false,//展示房源类型弹框
@@ -262,6 +290,8 @@
                 2:'houseRentDetail',
                 3:'villageDetail',
               },//详情类型
+              isLoadAll: false, //是否加载完所有数据
+              loading:false
             }
         },
         components: {
@@ -279,23 +309,38 @@
         },
         methods: {
           gethouseLists(isLoadMore){
-            console.log(isLoadMore)
+            if(!isLoadMore){ //不是加载更多时
+              this.houseParams[this.houseType].pageIndex = 1
+            }
             if (this.houseType == 1){
+
               //获取出售房源列表
               let params = this.houseParams[this.houseType];
               //openId:this.$route.query ? this.$route.query.openId:"",
               params.openId = this.$route.query? this.$route.query.openId : "";
               params.code = this.$route.query.code ? this.$route.query.code : "";
-
+              console.log(params)
               api.getSellHouseList(params)
                 .then( res => {
                   if (res.data.success){
+                    this.recomment = res.data.result.recomment;//是否为推荐房源
                         if(isLoadMore){
                           this.houseLists = this.houseLists.concat(res.data.result.list);
+                          if (res.data.result.list.length < this.houseParams[this.houseType].pageSize){//是否已经加载完所有数据
+                            this.loading = true;
+                            this.isLoadAll = true;
+                          }else{
+                            this.loading = false
+                          }
                           console.log(this.houseLists)
                         }else{
                           this.houseLists = res.data.result.list;
-                          this.recomment = res.data.result.recomment;
+                          if (res.data.result.list.length<this.houseParams[this.houseType].pageSize){ //是否已经加载完所有数据
+                            this.loading = true
+                            this.isLoadAll = true;
+                          }else{
+                            this.loading = false
+                          }
                         }
                   }else{
                     this.$toast({
@@ -323,9 +368,20 @@
                   if (res.data.success){
                     if(isLoadMore){
                       this.houseLists = this.houseLists.concat(res.data.result.list);
-                      console.log(this.houseLists)
+                      if (res.data.result.list.length < this.houseParams[this.houseType].pageSize){//是否已经加载完所有数据
+                        this.loading = true;
+                        this.isLoadAll = true;
+                      }else{
+                        this.loading = false
+                      }
                     }else{
                       this.houseLists = res.data.result.list;
+                      if (res.data.result.list.length<this.houseParams[this.houseType].pageSize){ //是否已经加载完所有数据
+                        this.loading = true
+                        this.isLoadAll = true;
+                      }else{
+                        this.loading = false
+                      }
                     }
                   }else{
                     this.$toast({
@@ -381,7 +437,14 @@
             api.getDistrict(params)
               .then( res => {
                 if (res.data.success){
-                  this.district = res.data.result;
+                    let district = res.data.result;
+                    let streetInDistrictIds = {}
+                  district.unshift({district:'不限',street:[]});
+                  district.forEach((value)=>{
+                    value.street.unshift({id:0,name:'不限'})
+                  });
+                  this.district = district;
+                  console.log(this.district)
                 }else{
                   this.$toast({
                   message: res.data.errorMessage,
@@ -391,8 +454,9 @@
                 }
               })
               .catch(res =>{
+                  console.log(res)
                 this.$toast({
-                  message: res.data.errorMessage,
+                  message: res,
                   position: 'bottom',
                   duration: 3000
                 });
@@ -402,15 +466,25 @@
           selectHouseType(houseType){
             this.houseType=houseType;
             this.isShowHouseType = false;
+            this.getFilterList();
             this.gethouseLists();
           },
           //打开筛选弹框
           opentFilter(filterType){
-            if (this.filterType){
-              this.filterType = ''
-            }else{
-              this.filterType = filterType
-            }
+              if (this.isShowHouseType){
+                  return
+              }
+              if (this.filterType){
+                this.filterType = ''
+              }else{
+                this.filterType = filterType
+              }
+          },
+          //打开房源类型弹框
+          openHouseTypePop(){
+              if (this.filterType == ''){
+                this.isShowHouseType = !this.isShowHouseType;
+              }
           },
           //设置价格过滤条件
           setFilterValue(event,id){
@@ -496,7 +570,27 @@
             this.houseParams[this.houseType].pageIndex++;
             console.log(this.houseParams[this.houseType].pageIndex)
             this.gethouseLists(true)
+
             this.$refs.loadmore.onBottomLoaded();
+          },
+//          loadMore() {
+//            this.loading = true;
+//            setTimeout(() => {
+//              let last = this.list[this.list.length - 1];
+//              for (let i = 1; i <= 10; i++) {
+//                this.list.push(last + i);
+//              }
+//              this.loading = false;
+//            }, 2500);
+//            console.log(123)
+//          },
+          loadMore() {
+            this.loading = true;
+            this.houseParams[this.houseType].pageIndex++;
+            console.log(this.houseParams[this.houseType].pageIndex)
+            this.gethouseLists(true)
+//              this.loading = false;
+            console.log(123)
           }
         },
         watch:{
@@ -905,5 +999,27 @@
       /*background-color: #ccc;*/
     }
   }
-
+/*加载中*/
+  .loading-more{
+    text-align:center;
+    line-height: 2.6rem;
+    @keyframes loading {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+    .loading-more-span{
+      display: inline-block;
+      animation:loading 1.2s infinite linear  both
+    }
+    .loading-more-text{
+      padding-left: 1rem;
+    }
+    .loading-more-icon{
+      font-size: 2.6rem;
+    }
+  }
 </style>
