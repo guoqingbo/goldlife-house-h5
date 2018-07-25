@@ -99,7 +99,7 @@
         verCode: '',
         datestamp: '',
         pickerValue:'',
-        startDate: new Date(),
+        startDate: new Date(new Date().setHours(new Date().getHours()+1)),
         isOriginHei: true,
         screenHeight: document.documentElement.clientHeight,        //此处也可能是其他获取方法
         originHeight: document.documentElement.clientHeight,
@@ -142,6 +142,7 @@
         if(picList != null && picList.length>0){
           this.pic = picList[0];
         }
+        this.phone = this.$store.state.userInfo.loginName;
       }
 
     },
@@ -262,7 +263,7 @@
           return
         }
         var timestamp2 = Date.parse(new Date(this.dateValue));
-        this.datestamp = timestamp2 / 1000;
+        this.datestamp = timestamp2;
         console.log(this.datestamp);
         let appointmentInfo = {
           cityId: this.$route.params.homes.cityId,
