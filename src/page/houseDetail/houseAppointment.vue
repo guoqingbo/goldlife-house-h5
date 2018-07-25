@@ -74,7 +74,7 @@
 </template>
 
 <script>
-  import api from '../../api/customer/axios'
+  import api from '../../api/axios'
   import headTop from '../../components/header/head'
   //引入element组键（后续要去掉）
 

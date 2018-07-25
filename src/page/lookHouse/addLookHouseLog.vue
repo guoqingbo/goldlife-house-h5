@@ -28,7 +28,7 @@
 	</div>
 </template>
 <script type="text/javascript">
-	import api from '../../api/customer/axios'
+	import api from '../../api/axios'
   	import headTop from '../../components/header/head'
 	export default {
 		name:'lookHouseIndex',
@@ -191,7 +191,8 @@
   	h2{
 		font-size: 2.4rem;
 		color: #333333;
-		margin: 0.8rem 0 1.8rem;
+		// margin: 0.8rem 0 1.8rem;
+		margin-bottom: 1.8rem;
 		font-weight: bold;
   	}
   	p{

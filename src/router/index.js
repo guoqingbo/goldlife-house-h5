@@ -4,7 +4,7 @@ import store from '../store'
 import envConfig from '../config/env'
 
 //引入ajax请求
-import api from '../api/customer/axios'
+import api from '../api/axios'
 
 Vue.use(Router);
 

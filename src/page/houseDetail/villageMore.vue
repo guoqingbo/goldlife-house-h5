@@ -14,7 +14,22 @@
     </div>
 
     <!--房源结果列表-->
-    <house-list :houseLists="hoseLists" :houseType="houseType"></house-list>
+    <!--<house-list :houseLists="houseLists" :houseType="houseType"></house-list>-->
+    <div v-if="houseLists.length>0">
+      <ul class="house-list"
+          v-infinite-scroll="loadMore"
+          infinite-scroll-disabled="loading"
+          infinite-scroll-distance="0">
+        <li class="house-item clear" v-for="item in houseLists" :key="item.id">
+          <router-link
+            :to="{name:houseTypeDetail[houseType], params:{cityId:'hz', houseId:item.id, userType:'customer', houseType:houseType}}">
+            <house-item :item="item" :houseType="houseType"/>
+          </router-link>
+        </li>
+      </ul>
+      <p v-if="!isLoadAll" class="loading-more"><span class="loading-more-span"><i class="icon iconfont loading-more-icon">&#xe6ae;</i></span><span class="loading-more-text">加载更多</span></p>
+      <p v-if="isLoadAll" class="loading-more">没有更多数据了！</p>
+    </div>
     <!--排序-->
     <div v-if="filterType == 'filterOrder'" class="filter-order">
       <div class="clear">
@@ -38,9 +53,9 @@
 
 
 <script>
-  import api from '../../api/customer/axios'
+  import api from '../../api/axios'
   import headTop from '../../components/header/head'
-  import houseList from '../../components/common/houseList'
+  import houseItem from '../../components/common/houseItem'
 
   export default {
     data() {
@@ -63,7 +78,7 @@
         //周边小区
         communityAround: [],//周边小区
         attentionStatus: '关注',
-        hoseLists: [],
+        houseLists: [],
         houseType: this.$route.params.houseType?this.$route.params.houseType:this.$store.state.activeInfo.houseType,
         filterType: '',//过滤选项卡
         orderFilter: [
@@ -73,6 +88,11 @@
           {orderColumn: "avgprice", orderBy: "asc", describe: "单价从低到高"},
           {orderColumn: "buildarea", orderBy: "asc", describe: "面积从大到小"},
         ],
+        houseTypeDetail:{
+          1:'houseBuyDetail',
+          2:'houseRentDetail',
+          3:'villageDetail',
+        },//详情类型
         houseParams:{
           1:{
             cityId:"hz",
@@ -81,8 +101,8 @@
             priceMin:"",//最小价格
             priceMax:"",//最大价格
             filterIds:[],
-            pageSize:"",
-            pageIndex:"",
+            pageSize:10,
+            pageIndex:1,
             orderBy:"",
             orderColumn:'',
           },//二手房房源请求参数
@@ -93,53 +113,87 @@
             priceMin:"",//最小价格
             priceMax:"",//最大价格
             filterIds:[],
-            pageSize:"",
-            pageIndex:"",
+            pageSize:10,
+            pageIndex:1,
             orderBy:"",
             orderColumn:'',
           },//租房房源请求参数
         },
+        isLoadAll: false, //是否加载完所有数据
+        loading:false,
       }
     },
     created() {
-      //this.getHoseLists();
+
     },
     components: {
       headTop,
-      houseList,
+      houseItem,
     },
     mounted() {
       this.menu();
-      this.getHoseLists();
+      this.gethouseLists();
     },
 
     methods: {
-      getHoseLists(){
-        /*if(this.$route.params.isOne){
-          this.houseType = 1;
-        }*/
-        //this.houseParams[this.houseType].communityId = this.$route.params.id;
-        this.houseParams[this.houseType].communityId = this.$route.params.id?this.$route.params.id:this.$store.state.activeInfo.blockId;
 
-        console.log('id')
-        console.log(this.$route.params.id)
-        console.log(this.houseType)
+      opentFilter(filterType) {
+        if (this.filterType) {
+          this.filterType = ''
+        } else {
+          this.filterType = filterType
+        }
+      },
+      //设置排序条件
+      setOrderValue(event, orderItem) {
+        this.houseParams[this.houseType].orderBy = orderItem.orderBy;
+        this.houseParams[this.houseType].orderColumn = orderItem.orderColumn;
+        this.gethouseLists();
+        this.filterType = ''
+      },
+      menu() {
+        window.scrollTo(0,0);
+      },
+      gethouseLists(isLoadMore){
+        if(!isLoadMore){ //不是加载更多时
+          this.houseParams[this.houseType].pageIndex = 1
+        }
+        this.houseParams[this.houseType].communityId = this.$route.params.id?this.$route.params.id:this.$store.state.activeInfo.blockId;
         if (this.houseType == 1){
+
           //获取出售房源列表
           let params = this.houseParams[this.houseType];
+          //openId:this.$route.query ? this.$route.query.openId:"",
+          params.openId = this.$route.query? this.$route.query.openId : "";
+          params.code = this.$route.query.code ? this.$route.query.code : "";
+          console.log(params)
           api.getSellHouseList(params)
             .then( res => {
-              console.log('出售params')
-              console.log(params)
-              console.log('出售结果')
-              console.log(res)
               if (res.data.success){
-                var resultHouse = res.data.result;
-                this.hoseLists = resultHouse.list;
-                if(this.hoseLists.length>0){
-                  this.title = this.hoseLists[0].block_name;
+                this.recomment = res.data.result.recomment;//是否为推荐房源
+                if(isLoadMore){
+                  this.houseLists = this.houseLists.concat(res.data.result.list);
+                  if (res.data.result.list.length < this.houseParams[this.houseType].pageSize){//是否已经加载完所有数据
+                    this.loading = true;
+                    this.isLoadAll = true;
+                  }else{
+                    this.loading = false
+                    this.isLoadAll = false;
+                  }
+                  console.log(this.houseLists)
+                }else{
+                  this.houseLists = res.data.result.list;
+                  if (res.data.result.list.length<this.houseParams[this.houseType].pageSize){ //是否已经加载完所有数据
+                    this.loading = true
+                    this.isLoadAll = true;
+                  }else{
+                    this.loading = false
+                    this.isLoadAll = false;
+                  }
                 }
-                this.recomment = resultHouse.recomment;
+                if(this.houseLists.length>0){
+                  this.title = this.houseLists[0].block_name;
+                }
               }else{
                 this.$toast({
                   message: res.data.errorMessage,
@@ -157,19 +211,34 @@
             });
         }
         else if(this.houseType == 2){
-          //获取租房源列表
+          //获取出售房源列表
           let params = this.houseParams[this.houseType];
+          console.log(params)
           api.getRentHouseList(params)
             .then( res => {
-              console.log('出租params')
-              console.log(params)
-              console.log('出租结果')
               console.log(res)
               if (res.data.success){
-                var resultHouse = res.data.result;
-                this.hoseLists = resultHouse.list;
-                if(this.hoseLists.length>0){
-                  this.title = this.hoseLists[0].block_name;
+                if(isLoadMore){
+                  this.houseLists = this.houseLists.concat(res.data.result.list);
+                  if (res.data.result.list.length < this.houseParams[this.houseType].pageSize){//是否已经加载完所有数据
+                    this.loading = true;
+                    this.isLoadAll = true;
+                  }else{
+                    this.loading = false
+                    this.isLoadAll = false;
+                  }
+                }else{
+                  this.houseLists = res.data.result.list;
+                  if (res.data.result.list.length<this.houseParams[this.houseType].pageSize){ //是否已经加载完所有数据
+                    this.loading = true
+                    this.isLoadAll = true;
+                  }else{
+                    this.loading = false
+                    this.isLoadAll = false;
+                  }
+                }
+                if(this.houseLists.length>0){
+                  this.title = this.houseLists[0].block_name;
                 }
               }else{
                 this.$toast({
@@ -189,23 +258,20 @@
         }
         this.$store.commit("setActiveInfo",{blockId:this.houseParams[this.houseType].communityId,houseType:this.houseType})
       },
-      opentFilter(filterType) {
-        if (this.filterType) {
-          this.filterType = ''
-        } else {
-          this.filterType = filterType
-        }
+      //加载更多
+      loadBottom(){
+        this.houseParams[this.houseType].pageIndex++;
+        console.log(this.houseParams[this.houseType].pageIndex)
+        this.gethouseLists(true)
+        this.$refs.loadmore.onBottomLoaded();
       },
-      //设置排序条件
-      setOrderValue(event, orderItem) {
-        this.houseParams[this.houseType].orderBy = orderItem.orderBy;
-        this.houseParams[this.houseType].orderColumn = orderItem.orderColumn;
-        this.getHoseLists();
-        this.filterType = ''
-      },
-      menu() {
-        window.scrollTo(0,0);
-      },
+
+      loadMore() {
+        this.loading = true;
+        this.houseParams[this.houseType].pageIndex++;
+        console.log(this.houseParams[this.houseType].pageIndex)
+        this.gethouseLists(true)
+      }
     }
   }
 
@@ -309,6 +375,37 @@
       .select-font-active {
         color: #ffc16b;
       }
+    }
+  }
+  /**列表*/
+  .house-list {
+    padding: 0 2rem;
+    li {
+      @include border-top;
+      /*background-color: #ccc;*/
+    }
+  }
+  /*加载中*/
+  .loading-more{
+    text-align:center;
+    line-height: 2.6rem;
+    @keyframes loading {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+    .loading-more-span{
+      display: inline-block;
+      animation:loading 1.2s infinite linear  both
+    }
+    .loading-more-text{
+      padding-left: 1rem;
+    }
+    .loading-more-icon{
+      font-size: 2.6rem;
     }
   }
 

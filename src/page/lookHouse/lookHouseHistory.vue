@@ -48,7 +48,7 @@
 	</div>
 </template>
 <script type="text/javascript">
-	import api from '../../api/customer/axios'
+	import api from '../../api/axios'
   	import headTop from '../../components/header/head'
 	export default {
 		name:'lookHouseHistory',
@@ -66,7 +66,7 @@
 				.then(res=>{
 					if(res.data.success){
 						this.houseList = res.data.result;
-
+						console.log(res.data.result);
 					}else{
 						console.log(res.data);
 					}
@@ -136,13 +136,13 @@
 		.house-detail{
 			background: #ffffff;
 			position: relative;
-			padding: 1.5rem 2rem 1.5rem 17rem;
+			padding: 1.5rem 2rem 1.5rem 14.5rem;
 			margin-bottom: 0.3rem;
 			img{
 				position: absolute;
 				left: 2rem;
-				width: 13rem;
-				height: 9.5rem;
+				width: 10.5rem;
+				height: 8rem;
 				border-radius: 0.5rem;
 			}
 			h3{

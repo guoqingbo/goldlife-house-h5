@@ -34,13 +34,12 @@
 
 				<div class="status_content">
 					<p v-for="item in transfer">
-						<span v-if="item.step_id==signDetail.now_transfer.step_id" class="current"></span>
+						<span v-if="item.step_id==signDetail.now_transfer.step_id" class="current" id="current"></span>
 						<span v-else-if="item.isComplete==1" class="complete"></span>
 						<span v-else class="uncomplete"></span>
 						<span>{{ item.stage_name }}</span>
 					</p>
 				</div>
-
 			</div>
 
 		</div>
@@ -48,7 +47,7 @@
 	</div>
 </template>
 <script type="text/javascript">
-	import api from '../../api/customer/axios'
+	import api from '../../api/axios'
 	import headTop from '../../components/header/head'
 	export default {
 		name:'signDetail',
@@ -65,8 +64,15 @@
 		        }
 			}
 		},
-		mounted(){
+		created(){
 			this.getSignDetail();
+		},
+		mounted(){
+			let that = this;
+			setTimeout(function(){	//先等待DOM元素加载完成
+				that.currentStatus();
+			},500)
+
 		},
 		methods:{
 			getSignDetail(){
@@ -81,8 +87,6 @@
 					if(res.data.success){
 						this.signDetail = res.data.result;
 						this.transfer = res.data.result.transfer;
-						console.log(this.signDetail);
-						console.log(this.transfer);
 					}else{
 						this.$toast({
 			              message: res.data.errorMessage,
@@ -95,6 +99,9 @@
 					console.log(err);
 				})
 			},
+			currentStatus(){//定位到当前步骤
+				document.getElementById("current").scrollIntoView();
+			}
 		},
 		components: {
           headTop
@@ -113,6 +120,9 @@
 			   }else{
 			   		return intPartFormat;
 			   }
+		  },
+		  phoneNum(data){
+
 		  }
 		},
 	}

@@ -35,7 +35,7 @@
 </template>
 
 <script>
-  import api from '../../api/customer/axios' //后台数据接口
+  import api from '../../api/axios' //后台数据接口
   export default {
     data(){
       return {

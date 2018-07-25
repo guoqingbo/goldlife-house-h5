@@ -31,7 +31,7 @@
         	<div class="compared" v-for="item in houseList">
         		<h4>{{ !!item.title?item.title:'暂无信息'}}</h4>
 	              <p>{{ !!item.price?item.price:'无' }}万</p>
-	              <img :src="!!item.pic?item.pic:'./static/searcherror@2x.png'" alt="">
+	              <img :src="!!item.pic?item.pic:'./static/bg_smallphotonormal@2x.png'" alt="">
 	              <ul class="first_ul">
 	              	  <li>{{ !!item.buildarea?item.buildarea:'无' }}</li>
 		              <li>{{ !!item.avgprice?item.avgprice:'无' }}</li>
@@ -51,7 +51,7 @@
 	</div>
 </template>
 <script>
-	import api from '../../api/customer/axios'
+	import api from '../../api/axios'
 	import headTop from '../../components/header/head'
 
 	export default {
@@ -71,7 +71,7 @@
 			getCompareData(){
 				// _data为从上一页获取到的数据,最少2条，最多4条
         let _data = this.$route.params.data;
-        console.log(_data)
+        // console.log(_data)
 				api.houseCompared(_data)
 				.then(res=>{
 					if(res.data.success){

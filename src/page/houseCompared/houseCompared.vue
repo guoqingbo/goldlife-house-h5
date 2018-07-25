@@ -43,7 +43,7 @@
   </div>
 </template>
 <script>
-  import api from '../../api/customer/axios'
+  import api from '../../api/axios'
   import houseItem from '../../components/common/houseItem.vue'
 
   export default {

@@ -15,7 +15,7 @@
 	</div>
 </template>
 <script>
-	import api from '../../api/customer/axios'
+	import api from '../../api/axios'
 	import headTop from '../../components/header/head'
 	import envConfig from '../../config/env.js'
 

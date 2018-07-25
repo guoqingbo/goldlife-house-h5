@@ -48,7 +48,7 @@
 				<div class="house-status">
 					<p :class="'t'+i.state">
 						<span>{{ state[i.state] }}</span>
-						<span>{{ (i.time)/1000|moment('MM/DD hh:mm') }}</span>
+						<span>{{ (i.time)/1000|moment('MM/DD HH:mm') }}</span>
 					</p>
 
 				</div>
@@ -60,7 +60,7 @@
 	</div>
 </template>
 <script type="text/javascript">
-	import api from '../../api/customer/axios'
+	import api from '../../api/axios'
   	import headTop from '../../components/header/head'
 	export default {
 		name:'lookHouseIndex',
@@ -85,7 +85,7 @@
 				.then(res=>{
 					if(res.data.success){
 						this.houseList = res.data.result;
-						console.log(res.data);
+						// console.log(res.data);
 
 					}else{
 						console.log(res.data.errorMessage);
@@ -146,13 +146,13 @@
 		.house-detail{
 			background: #ffffff;
 			position: relative;
-			padding: 1.5rem 2rem 1.5rem 17rem;
+			padding: 1.5rem 2rem 1.5rem 14.5rem;
 			margin-bottom: 0.3rem;
 			img{
 				position: absolute;
 				left: 2rem;
-				width: 13rem;
-				height: 8.1rem;
+				width: 10.5rem;
+				height: 8rem;
 				border-radius: 0.5rem;
 			}
 			h3{
