@@ -18,7 +18,7 @@
                   </ul>
               </div>
               <div class="my-search-input left">
-                <input type="search" placeholder="请输入商圈或小区名" @focus="isShowSearch=true">
+                <input type="search" placeholder="请输入商圈或小区名" @focus="isShowSearch=true" v-model="communityName">
               </div>
             </div>
             <div class="my-search-right left" @click="toggleMore">
@@ -214,7 +214,7 @@
     </div>
 </template>
 <script>
-    import api from '../../api/axios'
+    import api from '../../api/customer/axios'
     import headTop from '../../components/header/head'
     import houseItem from '../../components/common/houseItem'
     import search from '../../page/search/search'
@@ -275,6 +275,7 @@
                   orderColumn:'',
                 },//租房房源请求参数
               },
+              communityName:'',
               houseLists:[],//房源列表
               recomment:0,//是否为推荐房源
               houseType:this.$store.state.activeInfo.houseType?this.$store.state.activeInfo.houseType:1,//房源类型
@@ -663,9 +664,11 @@
               this.isShowSearch = true
           },
           //通过小区搜索房源(搜索子组件触发)
-          searchHouse(communityId){
-              console.log(communityId)
-            this.houseParams[this.houseType] = this.houseParamsInit[this.houseType]//房源请求参数
+          searchHouse(community){
+              console.log(community)
+            this.communityName = community.communityName
+            this.houseParams[this.houseType] = this.houseParamsInit[this.houseType] //房源请求参数
+            this.houseParams[this.houseType].communityId = community.communityId;
             this.gethouseLists();
             this.isShowSearch = false //不展示搜索组键
 

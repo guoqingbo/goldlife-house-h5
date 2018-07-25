@@ -51,7 +51,7 @@
 	</div>
 </template>
 <script>
-	import api from '../../api/axios'
+	import api from '../../api/customer/axios'
 	import headTop from '../../components/header/head'
 
 	export default {

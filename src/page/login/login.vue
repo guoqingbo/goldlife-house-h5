@@ -20,7 +20,7 @@
 </template>
 
 <script>
-    import api from '../../api/axios' //后台数据接口
+    import api from '../../api/customer/axios' //后台数据接口
 //    import headTop from '../../components/header/head'
 //    import $alert from '../../components/common/alert/alert.js'
 //    import { Toast } from 'mint-ui';

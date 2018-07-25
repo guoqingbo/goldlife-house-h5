@@ -5,7 +5,7 @@
           <span class="go-back" @click="$router.go(-1)"><i class="icon iconfont go-back-icon">&#xe60f;</i></span>
           <span class="header-title">{{houseAllInfo.buildName}}</span>
         </h1>
-		
+
 		<div class="container">
 			<h3 class="mini-title">位置信息</h3>
 			<p class="detail">区域位置：<span>{{houseAllInfo.area}}</span></p>
@@ -43,7 +43,7 @@
 	</div>
 </template>
 <script type="text/javascript">
-	import api from '../../api/axios'
+	import api from '../../api/broker/axios'
   	import headTop from '../../components/header/head'
   	import { MessageBox } from 'mint-ui';
 	export default {
@@ -63,7 +63,7 @@
 				}).then(action => {
 					if(action == "confirm"){
 						window.location.href = 'tel://'+this.reservationInfo.phone
-					}     
+					}
 		        });
 
 			}
@@ -93,7 +93,7 @@
 		      position: absolute;
 		      left: 1.5rem;
 		    }
-		    
+
 		    .go-back-icon{
 		      font-size: 2rem;
 		    }

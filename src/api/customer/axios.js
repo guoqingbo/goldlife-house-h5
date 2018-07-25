@@ -2,8 +2,8 @@ import axios from 'axios'
 import qs from 'qs'
 import { MessageBox } from 'mint-ui';
 // import store from '../store'
-import router from '../router'
-import envConfig from  '../config/env'
+import router from '../../router/index'
+import envConfig from  '../../config/env'
 
 //设置全局axios默认值
 axios.defaults.timeout = 5000; //5000的超时验证
@@ -228,7 +228,7 @@ export default {
 
   //房源详情
   getHouseDetail(data){
-    return axios.get('house/getHouseDetailStr',{
+    return axios.get('/house/getHouseDetailStr',{
       params:{
         cityId:data.cityId,
         houseId:data.houseId,
@@ -338,17 +338,4 @@ export default {
       })
     )
   },
-
-
-
-  // 经纪人模块
-  //新房详情
-  newHouseSharePage(data){
-    return axios.get('house/newHouseDetail',{
-      params:{
-        buildingId:data
-      }
-    })
-  },
-
 }

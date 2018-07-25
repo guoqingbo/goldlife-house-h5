@@ -28,14 +28,14 @@
     <!--搜索历史-->
     <ul v-if="communitySearchHistory&&communitySearchHistory[searchHouseType].length>0&&searchResult.length<=0" class="search-history">
       <li><span>搜索历史</span><span><i class="icon iconfont icon-delete" @click="deleteCommunitySearchHistory(searchHouseType)">&#xe613;</i></span></li>
-      <li v-for="(item,index) in communitySearchHistory[searchHouseType]">{{item.communityName}}</li>
+      <li v-for="(item,index) in communitySearchHistory[searchHouseType]"  @click="searchHouse(item)">{{item.communityName}}</li>
     </ul>
 
   </div>
 </template>
 
 <script>
-  import api from '../../api/axios' //后台数据接口
+  import api from '../../api/customer/axios' //后台数据接口
   export default {
     data(){
       return {
@@ -70,6 +70,10 @@
       // 搜索结果展示
       showSearchResult(){
           let searchParams = this.params;
+          console.log(searchParams.keyword)
+          if (searchParams.keyword == ''){
+              return
+          }
         api.searchCommunity(searchParams)
           .then(res=>{
               console.log(res.data)
@@ -103,10 +107,12 @@
       searchHouse(item){
           //添加搜索记录
         //获取小区搜索记录
-        this.communitySearchHistory[this.searchHouseType].push(item);
+        console.log(item)
+        this.communitySearchHistory[this.searchHouseType].unshift(item);
         localStorage.setItem("communitySearchHistory",JSON.stringify(this.communitySearchHistory));
           //触发父级搜索
-        this.$emit('searchHouse',item.communityId)
+        this.$emit('searchHouse',item);
+
       },
       deleteCommunitySearchHistory(searchHouseType){
         this.communitySearchHistory[this.searchHouseType]=[];

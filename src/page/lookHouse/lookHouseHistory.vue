@@ -5,9 +5,9 @@
           <span class="go-back" @click="$router.go(-1)"><i class="icon iconfont go-back-icon">&#xe60f;</i></span>
           <span class="header-title">看房记录</span>
         </h1>
-		
+
 		<div class="box" v-for="i in houseList">
-			
+
 			<div>
 				<div class="house-detail" v-if="i.targetHouse != undefined">
 					<img :src="!!i.targetHouse.pic?i.targetHouse.pic:'./static/bg_smallphotonormal@2x.png'">
@@ -28,19 +28,19 @@
 						<span><b>{{ i.brokerName }}</b>&nbsp;经纪人带看</span>
 						<span>{{ (i.time)/1000 |moment('MM月DD日 hh:mm') }}</span>
 					</p>
-					
+
 					<!-- <mt-button v-if="i.lookHouseLog.lable==''&&i.lookHouseLog.text==''" size="large" @click="editNode(i)">添加看房笔记</mt-button> -->
 					<span class="add" v-if="i.lookHouseLog.lable==''&&i.lookHouseLog.text==''"  @click="editNode(i)">添加看房笔记</span>
-				
+
 					<div v-else class="label" @click="editNode(i)">
-						
+
 						<p v-show="!!i.lookHouseLog.lable">{{i.lookHouseLog.lable}}。</p>
 						<p v-show="!!i.lookHouseLog.text">{{i.lookHouseLog.text}}</p>
 					</div>
-			
+
 				</div>
 			</div>
-			
+
 
 		</div>
 
@@ -48,13 +48,13 @@
 	</div>
 </template>
 <script type="text/javascript">
-	import api from '../../api/axios'
+	import api from '../../api/customer/axios'
   	import headTop from '../../components/header/head'
 	export default {
 		name:'lookHouseHistory',
 		data(){
 			return{
-				houseList:[],			
+				houseList:[],
 			}
 		},
 		created(){
@@ -129,7 +129,7 @@
 
 	.box{
 		width: 100%;
-    	font-family: PingFang-SC-Regular;		
+    	font-family: PingFang-SC-Regular;
 		background: #F8F8F8;
 		font-size: 1.3rem;
 		padding-bottom: 1rem;
@@ -157,12 +157,12 @@
 				}
 			}
 			.describ{
-				color:#C3C1C4; 
+				color:#C3C1C4;
 			}
 			.price{
 				margin-top: 2.5rem;
 				span:first-child{
-					color:#E10101; 
+					color:#E10101;
 				}
 			}
 		}
