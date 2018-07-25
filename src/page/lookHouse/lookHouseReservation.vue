@@ -35,7 +35,7 @@
 								<span>&nbsp;&nbsp;{{reservationInfo.targetHouse.avgprice}}&nbsp;元/平</span>
 							</p>
 							<!-- <p class="dayT">{{reservationInfo.targetHouse.create_time*1000 |moment('MM月DD日 hh:mm')}}&nbsp;发布</p> -->
-							<p class="dayT">{{reservationInfo.targetHouse.create_time*1000 |getDateDiff}}&nbsp;发布</p>
+							<p class="dayT">{{reservationInfo.targetHouse.create_time |publishTime}}&nbsp;发布</p>
 						</div>
 					</div>
 					<p class="tips" v-if="reservationInfo.state==1 || reservationInfo.state==2">带看经纪人将与您核实确认约看时间地点，确认预约。</p>
@@ -87,39 +87,33 @@
 			}
 		},
 		filters:{
-			getDateDiff(dateTimeStamp){
-				var result;
-				var minute = 1000 * 60;
-				var hour = minute * 60;
-				var day = hour * 24;
-				var halfamonth = day * 15;
-				var month = day * 30;
-				var now = new Date().getTime();
-				var diffValue = now - dateTimeStamp;
-				if(diffValue < 0){return;}
-				var monthC =diffValue/month;
-				var weekC =diffValue/(7*day);
-				var dayC =diffValue/day;
-				var hourC =diffValue/hour;
-				var minC =diffValue/minute;
-				if(monthC>=1){
-					result="" + parseInt(monthC) + "月前";
-				}
-				else if(weekC>=1){
-					result="" + parseInt(weekC) + "周前";
-				}
-				else if(dayC>=1){
-					result=""+ parseInt(dayC) +"天前";
-				}
-				else if(hourC>=1){
-					result=""+ parseInt(hourC) +"小时前";
-				}
-				else if(minC>=1){
-					result=""+ parseInt(minC) +"分钟前";
-				}else
-				result="刚刚";
-				return result;
-			}
+			publishTime(value){
+        if (value) {
+          if(value.toString().length < 11){
+            value = value*1000
+          }
+          let nowTime =  new Date().getTime();//当前时间
+          let leave1 = nowTime % (24 * 3600*1000)   //计算天数后剩余的毫秒数
+          let diffTime = nowTime -leave1- value;
+          let diffDay = Math.ceil(diffTime/(24 * 3600 * 1000))
+          if(diffTime <= 0){//当天发布时
+            let date = new Date(value)
+            let fullYear = date.getFullYear(); // 获取完整的年份(4位,1970)
+            let month = date.getMonth()+1<10?'0'+(date.getMonth()+1):date.getMonth()+1;// 获取月份(0-11,0代表1月,用的时候记得加上1)
+            let day = date.getDate()<10?'0'+date.getDate():date.getDate(); // 获取日(1-31)
+//            date.getTime(); // 获取时间(从1970.1.1开始的毫秒数)
+//            date.getHours(); // 获取小时数(0-23)
+//            date.getMinutes(); // 获取分钟数(0-59)
+//            date.getSeconds(); // 获取秒数(0-59)
+            return fullYear+'年'+month+'月'+day+'日'+ '发布';
+          }else if (diffDay>15){
+            return '15天以上';
+          }else{
+            return diffDay+"天前发布";
+          }
+        }
+      }
+
 		},
 		components:{
 			headTop
