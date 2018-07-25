@@ -197,17 +197,12 @@ const userProtocol = resolve => {
 
 
 
-const routesObj = [
+let routes = [
     {
       path: '/',
       name:'home',//首页
       component: home,
     },
-  {
-    path: '/home',
-    name:'home',//首页
-    component: home,
-  },
     {
       path: '/login',
       name: 'login',//登录页
@@ -366,7 +361,7 @@ const routesObj = [
 
 const router = new Router({
   mode:envConfig.routerMode,
-  routesObj,
+  routes,
 });
 //注册全局钩子用来拦截导航
 router.beforeEach((to, from, next) => {
