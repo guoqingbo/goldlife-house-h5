@@ -14,7 +14,7 @@
           <div class="input-code">
             <input  placeholder="请输入验证码" v-model="mobileCodeInput"/>
           </div>
-          <button class="btn-login" @click="userLogin">立即登录</button>
+          <button class="btn-login" @click.prevent="userLogin">立即登录</button>
         </form>
     </div>
 </template>

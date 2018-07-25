@@ -33,6 +33,7 @@
   import api from '../../api/customer/axios'
   import headTop from '../../components/header/head';
   import houseItem from '../../components/common/houseItem'
+  import {MessageBox} from 'mint-ui'
 
   export default {
     props:[],
@@ -130,12 +131,12 @@
               confirmButtonText:"登录"
             }).then(action => {
               if(action == "confirm"){
-                router.replace({ //跳转到登录页面
+                this.$router.replace({ //跳转到登录页面
                   path: 'login',
                   query: {
-                    redirect: router.currentRoute.fullPath, //将跳转的路由path作为参数，登录成功后跳转到该路由
-                    openId:res.result.openId,
-                    code:res.result.code
+                    redirect: this.$router.currentRoute.fullPath, //将跳转的路由path作为参数，登录成功后跳转到该路由
+//                    openId:res.result.openId,
+//                    code:res.result.code
                   }
                 });
               }

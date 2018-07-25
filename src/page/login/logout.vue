@@ -9,7 +9,7 @@
 			<img src="../../assets/icon/icon_questionmark@2x.png" alt="">
 			<p style="margin-bottom: 0.7rem;">是否确认退出</p>
 			<p>当前 {{(!!this.$store.state.userInfo.loginName?this.$store.state.userInfo.loginName:'')}} 的账号？</p>
-			<button class="btn-logout" @click="confirmOut">确认退出</button>
+			<button class="btn-logout" @click.prevent="confirmOut">确认退出</button>
 		</div>
 
 	</div>
