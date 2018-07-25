@@ -14,7 +14,8 @@ Vue.use(Router);
 // require.ensure 是 Webpack 的特殊语法，用来设置 code-split point
 
 //首页
-import home from '../page/home/home'
+// import home from '../page/home/home'
+const home = resolve => require(['../page/home/home'],resolve);
 // const home = resolve => {
 //   require.ensure(['../page/home/home'], () => {
 //     resolve(require('../page/home/home'));
