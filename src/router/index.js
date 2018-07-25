@@ -204,7 +204,7 @@ let routes = [
     {
       path: '/',
       name:'home',//首页
-      component: resolve => require(['../page/home/home'],resolve),
+      component: resolve => require(['@/page/home/home'],resolve),
     },
     {
       path: '/login',
