@@ -190,6 +190,12 @@ const registSuccess = resolve => {
   });
 };
 
+const userProtocol = resolve => {
+  require.ensure(['../broker/recommendFriend/userProtocol'], () => {
+    resolve(require('../broker/recommendFriend/userProtocol'));
+  });
+};
+
 
 
 const routes = [
@@ -350,8 +356,11 @@ const routes = [
     name: 'registSuccess',
     component: registSuccess,
   },
-
-
+  {//用户协议
+    path: '/userProtocol',
+    name: 'userProtocol',
+    component: userProtocol,
+  },
 
 ];
 
