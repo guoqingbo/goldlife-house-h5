@@ -12,8 +12,9 @@
 					<h2>看房预约</h2>
 					<div class="info">
 						<div class="info_left">
-							<p>{{ (reservationInfo.time)/1000 |moment('MM月DD日 hh:mm') }}</p>
-							<p>在 <span>{{reservationInfo.targetHouse.block_name}}</span> 约看</p>
+							<p>{{ (reservationInfo.time)/1000 |moment('MM月DD日 HH:mm') }}</p>
+							<p v-if="reservationInfo.lineType==0">在 <span>{{reservationInfo.targetHouse.block_name}}</span> 约看</p>
+							<p v-else>在 <span>线下房源</span> 约看</p>
 						</div>
 						<div class="info_right">
 							<p class="res" v-if="reservationInfo.state==1 || reservationInfo.state==2"></p>
@@ -27,7 +28,7 @@
 				<div class="box" v-if="reservationInfo.targetHouse != undefined">
 					<div class="house-detail">
 						<img :src="!!reservationInfo.targetHouse.pic?reservationInfo.targetHouse.pic:'./static/bg_smallphotonormal@2x.png'">
-						<div>
+						<div v-if="reservationInfo.lineType==0">
 							<h3>{{reservationInfo.targetHouse.block_name}} {{reservationInfo.targetHouse.room}}室{{reservationInfo.targetHouse.hall}}厅{{reservationInfo.targetHouse.toilet}}卫</h3>
 							<p class="describ">{{reservationInfo.targetHouse.describe}}</p>
 							<p class="price">
@@ -35,7 +36,11 @@
 								<span>&nbsp;&nbsp;{{reservationInfo.targetHouse.avgprice}}&nbsp;元/平</span>
 							</p>
 							<!-- <p class="dayT">{{reservationInfo.targetHouse.create_time*1000 |moment('MM月DD日 hh:mm')}}&nbsp;发布</p> -->
-							<p class="dayT">{{reservationInfo.targetHouse.create_time |publishTime}}&nbsp;发布</p>
+							<p class="dayT">{{reservationInfo.targetHouse.create_time |publishTime}}</p>
+						</div>
+						<div v-else class="lineDown">
+							<h3>线下房源</h3>
+							<p>{{reservationInfo.num}}</p>
 						</div>
 					</div>
 					<p class="tips" v-if="reservationInfo.state==1 || reservationInfo.state==2">带看经纪人将与您核实确认约看时间地点，确认预约。</p>
@@ -226,6 +231,14 @@
 				span{
 					color: #754501;
 					font-size: 1.3rem;
+					font-weight: bold;
+				}
+			}
+			.lineDown{
+				padding: 1rem 0;
+				p{
+					color: #E10101;
+					margin-top: 3rem;
 					font-weight: bold;
 				}
 			}
