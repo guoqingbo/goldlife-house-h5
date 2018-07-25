@@ -158,7 +158,6 @@ const villageMore = resolve => {
 
 
 //经纪人模块
-
 const newHouseSharePage = resolve => {
   require.ensure(['../broker/newHouse/newHouseSharePage'], () => {
     resolve(require('../broker/newHouse/newHouseSharePage'));
