@@ -41,7 +41,18 @@
 
     },
 		methods:{
-
+      downloadImg(){
+        var oQrcode = document.querySelector('#qrcode img')
+        var url = oQrcode.src
+        var a = document.createElement('a')
+        var event = new MouseEvent('click')
+        // 下载图名字
+        a.download = '张三的二维码'
+        //url
+        a.href = url
+        //合成函数，执行下载
+        a.dispatchEvent(event)
+      }
     },
 		components: {
         VueQr,
