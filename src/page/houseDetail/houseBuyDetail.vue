@@ -1,21 +1,21 @@
 <template>
   <div class="houseBuyDetail">
     <!--<head-top goBack="true"/>-->
-    <h1 class="nav-header">
-      <span class="go-back" @click="$router.go(-1)"><i class="icon iconfont go-back-icon">&#xe60f;</i></span>
-      <span class="header-title"><span class="village">{{block_name}}</span>
-        <i v-if="attentionStatus" @click="attention()" class="icon iconfont xl">&#xe609;</i>
-        <i v-else @click="attention()" class="icon iconfont xl">&#xe657;</i>
-        <div class="badge" @click="toCompare()">
-          <!--<router-link :to="{ name:'houseCompared',params: { }}">-->
+    <div id="nav-buy">
+      <ul>
+        <li class="menu"><span class="go-back" @click="$router.go(-1)"><i class="icon iconfont go-back-icon">&#xe60f;</i></span></li>
+        <li class="menu"><span class="village">{{block_name}}</span></li>
+        <li class="menu"><i v-if="attentionStatus" @click="attention()" class="icon iconfont xl">&#xe609;</i><i v-else @click="attention()" class="icon iconfont xl">&#xe657;</i></li>
+        <li class="menu"><div class="badge" @click="toCompare()">
+          <router-link :to="{ name:'houseCompared',params: { }}">
             <img src="../../assets/icon/icon_topbar_hclist@2x.png">
             <div v-if="compareNum!=''" class="div2">{{compareNum}}</div>
-          <!--</router-link>-->
-        </div>
-      </span>
+          </router-link>
+        </div></li>
+      </ul>
+    </div>
 
-    </h1>
-    <div class="content">
+    <div class="content-buy">
       <!--顶部轮播图片-->
       <div class="imgDiv">
         <router-link :to="{ name:'imgIncrease',params: { imgs: imgHouseAttr,title:title}}">
@@ -36,14 +36,14 @@
       <div class="house-content">
         <h2 class="villageName">{{title}}</h2>
         <div class="div-houseDes">
-            <div>
-                <p class="houseDes" style="color: red">{{price}}</p>
-                <p class="houseDes des" >售价</p>
-            </div>
-            <div>
-                <p  class="houseDes" style="color: red">{{buildarea}}</p>
-                <p class="houseDes des">建筑面积</p>
-            </div>
+          <div>
+            <p class="houseDes" style="color: red">{{price}}</p>
+            <p class="houseDes des" >售价</p>
+          </div>
+          <div>
+            <p  class="houseDes" style="color: red">{{buildarea}}</p>
+            <p class="houseDes des">建筑面积</p>
+          </div>
         </div>
       </div>
       <!--分割-->
@@ -142,9 +142,9 @@
             </div>
           </el-col>
           <!--<router-link :to="{ name:'houseAppointment',params: { homes: houseDetail}}">-->
-            <el-col :span="8" class="grid-bt-content bg-bt-m centenr">
-              <div @click="appoint()"><span class="span-icon">预约看房</span></div>
-            </el-col>
+          <el-col :span="8" class="grid-bt-content bg-bt-m centenr">
+            <div @click="appoint()"><span class="span-icon">预约看房</span></div>
+          </el-col>
           <!--</router-link>-->
           <el-col :span="8">
             <div class="grid-bt-content bg-bt centenr" @click="phoneCall"><span>联系经纪人</span></div>
@@ -316,7 +316,7 @@
             }
           })
           .catch(res => {
-              console.log(res)
+            console.log(res)
             this.$message.error(res);
           });
       },
@@ -556,79 +556,69 @@
 
   .houseBuyDetail {
     font-size: 1.6rem;
-
-    /**导航*/
-    .nav-header {
-      position: relative;
+    #nav-buy{
+      height: 4.4rem;
+      width:100%;
+      position:fixed;/*固定作用*/
+      top:0;
+      z-index: 9999;
+      text-align: center;
       background-color: #fff;
       font-size: 1.6rem;
       color: #424242;
       height: 4.4rem;
       line-height: 4.4rem;
       border-bottom: solid .6rem #f8f8f8;
+      .menu{
+        overflow-y:hidden;
+        cursor:hand;
+        display:inline;
+        list-style:none;
+        font-weight:bold;
+        float:left;
+      }
       .go-back {
         position: absolute;
         left: $contentPadding;
       }
-      .go-back-icon {
-        font-size: 2rem;
-      }
-      .header-title {
-        display: inline-block;
-        width: 100%;
+      .village {
+        position: absolute;
+        left: 41%;
         font-weight: bold;
-        text-align: center;
-        .village {
-          position: absolute;
-          left: 41%;
-          font-weight: bold;
-        }
-        .xl {
-          position: absolute;
-          right: 5rem;
-          color: #ffc16b;
-        }
-        .badge {
-          width: 3rem;
-          height: 4rem;
-          margin-right: 2rem;
-          float: left;
-          img {
-            height: 2rem;
-            width: 2rem;
-            margin-top: 1rem;
-            position: absolute;
-            right: 1.5rem;
-          }
-          .div2 {
-            margin-top: 1rem;
-            background: #ffc16b;
-            height: 1rem;
-            width: 1.5rem;
-            border-radius: 0.3rem;
-            line-height: 1rem;
-            position: absolute;
-            right: 0.6rem;
-            text-align: center;
-            font-size: 0.9rem;
-          }
-        }
+      }
+      .xl {
+        position: absolute;
+        right: 5rem;
+        color: #ffc16b;
+      }
+      .badge {
+        width: 3rem;
+        height: 4rem;
+        margin-right: 2rem;
+        float: left;
         img {
-          margin-top: 0.8rem;
-          height: 2.4rem;
+          height: 2rem;
           width: 2rem;
-        }
-        .right {
-          //transform: rotate(90deg);
+          margin-top: 1rem;
           position: absolute;
-          right: 1.4rem;
+          right: 1.5rem;
         }
-
-        .iconfont {
-          font-size: 20px;
+        .div2 {
+          margin-top: 1rem;
+          background: #ffc16b;
+          height: 1rem;
+          width: 1.5rem;
+          border-radius: 0.3rem;
+          line-height: 1rem;
+          position: absolute;
+          right: 0.6rem;
+          text-align: center;
+          font-size: 0.9rem;
         }
       }
-
+    }
+    .content-buy{
+      margin-top: 4.4rem;
     }
 
     .imgDiv {
