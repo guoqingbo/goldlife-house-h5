@@ -57,7 +57,6 @@
       getHouseList(){
         if (this.addType == 1){
           //获取关注房源列表
-
             api.getContrastAttentionHouse()
               .then( res => {
                 if (res.data.success){
@@ -83,7 +82,11 @@
             api.lookHouseHistory()
               .then(res=>{
                 if (res.data.success){
-                  this.houseLists = res.data.result
+                    let houseLists = [];
+                  res.data.result.forEach(item=>{
+                    houseLists.push(item.targetHouse)
+                  });
+                  this.houseLists = houseLists
                 }else{
                   this.$toast({
                     message: res.data.errorMessage,
