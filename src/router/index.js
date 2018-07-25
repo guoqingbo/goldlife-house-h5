@@ -56,12 +56,12 @@ const home = resolve => {
 //   });
 // };
 //
-// //我的关注
-// const myCare = resolve => {
-//   require.ensure(['../page/myCare/myCare'], () => {
-//     resolve(require('../page/myCare/myCare'));
-//   });
-// };
+//我的关注
+const myCare = resolve => {
+  require.ensure(['../page/myCare/myCare'], () => {
+    resolve(require('../page/myCare/myCare'));
+  });
+};
 //
 // // 房源对比结果
 // const comparedResult = resolve => {
@@ -249,11 +249,11 @@ const routes = [
 //       component: signDetail,
 //     },
 //
-//   {
-//       path: '/myCare',//我的关注
-//       name: 'myCare',
-//       component: myCare,
-//     },
+  {
+      path: '/myCare',//我的关注
+      name: 'myCare',
+      component: myCare,
+    },
 //   {
 //     path:'/careHouseList',
 //     name:'careHouseList',
