@@ -15,7 +15,7 @@ Vue.use(Router);
 
 //首页
 // import home from '../page/home/home'
-const home = resolve => require(['../page/home/home'],resolve);
+// const home = resolve => require(['../page/home/home'],resolve);
 // const home = resolve => {
 //   require.ensure(['../page/home/home'], () => {
 //     resolve(require('../page/home/home'));
@@ -204,7 +204,7 @@ let routes = [
     {
       path: '/',
       name:'home',//首页
-      component: home,
+      component: resolve => require(['../page/home/home'],resolve),
     },
     {
       path: '/login',
