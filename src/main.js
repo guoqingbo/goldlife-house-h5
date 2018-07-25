@@ -5,6 +5,8 @@ import App from './App'
 import router from './router'
 import './config/rem'
 
+//测试按需
+import 'es6-promise/auto'
 // import FastClick from 'fastclick'
 // //
 // if ('addEventListener' in document) {
