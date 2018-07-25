@@ -6,6 +6,7 @@ import envConfig from '../config/env'
 //引入ajax请求
 import api from '../api/axios'
 
+
 Vue.use(Router);
 
 // 路由懒加载
@@ -13,11 +14,12 @@ Vue.use(Router);
 // require.ensure 是 Webpack 的特殊语法，用来设置 code-split point
 
 //首页
-const home = resolve => {
-  require.ensure(['../page/home/home'], () => {
-    resolve(require('../page/home/home'));
-  });
-};
+import home from '../page/home/home'
+// const home = resolve => {
+//   require.ensure(['../page/home/home'], () => {
+//     resolve(require('../page/home/home'));
+//   });
+// };
 
 //登录页
 const login = resolve => {
