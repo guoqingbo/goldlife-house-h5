@@ -39,7 +39,7 @@
         <div class="span-input dark centenr">
           <span class="span-left">验证码：</span>
           <input class="yan dark" v-model="verCode">
-          <button class="input-right button" ref="button" @click="getCode()">发送验证码</button>
+          <button class="input-right button" ref="button" @click.prevent="getCode()">发送验证码</button>
           <br>
           <span class="xh"><span>_</span><span>_</span><span>_</span><span>_</span><span>_</span><span>_</span></span>
         </div>

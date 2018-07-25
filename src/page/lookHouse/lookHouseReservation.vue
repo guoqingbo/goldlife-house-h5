@@ -59,7 +59,7 @@
   	export default {
 		name:'lookHouseReservation',
 		data(){
-			return{	
+			return{
 				reservationInfo:'',
 				state:{
 					'1':'预约中',
@@ -67,7 +67,7 @@
 					'3':'预约失败',
 					'4':'待看房',
 					'5':'看房结束',
-				}	
+				}
 			}
 		},
 		created(){
@@ -75,10 +75,10 @@
 			console.log(this.reservationInfo);
 		},
 		mounted(){
-			
+
 		},
 		methods:{
-			
+
 			phoneNum(){
 		        MessageBox({
 				  title: '呼叫',
@@ -87,7 +87,7 @@
 				}).then(action => {
 					if(action == "confirm"){
 						window.location.href = 'tel://'+this.reservationInfo.phone
-					}     
+					}
 		        });
 			}
 		},
@@ -143,7 +143,7 @@
     .go-back-icon,{
       font-size: 2rem;
     }
-    
+
   }
 
 
@@ -260,7 +260,7 @@
 			// height: 3.5rem;
 			padding: 1rem 2rem;
 		}
-	
+
 	}
 	.contact{
 		font-size: 1.6rem;

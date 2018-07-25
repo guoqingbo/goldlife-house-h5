@@ -38,7 +38,7 @@
       },
       price(value,houseType){
         if (value) {
-          return houseType == 1 ? value + ' 万元' : value + ' 元/月';
+          return houseType == 1 ? value + '万' : value + '元/月';
         }
       },
       avgprice(value){

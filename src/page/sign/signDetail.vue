@@ -31,7 +31,7 @@
 			</div>
 			<div class="status" v-if="signDetail.now_transfer != undefined">
 				<h2>当前签约状态：<span>{{ signDetail.now_transfer.stage_name }}</span></h2>
-			
+
 				<div class="status_content">
 					<p v-for="item in transfer">
 						<span v-if="item.step_id==signDetail.now_transfer.step_id" class="current" id="current"></span>
@@ -71,8 +71,8 @@
 			let that = this;
 			setTimeout(function(){	//先等待DOM元素加载完成
 				that.currentStatus();
-			},500)			
-			
+			},500)
+
 		},
 		methods:{
 			getSignDetail(){
@@ -122,7 +122,7 @@
 			   }
 		  },
 		  phoneNum(data){
-		  	
+
 		  }
 		},
 	}

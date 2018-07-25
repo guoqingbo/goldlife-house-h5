@@ -18,7 +18,7 @@
                   </ul>
               </div>
               <div class="my-search-input left">
-                <input type="search" placeholder="请输入商圈或小区名" @focus="isShowSearch=true">
+                <input type="search" placeholder="请输入商圈或小区名" @focus="isShowSearch=true" v-model="communityName">
               </div>
             </div>
             <div class="my-search-right left" @click="toggleMore">
@@ -26,9 +26,9 @@
             </div>
             <ul class="more-ul" v-if="morePopVisible">
               <li><i class="icon iconfont arrow">&#xe65d;</i></li>
-              <li><router-link to="/myCare"><i class="icon iconfont my-care">&#xe609;</i>我的关注</router-link></li>
-              <li><router-link to="/lookHouseIndex"><i class="icon iconfont look-house">&#xe610;</i>看房预约</router-link></li>
-              <li><router-link to="/signSearch"><i class="icon iconfont sign-search">&#xe60b;</i>签约查询</router-link></li>
+              <li><router-link to="/myCare"><span><i class="icon iconfont my-care">&#xe609;</i></span>我的关注</router-link></li>
+              <li><router-link to="/lookHouseIndex"><span><i class="icon iconfont look-house">&#xe610;</i></span>看房预约</router-link></li>
+              <li><router-link to="/signSearch"><span><i class="icon iconfont sign-search">&#xe60b;</i></span>签约查询</router-link></li>
             </ul>
           </div>
           <!--过滤导航-->
@@ -86,7 +86,7 @@
             <div class="price-between-input">
               <input
                 class="left" v-model="houseParams[houseType].priceMin"
-                @focus="clearPriceFilter()"
+                @focus="clearNowFilter()"
                 maxlength="4"
                 @input="houseParams[houseType].priceMin.length>4?houseParams[houseType].priceMin = houseParams[houseType].priceMin.slice(0, 4):''"
                 type="number"/>
@@ -94,7 +94,7 @@
               <input
                 class="right"
                 v-model="houseParams[houseType].priceMax"
-                @focus="clearPriceFilter"
+                @focus="clearNowFilter"
                 @input="houseParams[houseType].priceMax.length>4?houseParams[houseType].priceMax = houseParams[houseType].priceMax.slice(0, 4):''"
                 maxlength="4" type="number"/>
             </div>
@@ -180,7 +180,7 @@
               </li>
             </ul>
             <div class="filter-btn">
-              <button class="unlimit-btn" @click="unlimit">不限</button>
+              <button class="unlimit-btn" @click="clearNowFilter">重置</button>
               <button class="confirm-btn" @click="filterConfirm">确定</button>
             </div>
             <!--遮罩-->
@@ -275,6 +275,7 @@
                   orderColumn:'',
                 },//租房房源请求参数
               },
+              communityName:'',
               houseLists:[],//房源列表
               recomment:0,//是否为推荐房源
               houseType:this.$store.state.activeInfo.houseType?this.$store.state.activeInfo.houseType:1,//房源类型
@@ -440,6 +441,7 @@
               .then( res => {
                 if (res.data.success){
                   this.filterList[1] = res.data.result
+
                 }else{
                   this.$toast({
                   message: res.data.errorMessage,
@@ -523,7 +525,7 @@
 
 //            this.getFilterList();
             //清空筛选条件
-            this.clearFilter();
+            this.clearAllFilter();
             this.gethouseLists();
           },
           //打开筛选弹框
@@ -538,9 +540,10 @@
                 this.filterType = filterType
                 this.filterTypeActive = filterType
               }
+            console.log(this.filterList)
           },
           //清空筛选条件
-          clearFilter(){
+          clearAllFilter(){
             let  filterShowText = {
                   district:{name:'区域',select:[]},
                   price:{name:'价格',select:[]},
@@ -552,19 +555,31 @@
             this.filterTypeActive = '';
             this.activDistrictIndex = 0;
           },
-          //清空价格筛选条件
-          clearPriceFilter(){
-
-            let price = this.filterList[this.houseType].price.child;
-            let room = this.filterList[this.houseType].room.child;
-
-            filter.forEach((item)=>{
+          //清空传入的筛选条件
+          clearFilterByChild(child){
+            child.forEach((item)=>{
               let index = this.houseParams[this.houseType].filterIds.indexOf(item.id)
               if(index>=0){
                 this.houseParams[this.houseType].filterIds.splice(index,1)
               }
             })
-            this.filterShowText. price = {name:'价格',select:[]};
+          },
+          //清空价格筛选条件
+          clearNowFilter(){
+              if(this.filterType == 'price'){//价格
+                let child = this.filterList[this.houseType].price.child;
+                this.clearFilterByChild(child);
+                this.filterShowText. price = {name:'价格',select:[]};
+              }else if(this.filterType == 'roomType'){//房型
+                let child = this.filterList[this.houseType].room.child;
+                this.clearFilterByChild(child);
+              }else if(this.filterType == 'filterMore'){//筛选
+                let buildareaChild = this.filterList[this.houseType].buildarea.child;
+                let buildyearChild = this.filterList[this.houseType].buildyear.child;
+                let forwardChild = this.filterList[this.houseType].forward.child;
+                let child = buildareaChild.concat(buildyearChild,forwardChild);console.log(forwardChild)
+                this.clearFilterByChild(child);
+              }
           },
           //打开房源类型弹框
           openHouseTypePop(){
@@ -616,8 +631,8 @@
           },
           //过滤不限按钮
           unlimit(){
-
-            this.houseParams[this.houseType] = this.houseParamsInit[this.houseType]//房源请求参数
+//            this.houseParams[this.houseType] = this.houseParamsInit[this.houseType]//房源请求参数
+            this.clearNowFilter();
             this.gethouseLists();
             this.filterType = '';
           },
@@ -663,9 +678,11 @@
               this.isShowSearch = true
           },
           //通过小区搜索房源(搜索子组件触发)
-          searchHouse(communityId){
-              console.log(communityId)
-            this.houseParams[this.houseType] = this.houseParamsInit[this.houseType]//房源请求参数
+          searchHouse(community){
+              console.log(community)
+            this.communityName = community.communityName
+            this.houseParams[this.houseType] = this.houseParamsInit[this.houseType] //房源请求参数
+            this.houseParams[this.houseType].communityId = community.communityId;
             this.gethouseLists();
             this.isShowSearch = false //不展示搜索组键
 
@@ -875,35 +892,42 @@
         li:not(:first-child){
           height: 3.5rem;
           line-height: 3.5rem;
-          padding-right: 1rem;
+          padding: 0 1rem;
           &:nth-child(n+3){
             @include border-top;
           }
           a{
             color: #424242;
+            display: inline-block;
+            width: 100%;
+          }
+          span{
+            display: inline-block;
+            width: 2rem;
+            /*margin: 0 .5rem 0 1rem;*/
           }
         }
         .arrow{
           color:#fff;
           position: absolute;
-          top: -1.6rem;
+          top: -1.5rem;
           right: 0.5rem;
           font-size: 2.5rem;
         }
         .my-care{
           color:#ffc16b ;
           font-size: 1.9rem;
-          margin: 0 1rem;
+          vertical-align: middle;
         }
         .look-house{
           color:#5c5990 ;
           font-size: 2.2rem;
-          margin: 0 1rem;
+          vertical-align: bottom;
         }
         .sign-search{
           color:#eed7b5 ;
           font-size: 1.9rem;
-          margin: 0 1rem;
+          vertical-align: middle;
         }
       }
     }

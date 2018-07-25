@@ -12,7 +12,7 @@
 				<!--顶部轮播图片-->
 				<div class="imgDiv">
 					<router-link :to="{ name:'imgIncrease',params: { imgs: houseData.screenPic,title:houseData.buildName}}">
-						
+
 						<div v-if="!!houseData.screenPic" class="swiper-container">
 							<div class="swiper-wrapper">
 								<div v-for='i in houseData.screenPic' class="swiper-slide">
@@ -64,7 +64,7 @@
 					<h3>备注</h3>
 					<!-- <p>房子不错</p> -->
 					<p>{{houseData.remark}}</p>
-					
+
 				</div>
 
 				<p class="contact" @click="phoneNum">电话咨询</p>
@@ -74,7 +74,7 @@
 	</div>
 </template>
 <script type="text/javascript">
-	import api from '../../api/axios'
+	import api from '../../api/broker/axios'
   	import headTop from '../../components/header/head'
   	import BMap from 'BMap'
   	import Swiper from 'swiper'
@@ -94,7 +94,7 @@
 			this.getNewHouseInfo();
 		},
 		mounted(){
-			this.getBaiduMap();	
+			this.getBaiduMap();
 		},
 		methods:{
 			getNewHouseInfo(){
@@ -174,7 +174,7 @@
 				}).then(action => {
 					if(action == "confirm"){
 						window.location.href = 'tel://'+this.reservationInfo.phone
-					}     
+					}
 		        });
 
 		      },
@@ -268,7 +268,7 @@
     		.addr{
 				font-size: 1.5rem;
 				color: #333333;
-				
+
 				span{
 					color: #754501;
 				}
@@ -353,7 +353,7 @@
  	 	p{
  	 		font-size: 1.5rem;
  	 		color: #424242;
- 	 	} 	
+ 	 	}
  	 }
 
 	.contact{
@@ -368,8 +368,8 @@
 			bottom: 0;
 			z-index: 66;
 		}
- 	 
+
   }
 
-	
+
 </style>
