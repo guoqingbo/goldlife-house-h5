@@ -40,15 +40,15 @@
 						<h3>线下房源</h3>
 						<p class="describ">请提前咨询确定房屋样式符合您的预期</p>
 						<p class="price">
-							<span>{{!!i.num?i.num:'0'}}</span>
-							<span>&nbsp;&nbsp;套</span>
+							<span>{{i.num |lineHouse}}</span>
+							<!-- <span>&nbsp;&nbsp;套</span> -->
 						</p>
 					</div>
 				</div>
 				<div class="house-status">
 					<p :class="'t'+i.state">
 						<span>{{ state[i.state] }}</span>
-						<span>{{ (i.time)/1000|moment('MM/DD HH:mm') }}</span>
+						<span>{{ (i.time)/1000|moment('MM月DD日 hh:mm') }}</span>
 					</p>
 
 				</div>
@@ -100,6 +100,15 @@
 			},
 			toDetail(houseData){
 				this.$router.push({path:'/lookHouseReservation',query:{data:houseData}});
+			}
+		},
+		filters:{
+			lineHouse(val){
+				if(val.toString().indexOf('套') >=0){
+					return val;
+				}else{
+					return val+'套';
+				}
 			}
 		},
 		components:{
