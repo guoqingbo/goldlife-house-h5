@@ -152,7 +152,7 @@
         <ul class="category-head">
           <li v-for="ortherImg in communityAround">
             <router-link
-              :to="{ name:'villageDetail',params: {blockId:blockId,cityId:cityId,userType:userType,houseType:houseType}}">
+              :to="{ name:'villageDetail',params: {blockId:ortherImg.id,cityId:cityId,userType:userType,houseType:houseType}}">
               <img
                 :src="ortherImg.surface_img?ortherImg.surface_img:require('../../../static/bg_smallphotonormal@2x.png')"><br/>
               <p style="color: #885D24;">{{ortherImg.build_date}}年建</p>
@@ -444,6 +444,7 @@
         this.houseId = data;
         this.houseType = '2';
         this.getHouseDetail();
+        this.menu();
       },
       ready() {
         var map = new BMap.Map('allmap');

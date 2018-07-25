@@ -18,7 +18,7 @@
             <!-- 如果需要分页器 -->
             <div  class="swiper-pagination"></div>
           </div>
-          <div v-else><img src="../../assets/img/bg_bigphotonormal@2x.png"></div>
+          <div v-else><img src="../../../static/bg_bigphotonormal拷贝@3x.png"></div>
         </router-link>
       </div>
 
@@ -229,7 +229,11 @@
               this.id = resultHouse.id;
               this.sellList = resultHouse.houseInblock.sell.lists;
               this.rentList = resultHouse.houseInblock.rent.lists;
-              if(this.sellList.length<1 || this.rentList.length<1){
+              if(this.sellList.length<1 && this.isSell){
+                this.$refs.ulDisplay.style.display = 'none';
+                this.$refs.sameSell.style.marginTop = '2rem';
+              }
+              if(this.isRent && this.rentList.length<1){
                 this.$refs.ulDisplay.style.display = 'none';
                 this.$refs.sameSell.style.marginTop = '2rem';
               }
@@ -379,6 +383,7 @@
       getOtherVillage(data){
         this.blockId = data;
         this.getCommunityDetail();
+        this.menu();
       },
       ready() {
         var map = new BMap.Map('allmap');
