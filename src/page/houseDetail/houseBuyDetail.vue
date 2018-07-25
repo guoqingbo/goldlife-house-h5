@@ -28,7 +28,7 @@
             <!-- 如果需要分页器 -->
             <div class="swiper-pagination"></div>
           </div>
-          <div v-else><img src="../../assets/img/bg_bigphotonormal@2x.png"></div>
+          <div v-else><img src="../../../static/bg_bigphotonormal拷贝@3x.png"></div>
         </router-link>
       </div>
 
@@ -88,14 +88,14 @@
         </div>
         <ul class="category-head" ref="ulDisplay">
           <li v-if="isSell" v-for='sellImg in sellList' @click="getHomeDetail(sellImg.id)">
-            <img :src="sellImg.pic?sellImg.pic:require('../../assets/img/bg_smallphotonormal@3x.png')"><br/>
+            <img :src="sellImg.pic?sellImg.pic:require('../../../static/bg_smallphotonormal@2x.png')"><br/>
             <p>{{sellImg.room_type}}|{{sellImg.buildarea}}|{{sellImg.forward}}</p>
             <p><span style="color: #e10000">{{sellImg.price}}</span>&nbsp;&nbsp;&nbsp;{{sellImg.avgprice}}</p>
           </li>
           <li v-if="isRent" v-for='rentImg in rentList'>
             <router-link
               :to="{ name:'houseRentDetail',params: {cityId:cityId,houseId:houseId,userType:userType,houseType:houseType}}">
-              <img :src="rentImg.pic?rentImg.pic:require('../../assets/img/bg_smallphotonormal@3x.png')"><br/>
+              <img :src="rentImg.pic?rentImg.pic:require('../../../static/bg_smallphotonormal@2x.png')"><br/>
               <p>{{rentImg.room_type}}|{{rentImg.buildarea}}|{{rentImg.forward}}</p>
               <p><span style="color: #e10000">{{rentImg.price}}</span></p>
             </router-link>
@@ -106,10 +106,10 @@
       <!--同小区在售10套-->
       <div ref="sameSell" class="sameSells" @click="clkVillage()">
         <div v-if="isSell">
-          同小区在售{{sellList.length}}套
+          同小区在售{{sellLength}}套
         </div>
         <div v-else-if="isRent">
-          同小区在租{{rentList.length}}套
+          同小区在租{{rentLength}}套
         </div>
       </div>
 
@@ -122,9 +122,9 @@
         <ul class="category-head">
           <li v-for="ortherImg in communityAround">
             <router-link
-              :to="{ name:'villageDetail',params: {blockId:blockId,cityId:cityId,userType:userType,houseType:houseType}}">
+              :to="{ name:'villageDetail',params: {blockId:ortherImg.id,cityId:cityId,userType:userType,houseType:houseType}}">
               <img
-                :src="ortherImg.surface_img?ortherImg.surface_img:require('../../assets/img/bg_smallphotonormal@3x.png')"><br/>
+                :src="ortherImg.surface_img?ortherImg.surface_img:require('../../../static/bg_smallphotonormal@2x.png')"><br/>
               <p style="color: #885D24;">{{ortherImg.build_date}}年建</p>
               <p>{{ortherImg.cmt_name}}</p>
               <p class="p-bottom"><span style="color: #e10000">{{ortherImg.averprice}}元/平</span></p>
@@ -211,6 +211,8 @@
         compareDesc: '加入对比',
         brokerPhone: '',
         address: '',//地图标注地址
+        sellLength:'',
+        rentLength:'',
       }
     },
     created() {
@@ -301,8 +303,13 @@
                   },
                 });
               });
+              this.sellList = resultHouse.houseInBlock.sell.lists;
+              this.sellLength = resultHouse.houseInBlock.sell.tatalCount;
+              this.rentList = resultHouse.houseInBlock.rent.lists;
+              this.rentLength = resultHouse.houseInBlock.rent.tatalCount;
+              this.communityAround = resultHouse.communityAround;
               //房源小区
-              this.getCommunityDetail();
+              //this.getCommunityDetail();
 
             } else {
               this.$message.error(res.data.errorMessage);
@@ -354,7 +361,7 @@
         this.houseType = 1;
         this.isSell = true;
         this.isRent = false;
-        if (this.sellList.length > 0) {
+        if (this.sellLength > 0) {
           this.$refs.ulDisplay.style.display = '';
           this.$refs.sameSell.style.marginTop = '16rem';
         } else {
@@ -367,7 +374,7 @@
         this.houseType = 2;
         this.isSell = false;
         this.isRent = true;
-        if (this.rentList.length > 0) {
+        if (this.rentLength > 0) {
           this.$refs.ulDisplay.style.display = '';
           this.$refs.sameSell.style.marginTop = '16rem';
         } else {
@@ -436,6 +443,7 @@
         this.houseId = data;
         this.houseType = '1';
         this.getHouseDetail();
+        this.menu();
       },
       getCompareNum() {
         //获取用户名
@@ -503,7 +511,7 @@
         })
       },
       clkVillage(){
-        if((this.isSell&&this.sellList.length>0)||(this.isRent&&this.rentList.length>0)){
+        if((this.isSell&&this.sellLength>0)||(this.isRent&&this.rentLength>0)){
           console.log(this.isSell)
           this.$router.push({ name:'villageMore',params: { more: this.isSell?this.sellList:this.rentList,villageName:this.title,id:this.blockId,houseType:this.houseType}});
         }
