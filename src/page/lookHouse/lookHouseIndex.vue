@@ -48,7 +48,7 @@
 				<div class="house-status">
 					<p :class="'t'+i.state">
 						<span>{{ state[i.state] }}</span>
-						<span>{{ (i.time)/1000|moment('MM/DD hh:mm') }}</span>
+						<span>{{ (i.time)/1000|moment('MM/DD HH:mm') }}</span>
 					</p>
 
 				</div>
@@ -85,7 +85,7 @@
 				.then(res=>{
 					if(res.data.success){
 						this.houseList = res.data.result;
-						console.log(res.data);
+						// console.log(res.data);
 
 					}else{
 						console.log(res.data.errorMessage);

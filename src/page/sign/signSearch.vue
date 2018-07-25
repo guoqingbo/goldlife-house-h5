@@ -43,7 +43,7 @@
       getSignSearch(){
         //从vuex中获取登录用户手机号
         var phoneNum = this.$store.state.userInfo.loginName;
-        // console.log(phoneNum)
+        console.log(phoneNum)
         api.signSearch(phoneNum).then(res=>{
           if(res.data.success){
             this.signList = res.data.result;
