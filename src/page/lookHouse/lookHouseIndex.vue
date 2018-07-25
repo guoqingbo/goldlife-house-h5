@@ -27,28 +27,28 @@
 				<div class="house-status">
 					<p :class="'t'+i.state">
 						<span>{{ state[i.state] }}</span>
-						<span>{{ (i.time)/1000 |moment('MM月DD日 hh:mm') }}</span>
+						<span>{{ (i.time)/1000 |moment('MM月DD日 HH:mm') }}</span>
 					</p>
 				</div>
 			</div>
 
 			<!-- 线下房源 -->
 			<div v-else>
-				<div class="house-detail">
+				<div class="house-detail" @click="toDetail(i)">
 					<img :src="!!i.targetHouse.pic?i.targetHouse.pic:'./static/bg_smallphotonormal@2x.png'">
 					<div>
 						<h3>线下房源</h3>
 						<p class="describ">请提前咨询确定房屋样式符合您的预期</p>
-						<p class="price">
-							<span>{{!!i.num?i.num:'0'}}</span>
-							<span>&nbsp;&nbsp;套</span>
+						<p class="price offline">
+							<span>{{i.num |lineHouse}}</span>
+							<!-- <span>&nbsp;&nbsp;套</span> -->
 						</p>
 					</div>
 				</div>
 				<div class="house-status">
 					<p :class="'t'+i.state">
 						<span>{{ state[i.state] }}</span>
-						<span>{{ (i.time)/1000|moment('MM/DD hh:mm') }}</span>
+						<span>{{ (i.time)/1000|moment('MM月DD日 HH:mm') }}</span>
 					</p>
 
 				</div>
@@ -102,6 +102,15 @@
 				this.$router.push({path:'/lookHouseReservation',query:{data:houseData}});
 			}
 		},
+		filters:{
+			lineHouse(val){
+				if(val.toString().indexOf('套') >=0){
+					return val;
+				}else{
+					return val+'套';
+				}
+			}
+		},
 		components:{
 			headTop
 		}
@@ -146,13 +155,13 @@
 		.house-detail{
 			background: #ffffff;
 			position: relative;
-			padding: 1.5rem 2rem 1.5rem 17rem;
+			padding: 1.5rem 2rem 1.5rem 14.5rem;
 			margin-bottom: 0.3rem;
 			img{
 				position: absolute;
 				left: 2rem;
-				width: 13rem;
-				height: 8.1rem;
+				width: 10.5rem;
+				height: 8rem;
 				border-radius: 0.5rem;
 			}
 			h3{
@@ -174,6 +183,9 @@
 				span:first-child{
 					color:#E10101;
 				}
+			}
+			.offline{
+				margin-top: 1rem;
 			}
 		}
 		.house-status{
