@@ -20,7 +20,7 @@ Vue.use(Router);
 //     resolve(require('../page/home/home'));
 //   });
 // };
-const home = r => require.ensure([], () => r(require('../page/home/home')), 'home')
+const home = r => require.ensure([], () => r(require('../page/home/home')),'home')
 
 //登录页
 const login = resolve => {
