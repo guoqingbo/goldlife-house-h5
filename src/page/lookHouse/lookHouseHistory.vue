@@ -26,7 +26,7 @@
 				<div class="house-status" v-if="i.lookHouseLog != undefined">
 					<p >
 						<span><b>{{ i.brokerName }}</b>&nbsp;经纪人带看</span>
-						<span>{{ (i.time)/1000 |moment('MM月DD日 hh:mm') }}</span>
+						<span>{{ (i.time)/1000 |moment('MM月DD日 HH:mm') }}</span>
 					</p>
 
 					<!-- <mt-button v-if="i.lookHouseLog.lable==''&&i.lookHouseLog.text==''" size="large" @click="editNode(i)">添加看房笔记</mt-button> -->
@@ -75,21 +75,12 @@
 					console.log(err);
 				})
 			},
-			/*addNode(houseData){
-				let _data = {
-					orderDetailId:houseData.lookHouseLog.orderDetailId,
-					room:houseData.room,
-					hall:houseData.hall,
-					price:houseData.price,
-					blockName:houseData.block_name
-				}
-				this.$router.push({name:'addLookHouseLog',query:{data:_data}})
-			},*/
 			editNode(data){
 				let _data = {
 					orderDetailId:data.lookHouseLog.orderDetailId,
 					room:data.targetHouse.room,
 					hall:data.targetHouse.hall,
+					toilet:data.targetHouse.toilet,
 					price:data.targetHouse.price,
 					blockName:data.targetHouse.block_name,
 					text:data.lookHouseLog.text,

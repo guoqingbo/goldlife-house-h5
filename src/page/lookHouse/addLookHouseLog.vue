@@ -10,7 +10,7 @@
 			<h2>看房备注</h2>
 			<p>{{this.$route.query.data.blockName}}</p>
 			<p>
-				<span>{{this.$route.query.data.room}}室{{this.$route.query.data.hall}}厅</span>
+				<span>{{this.$route.query.data.room}}室{{this.$route.query.data.hall}}厅{{this.$route.query.data.toilet}}卫</span>
 				<span>{{this.$route.query.data.price}}万</span>
 			</p>
 		</div>
@@ -46,7 +46,8 @@
 		},
 		mounted(){
 			this.haveLable();
-			console.log(this.selectedLable);
+			// console.log(this.selectedLable);
+			console.log(this.$route.query.data);
 
 		},
 		methods:{
