@@ -55,6 +55,7 @@ const home = r => require.ensure([], () => r(require('../page/home/home')),'home
 //     resolve(require('../page/houseDetail/houseBuyDetail'));
 //   });
 // };
+const houseBuyDetail = r => require.ensure([], () => r(require('../page/houseDetail/houseBuyDetail')),'houseBuyDetail')
 //
 // //我的关注
 // const myCare = resolve => {
@@ -264,11 +265,11 @@ const routes = [
 //     name: 'houseRentDetail',//租房详情
 //     component: houseRentDetail,
 //   },
-//   {
-//     path: '/houseBuyDetail',
-//     name: 'houseBuyDetail',//二手房详情
-//     component: houseBuyDetail,
-//   },
+  {
+    path: '/houseBuyDetail',
+    name: 'houseBuyDetail',//二手房详情
+    component: houseBuyDetail,
+  },
 //   {
 //     path: '/imgIncrease',
 //     name: 'imgIncrease',//图片放大
