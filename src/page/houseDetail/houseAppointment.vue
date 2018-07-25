@@ -18,7 +18,7 @@
           <span class="span-bottom"><span style="color: #e10000">{{$route.params.homes.price}}</span>&nbsp;&nbsp;&nbsp;{{$route.params.homes.avgprice}}</span>
         </div>
 
-        <img src="http://image.qmango.com/hotelimg/dl1210/109490/109.jpeg"><br/>
+        <img :src="pic?pic:require('../../../static/bg_smallphotonormal@2x.png')"><br/>
       </li>
     </div>
     <div class="form">
@@ -103,6 +103,7 @@
         isOriginHei: true,
         screenHeight: document.documentElement.clientHeight,        //此处也可能是其他获取方法
         originHeight: document.documentElement.clientHeight,
+        pic:'',
       }
     },
     watch: {
@@ -133,8 +134,14 @@
       }
     },
     created() {
+      console.log(this.$route.params.homes)
       if(this.$route.params.homes == null){
         this.$router.push({ name:'home',params: { }});
+      }else{
+        var picList = this.$route.params.homes.img;
+        if(picList != null && picList.length>0){
+          this.pic = picList[0];
+        }
       }
 
     },

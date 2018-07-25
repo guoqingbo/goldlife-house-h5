@@ -12,7 +12,7 @@
           <div v-if="imgHouseAttr.length>0" class="swiper-container">
             <div class="swiper-wrapper">
               <div v-for='i in imgHouseAttr' class="swiper-slide">
-                <img :src="i?i:require('../../assets/img/bg_smallphotonormal@3x.png')">
+                <img :src="i?i:require('../../../static/bg_bigphotonormal拷贝@3x.png')">
               </div>
             </div>
             <!-- 如果需要分页器 -->
@@ -93,7 +93,7 @@
           <li v-if="isSell" v-for='sellImg in sellList' >
             <router-link
               :to="{ name:'houseBuyDetail',params: {cityId:cityId,houseId:sellImg.id,userType:userType,houseType:houseType}}">
-              <img :src="sellImg.pic?sellImg.pic:require('../../assets/img/bg_smallphotonormal@3x.png')"><br/>
+              <img :src="sellImg.pic?sellImg.pic:require('../../../static/bg_smallphotonormal@2x.png')"><br/>
               <p>{{sellImg.room_type}}|{{sellImg.buildarea}}|{{sellImg.forward}}</p>
               <p><span style="color: #e10000">{{sellImg.price}}</span>&nbsp;&nbsp;&nbsp;{{sellImg.avgprice}}</p>
             </router-link>
@@ -101,7 +101,7 @@
           <li v-if="isRent" v-for='rentImg in rentList'>
             <router-link
               :to="{ name:'houseRentDetail',params: {cityId:cityId,houseId:rentImg.id,userType:userType,houseType:houseType}}">
-              <img :src="rentImg.pic?rentImg.pic:require('../../assets/img/bg_smallphotonormal@3x.png')"><br/>
+              <img :src="rentImg.pic?rentImg.pic:require('../../../static/bg_smallphotonormal@2x.png')"><br/>
               <p>{{rentImg.room_type}}|{{rentImg.buildarea}}|{{rentImg.forward}}</p>
               <p><span style="color: #e10000">{{rentImg.price}}</span></p>
             </router-link>
@@ -134,7 +134,7 @@
         <ul class="category-head">
           <li v-for="ortherImg in communityAround" @click="getOtherVillage(ortherImg.id)">
             <img
-              :src="ortherImg.surface_img?ortherImg.surface_img:require('../../assets/img/bg_smallphotonormal@3x.png')"><br/>
+              :src="ortherImg.surface_img?ortherImg.surface_img:require('../../../static/bg_smallphotonormal@2x.png')"><br/>
             <p style="color: #885D24;">{{ortherImg.build_date}}年建</p>
             <p>{{ortherImg.cmt_name}}</p>
             <p class="p-bottom"><span style="color: #e10000">{{ortherImg.averprice}}元/平</span></p>
