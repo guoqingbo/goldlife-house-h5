@@ -294,7 +294,7 @@
                     {orderColumn:"price",orderBy:"asc",describe:"总价从低到高"},
                     {orderColumn:"price",orderBy:"desc",describe:"总价从高到底"},
                     {orderColumn:"avgprice",orderBy:"asc",describe:"单价从低到高"},
-                    {orderColumn:"buildarea",orderBy:"asc",describe:"面积从大到小"},
+                    {orderColumn:"buildarea",orderBy:"desc",describe:"面积从大到小"},
                   ],
                 2:[
                   {orderColumn:"id",orderBy:"desc",describe:"最新发布"},

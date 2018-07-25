@@ -27,28 +27,28 @@
 				<div class="house-status">
 					<p :class="'t'+i.state">
 						<span>{{ state[i.state] }}</span>
-						<span>{{ (i.time)/1000 |moment('MM月DD日 hh:mm') }}</span>
+						<span>{{ (i.time)/1000 |moment('MM月DD日 HH:mm') }}</span>
 					</p>
 				</div>
 			</div>
 
 			<!-- 线下房源 -->
 			<div v-else>
-				<div class="house-detail">
+				<div class="house-detail" @click="toDetail(i)">
 					<img :src="!!i.targetHouse.pic?i.targetHouse.pic:'./static/bg_smallphotonormal@2x.png'">
 					<div>
 						<h3>线下房源</h3>
 						<p class="describ">请提前咨询确定房屋样式符合您的预期</p>
-						<p class="price">
-							<span>{{!!i.num?i.num:'0'}}</span>
-							<span>&nbsp;&nbsp;套</span>
+						<p class="price offline">
+							<span>{{i.num |lineHouse}}</span>
+							<!-- <span>&nbsp;&nbsp;套</span> -->
 						</p>
 					</div>
 				</div>
 				<div class="house-status">
 					<p :class="'t'+i.state">
 						<span>{{ state[i.state] }}</span>
-						<span>{{ (i.time)/1000|moment('MM/DD HH:mm') }}</span>
+						<span>{{ (i.time)/1000|moment('MM月DD日 HH:mm') }}</span>
 					</p>
 
 				</div>
@@ -85,7 +85,7 @@
 				.then(res=>{
 					if(res.data.success){
 						this.houseList = res.data.result;
-						// console.log(res.data);
+						console.log(res.data);
 
 					}else{
 						console.log(res.data.errorMessage);
@@ -100,6 +100,15 @@
 			},
 			toDetail(houseData){
 				this.$router.push({path:'/lookHouseReservation',query:{data:houseData}});
+			}
+		},
+		filters:{
+			lineHouse(val){
+				if(val.toString().indexOf('套') >=0){
+					return val;
+				}else{
+					return val+'套';
+				}
 			}
 		},
 		components:{
@@ -174,6 +183,9 @@
 				span:first-child{
 					color:#E10101;
 				}
+			}
+			.offline{
+				margin-top: 1rem;
 			}
 		}
 		.house-status{

@@ -34,7 +34,7 @@
     <div v-if="filterType == 'filterOrder'" class="filter-order">
       <div class="clear">
         <ul class="filter-order-ul left">
-          <li v-for="(item,index) in orderFilter"
+          <li v-for="(item,index) in orderFilter[houseType]"
               :class="{'select-font-active': houseParams[houseType].orderColumn == item.orderColumn&&houseParams[houseType].orderBy == item.orderBy}"
               @click="setOrderValue($event,item)">
             {{item.describe}}
@@ -81,13 +81,27 @@
         houseLists: [],
         houseType: this.$route.params.houseType?this.$route.params.houseType:this.$store.state.activeInfo.houseType,
         filterType: '',//过滤选项卡
-        orderFilter: [
+        /*orderFilter: [
           {orderColumn: "id", orderBy: "desc", describe: "最新发布"},
           {orderColumn: "price", orderBy: "asc", describe: "总价从低到高"},
           {orderColumn: "price", orderBy: "desc", describe: "总价从高到底"},
           {orderColumn: "avgprice", orderBy: "asc", describe: "单价从低到高"},
           {orderColumn: "buildarea", orderBy: "asc", describe: "面积从大到小"},
-        ],
+        ],*/
+        orderFilter:{
+          1:[
+            {orderColumn:"id",orderBy:"desc",describe:"最新发布"},
+            {orderColumn:"price",orderBy:"asc",describe:"总价从低到高"},
+            {orderColumn:"price",orderBy:"desc",describe:"总价从高到底"},
+            {orderColumn:"avgprice",orderBy:"asc",describe:"单价从低到高"},
+            {orderColumn:"buildarea",orderBy:"desc",describe:"面积从大到小"},
+          ],
+          2:[
+            {orderColumn:"id",orderBy:"desc",describe:"最新发布"},
+            {orderColumn:"price",orderBy:"asc",describe:"租金从低到高"},
+            {orderColumn:"price",orderBy:"desc",describe:"租金从高到底"},
+          ],
+        },
         houseTypeDetail:{
           1:'houseBuyDetail',
           2:'houseRentDetail',
@@ -358,7 +372,9 @@
   /*排序*/
   .filter-order {
     @include filter-wrap;
-    margin-top: 1rem;
+    position: absolute;
+    top: 8rem;
+    font-size: 1.6rem;
     ul {
       width: 100%;
       /*height: 29rem;*/
