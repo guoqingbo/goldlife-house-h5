@@ -5,7 +5,7 @@
           <!--<span class="go-back" @click="$router.go(-1)"><i class="icon iconfont go-back-icon">&#xe60f;</i></span>-->
           <span class="header-title">登录</span>
         </h1>
-        <form class="loginForm">
+        <div class="loginForm">
           <div class="input-telpnone">
             <input   placeholder="请输入手机号" v-model="loginName" />
             <span class="right" @click="getCode" v-show="!computedTime">获取验证码</span>
@@ -15,7 +15,7 @@
             <input  placeholder="请输入验证码" v-model="mobileCodeInput"/>
           </div>
           <button class="btn-login" @click.prevent="userLogin">立即登录</button>
-        </form>
+        </div>
     </div>
 </template>
 
@@ -197,6 +197,7 @@
         border-bottom: 0.1rem solid #f5f5f5;
         input{
           height: 2rem;
+          font-size: 1.5rem;
         }
         input::placeholder{
           color: #424242;
@@ -214,7 +215,7 @@
         font-size: 1.6rem;
         border-bottom: 0.1rem solid #f5f5f5;
         input{
-          height: 100%;
+          font-size: 1.5rem;
           height: 2rem;
         }
         input::placeholder{
