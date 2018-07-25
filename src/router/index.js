@@ -20,7 +20,7 @@ Vue.use(Router);
 //     resolve(require('../page/home/home'));
 //   });
 // };
-const home = r => require.ensure([], () => r(require('../page/home/home')),'home')
+const home = r => require.ensure([], () => r(require('../page/home/home')))
 //
 // //登录页
 // const login = resolve => {
@@ -55,7 +55,7 @@ const home = r => require.ensure([], () => r(require('../page/home/home')),'home
 //     resolve(require('../page/houseDetail/houseBuyDetail'));
 //   });
 // };
-const houseBuyDetail = r => require.ensure([], () => r(require('../page/houseDetail/houseBuyDetail')),'houseBuyDetail')
+const houseBuyDetail = r => require.ensure([], () => r(require('../page/houseDetail/houseBuyDetail')))
 //
 // //我的关注
 // const myCare = resolve => {
