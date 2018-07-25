@@ -137,10 +137,10 @@
       <!--同小区在售10套-->
       <div ref="sameSell" class="sameSells" @click="clkVillage()">
         <div v-if="isSell">
-          同小区在售{{sellList.length}}套
+          同小区在售{{sellLength}}套
         </div>
         <div v-else-if="isRent">
-          同小区在租{{rentList.length}}套
+          同小区在租{{rentLength}}套
         </div>
       </div>
       <!--分割2-->
@@ -230,6 +230,8 @@
         blockId:'1',
         brokerPhone: '',
         address: '',//地图标注地址
+        sellLength:'',
+        rentLength:'',
       }
     },
     created() {
@@ -306,8 +308,13 @@
                 });
               });
 
+              this.sellList = resultHouse.houseInBlock.sell.lists;
+              this.sellLength = resultHouse.houseInBlock.sell.tatalCount;
+              this.rentList = resultHouse.houseInBlock.rent.lists;
+              this.rentLength = resultHouse.houseInBlock.rent.tatalCount;
+              this.communityAround = resultHouse.communityAround;
               //房源小区
-              this.getCommunityDetail();
+              //this.getCommunityDetail();
 
             } else {
               this.$message.error(res.data.errorMessage);
@@ -348,7 +355,7 @@
         this.houseType = 1;
         this.isSell = true;
         this.isRent = false;
-        if (this.sellList.length > 0) {
+        if (this.sellLength > 0) {
           this.$refs.ulDisplay.style.display = '';
           this.$refs.sameSell.style.marginTop = '16rem';
         } else {
@@ -361,7 +368,7 @@
         this.houseType = 2;
         this.isSell = false;
         this.isRent = true;
-        if (this.rentList.length > 0) {
+        if (this.rentLength > 0) {
           this.$refs.ulDisplay.style.display = '';
           this.$refs.sameSell.style.marginTop = '16rem';
         } else {
@@ -434,7 +441,7 @@
         })
       },
       clkVillage(){
-        if((this.isSell&&this.sellList.length>0)||(this.isRent&&this.rentList.length>0)){
+        if((this.isSell&&this.sellLength>0)||(this.isRent&&this.rentLength>0)){
           console.log(this.isSell)
           this.$router.push({ name:'villageMore',params: { more: this.isSell?this.sellList:this.rentList,villageName:this.title,id:this.blockId,houseType:this.houseType}});
         }
