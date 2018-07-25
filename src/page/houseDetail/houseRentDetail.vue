@@ -462,9 +462,14 @@
 
       },
       getHomeDetail(data){
-        this.houseId = data;
-        this.houseType = '2';
-        this.getHouseDetail();
+        if(data == this.houseId){
+
+        }else {
+          this.houseId = data;
+          this.houseType = '2';
+          this.getHouseDetail();
+        }
+
         this.menu();
       },
       ready() {
