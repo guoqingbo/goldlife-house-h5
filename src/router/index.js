@@ -179,14 +179,14 @@ const recommend = resolve => {
 };
 
 const recommendRegist = resolve => {
-  require.ensure(['../blocker/recommendFriend/recommendRegist'], () => {
-    resolve(require('../blocker/recommendFriend/recommendRegist'));
+  require.ensure(['../broker/recommendFriend/recommendRegist'], () => {
+    resolve(require('../broker/recommendFriend/recommendRegist'));
   });
 };
 
 const registSuccess = resolve => {
-  require.ensure(['../blocker/recommendFriend/registSuccess'], () => {
-    resolve(require('../blocker/recommendFriend/registSuccess'));
+  require.ensure(['../broker/recommendFriend/registSuccess'], () => {
+    resolve(require('../broker/recommendFriend/registSuccess'));
   });
 };
 
