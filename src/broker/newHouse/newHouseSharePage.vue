@@ -189,22 +189,6 @@
 </script>
 <style lang="scss" scoped>
 
-	.customClass{
-    width: 80%!important;
-    padding-bottom:4rem;
-    p{
-      font-weight: bold;
-    }
-    .cancelButtonClass{
-      width: 40%;
-      height: 4rem;
-    }
-    .confirmButtonClass{
-      width: 40%;
-      height: 4rem;
-    }
-  }
-
 	.nav-header{
 	    position: relative;
 	    background-color: #fff;
