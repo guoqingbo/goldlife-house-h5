@@ -13,18 +13,18 @@
       <div class="imgDiv">
         <router-link :to="{ name:'imgIncrease',params: { imgs: imgHouseAttr,title:title}}">
           <div v-if="imgHouseAttr.length>0" class="swiper-container">
-            <div class="swiper-wrapper">
-              <div v-for='i in imgHouseAttr' class="swiper-slide">
-                <img :src="i?i:require('../../../static/bg_bigphotonormal拷贝@3x.png')">
-              </div>
-            </div>
-            <!-- 如果需要分页器 -->
-            <div  class="swiper-pagination"></div>
+
+            <mt-swipe :auto="0" @change="handleChange" :show-indicators="false">
+              <mt-swipe-item v-for="(item,index) in imgHouseAttr" :key="index">
+                <img :src="item" >
+              </mt-swipe-item>
+            </mt-swipe>
+
           </div>
           <div v-else><img src="../../../static/bg_bigphotonormal拷贝@3x.png"></div>
+          <div class="showNum" v-if="imgHouseAttr.length>0">{{indexNum}}/{{imgHouseAttr.length}}</div>
         </router-link>
       </div>
-
 
       <div class="house-content">
         <h2 class="villageName">{{title}}</h2>
@@ -116,16 +116,10 @@
       <router-link
         :to="{ name:'villageMore',params: { more: isSell?sellList:rentList,villageName:title,id:id,houseType:houseType}}">
         <div ref="sameSell" class="sameSells" >
-          <!--<div v-if="isSell"  >
-            同小区在售{{sellList.length}}套
-          </div>
-          <div v-else-if="isRent">
-            同小区在租{{rentList.length}}套
-          </div>-->
           <span v-if="(isRent&&rentList.length>3)||(isSell&&sellList.length>3)">查看更多</span>
           <span v-else><span v-if="(isRent&&rentList.length<1)">暂无在租房源</span>
             <span v-if="(isSell&&sellList.length<1)">暂无在售房源</span>
-            <!--{{isRent?'在租':'在售'}}--></span>
+            </span>
         </div>
       </router-link>
       <!--分割2-->
@@ -159,7 +153,6 @@
   import api from '../../api/axios'
   import headTop from '../../components/header/head'
   import BMap from 'BMap'
-//  import Swiper from 'swiper'
 
   export default {
     data() {
@@ -194,6 +187,7 @@
         userType: 'customer',
         houseType: this.$route.params.houseType?this.$route.params.houseType:this.$store.state.activeInfo.houseType,
         address: '',//地图标注地址
+        indexNum:'1',
       }
     },
     created() {
@@ -311,6 +305,9 @@
       },
       menu() {
         window.scrollTo(0,0);
+      },
+      handleChange(index){
+        this.indexNum = index+1;
       },
       clickSell() {
         this.isSell = true;
@@ -477,16 +474,19 @@
       width: 100%;
       height: 20rem;
     }
-    .swiper-pagination {
+    .showNum{
       height: 4rem;
       width: 4rem;
       border-radius: 2rem;
+      position: absolute;
+      top: 20rem;
+      right: 1rem;
+      z-index: 1;
+      color: #f0f0f0;
       background-color: #303133;
       opacity: 0.7;
       text-align: center;
       line-height: 4rem;
-      left: 85%;
-      color: #f0f0f0;
     }
     img {
       width: 100%;
