@@ -21,7 +21,6 @@
 </template>
 
 <script>
-  import headTop from '../../components/header/head'
   import BMap from 'BMap'
 
   export default {
@@ -42,7 +41,7 @@
 
     },
     components: {
-      headTop,
+
     },
     mounted() {
       this.getBaiduMap();

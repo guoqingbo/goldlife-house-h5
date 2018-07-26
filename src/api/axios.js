@@ -60,7 +60,8 @@ axios.interceptors.response.use(
     return response;
   },
   error => {
-    return Promise.reject(error.response);
+    console.log(error.response)
+    return Promise.resolve(error.response);
   }
 );
 

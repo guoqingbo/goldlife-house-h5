@@ -1,10 +1,12 @@
 <template>
   <div class="villageMore">
     <!--<head-top goBack="true"/>-->
-    <h1 class="nav-header">
-      <span class="go-back" @click="$router.go(-1)"><i class="icon iconfont go-back-icon">&#xe60f;</i></span>
-      <span class="header-title">{{this.title}}</span>
-    </h1>
+    <div id="nav-village">
+      <ul>
+        <li class="menu"><span class="go-back" @click="$router.go(-1)"><i class="icon iconfont go-back-icon">&#xe60f;</i></span></li>
+        <span>{{title}}</span>
+      </ul>
+    </div>
 
     <div class="search">
       <span class="left">{{this.title}}</span>
@@ -15,6 +17,7 @@
 
     <!--房源结果列表-->
     <!--<house-list :houseLists="houseLists" :houseType="houseType"></house-list>-->
+    <div class="content-more">
     <div v-if="houseLists.length>0">
       <ul class="house-list"
           v-infinite-scroll="loadMore"
@@ -43,6 +46,7 @@
       </div>
       <!--遮罩-->
       <div class="filter-mask" @click='opentFilter("district")' @touchmove.prevent></div>
+    </div>
     </div>
     <keep-alive>
       <router-view></router-view>
@@ -164,6 +168,7 @@
         this.houseParams[this.houseType].orderColumn = orderItem.orderColumn;
         this.gethouseLists();
         this.filterType = ''
+        window.scrollTo(0,0);
       },
       menu() {
         window.scrollTo(0,0);
@@ -297,44 +302,41 @@
   .villageMore{
     font-size: 1.6rem;
   }
-  /**导航*/
-  .nav-header {
-    position: relative;
+  #nav-village{
+    height: 4.4rem;
+    width:100%;
+    position:fixed;/*固定作用*/
+    top:0;
+    z-index: 9999;
+    text-align: center;
     background-color: #fff;
     font-size: 1.6rem;
     color: #424242;
     height: 4.4rem;
     line-height: 4.4rem;
-    //border-bottom: solid .6rem #f8f8f8;
+    border-bottom: solid .6rem #f8f8f8;
+    .menu{
+      overflow-y:hidden;
+      cursor:hand;
+      display:inline;
+      list-style:none;
+      font-weight:bold;
+      float:left;
+    }
     .go-back {
       position: absolute;
       left: $contentPadding;
     }
-    .go-back-icon {
-      font-size: 2rem;
-    }
-    .header-title {
-      display: inline-block;
-      width: 100%;
+    span{
       font-weight: bold;
-      text-align: center;
-    }
-    .xl {
-      position: absolute;
-      right: 5rem;
-    }
-
-    .right {
-      transform: rotate(90deg);
-      position: absolute;
-      right: 1rem;
-    }
-    .iconfont {
-      font-size: 20px;
     }
   }
 
   .search {
+    position: fixed;
+    top:4.4rem;
+    z-index: 9999;
+    width: 100%;
     background-color: #F8F8F8;
     height: 4rem;
     line-height: 4rem;
@@ -347,6 +349,9 @@
     .select-active-icon {
       color: #ffc16a;
     }
+  }
+  .content-more{
+    margin-top: 8.4rem;
   }
 
   .houseList {
@@ -372,8 +377,8 @@
   /*排序*/
   .filter-order {
     @include filter-wrap;
-    position: absolute;
-    top: 8rem;
+    position: fixed;
+    top: 8.4rem;
     font-size: 1.6rem;
     ul {
       width: 100%;

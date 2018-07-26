@@ -1,11 +1,14 @@
 <template>
   <div class="villageDetail">
     <!--<head-top goBack="true"/>-->
-    <h1 class="nav-header">
-      <span class="go-back" @click="$router.go(-1)"><i class="icon iconfont go-back-icon">&#xe60f;</i></span>
-      <span class="header-title">{{title}}</span>
-    </h1>
-    <div class="content">
+    <div id="nav-village">
+      <ul>
+        <li class="menu"><span class="go-back" @click="$router.go(-1)"><i class="icon iconfont go-back-icon">&#xe60f;</i></span></li>
+        <span>{{title}}</span>
+      </ul>
+    </div>
+
+    <div class="content-village">
       <!--顶部轮播图片-->
       <div class="imgDiv">
         <router-link :to="{ name:'imgIncrease',params: { imgs: imgHouseAttr,title:title}}">
@@ -156,7 +159,7 @@
   import api from '../../api/axios'
   import headTop from '../../components/header/head'
   import BMap from 'BMap'
-  import Swiper from 'swiper'
+//  import Swiper from 'swiper'
 
   export default {
     data() {
@@ -229,13 +232,35 @@
               this.id = resultHouse.id;
               this.sellList = resultHouse.houseInblock.sell.lists;
               this.rentList = resultHouse.houseInblock.rent.lists;
-              if(this.sellList.length<1 && this.isSell){
-                this.$refs.ulDisplay.style.display = 'none';
-                this.$refs.sameSell.style.marginTop = '2rem';
+              if(this.isSell){
+                if(this.sellList.length > 3){
+                  this.$refs.ulDisplay.style.display = '';
+                  this.$refs.sameSell.style.marginTop = '16rem';
+                  this.$refs.sameSell.style.backgroundColor='#f5f5f5';
+                }else if(this.sellList.length > 0 && this.sellList.length < 4){
+                  this.$refs.ulDisplay.style.display = '';
+                  this.$refs.sameSell.style.marginTop = '12rem';
+                  this.$refs.sameSell.style.backgroundColor='#fff';
+                }else {
+                  this.$refs.ulDisplay.style.display = 'none';
+                  this.$refs.sameSell.style.marginTop = '2rem';
+                  this.$refs.sameSell.style.backgroundColor='#f5f5f5';
+                }
               }
-              if(this.isRent && this.rentList.length<1){
-                this.$refs.ulDisplay.style.display = 'none';
-                this.$refs.sameSell.style.marginTop = '2rem';
+              if(this.isRent){
+                if(this.rentList.length > 3){
+                  this.$refs.ulDisplay.style.display = '';
+                  this.$refs.sameSell.style.marginTop = '16rem';
+                  this.$refs.sameSell.style.backgroundColor='#f5f5f5';
+                }else if(this.rentList.length > 0 && this.rentList.length < 4){
+                  this.$refs.ulDisplay.style.display = '';
+                  this.$refs.sameSell.style.marginTop = '12rem';
+                  this.$refs.sameSell.style.backgroundColor='#fff';
+                }else {
+                  this.$refs.ulDisplay.style.display = 'none';
+                  this.$refs.sameSell.style.marginTop = '2rem';
+                  this.$refs.sameSell.style.backgroundColor='#f5f5f5';
+                }
               }
               console.log('在售列表')
               console.log(this.sellList);
@@ -322,13 +347,7 @@
           this.$refs.sameSell.style.marginTop = '2rem';
           this.$refs.sameSell.style.backgroundColor='#f5f5f5';
         }
-        /*if (this.rentList.length > 0) {
-          this.$refs.ulDisplay.style.display = '';
-          this.$refs.sameSell.style.marginTop = '16rem';
-        } else {
-          this.$refs.ulDisplay.style.display = 'none';
-          this.$refs.sameSell.style.marginTop = '2rem';
-        }*/
+
       },
       clkAttention() {
         api.isLogin()
@@ -420,41 +439,37 @@
   .villageDetail{
     font-size: 1.6rem;
   }
-  /**导航*/
-  .nav-header {
-    position: relative;
+  #nav-village{
+    height: 4.4rem;
+    width:100%;
+    position:fixed;/*固定作用*/
+    top:0;
+    z-index: 9999;
+    text-align: center;
     background-color: #fff;
     font-size: 1.6rem;
     color: #424242;
     height: 4.4rem;
     line-height: 4.4rem;
     border-bottom: solid .6rem #f8f8f8;
+    .menu{
+      overflow-y:hidden;
+      cursor:hand;
+      display:inline;
+      list-style:none;
+      font-weight:bold;
+      float:left;
+    }
     .go-back {
       position: absolute;
       left: $contentPadding;
     }
-    .go-back-icon {
-      font-size: 2rem;
-    }
-    .header-title {
-      display: inline-block;
-      width: 100%;
+    span{
       font-weight: bold;
-      text-align: center;
     }
-    .xl {
-      position: absolute;
-      right: 5rem;
-    }
-
-    .right {
-      transform: rotate(90deg);
-      position: absolute;
-      right: 1rem;
-    }
-    .iconfont {
-      font-size: 20px;
-    }
+  }
+  .content-village{
+    margin-top: 4.4rem;
   }
 
   .imgDiv {

@@ -1,11 +1,13 @@
 <template>
   <div class="houseRentDetail">
     <!--<head-top goBack="true"/>-->
-    <h1 class="nav-header">
-      <span class="go-back" @click="$router.go(-1)"><i class="icon iconfont go-back-icon">&#xe60f;</i></span>
-      <span class="header-title">房源</span>
-    </h1>
-    <div class="content">
+    <div id="nav-rent">
+      <ul>
+        <li class="menu"><span class="go-back" @click="$router.go(-1)"><i class="icon iconfont go-back-icon">&#xe60f;</i></span></li>
+        <span class="village">房源</span>
+      </ul>
+    </div>
+    <div class="content-rent">
       <!--顶部轮播图片-->
       <div class="imgDiv">
         <router-link :to="{ name:'imgIncrease',params: { imgs: imgHouseAttr,title:title}}">
@@ -70,13 +72,6 @@
             <el-row class="el-detailDes">
               <p>年代： <span class="data-show">{{buildyear}}</span></p>
             </el-row>
-            <el-row class="el-detailDes">
-              <router-link
-                :to="{ name:'villageDetail',params: {blockId:blockId,cityId:cityId,userType:userType,houseType:houseType}}">
-              <p>小区： <span style="color: #ffc16b" >{{block_name}}</span></p>
-              </router-link>
-            </el-row>
-
           </el-col>
 
           <el-col :span="11">
@@ -90,6 +85,19 @@
             <el-row class="el-detailDes">
               <p></p>
             </el-row>
+
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="18">
+            <el-row class="el-detailDes">
+              <router-link
+                :to="{ name:'villageDetail',params: {blockId:blockId,cityId:cityId,userType:userType,houseType:houseType}}">
+                <p>小区： <span style="color: #ffc16b" >{{block_name}}</span></p>
+              </router-link>
+            </el-row>
+          </el-col>
+          <el-col :span="6">
             <el-row class="el-detailDes">
               <router-link
                 :to="{ name:'villageDetail',params: {blockId:blockId,cityId:cityId,userType:userType,houseType:houseType}}">
@@ -98,6 +106,7 @@
             </el-row>
           </el-col>
         </el-row>
+
       </div>
       <!--百度地图-->
       <div class="homeMap">
@@ -168,7 +177,7 @@
       <div class="button-bottom">
         <el-row class="el-bt">
           <el-col :span="12" class="grid-bt-content bg-bt-light">
-            <div @click="clkAttention()"><i class="icon iconfont xl">&#xe657;</i><br><span class="span-icon">{{attentionStatus}}</span>
+            <div @click="clkAttention()"><i class="icon iconfont xl">&#xe657;</i><br><span class="span-icon" ref="spanIcon">{{attentionStatus}}</span>
             </div>
           </el-col>
           <el-col :span="12">
@@ -187,9 +196,8 @@
 
 <script>
   import api from '../../api/axios'
-  import headTop from '../../components/header/head'
   import BMap from 'BMap'
-  import Swiper from 'swiper'
+//  import Swiper from 'swiper'
   import { MessageBox } from 'mint-ui';
 
   export default {
@@ -242,7 +250,7 @@
       this.$store.commit("setActiveInfo",{houseId:this.houseId,houseType:this.houseType})
     },
     components: {
-      headTop,
+
     },
     mounted() {
       this.ready();
@@ -287,8 +295,11 @@
               this.brokerPhone = resultHouse.brokerPhone;
               if (resultHouse.attentionState === '1') {
                 this.attentionStatus = '已关注'
+                this.$refs.spanIcon.style.left = '7.4rem'
+
               } else if (resultHouse.attentionState === '0') {
                 this.attentionStatus = '关注'
+                this.$refs.spanIcon.style.left = '8rem'
               }
               this.address = resultHouse.disrictName + ',' + resultHouse.streetName;
               //重置地图
@@ -396,6 +407,7 @@
                     if (res.data.success) {
                       console.log('关注成功')
                       this.attentionStatus = '已关注';
+                      this.$refs.spanIcon.style.left = '7.4rem'
                     }
                   })
                   .catch(function (response) {
@@ -416,6 +428,7 @@
                     if (res.data.success) {
                       console.log('取消关注')
                       this.attentionStatus = '关注';
+                      this.$refs.spanIcon.style.left = '8rem'
                     }
                   })
                   .catch(function (response) {
@@ -448,9 +461,14 @@
 
       },
       getHomeDetail(data){
-        this.houseId = data;
-        this.houseType = '2';
-        this.getHouseDetail();
+        if(data == this.houseId){
+
+        }else {
+          this.houseId = data;
+          this.houseType = '2';
+          this.getHouseDetail();
+        }
+
         this.menu();
       },
       ready() {
@@ -488,41 +506,37 @@
   .houseRentDetail{
     font-size: 1.6rem;
 
-    /**导航*/
-    .nav-header {
-      position: relative;
+    #nav-rent{
+      height: 4.4rem;
+      width:100%;
+      position:fixed;/*固定作用*/
+      top:0;
+      z-index: 9999;
+      text-align: center;
       background-color: #fff;
       font-size: 1.6rem;
       color: #424242;
       height: 4.4rem;
       line-height: 4.4rem;
       border-bottom: solid .6rem #f8f8f8;
+      .menu{
+        overflow-y:hidden;
+        cursor:hand;
+        display:inline;
+        list-style:none;
+        font-weight:bold;
+        float:left;
+      }
       .go-back {
         position: absolute;
         left: $contentPadding;
       }
-      .go-back-icon {
-        font-size: 2rem;
-      }
-      .header-title {
-        display: inline-block;
-        width: 100%;
+      span{
         font-weight: bold;
-        text-align: center;
       }
-      .xl {
-        position: absolute;
-        right: 5rem;
-      }
-
-      .right {
-        transform: rotate(90deg);
-        position: absolute;
-        right: 1rem;
-      }
-      .iconfont {
-        font-size: 20px;
-      }
+    }
+    .content-rent{
+      margin-top: 4.4rem;
     }
 
     .imgDiv {
@@ -624,6 +638,7 @@
         i{
           margin-top: 0.5rem;
           font-weight: bold;
+          margin-right: 2rem;
         }
       }
     }
@@ -717,10 +732,17 @@
       }
       .icon {
         color: #ffc16b;
+        position: absolute;
+        bottom: 2.4rem;
+        left: 8.4rem;
+        padding-bottom: 0.1rem;
       }
       .span-icon {
         color: #ffc16b;
-        font-size: 1.6rem;
+        font-size: 1.3rem;
+        position: absolute;
+        left: 7.4rem;
+        bottom: 0.6rem;
       }
       .centenr {
         text-align: center;
