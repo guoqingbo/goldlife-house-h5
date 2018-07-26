@@ -14,7 +14,7 @@
           </ul>
         </div>
         <div class="my-search-input left">
-          <input type="search" placeholder="请输入商圈或小区名" @keyup="showSearchResult" v-model="params.keyword">
+          <input type="search" placeholder="请输入想找的楼盘名称" @keyup="showSearchResult" v-model="params.keyword">
         </div>
       </div>
       <div class="my-search-right right" @click="$emit('hideSearch')">
@@ -151,7 +151,7 @@
     /*下拉样式*/
     .my-search-dropdown{
       position: relative;
-      width: 30%;
+      width: 20%;
       font-size: 1.3rem;
       .house-type-ul{
         width: 9rem;
@@ -201,6 +201,7 @@
       color: #424242;
       input{
         background-color: transparent;
+        font-size: 1.3rem;
         width: 100%;
       }
     }

@@ -157,7 +157,6 @@
 
 <script>
   import api from '../../api/axios'
-  import headTop from '../../components/header/head'
   import BMap from 'BMap'
 //  import Swiper from 'swiper'
 
@@ -203,7 +202,6 @@
       this.$store.commit("setActiveInfo",{blockId:this.blockId,houseType:this.houseType})
     },
     components: {
-      headTop,
     },
     mounted() {
       this.ready();

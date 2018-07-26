@@ -54,7 +54,6 @@ axios.interceptors.response.use(
               });
             }
           })
-          return;
       }
     }
     return response;
@@ -158,18 +157,6 @@ export default {
     )
   },
 
-
-
-
-  // //区域板块
-  // getDistrict(data){
-  //   return axios.post(
-  //     'house/getRegion',
-  //     qs.stringify({
-  //       city:data.city,
-  //     })
-  //   )
-  // },
   //区域板块
   getDistrict(data){
     return axios.post(
@@ -334,9 +321,6 @@ export default {
   isLogin(){
     return axios.post(
       '/user/isLogin',
-      qs.stringify({
-
-      })
     )
   },
 }

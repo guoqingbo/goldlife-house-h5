@@ -1,6 +1,5 @@
 <template>
 	<div>
-		<head-top />
         <h1 class="nav-header">
           <span class="go-back" @click="$router.go(-1)"><i class="icon iconfont go-back-icon">&#xe60f;</i></span>
           <span class="header-title">看房日程</span>
@@ -61,7 +60,6 @@
 </template>
 <script type="text/javascript">
 	import api from '../../api/axios'
-  	import headTop from '../../components/header/head'
 	export default {
 		name:'lookHouseIndex',
 		data(){
@@ -112,7 +110,6 @@
 			}
 		},
 		components:{
-			headTop
 		}
 	}
 </script>

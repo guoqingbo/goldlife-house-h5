@@ -21,7 +21,6 @@
 
 <script>
     import api from '../../api/axios' //后台数据接口
-//    import headTop from '../../components/header/head'
 //    import $alert from '../../components/common/alert/alert.js'
 //    import { Toast } from 'mint-ui';
 //    import { MessageBox } from 'mint-ui';
@@ -43,8 +42,6 @@
 //          console.log(this.$route.params);
         },
         components: {
-//          headTop,
-//          alert,
         },
         computed: {
 

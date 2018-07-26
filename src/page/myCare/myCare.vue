@@ -1,8 +1,6 @@
 <template>
   <!--房源结果列表-->
   <div class="">
-    <!--顶部头-->
-    <head-top goBack="true"/>
     <!--头部导航-->
     <div class="header-nav">
       <!--返回图标-->
@@ -36,7 +34,6 @@
 </template>
 <script>
   import api from '../../api/axios'
-  import headTop from '../../components/header/head';
   import houseItem from '../../components/common/houseItem'
 
   export default {
@@ -56,7 +53,6 @@
       }
     },
     components: {
-      headTop,
       houseItem,
     },
     created(){

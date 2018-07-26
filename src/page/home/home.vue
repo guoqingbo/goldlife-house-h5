@@ -2,7 +2,6 @@
     <div class="box">
       <!--房源列表页-->
       <div v-if="!isShowSearch">
-        <head-top goBack="true"/>
         <div class="content">
           <!--搜索-->
           <div class="my-search clear">
@@ -18,7 +17,7 @@
                   </ul>
               </div>
               <div class="my-search-input left">
-                <input type="search" placeholder="请输入商圈或小区名" @focus="isShowSearch=true" v-model="communityName">
+                <input type="search" placeholder="请输入想找的楼盘名称" @focus="isShowSearch=true" v-model="communityName">
               </div>
             </div>
             <div class="my-search-right left" @click="toggleMore">
@@ -215,7 +214,6 @@
 </template>
 <script>
     import api from '../../api/axios'
-    import headTop from '../../components/header/head'
     import houseItem from '../../components/common/houseItem'
     import search from '../../page/search/search'
 //    import $alert from '../../components/common/alert/alert.js'
@@ -321,7 +319,6 @@
             }
         },
         components: {
-          headTop,
           search,
           houseItem,
         },
@@ -823,7 +820,7 @@
       /*下拉样式*/
       .my-search-dropdown{
         position: relative;
-        width: 30%;
+        width: 20%;
         font-size: 1.3rem;
         .house-type-ul{
           width: 9rem;
@@ -873,6 +870,7 @@
         color: #424242;
         input{
           background-color: transparent;
+          font-size: 1.3rem;
           width: 100%;
         }
       }

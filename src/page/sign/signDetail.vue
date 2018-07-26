@@ -48,7 +48,6 @@
 </template>
 <script type="text/javascript">
 	import api from '../../api/axios'
-	import headTop from '../../components/header/head'
 	export default {
 		name:'signDetail',
 		data(){
@@ -104,7 +103,6 @@
 			}
 		},
 		components: {
-          headTop
         },
         filters: { //定义过滤器
 		  formatPrice: function (value) {

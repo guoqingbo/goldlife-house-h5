@@ -1,6 +1,5 @@
 <template>
 	<div>
-		<!--<head-top />-->
         <h1 class="nav-header">
           <!--<span class="go-back" @click="$router.go(-1)"><i class="icon iconfont go-back-icon">&#xe60f;</i></span>-->
           <span class="header-title">退出</span>
@@ -16,7 +15,6 @@
 </template>
 <script>
 	import api from '../../api/axios'
-	import headTop from '../../components/header/head'
 	import envConfig from '../../config/env.js'
 
 	export default {
@@ -69,7 +67,7 @@
 			}
 		},
 		components: {
-//          headTop
+
         },
 	}
 </script>

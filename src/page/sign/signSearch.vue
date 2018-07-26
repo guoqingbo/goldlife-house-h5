@@ -23,7 +23,6 @@
 </template>
 <script type="text/javascript">
   import api from '../../api/axios'
-  import headTop from '../../components/header/head'
   export default {
     name:'signSearch',
     data(){
@@ -81,7 +80,7 @@
       }
     },
     components: {
-        headTop
+
       },
   }
 </script>

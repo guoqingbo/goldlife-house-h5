@@ -33,7 +33,7 @@
         if (value) {
           return value;
         }else{
-          return "/static/img/bg_bigphotonormal@2x.f7b270e.png"
+          return "/static/bg_smallphotonormal@2x.png"
         }
       },
       price(value,houseType){
@@ -85,8 +85,8 @@
     padding:1.5rem 0;
     width: 100%;
     .img {
-      width: 42%;
-      height: 8.5rem;
+      width: 12.1rem;
+      height: 9rem;
       /*border-radius: .5rem;*/
       img {
         width: 100%;
