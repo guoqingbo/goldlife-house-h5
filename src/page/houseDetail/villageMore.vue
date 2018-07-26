@@ -168,6 +168,7 @@
         this.houseParams[this.houseType].orderColumn = orderItem.orderColumn;
         this.gethouseLists();
         this.filterType = ''
+        window.scrollTo(0,0);
       },
       menu() {
         window.scrollTo(0,0);
