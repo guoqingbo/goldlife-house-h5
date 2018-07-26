@@ -159,7 +159,7 @@
   import api from '../../api/axios'
   import headTop from '../../components/header/head'
   import BMap from 'BMap'
-  import Swiper from 'swiper'
+//  import Swiper from 'swiper'
 
   export default {
     data() {

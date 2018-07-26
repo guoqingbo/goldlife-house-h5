@@ -32,7 +32,6 @@
 </template>
 
 <script>
-  import headTop from '../../components/header/head'
   import Swiper from 'swiper'
 
   export default {
@@ -44,7 +43,6 @@
 
     },
     components: {
-      headTop,
     },
     mounted() {
       var mySwiper = new Swiper('.swiper-container', {

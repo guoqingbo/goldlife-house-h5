@@ -196,9 +196,8 @@
 
 <script>
   import api from '../../api/axios'
-  import headTop from '../../components/header/head'
   import BMap from 'BMap'
-  import Swiper from 'swiper'
+//  import Swiper from 'swiper'
   import { MessageBox } from 'mint-ui';
 
   export default {
@@ -251,7 +250,7 @@
       this.$store.commit("setActiveInfo",{houseId:this.houseId,houseType:this.houseType})
     },
     components: {
-      headTop,
+
     },
     mounted() {
       this.ready();

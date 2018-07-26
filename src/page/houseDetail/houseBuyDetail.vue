@@ -162,10 +162,9 @@
 
 <script>
   import api from '../../api/axios'
-  import headTop from '../../components/header/head'
   import BMap from 'BMap'
-  import Swiper from 'swiper'
   import { MessageBox } from 'mint-ui';
+//  import Swiper from 'swiper'
 
   export default {
     beforeCreate() {
@@ -224,7 +223,6 @@
 
     },
     components: {
-      headTop,
     },
     mounted() {
       this.getBaiduMap();
