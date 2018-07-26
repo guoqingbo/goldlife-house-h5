@@ -151,7 +151,7 @@
     /*下拉样式*/
     .my-search-dropdown{
       position: relative;
-      width: 20%;
+      width: 24%;
       font-size: 1.3rem;
       .house-type-ul{
         width: 9rem;

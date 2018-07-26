@@ -11,15 +11,15 @@ Vue.use(Router);
 
 const routes = [
   {//首页
-    path: '/', name: 'home',
+    path: '/', name: 'home',meta:{keepAlive:true},
     component: r => require.ensure([], () => r(require('../page/home/home'))),
   },
   {//登录页
-    path: '/login', name: 'login', title: '金品生活',
+    path: '/login', name: 'login', meta:{title: '金品生活'},
     component: r => require.ensure([], () => r(require('../page/login/login'))),
   },
   {//登出
-    path: '/logout', name: 'logout',title: '金品生活',
+    path: '/logout', name: 'logout',meta:{title: '金品生活'},
     component: r => require.ensure([], () => r(require('../page/login/logout'))),
   },
   {//房源列表页
@@ -135,6 +135,12 @@ router.beforeEach((to, from, next) => {
         }
       });
   }
+  //更改title
+  if (to.meta.title) {
+    document.title = to.meta.title;
+    next();
+  }
+
   // else if(to.meta.redirect){
   //   //路由跳转(微信需要)
   //   let data = to.query;
