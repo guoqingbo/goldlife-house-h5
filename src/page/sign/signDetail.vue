@@ -143,35 +143,6 @@
 <style lang="scss" scoped>
 	@import '../../style/mixin';
 	// @import '../../style/sign';
-	
-	/* @media screen and (max-width: 320px) {
-	    	.scroll-box{
-	  			height: 21.5rem;  		
-	  		}
-	  }
-	  @media screen and (max-width: 320px) and (device-height:533px){
-	    	.scroll-box{
-	  			height: 15.5rem;
-	  		}
-	  }
-	
-	  @media screen and (max-width: 414px) and (min-width: 360px) {
-	    	.scroll-box{
-	  			height: 28.5rem;
-	  		}
-	  }
-	  // 适配iphoneX
-	  @media screen and (device-width: 375px) and (device-height:812px)and (-webkit-device-pixel-ratio:3) {
-	    	.scroll-box{
-	  			height: 42.5rem;
-	  		}
-	  }
-	  // 适配iPad
-	  @media screen and (min-width: 768px) {
-	    	.scroll-box{
-	  			height: 11.5rem;
-	  		}
-	  } */
 
 	.container_box{
 		height:100%;
