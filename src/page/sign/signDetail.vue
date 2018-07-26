@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="container_box" >
 		<head-top />
         <h1 class="nav-header">
           <span class="go-back" @click="$router.go(-1)"><i class="icon iconfont go-back-icon">&#xe60f;</i></span>
@@ -32,13 +32,15 @@
 			<div class="status" v-if="signDetail.now_transfer != undefined">
 				<h2>当前签约状态：<span>{{ signDetail.now_transfer.stage_name }}</span></h2>
 
-				<div class="status_content">
-					<p v-for="item in transfer">
-						<span v-if="item.step_id==signDetail.now_transfer.step_id" class="current" id="current"></span>
-						<span v-else-if="item.isComplete==1" class="complete"></span>
-						<span v-else class="uncomplete"></span>
-						<span>{{ item.stage_name }}</span>
-					</p>
+				<div class="scroll-box" id="scroll-box" :style="'height:'+Heig+'px'">
+					<div class="status_content">
+						<p v-for="item in transfer">
+							<span v-if="item.step_id==signDetail.now_transfer.step_id" class="current" id="current"></span>
+							<span v-else-if="item.isComplete==1" class="complete"></span>
+							<span v-else class="uncomplete"></span>
+							<span>{{ item.stage_name }}</span>
+						</p>
+					</div>
 				</div>
 			</div>
 
@@ -61,7 +63,8 @@
 		          '1':'办理中',
 		          '2':'结案',
 		          '3':'作废'
-		        }
+		        },
+		        Heig:''
 			}
 		},
 		created(){
@@ -72,6 +75,7 @@
 			setTimeout(function(){	//先等待DOM元素加载完成
 				that.currentStatus();
 			},500)
+			// this.currentStatus();
 
 		},
 		methods:{
@@ -100,7 +104,16 @@
 				})
 			},
 			currentStatus(){//定位到当前步骤
-				document.getElementById("current").scrollIntoView();
+				// document.getElementById("current").scrollIntoView();
+				var currEle = document.getElementById("current");
+				var scrollBox = document.getElementById("scroll-box");
+				// var currTop = currEle.getBoundingClientRect().top;
+				var BoxTop = scrollBox.getBoundingClientRect().top;
+				var screenH = document.documentElement.clientHeight;
+				
+				let HH = screenH - BoxTop;
+
+				this.Heig = HH
 			}
 		},
 		components: {
@@ -129,6 +142,41 @@
 </script>
 <style lang="scss" scoped>
 	@import '../../style/mixin';
+	// @import '../../style/sign';
+	
+	/* @media screen and (max-width: 320px) {
+	    	.scroll-box{
+	  			height: 21.5rem;  		
+	  		}
+	  }
+	  @media screen and (max-width: 320px) and (device-height:533px){
+	    	.scroll-box{
+	  			height: 15.5rem;
+	  		}
+	  }
+	
+	  @media screen and (max-width: 414px) and (min-width: 360px) {
+	    	.scroll-box{
+	  			height: 28.5rem;
+	  		}
+	  }
+	  // 适配iphoneX
+	  @media screen and (device-width: 375px) and (device-height:812px)and (-webkit-device-pixel-ratio:3) {
+	    	.scroll-box{
+	  			height: 42.5rem;
+	  		}
+	  }
+	  // 适配iPad
+	  @media screen and (min-width: 768px) {
+	    	.scroll-box{
+	  			height: 11.5rem;
+	  		}
+	  } */
+
+	.container_box{
+		height:100%;
+		overflow-y: hidden;		
+	}
   .nav-header{
     position: relative;
     background-color: #fff;
@@ -233,12 +281,16 @@
   		}
   	}
   	.status{
+  		
   		background: #ffffff;
   		padding: 1.5rem;
   		p{
   			font-size: 1.4rem;
   			margin-top: 2rem;
 
+  		}
+  		p:first-child{
+  			margin-top: 1.5rem;
   		}
   		p:last-child{
   			margin-bottom: 1.75rem;
@@ -248,6 +300,11 @@
   				color: #ffbb02;
   			}
   		}
+  		.scroll-box{
+  			overflow-y: scroll;
+  			padding-left: 0.2rem;
+  		}
+  		
   	}
 
 	.status_content{
