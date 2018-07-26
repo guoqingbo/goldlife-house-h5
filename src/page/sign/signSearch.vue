@@ -1,9 +1,9 @@
 <template>
   <div>
       <head-top />
-      <h1 class="nav-header">
+      <h1 class="nav-hd">
         <span class="hd-title">签约查询</span>
-        <span class="go-back" @click="$router.go(-1)">返回</span>
+        <span class="hd-back" @click="$router.go(-1)">返回</span>
       </h1>
 
       <div class="box" v-for="item in signList" @click="toDetail(item.id)">
@@ -85,7 +85,7 @@
   }
 </script>
 <style lang="scss" scoped>
-  .nav-header{
+  .nav-hd{
     display: flex;
     justify-content: space-between;
     background-color: #fff;
@@ -95,7 +95,7 @@
     line-height: 4.4rem;
     border-bottom: solid .6rem #f8f8f8;
     padding:0 2rem;
-    .go-back{
+    .hd-back{
       color:#ffc16b;
     }
     .hd-title{

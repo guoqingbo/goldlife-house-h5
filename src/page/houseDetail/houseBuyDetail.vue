@@ -19,16 +19,26 @@
       <!--顶部轮播图片-->
       <div class="imgDiv">
         <router-link :to="{ name:'imgIncrease',params: { imgs: imgHouseAttr,title:title}}">
-          <div v-if="imgHouseAttr.length>0" class="swiper-container">
+          <!--<div v-if="imgHouseAttr.length>0" class="swiper-container">
             <div class="swiper-wrapper">
               <div v-for='i in imgHouseAttr' class="swiper-slide">
                 <img :src="i">
               </div>
             </div>
-            <!-- 如果需要分页器 -->
+            &lt;!&ndash; 如果需要分页器 &ndash;&gt;
             <div class="swiper-pagination"></div>
+          </div>-->
+          <div v-if="imgHouseAttr.length>0" class="swiper-container">
+
+            <mt-swipe :auto="0" @change="handleChange" :show-indicators="false">
+              <mt-swipe-item v-for="(item,index) in imgHouseAttr" :key="index">
+                  <img :src="item" >
+              </mt-swipe-item>
+            </mt-swipe>
+
           </div>
           <div v-else><img src="../../../static/bg_bigphotonormal拷贝@3x.png"></div>
+          <div class="showNum">{{indexNum}}/{{imgHouseAttr.length}}</div>
         </router-link>
       </div>
 
@@ -212,6 +222,7 @@
         address: '',//地图标注地址
         sellLength:'',
         rentLength:'',
+        indexNum:'1',
       }
     },
     created() {
@@ -288,7 +299,7 @@
                 this.compareDesc = '加入对比'
               }
               //初始化轮播
-              this.$nextTick(function () {
+              /*this.$nextTick(function () {
                 var mySwiper = new Swiper('.swiper-container', {
                   loop: true,
                   autoplay: {
@@ -300,7 +311,7 @@
                     type: 'fraction',
                   },
                 });
-              });
+              });*/
               this.sellList = resultHouse.houseInBlock.sell.lists;
               this.sellLength = resultHouse.houseInBlock.sell.tatalCount;
               this.rentList = resultHouse.houseInBlock.rent.lists;
@@ -379,6 +390,9 @@
           this.$refs.ulDisplay.style.display = 'none';
           this.$refs.sameSell.style.marginTop = '2rem';
         }
+      },
+      handleChange(index){
+        this.indexNum = index+1;
       },
       //关注
       attention() {
@@ -642,6 +656,20 @@
       img {
         width: 100%;
         height: 20rem;
+      }
+      .showNum{
+        height: 4rem;
+        width: 4rem;
+        border-radius: 2rem;
+        position: absolute;
+        top: 20rem;
+        right: 1rem;
+        z-index: 999;
+        color: #f0f0f0;
+        background-color: #303133;
+        opacity: 0.7;
+        text-align: center;
+        line-height: 4rem;
       }
 
     }
