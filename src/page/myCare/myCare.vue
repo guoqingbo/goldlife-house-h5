@@ -1,8 +1,6 @@
 <template>
   <!--房源结果列表-->
   <div class="">
-    <!--顶部头-->
-    <head-top goBack="true"/>
     <!--头部导航-->
     <div class="header-nav">
       <!--返回图标-->
@@ -26,7 +24,10 @@
                 handler: () => attention(item.id,index)
             }]">
             <div class="house-item-box" slot="title">
-              <router-link to="/sellDetail"> <house-item :item="item" :houseType="houseType"/></router-link>
+              <router-link
+                :to="houseType==3?{name:houseTypeDetail[houseType], params:{cityId:'hz', blockId:item.id, userType:'customer', houseType:1}}:{name:houseTypeDetail[houseType], params:{cityId:'hz', houseId:item.id, userType:'customer', houseType:houseType}}">
+                <house-item :item="item" :houseType="houseType"/>
+              </router-link>
             </div>
           </mt-cell-swipe>
         </li>
@@ -36,27 +37,22 @@
 </template>
 <script>
   import api from '../../api/axios'
-  import headTop from '../../components/header/head';
   import houseItem from '../../components/common/houseItem'
 
   export default {
     props:[],
     data(){
       return {
-        houseType:2, //1租房 2二手房 3楼盘
-        houseLists:[],//收藏房源列表
-        cancelCareStyle:{
-
-//          font-size: 1.3rem;
-//          height: 11rem;
-//          line-height: 11rem;
-//          text-align: center;
-//          width: 8rem;
-      }
+        houseType: 1, //1二手房 2租房 3楼盘
+        houseLists: [],//收藏房源列表
+        houseTypeDetail: {
+          1: 'houseBuyDetail',
+          2: 'houseRentDetail',
+          3: 'villageDetail',
+        },//详情类型
       }
     },
     components: {
-      headTop,
       houseItem,
     },
     created(){
@@ -78,8 +74,10 @@
                     item.title=item.cmt_name
                     item.describe =item.build_date?item.build_date+"年建":""
                     item.pic=item.surface_img
+
                     houseLists.push(item)
                   });
+                  console.log(houseLists)
                   this.houseLists = houseLists;
                 }else{
                   this.$toast({

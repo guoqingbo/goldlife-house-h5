@@ -31,7 +31,6 @@
 </template>
 <script>
   import api from '../../api/axios'
-  import headTop from '../../components/header/head';
   import houseItem from '../../components/common/houseItem'
   import {MessageBox} from 'mint-ui'
 

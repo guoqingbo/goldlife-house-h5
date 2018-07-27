@@ -2,12 +2,12 @@
     <div class="box">
       <!--房源列表页-->
       <div v-if="!isShowSearch">
-        <!-- <head-top goBack="true"/> -->
         <div class="content">
-          <!--搜索-->
-          <div class="my-search clear">
-            <div class="my-searchbar-inner left clear">
-              <div class="my-search-dropdown left" >
+          <div class="top-fix">
+            <!--搜索-->
+            <div class="my-search clear">
+              <div class="my-searchbar-inner left clear">
+                <div class="my-search-dropdown left" >
                   <div class="" @click="openHouseTypePop">
                     {{houseType == 1?"二手房":'租房' }}<i class="icon iconfont">&#xe62d;</i>
                   </div>
@@ -16,189 +16,182 @@
                     <li :class="{'house-type-active':houseType==1}"><span @click='selectHouseType(1)'>二手房</span></li>
                     <li :class="{'house-type-active':houseType==2}"><span @click='selectHouseType(2)'>租房</span></li>
                   </ul>
+                </div>
+                <div class="my-search-input left">
+                  <input type="search" placeholder="请输入想找的楼盘名称" @focus="isShowSearch=true" v-model="communityName">
+                </div>
               </div>
-              <div class="my-search-input left">
-                <input type="search" placeholder="请输入商圈或小区名" @focus="isShowSearch=true" v-model="communityName">
+              <div class="my-search-right left" @click="toggleMore">
+                <i class="icon iconfont iconfont-more">&#xe641;</i>
               </div>
             </div>
-            <div class="my-search-right left" @click="toggleMore">
-              <i class="icon iconfont iconfont-more">&#xe641;</i>
-            </div>
-            <ul class="more-ul" v-if="morePopVisible">
-              <li><i class="icon iconfont arrow">&#xe65d;</i></li>
-              <li><router-link to="/myCare"><span><i class="icon iconfont my-care">&#xe609;</i></span>我的关注</router-link></li>
-              <li><router-link to="/lookHouseIndex"><span><i class="icon iconfont look-house">&#xe610;</i></span>看房预约</router-link></li>
-              <li><router-link to="/signSearch"><span><i class="icon iconfont sign-search">&#xe60b;</i></span>签约查询</router-link></li>
-            </ul>
-          </div>
-          <!--过滤导航-->
-          <div class="condition-filter clear" @touchmove.prevent>
-            <ul class="left clear">
-              <li @click = 'opentFilter("district")' :class="{'select-active':filterTypeActive == 'district'}">
-                {{filterShowText.district.name}}
-                <i v-if="filterType != 'district'" class="icon iconfont">&#xe65e;</i>
-                <i  v-if="filterType == 'district'" class="icon iconfont select-active">&#xe65d;</i>
-              </li>
-              <li @click = 'opentFilter("price")' :class="{'select-active':filterTypeActive == 'price'}">
-                {{filterShowText.price.name}}
-                <i v-if="filterType != 'price'" class="icon iconfont">&#xe65e;</i>
-                <i  v-if="filterType == 'price'" class="icon iconfont select-active">&#xe65d;</i>
-              </li>
-              <li @click = 'opentFilter("roomType")' :class="{'select-active':filterTypeActive == 'roomType'}">
-                {{filterShowText.roomType.name}}
-                <i v-if="filterType != 'roomType'" class="icon iconfont">&#xe65e;</i>
-                <i  v-if="filterType == 'roomType'" class="icon iconfont select-active">&#xe65d;</i>
-              </li>
-              <li @click = 'opentFilter("filterMore")' :class="{'select-active':filterTypeActive == 'filterMore'}">
-                {{filterShowText.filterMore.name}}
-                <i v-if="filterType != 'filterMore'" class="icon iconfont">&#xe65e;</i>
-                <i v-if="filterType == 'filterMore'" class="icon iconfont select-active">&#xe65d;</i>
-              </li>
-              <li @click = 'opentFilter("filterOrder")' :class="{'select-active':filterTypeActive == 'filterOrder'}">
-                <i class="icon iconfont">&#xe656;</i></li>
-            </ul>
-          </div>
-          <!--搜索结果为空-->
-          <div v-if="recomment > 0" class="search-empty">
-            <div class="search-empty-tip">找不到您搜索的房源</div>
-            <div class="recomment-tip">为您推荐</div>
-          </div>
-          <!--房源结果列表-->
-          <div v-if="houseLists.length>0">
-            <ul class="house-list"
-                v-infinite-scroll="loadMore"
-                infinite-scroll-disabled="loading"
-                infinite-scroll-distance="0">
-              <li class="house-item clear" v-for="item in houseLists" :key="item.id">
-                <router-link
-                  :to="{name:houseTypeDetail[houseType], params:{cityId:'hz', houseId:item.id, userType:'customer', houseType:houseType}}">
-                  <house-item :item="item" :houseType="houseType"/>
-                </router-link>
-              </li>
-            </ul>
-            <p v-if="!isLoadAll" class="loading-more"><span class="loading-more-span"><i class="icon iconfont loading-more-icon">&#xe6ae;</i></span><span class="loading-more-text">加载更多</span></p>
-            <p v-if="isLoadAll" class="loading-more">没有更多数据了！</p>
-          </div>
-
-          <!--价格-->
-          <div v-if="filterType == 'price'" class="filter-price"  @touchmove.prevent>
-            <div class="filter-title">价格区间（{{houseType == 1?'万':'元'}}）</div>
-            <div class="price-between-input">
-              <input
-                class="left" v-model="houseParams[houseType].priceMin"
-                @focus="clearNowFilter()"
-                maxlength="4"
-                @input="houseParams[houseType].priceMin.length>4?houseParams[houseType].priceMin = houseParams[houseType].priceMin.slice(0, 4):''"
-                type="number"/>
-              <span><i class="icon iconfont iconfont-heng">&#xe6f1;</i></span>
-              <input
-                class="right"
-                v-model="houseParams[houseType].priceMax"
-                @focus="clearNowFilter"
-                @input="houseParams[houseType].priceMax.length>4?houseParams[houseType].priceMax = houseParams[houseType].priceMax.slice(0, 4):''"
-                maxlength="4" type="number"/>
-            </div>
-            <ul class="filter-select">
-              <li
-                v-for="item in filterList[houseType].price.child" :key="item.id"
-                class=""
-                :class="{'filter-select-active': houseParams[houseType].filterIds.indexOf(item.id) >= 0}"
-                @click="setFilterValue($event,item)">{{item.child_name}}
-              </li>
-            </ul>
-            <div class="filter-btn">
-              <button class="unlimit-btn" @click="unlimit">不限</button>
-              <button class="confirm-btn" @click="filterConfirm">确定</button>
-            </div>
-            <!--遮罩-->
-            <div class="filter-mask" @click = 'opentFilter("price")'></div>
-          </div>
-          <!--区域-->
-          <div v-if="filterType == 'district'" class="filter-district" @touchmove.prevent>
-            <div class="clear">
-              <!--区域-->
-              <ul class="district-ul left" @touchmove.stop>
-                <li v-for="(districtItem,index) in district"
-                    :class="{'select-font-active': activDistrictIndex == index}"
-                    @click="setCheckDistrictValue($event,index)">
-                  {{districtItem.district}}
+            <!--过滤导航-->
+            <div class="condition-filter clear" @touchmove.prevent>
+              <ul class="left clear">
+                <li @click = 'opentFilter("district")' :class="{'select-active':filterTypeActive == 'district'}">
+                  {{filterShowText.district.name}}
+                  <i v-if="filterType != 'district'" class="icon iconfont">&#xe65e;</i>
+                  <i  v-if="filterType == 'district'" class="icon iconfont select-active">&#xe65d;</i>
                 </li>
-              </ul>
-              <!--板块-->
-              <ul class="street-ul left clear" @touchmove.stop>
-                <li v-for="streetItem in district[activDistrictIndex].street"
-                    @click="setCheckStreetValue($event,streetItem)"
-                    :class="{'street-active': houseParams[houseType].areaIds == streetItem.id}">
-                  {{streetItem.name}}
+                <li @click = 'opentFilter("price")' :class="{'select-active':filterTypeActive == 'price'}">
+                  {{filterShowText.price.name}}
+                  <i v-if="filterType != 'price'" class="icon iconfont">&#xe65e;</i>
+                  <i  v-if="filterType == 'price'" class="icon iconfont select-active">&#xe65d;</i>
                 </li>
+                <li @click = 'opentFilter("roomType")' :class="{'select-active':filterTypeActive == 'roomType'}">
+                  {{filterShowText.roomType.name}}
+                  <i v-if="filterType != 'roomType'" class="icon iconfont">&#xe65e;</i>
+                  <i  v-if="filterType == 'roomType'" class="icon iconfont select-active">&#xe65d;</i>
+                </li>
+                <li @click = 'opentFilter("filterMore")' :class="{'select-active':filterTypeActive == 'filterMore'}">
+                  {{filterShowText.filterMore.name}}
+                  <i v-if="filterType != 'filterMore'" class="icon iconfont">&#xe65e;</i>
+                  <i v-if="filterType == 'filterMore'" class="icon iconfont select-active">&#xe65d;</i>
+                </li>
+                <li @click = 'opentFilter("filterOrder")' :class="{'select-active':filterTypeActive == 'filterOrder'}">
+                  <i class="icon iconfont">&#xe656;</i></li>
               </ul>
             </div>
-            <!--遮罩-->
-            <div class="filter-mask" @click = 'opentFilter("district")' @touchmove.prevent></div>
-          </div>
-          <!--房型-->
-          <div v-if="filterType == 'roomType'" class="filter-room-type"  @touchmove.prevent>
-            <ul class="filter-select">
-              <li v-for="item in filterList[houseType].room.child" :key="item.id"
+            <!--价格-->
+            <div v-if="filterType == 'price'" class="filter-price"  @touchmove.prevent>
+              <div class="filter-title">价格区间（{{houseType == 1?'万':'元'}}）</div>
+              <div class="price-between-input">
+                <input
+                  class="left" v-model="houseParams[houseType].priceMin"
+                  @focus="clearNowFilter()"
+                  maxlength="4"
+                  @input="houseParams[houseType].priceMin.length>4?houseParams[houseType].priceMin = houseParams[houseType].priceMin.slice(0, 4):''"
+                  type="number"/>
+                <span><i class="icon iconfont iconfont-heng">&#xe6f1;</i></span>
+                <input
+                  class="right"
+                  v-model="houseParams[houseType].priceMax"
+                  @focus="clearNowFilter"
+                  @input="houseParams[houseType].priceMax.length>4?houseParams[houseType].priceMax = houseParams[houseType].priceMax.slice(0, 4):''"
+                  maxlength="4" type="number"/>
+              </div>
+              <ul class="filter-select">
+                <li
+                  v-for="item in filterList[houseType].price.child" :key="item.id"
+                  class=""
                   :class="{'filter-select-active': houseParams[houseType].filterIds.indexOf(item.id) >= 0}"
-                  @click="setFilterValue($event,item)">
-                {{item.child_name}}
-              </li>
-            </ul>
-            <div class="filter-btn">
-              <button class="unlimit-btn" @click="unlimit">不限</button>
-              <button class="confirm-btn" @click="filterConfirm">确定</button>
-            </div>
-            <!--遮罩-->
-            <div class="filter-mask" @click = 'opentFilter("price")'></div>
-          </div>
-          <!--筛选-->
-          <div v-if="filterType == 'filterMore'" class="filter-more"  @touchmove.prevent>
-            <div class="filter-title">建筑面积（㎡）</div>
-            <ul class="filter-select">
-              <li
-                v-for="item in filterList[houseType].buildarea.child" :key="item.id"
-                :class="{'filter-select-active': houseParams[houseType].filterIds.indexOf(item.id) >= 0}"
-                @click="setFilterValue($event,item)">{{item.child_name}}
-              </li>
-            </ul>
-            <div class="filter-title">楼龄</div>
-            <ul class="filter-select">
-              <li
-                v-for="item in filterList[houseType].buildyear.child" :key="item.id"
-                :class="{'filter-select-active': houseParams[houseType].filterIds.indexOf(item.id) >= 0}"
-                @click="setFilterValue($event,item)">{{item.child_name}}
-              </li>
-            </ul>
-
-            <div class="filter-title">朝向</div>
-            <ul class="filter-select">
-              <li
-                v-for="item in filterList[houseType].forward.child" :key="item.id"
-                :class="{'filter-select-active': houseParams[houseType].filterIds.indexOf(item.id) >= 0}"
-                @click="setFilterValue($event,item)">{{item.child_name}}
-              </li>
-            </ul>
-            <div class="filter-btn">
-              <button class="unlimit-btn" @click="clearNowFilter">重置</button>
-              <button class="confirm-btn" @click="filterConfirm">确定</button>
-            </div>
-            <!--遮罩-->
-            <div class="filter-mask" @click = 'opentFilter("price")'></div>
-          </div>
-          <!--排序-->
-          <div v-if="filterType == 'filterOrder'" class="filter-order">
-            <div class="clear">
-              <ul class="filter-order-ul left">
-                <li v-for="(item,index) in orderFilter[houseType]"
-                    :class="{'select-font-active': houseParams[houseType].orderColumn == item.orderColumn&&houseParams[houseType].orderBy == item.orderBy}"
-                    @click="setOrderValue($event,item)">
-                  {{item.describe}}
+                  @click="setFilterValue($event,item)">{{item.child_name}}
                 </li>
               </ul>
+              <div class="filter-btn">
+                <button class="unlimit-btn" @click="unlimit">不限</button>
+                <button class="confirm-btn" @click="filterConfirm">确定</button>
+              </div>
+              <!--遮罩-->
+              <div class="filter-mask" @click = 'opentFilter("price")'></div>
             </div>
-            <!--遮罩-->
-            <div class="filter-mask" @click = 'opentFilter("district")' @touchmove.prevent></div>
+            <!--区域-->
+            <div v-if="filterType == 'district'" class="filter-district" @touchmove.prevent>
+              <div class="clear">
+                <!--区域-->
+                <ul class="district-ul left" @touchmove.stop>
+                  <li v-for="(districtItem,index) in district"
+                      :class="{'select-font-active': activDistrictIndex == index}"
+                      @click="setCheckDistrictValue($event,index)">
+                    {{districtItem.district}}
+                  </li>
+                </ul>
+                <!--板块-->
+                <ul class="street-ul left clear" @touchmove.stop>
+                  <li v-for="streetItem in district[activDistrictIndex].street"
+                      @click="setCheckStreetValue($event,streetItem)"
+                      :class="{'street-active': houseParams[houseType].areaIds == streetItem.id}">
+                    {{streetItem.name}}
+                  </li>
+                </ul>
+              </div>
+              <!--遮罩-->
+              <div class="filter-mask" @click = 'opentFilter("district")' @touchmove.prevent></div>
+            </div>
+            <!--房型-->
+            <div v-if="filterType == 'roomType'" class="filter-room-type"  @touchmove.prevent>
+              <ul class="filter-select">
+                <li v-for="item in filterList[houseType].room.child" :key="item.id"
+                    :class="{'filter-select-active': houseParams[houseType].filterIds.indexOf(item.id) >= 0}"
+                    @click="setFilterValue($event,item)">
+                  {{item.child_name}}
+                </li>
+              </ul>
+              <div class="filter-btn">
+                <button class="unlimit-btn" @click="unlimit">不限</button>
+                <button class="confirm-btn" @click="filterConfirm">确定</button>
+              </div>
+              <!--遮罩-->
+              <div class="filter-mask" @click = 'opentFilter("price")'></div>
+            </div>
+            <!--筛选-->
+            <div v-if="filterType == 'filterMore'" class="filter-more"  @touchmove.prevent>
+              <div class="filter-title">建筑面积（㎡）</div>
+              <ul class="filter-select">
+                <li
+                  v-for="item in filterList[houseType].buildarea.child" :key="item.id"
+                  :class="{'filter-select-active': houseParams[houseType].filterIds.indexOf(item.id) >= 0}"
+                  @click="setFilterValue($event,item)">{{item.child_name}}
+                </li>
+              </ul>
+              <div class="filter-title">楼龄</div>
+              <ul class="filter-select">
+                <li
+                  v-for="item in filterList[houseType].buildyear.child" :key="item.id"
+                  :class="{'filter-select-active': houseParams[houseType].filterIds.indexOf(item.id) >= 0}"
+                  @click="setFilterValue($event,item)">{{item.child_name}}
+                </li>
+              </ul>
+
+              <div class="filter-title">朝向</div>
+              <ul class="filter-select">
+                <li
+                  v-for="item in filterList[houseType].forward.child" :key="item.id"
+                  :class="{'filter-select-active': houseParams[houseType].filterIds.indexOf(item.id) >= 0}"
+                  @click="setFilterValue($event,item)">{{item.child_name}}
+                </li>
+              </ul>
+              <div class="filter-btn">
+                <button class="unlimit-btn" @click="clearNowFilter">重置</button>
+                <button class="confirm-btn" @click="filterConfirm">确定</button>
+              </div>
+              <!--遮罩-->
+              <div class="filter-mask" @click = 'opentFilter("price")'></div>
+            </div>
+            <!--排序-->
+            <div v-if="filterType == 'filterOrder'" class="filter-order">
+              <div class="clear">
+                <ul class="filter-order-ul left">
+                  <li v-for="(item,index) in orderFilter[houseType]"
+                      :class="{'select-font-active': houseParams[houseType].orderColumn == item.orderColumn&&houseParams[houseType].orderBy == item.orderBy}"
+                      @click="setOrderValue($event,item)">
+                    {{item.describe}}
+                  </li>
+                </ul>
+              </div>
+              <!--遮罩-->
+              <div class="filter-mask" @click = 'opentFilter("district")' @touchmove.prevent></div>
+            </div>
+          </div>
+          <div class="house-box">
+            <!--搜索结果为空-->
+            <div v-if="recomment > 0" class="search-empty">
+              <div class="search-empty-tip">找不到您搜索的房源</div>
+              <div class="recomment-tip">为您推荐</div>
+            </div>
+            <!--房源结果列表-->
+            <div v-if="houseLists.length>0" class="house-list-box">
+              <ul class="house-list" ref="houseScroll" @touchmove="loadMore">
+                <li class="house-item clear" v-for="item in houseLists" :key="item.id">
+                  <router-link
+                    :to="{name:houseTypeDetail[houseType], params:{cityId:'hz', houseId:item.id, userType:'customer', houseType:houseType}}">
+                    <house-item :item="item" :houseType="houseType"/>
+                  </router-link>
+                </li>
+              </ul>
+              <p v-if="!isLoadAll" class="loading-more"><span class="loading-more-span"><i class="icon iconfont loading-more-icon">&#xe6ae;</i></span><span class="loading-more-text">加载更多</span></p>
+              <p v-if="isLoadAll" class="loading-more">没有更多数据了！</p>
+            </div>
           </div>
         </div>
       </div>
@@ -209,13 +202,19 @@
         @hideSearch="isShowSearch = false"
         @searchHouse="searchHouse">
       </search>
+      <!--加载更多-->
+      <ul class="more-ul" v-if="morePopVisible">
+        <li><i class="icon iconfont arrow">&#xe65d;</i></li>
+        <li @click="morePopVisible=false"><router-link to="/myCare"><span><i class="icon iconfont my-care">&#xe609;</i></span>我的关注</router-link></li>
+        <li @click="morePopVisible=false"><router-link to="/lookHouseIndex"><span><i class="icon iconfont look-house">&#xe610;</i></span>看房预约</router-link></li>
+        <li @click="morePopVisible=false"><router-link to="/signSearch"><span><i class="icon iconfont sign-search">&#xe60b;</i></span>签约查询</router-link></li>
+      </ul>
       <!--全屏遮罩-->
       <div class="full-mask" v-if="morePopVisible" @touchmove.prevent @click="morePopVisible = false"></div>
     </div>
 </template>
 <script>
     import api from '../../api/axios'
-    import headTop from '../../components/header/head'
     import houseItem from '../../components/common/houseItem'
     import search from '../../page/search/search'
 //    import $alert from '../../components/common/alert/alert.js'
@@ -320,8 +319,11 @@
               }
             }
         },
+        mounted(){
+
+        },
+
         components: {
-          headTop,
           search,
           houseItem,
         },
@@ -393,6 +395,7 @@
               api.getRentHouseList(params)
                 .then( res => {
                     console.log(res)
+                  this.recomment = res.data.result.recomment;//是否为推荐房源
                   if (res.data.success){
                     if(isLoadMore){
                       this.houseLists = this.houseLists.concat(res.data.result.list);
@@ -707,10 +710,27 @@
 //            console.log(123)
 //          },
           loadMore() {
-            this.loading = true;
-            this.houseParams[this.houseType].pageIndex++;
-            console.log(this.houseParams[this.houseType].pageIndex)
-            this.gethouseLists(true)
+              if(this.isLoadAll){ //如果加载完了所有数据
+                  return
+              }
+              let scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scroll;
+              let innerHeight = window.innerHeight;
+              let offsetHeight =   document.documentElement.offsetHeight || document.body.offsetHeight;
+              // 判断是否滚动到底部
+              if(scrollTop + innerHeight >= offsetHeight) {
+                  if(this.loading){ //防止连续请求
+                      return
+                  }
+                console.log("++++")
+                  this.loading = true;
+                  this.houseParams[this.houseType].pageIndex++;
+                  this.gethouseLists(true)
+              }
+
+//            this.loading = true;
+//            this.houseParams[this.houseType].pageIndex++;
+//            console.log(this.houseParams[this.houseType].pageIndex)
+//            this.gethouseLists(true)
 //              this.loading = false;
             console.log(123)
           }
@@ -728,10 +748,6 @@
 </script>
 
 <style lang="scss" scoped>
-
-  .box{
-    font-size: 1.6rem;
-  }
   /*公用样式封装*/
   /*边框*/
   @mixin border {
@@ -747,7 +763,7 @@
     font-size: 1.5rem;
     position: absolute;
     z-index: 6;
-    top: 16.5rem;
+    top: 10.5rem;
     background-color: #fff;
   }
   /*过滤标题*/
@@ -803,6 +819,15 @@
       background-color: #ffc16b;
     }
   }
+  .box{
+    font-size: 1.6rem;
+  }
+  /*固定头*/
+  .top-fix{
+    position: fixed;
+    background-color: #fff;
+    width: 100%;
+    z-index: 0;
     /**搜索样式*/
     .my-search{
       margin-top: 1.2rem;
@@ -823,7 +848,7 @@
       /*下拉样式*/
       .my-search-dropdown{
         position: relative;
-        width: 30%;
+        width: 24%;
         font-size: 1.3rem;
         .house-type-ul{
           width: 9rem;
@@ -873,6 +898,7 @@
         color: #424242;
         input{
           background-color: transparent;
+          font-size: 1.3rem;
           width: 100%;
         }
       }
@@ -881,60 +907,11 @@
         text-align: right;
         .iconfont-more{font-size: 2.5rem};
       }
-      .more-ul{
-        position: absolute;
-        z-index: 6;
-        right: 2rem;
-        top: 10rem;
-        background-color: #fff;
-        font-size: 1.3rem;
-        border-radius: 6px;
-        li:not(:first-child){
-          height: 3.5rem;
-          line-height: 3.5rem;
-          padding: 0 1rem;
-          &:nth-child(n+3){
-            @include border-top;
-          }
-          a{
-            color: #424242;
-            display: inline-block;
-            width: 100%;
-          }
-          span{
-            display: inline-block;
-            width: 2rem;
-            /*margin: 0 .5rem 0 1rem;*/
-          }
-        }
-        .arrow{
-          color:#fff;
-          position: absolute;
-          top: -1.5rem;
-          right: 0.5rem;
-          font-size: 2.5rem;
-        }
-        .my-care{
-          color:#ffc16b ;
-          font-size: 1.9rem;
-          vertical-align: middle;
-        }
-        .look-house{
-          color:#5c5990 ;
-          font-size: 2.2rem;
-          vertical-align: bottom;
-        }
-        .sign-search{
-          color:#eed7b5 ;
-          font-size: 1.9rem;
-          vertical-align: middle;
-        }
-      }
     }
 
     /**条件过滤*/
     .condition-filter{
-      padding:3rem 2rem 0 2rem;
+      padding:2rem 2rem 0 2rem;
       ul{
         padding-bottom: 1.5rem;
         width: 100%;
@@ -952,12 +929,63 @@
         }
       }
       /*li:last-child{*/
-        /*text-align: center;*/
+      /*text-align: center;*/
       /*}*/
       .select-active{
         color:#ffc16a;
       }
     }
+  }
+  /*搜索右边点击弹框*/
+  .more-ul{
+    position: fixed;
+    z-index: 6;
+    right: 2rem;
+    top: 5rem;
+    background-color: #fff;
+    font-size: 1.3rem;
+    border-radius: 6px;
+    li:not(:first-child){
+      height: 3.5rem;
+      line-height: 3.5rem;
+      padding: 0 1rem;
+      &:nth-child(n+3){
+        @include border-top;
+      }
+      a{
+        color: #424242;
+        display: inline-block;
+        width: 100%;
+      }
+      span{
+        display: inline-block;
+        width: 2rem;
+        /*margin: 0 .5rem 0 1rem;*/
+      }
+    }
+    .arrow{
+      color:#fff;
+      position: absolute;
+      top: -1.5rem;
+      right: 0.5rem;
+      font-size: 2.5rem;
+    }
+    .my-care{
+      color:#ffc16b ;
+      font-size: 1.9rem;
+      vertical-align: middle;
+    }
+    .look-house{
+      color:#5c5990 ;
+      font-size: 2.2rem;
+      vertical-align: bottom;
+    }
+    .sign-search{
+      color:#eed7b5 ;
+      font-size: 1.9rem;
+      vertical-align: middle;
+    }
+  }
 
   /*价格筛选*/
     .filter-price{
@@ -1005,7 +1033,7 @@
   /*区域筛选*/
     .filter-district{
       @include filter-wrap;
-      top: 15rem;
+      top: 10.5rem;
       ul{
         width: 50%;
         height: 29rem;
@@ -1106,7 +1134,8 @@
     left: 0;
     background-color: rgba(0,0,0,0.5);
   }
-
+  .house-box{
+    padding-top: 10.5rem;
     /*搜索结果为空*/
     .search-empty{
       .search-empty-tip{
@@ -1122,35 +1151,39 @@
         color:#444444;
       }
     }
-  /**列表*/
-  .house-list {
-    padding: 0 2rem;
-    li {
-      @include border-top;
-      /*background-color: #ccc;*/
-    }
-  }
-/*加载中*/
-  .loading-more{
-    text-align:center;
-    line-height: 2.6rem;
-    @keyframes loading {
-      0% {
-        transform: rotate(0deg);
+    /**列表*/
+    .house-list-box{
+      .house-list {
+        overflow: auto;
+        padding: 0 2rem;
+        li {
+          @include border-top;
+          /*background-color: #ccc;*/
+        }
       }
-      100% {
-        transform: rotate(360deg);
+      /*加载中*/
+      .loading-more{
+        text-align:center;
+        line-height: 2.6rem;
+        @keyframes loading {
+          0% {
+            transform: rotate(0deg);
+          }
+          100% {
+            transform: rotate(360deg);
+          }
+        }
+        .loading-more-span{
+          display: inline-block;
+          animation:loading 1.2s infinite linear  both
+        }
+        .loading-more-text{
+          padding-left: 1rem;
+        }
+        .loading-more-icon{
+          font-size: 2.6rem;
+        }
       }
-    }
-    .loading-more-span{
-      display: inline-block;
-      animation:loading 1.2s infinite linear  both
-    }
-    .loading-more-text{
-      padding-left: 1rem;
-    }
-    .loading-more-icon{
-      font-size: 2.6rem;
     }
   }
 </style>

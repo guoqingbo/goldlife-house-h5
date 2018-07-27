@@ -33,12 +33,14 @@
         if (value) {
           return value;
         }else{
-          return "/static/img/bg_bigphotonormal@2x.f7b270e.png"
+          return "/static/bg_smallphotonormal@2x.png"
         }
       },
       price(value,houseType){
         if (value) {
           return houseType == 1 ? value + '万' : value + '元/月';
+        }else if (value == 0){
+          return houseType == 1 ? 0 + '万' : 0 + '元/月';
         }
       },
       avgprice(value){
@@ -85,8 +87,8 @@
     padding:1.5rem 0;
     width: 100%;
     .img {
-      width: 42%;
-      height: 8.5rem;
+      width: 12.1rem;
+      height: 9rem;
       /*border-radius: .5rem;*/
       img {
         width: 100%;
@@ -99,7 +101,7 @@
       /*flex-direction:column;*/
       align-content: space-between;
       flex-wrap: wrap;
-      width: 58%;
+      width: 16rem;
       padding-left: 1.5rem;
       p {
         width: 100%;

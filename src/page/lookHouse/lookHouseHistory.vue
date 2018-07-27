@@ -105,7 +105,7 @@
 		        }
 		    }
 		}
-		
+
 	}
 </script>
 <style lang="scss" scoped>
@@ -139,7 +139,7 @@
 		    }
 		  }
 	}
-  
+
 
 	.box{
 		width: 100%;

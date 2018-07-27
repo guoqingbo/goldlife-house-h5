@@ -58,7 +58,6 @@
 
 <script>
   import api from '../../api/axios'
-  import headTop from '../../components/header/head'
   import houseItem from '../../components/common/houseItem'
 
   export default {
@@ -145,7 +144,6 @@
 
     },
     components: {
-      headTop,
       houseItem,
     },
     mounted() {

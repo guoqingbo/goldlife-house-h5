@@ -1,6 +1,5 @@
 <template>
 	<div class="box">
-		
         <h1 class="nav-header">
           <span class="go-back" @click="$router.go(-1)"><i class="icon iconfont go-back-icon">&#xe60f;</i></span>
           <span class="header-title" @click="postNode">确定</span>

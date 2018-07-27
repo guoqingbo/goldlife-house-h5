@@ -7,12 +7,14 @@
         </h1>
         <div class="loginForm">
           <div class="input-telpnone">
-            <input   placeholder="请输入手机号" v-model="loginName" />
+            <input   placeholder="请输入手机号" v-model="loginName" type="tel"
+                     @input="loginName.length>11?loginName = loginName.slice(0, 11):''"/>
             <span class="right" @click="getCode" v-show="!computedTime">获取验证码</span>
             <span class="right"  v-show="computedTime">已发送({{computedTime}}s)</span>
           </div>
           <div class="input-code">
-            <input  placeholder="请输入验证码" v-model="mobileCodeInput"/>
+            <input  placeholder="请输入验证码" v-model="mobileCodeInput"
+                    @input="mobileCodeInput.length>6?mobileCodeInput = mobileCodeInput.slice(0, 6):''"/>
           </div>
           <button class="btn-login" @click.prevent="userLogin">立即登录</button>
         </div>
@@ -21,7 +23,6 @@
 
 <script>
     import api from '../../api/axios' //后台数据接口
-//    import headTop from '../../components/header/head'
 //    import $alert from '../../components/common/alert/alert.js'
 //    import { Toast } from 'mint-ui';
 //    import { MessageBox } from 'mint-ui';
@@ -43,8 +44,6 @@
 //          console.log(this.$route.params);
         },
         components: {
-//          headTop,
-//          alert,
         },
         computed: {
 
@@ -72,7 +71,7 @@
                 });
                 return
               }else{
-                this.computedTime = 30;
+                this.computedTime = 60;
                 this.timer = setInterval(() => {
                   this.computedTime --;
                   if (this.computedTime == 0) {
