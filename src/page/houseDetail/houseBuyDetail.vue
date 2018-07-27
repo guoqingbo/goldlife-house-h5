@@ -4,13 +4,11 @@
     <div id="nav-buy">
       <ul>
         <li class="menu"><span class="go-back" @click="$router.go(-1)"><i class="icon iconfont go-back-icon">&#xe60f;</i></span></li>
-        <li class="menu"><span class="village">{{block_name}}</span></li>
+        <li class="menu villageLi"><span class="village">{{block_name}}</span></li>
         <li class="menu"><i v-if="attentionStatus" @click="attention()" class="icon iconfont xl">&#xe609;</i><i v-else @click="attention()" class="icon iconfont xl">&#xe657;</i></li>
         <li class="menu"><div class="badge" @click="toCompare()">
-          <router-link :to="{ name:'houseCompared',params: { }}">
             <img src="../../assets/icon/icon_topbar_hclist@2x.png">
             <div v-if="compareNum!=''" class="div2">{{compareNum}}</div>
-          </router-link>
         </div></li>
       </ul>
     </div>
@@ -430,7 +428,8 @@
       },
       getHomeDetail(data) {
         if(data == this.houseId){
-
+          //window.reload();
+          this.$router.go(0);
         }else{
           this.houseId = data;
           this.houseType = '1';
@@ -577,9 +576,16 @@
         position: absolute;
         left: $contentPadding;
       }
+      .villageLi{
+        height: 4.4rem;
+        width: 100%;
+      }
       .village {
-        position: absolute;
-        left: 41%;
+        /*position: absolute;
+        left: 41%;*/
+        display: inline-block;
+        width: 100%;
+        text-align: center;
         font-weight: bold;
       }
       .xl {
@@ -590,8 +596,10 @@
       .badge {
         width: 3rem;
         height: 4rem;
-        margin-right: 2rem;
-        float: left;
+        right: 0rem;
+        //float: right;
+        position: absolute;
+        top: 0;
         img {
           height: 2rem;
           width: 2rem;
