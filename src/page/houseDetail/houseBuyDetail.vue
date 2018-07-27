@@ -474,6 +474,10 @@
               var addList = JSON.parse(localStorage.getItem("comparedList_hz_" + loginName));
               console.log(addList);
               if (this.compareDesc == '加入对比') {
+                  console.log(this.houseDetail)
+                if(this.houseDetail.img.length>0){
+                  this.houseDetail.pic = this.houseDetail.img[0]
+                }
                 list[this.houseId] =  this.houseDetail;
 
                 console.log(list);
@@ -482,7 +486,6 @@
                 this.compareDesc = '取消对比';
                 this.getCompareNum();
               } else if (this.compareDesc == '取消对比') {
-                delete list[6]
                 delete list[this.houseId]
                 //对比清单移除
                 localStorage.setItem("comparedList_hz_" + loginName, JSON.stringify(list));

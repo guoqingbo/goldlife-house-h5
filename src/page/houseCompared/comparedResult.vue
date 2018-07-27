@@ -73,8 +73,8 @@
 		methods:{
 			getCompareData(){
 				// _data为从上一页获取到的数据,最少2条，最多4条
-        // let _data = this.$route.params.data;
-        let _data = [{"cityId":"hz","houseId":"36979"},{"cityId":"hz","houseId":"36980"}];
+         let _data = this.$route.params.data;
+//        let _data = [{"cityId":"hz","houseId":"36979"},{"cityId":"hz","houseId":"36980"}];
         // console.log(_data)
 				api.houseCompared(_data)
 				.then(res=>{

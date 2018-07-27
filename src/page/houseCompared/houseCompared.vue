@@ -15,7 +15,7 @@
     <!--房源结果列表-->
     <div class="house-list">
       <ul>
-        <li class="house-item clear" v-for="item in houseLists" :key="item.id" @click="selectedHouse(item.id)">
+        <li v-for="item in houseLists" :key="item.id" @click="selectedHouse(item.id)">
           <house-item :item="item" :houseType="1" :checkBox="true">
             <div slot="checkBox" class="check-box-div">
               <span class="check-box" :class="{'check-active':beginCompared.indexOf(item.id)>=0}"></span>
@@ -206,7 +206,8 @@
   @import '../../style/mixin';
   /*导航头*/
   .nav-header{
-    position: relative;
+    position: fixed;
+    width: 100%;
     background-color: #fff;
     font-size: 1.6rem;
     color: #424242;
@@ -245,7 +246,7 @@
   }
   /*房源列表*/
   .house-list{
-    padding: 0 2rem;
+    padding: 4.4rem 2rem;
     /*选中按钮*/
     .check-box-div{
       line-height: 8rem;
@@ -275,7 +276,7 @@
   }
   /*开始对比*/
   .begin-to-compared{
-    position: absolute;
+    position: fixed;
     bottom: 0;
     text-align: center;
     width: 100%;
@@ -291,7 +292,7 @@
   }
   /*底部编辑菜单*/
   .modify-bottom-menu{
-    position: absolute;
+    position: fixed;
     bottom: 0;
     text-align: center;
     width: 100%;
