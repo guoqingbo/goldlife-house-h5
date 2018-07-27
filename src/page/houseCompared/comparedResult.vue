@@ -128,10 +128,10 @@
   	padding-left:2rem;
   	text-align: left;
   	padding-bottom:6rem;
-	position: absolute;
-	top:8.8rem;
-	left:0;
-	overflow: hidden;
+    position: absolute;
+    top:8.8rem;
+    left:0;
+    overflow: hidden;
 
   	h2{
   		width: 5rem;
