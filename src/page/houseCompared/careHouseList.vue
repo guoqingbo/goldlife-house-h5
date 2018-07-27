@@ -213,7 +213,7 @@
 
   /*加入对比清单*/
   .add-to-compared{
-    position: absolute;
+    position: fixed;
     bottom: 0;
     text-align: center;
     width: 100%;
