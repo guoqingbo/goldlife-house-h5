@@ -35,7 +35,7 @@
         </div>
         <div class="span-input dark centenr">
           <span class="span-left">验证码：</span>
-          <input class="yan dark" v-model="verCode" maxlength="6" type="number" onkeyup="this.value=this.value.replace(/[^0-9-]+/,'');" >
+          <input class="yan dark" v-model="verCode" onkeyup="this.value=this.value.replace(/[^0-9-]+/,'');" maxlength="6" >
           <button class="input-right button" ref="button" @click.prevent="getCode()">发送验证码</button>
           <br>
           <span class="xh"><span>_</span><span>_</span><span>_</span><span>_</span><span>_</span><span>_</span></span>
@@ -250,14 +250,14 @@
           });
           return
         }
-        if (!this.desc) {
+        /*if (!this.desc) {
           this.$toast({
             message: '请填写备注',
             position: 'bottom',
             duration: 3000
           });
           return
-        }
+        }*/
         var timestamp2 = Date.parse(new Date(this.dateValue));
         this.datestamp = timestamp2;
         console.log(this.datestamp);
@@ -278,10 +278,18 @@
               console.log('提交成功')
               //跳转看房日程
               this.$router.push({ name: 'lookHouseIndex', params: {}});
+            }else{
+              var errorMsg = res.data.errorMessage;
+              this.$toast({
+                message: errorMsg,
+                position: 'bottom',
+                duration: 3000
+              });
+              return
             }
           })
           .catch(function (response) {
-            console.log(response)
+
           });
 
       },
