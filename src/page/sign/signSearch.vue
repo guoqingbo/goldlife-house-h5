@@ -1,10 +1,12 @@
 <template>
-  <div>
-      <head-top />
-      <h1 class="nav-hd">
-        <span class="hd-title">签约查询</span>
-        <span class="hd-back" @click="$router.go(-1)">返回</span>
-      </h1>
+  <div class="search-box">
+      <!-- <head-top /> -->
+      <div class="tt">
+        <h1 class="nav-hd">
+          <span class="hd-title">签约查询</span>
+          <span class="hd-back" @click="$router.go(-1)">返回</span>
+        </h1>
+      </div>
 
       <div class="box" v-for="item in signList" @click="toDetail(item.id)">
         <div class="title">
@@ -23,7 +25,7 @@
 </template>
 <script type="text/javascript">
   import api from '../../api/axios'
-  import headTop from '../../components/header/head'
+  // import headTop from '../../components/header/head'
   export default {
     name:'signSearch',
     data(){
@@ -80,30 +82,43 @@
          }
       }
     },
-    components: {
-        headTop
-      },
+    // components: {
+    //     headTop
+    //   },
   }
 </script>
 <style lang="scss" scoped>
-  .nav-hd{
-    display: flex;
-    justify-content: space-between;
-    background-color: #fff;
-    font-size: 1.6rem;
-    color: #424242;
-    height: 4.4rem;
-    line-height: 4.4rem;
-    border-bottom: solid .6rem #f8f8f8;
-    padding:0 2rem;
-    .hd-back{
-      color:#ffc16b;
-    }
-    .hd-title{
-      display: inline-block;
-      font-weight: bold;
+  .search-box{
+    width: 100%;
+    height: 100%;
+    padding-top: 4.4rem;
+    .tt{
+      height: 4.4rem;
+      width: 100%;
+      background: #ffffff;
+      position: fixed;
+      top: 0;
+      .nav-hd{
+        display: flex;
+        justify-content: space-between;
+        // background-color: #fff;
+        font-size: 1.6rem;
+        color: #424242;
+        height: 4.4rem;
+        line-height: 4.4rem;
+        border-bottom: solid .6rem #f8f8f8;
+        padding:0 2rem;
+        .hd-back{
+          color:#ffc16b;
+        }
+        .hd-title{
+          display: inline-block;
+          font-weight: bold;
+        }
+      }
     }
   }
+  
 
   .box{
     width: 100%;

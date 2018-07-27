@@ -1,6 +1,6 @@
 <template>
 	<div class="container_box" >
-		<head-top />
+		<!-- <head-top /> -->
         <h1 class="nav-header">
           <span class="go-back" @click="$router.go(-1)"><i class="icon iconfont go-back-icon">&#xe60f;</i></span>
           <span class="header-title">签约详情</span>
@@ -50,7 +50,7 @@
 </template>
 <script type="text/javascript">
 	import api from '../../api/axios'
-	import headTop from '../../components/header/head'
+	// import headTop from '../../components/header/head'
 	export default {
 		name:'signDetail',
 		data(){
@@ -75,8 +75,6 @@
 			setTimeout(function(){	//先等待DOM元素加载完成
 				that.currentStatus();
 			},500)
-			// this.currentStatus();
-
 		},
 		methods:{
 			getSignDetail(){
@@ -103,22 +101,19 @@
 					console.log(err);
 				})
 			},
-			currentStatus(){//定位到当前步骤
-				// document.getElementById("current").scrollIntoView();
-				var currEle = document.getElementById("current");
-				var scrollBox = document.getElementById("scroll-box");
+			currentStatus(){//动态设置签约状态盒子的高度
+				// var currEle = document.getElementById("current");
 				// var currTop = currEle.getBoundingClientRect().top;
+				var scrollBox = document.getElementById("scroll-box");			
 				var BoxTop = scrollBox.getBoundingClientRect().top;
-				var screenH = document.documentElement.clientHeight;
-				
+				var screenH = document.documentElement.clientHeight;			
 				let HH = screenH - BoxTop;
-
 				this.Heig = HH
 			}
 		},
-		components: {
+		/*components: {
           headTop
-        },
+        },*/
         filters: { //定义过滤器
 		  formatPrice: function (value) {
  			if(!value) return '0.00';
@@ -141,8 +136,7 @@
 	}
 </script>
 <style lang="scss" scoped>
-	@import '../../style/mixin';
-	// @import '../../style/sign';
+	// @import '../../style/mixin';
 
 	.container_box{
 		height:100%;
@@ -158,7 +152,7 @@
     border-bottom: solid .6rem #f8f8f8;
     .go-back{
       position: absolute;
-      left: $contentPadding;
+      left: 1.5rem;
     }
     .go-back-icon{
       font-size: 2rem;
