@@ -1,7 +1,6 @@
 <template>
 	<div class="box">
 		<!-- <head-top /> -->
-    <!-- <div class="compared-box"> -->
       <h1 class="nav-header">
         <span class="go-back" @click="$router.go(-1)"><i class="icon iconfont go-back-icon">&#xe60f;</i></span>
         <span class="header-title">房源对比</span>
@@ -28,7 +27,7 @@
         </div>
       </div>
       <div class="houseDetail">
-
+      
         <div class="compared" v-for="item in houseList">
           <h4>{{ !!item.title?item.title:'暂无信息'}}</h4>
           <p>{{ !!item.price?item.price:'无' }}万</p>
@@ -47,9 +46,9 @@
             <li>{{ !!item.sell_type?item.sell_type:'无' }}</li>
           </ul>
         </div>
-
-      </div>
-    <!-- </div> -->
+      
+      </div>    
+ 
   </div>
 </template>
 <script>
@@ -72,8 +71,8 @@
 		methods:{
 			getCompareData(){
 				// _data为从上一页获取到的数据,最少2条，最多4条
-        // let _data = this.$route.params.data;
-        let _data = [{"cityId":"hz","houseId":"36979"},{"cityId":"hz","houseId":"36980"}];
+        let _data = this.$route.params.data;
+        // let _data = [{"cityId":"hz","houseId":"36979"},{"cityId":"hz","houseId":"36980"}];
         // console.log(_data)
 				api.houseCompared(_data)
 				.then(res=>{
@@ -194,12 +193,13 @@
 			color:#e10000;
   		}
   		img{
-  			display: inline-block;
-  			width: 12rem;
-  			height:9rem;
-  			margin-top:1.5rem;
-  			margin-bottom:3rem;
-  		}
+        display: inline-block;
+        width: 12rem;
+        height:9rem;
+        margin-top:1.5rem;
+        margin-bottom:3rem;
+        border-radius: 0.5rem;
+      }
   		ul > li{
 			font-size:1.3rem;
 	  		color:#424242;
