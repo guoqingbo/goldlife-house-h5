@@ -7,10 +7,8 @@
         <li class="menu"><span class="village">{{block_name}}</span></li>
         <li class="menu"><i v-if="attentionStatus" @click="attention()" class="icon iconfont xl">&#xe609;</i><i v-else @click="attention()" class="icon iconfont xl">&#xe657;</i></li>
         <li class="menu"><div class="badge" @click="toCompare()">
-          <router-link :to="{ name:'houseCompared',params: { }}">
             <img src="../../assets/icon/icon_topbar_hclist@2x.png">
             <div v-if="compareNum!=''" class="div2">{{compareNum}}</div>
-          </router-link>
         </div></li>
       </ul>
     </div>
