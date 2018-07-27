@@ -1,14 +1,12 @@
 <template>
 	<div>
 		<div class="res-box">
-			<head-top />
+			<!-- <head-top /> -->
 			<h1 class="nav-header">
 				<span class="go-back" @click="$router.go(-1)"><i class="icon iconfont go-back-icon">&#xe60f;</i></span>
-				<!-- <span class="header-title" @click="postNode">确定</span> -->
 			</h1>
 
 			<div class="reservaInfo" v-if="reservationInfo.targetHouse != undefined">
-				<!-- <div class="reservaInfo"> -->
 					<h2>看房预约</h2>
 					<div class="info">
 						<div class="info_left">
@@ -33,7 +31,7 @@
 							<p class="describ">{{reservationInfo.targetHouse.describe}}</p>
 							<p class="price">
 								<span>{{reservationInfo.targetHouse.price}}万</span>
-								<span>&nbsp;&nbsp;{{reservationInfo.targetHouse.avgprice}}&nbsp;元/平</span>
+								<span>&nbsp;&nbsp;{{reservationInfo.targetHouse.avgprice |formatPrice}}&nbsp;元/平</span>
 							</p>
 							<!-- <p class="dayT">{{reservationInfo.targetHouse.create_time*1000 |moment('MM月DD日 hh:mm')}}&nbsp;发布</p> -->
 							<p class="dayT">{{reservationInfo.targetHouse.create_time |publishTime}}</p>
@@ -54,7 +52,7 @@
 	</template>
 <script type="text/javascript">
 	import api from '../../api/axios'
-  	import headTop from '../../components/header/head'
+  	// import headTop from '../../components/header/head'
   	import { MessageBox } from 'mint-ui';
   	export default {
 		name:'lookHouseReservation',
@@ -117,12 +115,26 @@
             return diffDay+"天前发布";
           }
         }
-      }
+      },
+      formatPrice: function (value) {
+				if(!value) return '0.00';
+		         var valueStr = value.toString();//先转换成字符串
+		         // 判断是否有小数
+		         if(valueStr.indexOf(".") >= 0){
+		         	var intPart = valueStr.split(".")[0];
+		            var floatPart = valueStr.split(".")[1]; //预定义小数部分
+		             //将整数部分逢三一断
+		        	var intPartFormat = intPart.replace(/(\d)(?=(?:\d{3})+$)/g, '$1,');
+		            return intPartFormat + "." + floatPart;
+		        }else{
+		        	return valueStr.replace(/(\d)(?=(?:\d{3})+$)/g, '$1,');
+		        }
+		    }
 
 		},
-		components:{
+		/*components:{
 			headTop
-		}
+		}*/
 	}
 </script>
 <style lang="scss" scoped>

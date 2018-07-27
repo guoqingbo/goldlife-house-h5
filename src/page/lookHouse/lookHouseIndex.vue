@@ -1,67 +1,66 @@
 <template>
 	<div>
-		<head-top />
-        <h1 class="nav-header">
-          <span class="go-back" @click="$router.go(-1)"><i class="icon iconfont go-back-icon">&#xe60f;</i></span>
-          <span class="header-title">看房日程</span>
-          <span class="go-edit" @click="lookHistory"><i class="icon iconfont editor-icon">&#xe62e;</i></span>
-        </h1>
+		<div class="look_box">
+			<h1 class="nav-header">
+				<span class="go-back" @click="$router.go(-1)"><i class="icon iconfont go-back-icon">&#xe60f;</i></span>
+				<span class="header-title">看房日程</span>
+				<span class="go-edit" @click="lookHistory"><i class="icon iconfont editor-icon">&#xe62e;</i></span>
+			</h1>
 
-		<div class="box" v-for="i in houseList" @click="toDetail(i)">
-			<!-- 线上房源 -->
-			<div v-if="i.lineType == 0">
-				<div class="house-detail" v-if="i.targetHouse != undefined">
-					<img :src="!!i.targetHouse.pic?i.targetHouse.pic:'./static/bg_smallphotonormal@2x.png'">
-					<div>
-						<h3>
-							<span>约看小区&nbsp;</span>
-							{{i.targetHouse.community_name}}
-						</h3>
-						<p class="describ">{{i.targetHouse.room}}室{{i.targetHouse.hall}}厅{{i.targetHouse.toilet}}卫/{{i.targetHouse.buildarea}}㎡/朝{{i.targetHouse.forward}}</p>
-						<p class="price">
-							<span>{{i.targetHouse.price}}万</span>
-							<span>&nbsp;&nbsp;{{i.targetHouse.avgprice}}&nbsp;元/平</span>
+			<div class="box" v-for="i in houseList" @click="toDetail(i)">
+				<!-- 线上房源 -->
+				<div v-if="i.lineType == 0">
+					<div class="house-detail" v-if="i.targetHouse != undefined">
+						<img :src="!!i.targetHouse.pic?i.targetHouse.pic:'./static/bg_smallphotonormal@2x.png'">
+						<div>
+							<h3>
+								<span>约看小区&nbsp;</span>
+								{{i.targetHouse.community_name}}
+							</h3>
+							<p class="describ">{{i.targetHouse.room}}室{{i.targetHouse.hall}}厅{{i.targetHouse.toilet}}卫/{{i.targetHouse.buildarea}}㎡/朝{{i.targetHouse.forward}}</p>
+							<p class="price">
+								<span>{{i.targetHouse.price}}万</span>
+								<span>&nbsp;&nbsp;{{i.targetHouse.avgprice|formatPrice}}&nbsp;元/平</span>
+							</p>
+						</div>
+					</div>
+					<div class="house-status">
+						<p :class="'t'+i.state">
+							<span>{{ state[i.state] }}</span>
+							<span>{{ (i.time)/1000 |moment('MM月DD日 HH:mm') }}</span>
 						</p>
 					</div>
 				</div>
-				<div class="house-status">
-					<p :class="'t'+i.state">
-						<span>{{ state[i.state] }}</span>
-						<span>{{ (i.time)/1000 |moment('MM月DD日 HH:mm') }}</span>
-					</p>
-				</div>
-			</div>
 
-			<!-- 线下房源 -->
-			<div v-else>
-				<div class="house-detail" @click="toDetail(i)">
-					<img :src="!!i.targetHouse.pic?i.targetHouse.pic:'./static/bg_smallphotonormal@2x.png'">
-					<div>
-						<h3>线下房源</h3>
-						<p class="describ">请提前咨询确定房屋样式符合您的预期</p>
-						<p class="price offline">
-							<span>{{i.num |lineHouse}}</span>
-							<!-- <span>&nbsp;&nbsp;套</span> -->
+				<!-- 线下房源 -->
+				<div v-else>
+					<div class="house-detail" @click="toDetail(i)">
+						<img :src="!!i.targetHouse.pic?i.targetHouse.pic:'./static/bg_smallphotonormal@2x.png'">
+						<div>
+							<h3>线下房源</h3>
+							<p class="describ">请提前咨询确定房屋样式符合您的预期</p>
+							<p class="price offline">
+								<span>{{i.num |lineHouse}}</span>
+								<!-- <span>&nbsp;&nbsp;套</span> -->
+							</p>
+						</div>
+					</div>
+					<div class="house-status">
+						<p :class="'t'+i.state">
+							<span>{{ state[i.state] }}</span>
+							<span>{{ (i.time)/1000|moment('MM月DD日 HH:mm') }}</span>
 						</p>
+
 					</div>
 				</div>
-				<div class="house-status">
-					<p :class="'t'+i.state">
-						<span>{{ state[i.state] }}</span>
-						<span>{{ (i.time)/1000|moment('MM月DD日 HH:mm') }}</span>
-					</p>
 
-				</div>
 			</div>
-
 		</div>
-
 
 	</div>
 </template>
 <script type="text/javascript">
 	import api from '../../api/axios'
-  	import headTop from '../../components/header/head'
 	export default {
 		name:'lookHouseIndex',
 		data(){
@@ -109,42 +108,64 @@
 				}else{
 					return val+'套';
 				}
-			}
+			},
+			formatPrice: function (value) {
+				if(!value) return '0.00';
+		         var intPart = Number(value).toFixed(0); //获取整数部分
+		        //将整数部分逢三一断
+		        var intPartFormat = intPart.toString().replace(/(\d)(?=(?:\d{3})+$)/g, '$1,');
+		         var valueStr = value + '';//先转换成字符串
+		         // 判断是否有小数
+		         if(valueStr.indexOf(".") >= 0){
+		            var floatPart = valueStr.split(".")[1]; //预定义小数部分
+		            return intPartFormat + "." + floatPart;
+		        }else{
+		        	return intPartFormat;
+		        }
+		    }
 		},
-		components:{
-			headTop
-		}
 	}
 </script>
 <style lang="scss" scoped>
-  .nav-header{
-    position: relative;
-    background-color: #fff;
-    font-size: 1.6rem;
-    color: #424242;
-    height: 4.4rem;
-    line-height: 4.4rem;
-    border-bottom: solid .6rem #f8f8f8;
-    .go-back{
-      position: absolute;
-      left: 1.5rem;
-    }
-    .go-edit{
-    	position: absolute;
-    	right: 1.5rem;
-    	top: 0;
-    	z-index: 22;
-    }
-    .go-back-icon,.editor-icon{
-      font-size: 2rem;
-    }
-    .header-title{
-      display: inline-block;
-      width:100% ;
-      font-weight: bold;
-      text-align: center;
-    }
-  }
+.look_box{
+	width: 100%;
+	height: 100%;
+	padding-top: 4.4rem;
+	.nav-header{
+		// position: relative;
+		position: fixed;
+	    top: 0;
+	    width: 100%;
+	    z-index: 777;
+		background-color: #fff;
+		font-size: 1.6rem;
+		color: #424242;
+		height: 4.4rem;
+		line-height: 4.4rem;
+		border-bottom: solid .6rem #f8f8f8;
+		.go-back{
+			position: absolute;
+			left: 1.5rem;
+		}
+		.go-edit{
+			position: absolute;
+			right: 1.5rem;
+			top: 0;
+			z-index: 22;
+		}
+		.go-back-icon,.editor-icon{
+			font-size: 2rem;
+		}
+		.header-title{
+			display: inline-block;
+			width:100% ;
+			font-weight: bold;
+			text-align: center;
+		}
+	}
+
+}
+  
 
 	.box{
 		width: 100%;

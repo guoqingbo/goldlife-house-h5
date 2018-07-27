@@ -116,22 +116,19 @@
         },*/
         filters: { //定义过滤器
 		  formatPrice: function (value) {
- 			if(!value) return '0.00';
-			   var intPart = Number(value).toFixed(0); //获取整数部分
-				//将整数部分逢三一断
-			   var intPartFormat = intPart.toString().replace(/(\d)(?=(?:\d{3})+$)/g, '$1,');
-			   var valueStr = value + '';//先转换成字符串
-			   // 判断是否有小数
-			   if(valueStr.indexOf(".") >= 0){
-			   		var floatPart = valueStr.split(".")[1]; //预定义小数部分
-			   		return intPartFormat + "." + floatPart;
-			   }else{
-			   		return intPartFormat;
-			   }
-		  },
-		  phoneNum(data){
-
-		  }
+				if(!value) return '0.00';
+		         var valueStr = value.toString();//先转换成字符串
+		         // 判断是否有小数
+		         if(valueStr.indexOf(".") >= 0){
+		         	var intPart = valueStr.split(".")[0];
+		            var floatPart = valueStr.split(".")[1]; //预定义小数部分
+		             //将整数部分逢三一断
+		        	var intPartFormat = intPart.replace(/(\d)(?=(?:\d{3})+$)/g, '$1,');
+		            return intPartFormat + "." + floatPart;
+		        }else{
+		        	return valueStr.replace(/(\d)(?=(?:\d{3})+$)/g, '$1,');
+		        }
+		    },
 		},
 	}
 </script>

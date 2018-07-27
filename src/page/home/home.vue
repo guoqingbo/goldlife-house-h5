@@ -2,7 +2,7 @@
     <div class="box">
       <!--房源列表页-->
       <div v-if="!isShowSearch">
-        <head-top goBack="true"/>
+        <!-- <head-top goBack="true"/> -->
         <div class="content">
           <!--搜索-->
           <div class="my-search clear">
