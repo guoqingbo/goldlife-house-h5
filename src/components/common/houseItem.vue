@@ -39,7 +39,7 @@
       price(value,houseType){
         if (value) {
           return houseType == 1 ? value + '万' : value + '元/月';
-        }else{
+        }else if (value == 0){
           return houseType == 1 ? 0 + '万' : 0 + '元/月';
         }
       },
@@ -101,7 +101,7 @@
       /*flex-direction:column;*/
       align-content: space-between;
       flex-wrap: wrap;
-      width: 58%;
+      width: 16rem;
       padding-left: 1.5rem;
       p {
         width: 100%;

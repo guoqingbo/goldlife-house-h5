@@ -42,7 +42,7 @@
         params:{
           keyword:"",//小区名关键字(拼音或汉字)
           city:"hz",//城市拼写(hz)
-          limit:"5",//搜索到的小区限制，默认5条
+          limit:"10",//搜索到的小区限制，默认5条
         },
         isShowHouseType:false,//搜索房源类型 1：二手房 2：租房
         searchResult:[],//搜索结果
@@ -106,6 +106,10 @@
       },
       searchHouse(item){
           //添加搜索记录
+        let _itemIndex = this.communitySearchHistory[this.searchHouseType].indexOf(item)
+        if(_itemIndex>=0){//删除旧的记录
+          this.communitySearchHistory[this.searchHouseType].splice(_itemIndex,1);
+        }
         //获取小区搜索记录
         console.log(item)
         this.communitySearchHistory[this.searchHouseType].unshift(item);

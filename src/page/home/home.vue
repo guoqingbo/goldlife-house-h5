@@ -24,12 +24,6 @@
               <div class="my-search-right left" @click="toggleMore">
                 <i class="icon iconfont iconfont-more">&#xe641;</i>
               </div>
-              <ul class="more-ul" v-if="morePopVisible">
-                <li><i class="icon iconfont arrow">&#xe65d;</i></li>
-                <li @click="morePopVisible=false"><router-link to="/myCare"><span><i class="icon iconfont my-care">&#xe609;</i></span>我的关注</router-link></li>
-                <li @click="morePopVisible=false"><router-link to="/lookHouseIndex"><span><i class="icon iconfont look-house">&#xe610;</i></span>看房预约</router-link></li>
-                <li @click="morePopVisible=false"><router-link to="/signSearch"><span><i class="icon iconfont sign-search">&#xe60b;</i></span>签约查询</router-link></li>
-              </ul>
             </div>
             <!--过滤导航-->
             <div class="condition-filter clear" @touchmove.prevent>
@@ -186,11 +180,8 @@
               <div class="recomment-tip">为您推荐</div>
             </div>
             <!--房源结果列表-->
-            <div v-if="houseLists.length>0">
-              <ul class="house-list"
-                  v-infinite-scroll=""
-                  infinite-scroll-disabled="loading"
-                  infinite-scroll-distance="0">
+            <div v-if="houseLists.length>0" class="house-list-box">
+              <ul class="house-list" ref="houseScroll" @touchmove="loadMore">
                 <li class="house-item clear" v-for="item in houseLists" :key="item.id">
                   <router-link
                     :to="{name:houseTypeDetail[houseType], params:{cityId:'hz', houseId:item.id, userType:'customer', houseType:houseType}}">
@@ -211,6 +202,13 @@
         @hideSearch="isShowSearch = false"
         @searchHouse="searchHouse">
       </search>
+      <!--加载更多-->
+      <ul class="more-ul" v-if="morePopVisible">
+        <li><i class="icon iconfont arrow">&#xe65d;</i></li>
+        <li @click="morePopVisible=false"><router-link to="/myCare"><span><i class="icon iconfont my-care">&#xe609;</i></span>我的关注</router-link></li>
+        <li @click="morePopVisible=false"><router-link to="/lookHouseIndex"><span><i class="icon iconfont look-house">&#xe610;</i></span>看房预约</router-link></li>
+        <li @click="morePopVisible=false"><router-link to="/signSearch"><span><i class="icon iconfont sign-search">&#xe60b;</i></span>签约查询</router-link></li>
+      </ul>
       <!--全屏遮罩-->
       <div class="full-mask" v-if="morePopVisible" @touchmove.prevent @click="morePopVisible = false"></div>
     </div>
@@ -321,6 +319,10 @@
               }
             }
         },
+        mounted(){
+
+        },
+
         components: {
           search,
           houseItem,
@@ -393,6 +395,7 @@
               api.getRentHouseList(params)
                 .then( res => {
                     console.log(res)
+                  this.recomment = res.data.result.recomment;//是否为推荐房源
                   if (res.data.success){
                     if(isLoadMore){
                       this.houseLists = this.houseLists.concat(res.data.result.list);
@@ -707,9 +710,26 @@
 //            console.log(123)
 //          },
           loadMore() {
-            this.loading = true;
-            this.houseParams[this.houseType].pageIndex++;
-            console.log(this.houseParams[this.houseType].pageIndex)
+              if(this.isLoadAll){ //如果加载完了所有数据
+                  return
+              }
+              let scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scroll;
+              let innerHeight = window.innerHeight;
+              let offsetHeight =   document.documentElement.offsetHeight || document.body.offsetHeight;
+              // 判断是否滚动到底部
+              if(scrollTop + innerHeight >= offsetHeight) {
+                  if(this.loading){ //防止连续请求
+                      return
+                  }
+                console.log("++++")
+                  this.loading = true;
+                  this.houseParams[this.houseType].pageIndex++;
+                  this.gethouseLists(true)
+              }
+
+//            this.loading = true;
+//            this.houseParams[this.houseType].pageIndex++;
+//            console.log(this.houseParams[this.houseType].pageIndex)
 //            this.gethouseLists(true)
 //              this.loading = false;
             console.log(123)
@@ -801,13 +821,13 @@
   }
   .box{
     font-size: 1.6rem;
-    height: 100%;
-    width: 100%;
   }
+  /*固定头*/
   .top-fix{
     position: fixed;
     background-color: #fff;
     width: 100%;
+    z-index: 0;
     /**搜索样式*/
     .my-search{
       margin-top: 1.2rem;
@@ -887,55 +907,6 @@
         text-align: right;
         .iconfont-more{font-size: 2.5rem};
       }
-      .more-ul{
-        position: absolute;
-        z-index: 6;
-        right: 2rem;
-        top: 10rem;
-        background-color: #fff;
-        font-size: 1.3rem;
-        border-radius: 6px;
-        li:not(:first-child){
-          height: 3.5rem;
-          line-height: 3.5rem;
-          padding: 0 1rem;
-          &:nth-child(n+3){
-            @include border-top;
-          }
-          a{
-            color: #424242;
-            display: inline-block;
-            width: 100%;
-          }
-          span{
-            display: inline-block;
-            width: 2rem;
-            /*margin: 0 .5rem 0 1rem;*/
-          }
-        }
-        .arrow{
-          color:#fff;
-          position: absolute;
-          top: -1.5rem;
-          right: 0.5rem;
-          font-size: 2.5rem;
-        }
-        .my-care{
-          color:#ffc16b ;
-          font-size: 1.9rem;
-          vertical-align: middle;
-        }
-        .look-house{
-          color:#5c5990 ;
-          font-size: 2.2rem;
-          vertical-align: bottom;
-        }
-        .sign-search{
-          color:#eed7b5 ;
-          font-size: 1.9rem;
-          vertical-align: middle;
-        }
-      }
     }
 
     /**条件过滤*/
@@ -963,6 +934,56 @@
       .select-active{
         color:#ffc16a;
       }
+    }
+  }
+  /*搜索右边点击弹框*/
+  .more-ul{
+    position: fixed;
+    z-index: 6;
+    right: 2rem;
+    top: 5rem;
+    background-color: #fff;
+    font-size: 1.3rem;
+    border-radius: 6px;
+    li:not(:first-child){
+      height: 3.5rem;
+      line-height: 3.5rem;
+      padding: 0 1rem;
+      &:nth-child(n+3){
+        @include border-top;
+      }
+      a{
+        color: #424242;
+        display: inline-block;
+        width: 100%;
+      }
+      span{
+        display: inline-block;
+        width: 2rem;
+        /*margin: 0 .5rem 0 1rem;*/
+      }
+    }
+    .arrow{
+      color:#fff;
+      position: absolute;
+      top: -1.5rem;
+      right: 0.5rem;
+      font-size: 2.5rem;
+    }
+    .my-care{
+      color:#ffc16b ;
+      font-size: 1.9rem;
+      vertical-align: middle;
+    }
+    .look-house{
+      color:#5c5990 ;
+      font-size: 2.2rem;
+      vertical-align: bottom;
+    }
+    .sign-search{
+      color:#eed7b5 ;
+      font-size: 1.9rem;
+      vertical-align: middle;
     }
   }
 
@@ -1114,8 +1135,7 @@
     background-color: rgba(0,0,0,0.5);
   }
   .house-box{
-    position: absolute;
-    top: 10.5rem;
+    padding-top: 10.5rem;
     /*搜索结果为空*/
     .search-empty{
       .search-empty-tip{
@@ -1132,37 +1152,37 @@
       }
     }
     /**列表*/
-    .house-list {
-      overflow: auto;
-      padding: 0 2rem;
-      background-color: #ccc;
-      height: 100%;
-      li {
-        @include border-top;
-        /*background-color: #ccc;*/
-      }
-    }
-    /*加载中*/
-    .loading-more{
-      text-align:center;
-      line-height: 2.6rem;
-      @keyframes loading {
-        0% {
-          transform: rotate(0deg);
-        }
-        100% {
-          transform: rotate(360deg);
+    .house-list-box{
+      .house-list {
+        overflow: auto;
+        padding: 0 2rem;
+        li {
+          @include border-top;
+          /*background-color: #ccc;*/
         }
       }
-      .loading-more-span{
-        display: inline-block;
-        animation:loading 1.2s infinite linear  both
-      }
-      .loading-more-text{
-        padding-left: 1rem;
-      }
-      .loading-more-icon{
-        font-size: 2.6rem;
+      /*加载中*/
+      .loading-more{
+        text-align:center;
+        line-height: 2.6rem;
+        @keyframes loading {
+          0% {
+            transform: rotate(0deg);
+          }
+          100% {
+            transform: rotate(360deg);
+          }
+        }
+        .loading-more-span{
+          display: inline-block;
+          animation:loading 1.2s infinite linear  both
+        }
+        .loading-more-text{
+          padding-left: 1rem;
+        }
+        .loading-more-icon{
+          font-size: 2.6rem;
+        }
       }
     }
   }
