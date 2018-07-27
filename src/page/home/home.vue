@@ -351,7 +351,6 @@
               api.getSellHouseList(params)
                 .then( res => {
                   if (res.data.success){
-                    this.recomment = res.data.result.recomment;//是否为推荐房源
                         if(isLoadMore){
                           this.houseLists = this.houseLists.concat(res.data.result.list);
                           if (res.data.result.list.length < this.houseParams[this.houseType].pageSize){//是否已经加载完所有数据
@@ -363,6 +362,7 @@
                           }
                           console.log(this.houseLists)
                         }else{
+                          this.recomment = res.data.result.recomment;//是否为推荐房源
                           this.houseLists = res.data.result.list;
                           if (res.data.result.list.length<this.houseParams[this.houseType].pageSize){ //是否已经加载完所有数据
                             this.loading = true
@@ -390,7 +390,6 @@
             }
             else if(this.houseType == 2){
               //获取出售房源列表
-              let params = this.houseParams[this.houseType];
               console.log(params)
               api.getRentHouseList(params)
                 .then( res => {
@@ -684,7 +683,7 @@
           searchHouse(community){
               console.log(community)
             this.communityName = community.communityName
-            this.houseParams[this.houseType] = this.houseParamsInit[this.houseType] //房源请求参数
+           //房源请求参数
             this.houseParams[this.houseType].communityId = community.communityId;
             this.gethouseLists();
             this.isShowSearch = false //不展示搜索组键
