@@ -472,7 +472,8 @@
           //本地存储搜索历史
           storageHouseSearchHistory(){
               let houseSearchHistory = localStorage.getItem("houseSearchHistory");
-              if(houseSearchHistory.length<1){
+              console.log(houseSearchHistory)
+              if(houseSearchHistory == null || houseSearchHistory.length<1){
                 houseSearchHistory = {
                     1:[],//二手房搜索历史
                     2:[]//租房搜索历史
