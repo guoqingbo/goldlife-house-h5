@@ -31,11 +31,11 @@
         </div>
         <div class="span-input centenr">
           <span class="span-left">联系方式：</span>
-          <input class="input-right phone" placeholder="请填写联系方式" v-model="phone" ref="phone" maxlength="11">
+          <input class="input-right phone" placeholder="请填写联系方式" v-model="phone" ref="phone" type="tel" maxlength="11">
         </div>
         <div class="span-input dark centenr">
           <span class="span-left">验证码：</span>
-          <input class="yan dark" v-model="verCode" onkeyup="this.value=this.value.replace(/[^0-9-]+/,'');" maxlength="6" >
+          <input class="yan dark" v-model="verCode" pattern="[0-9]*" type="tel" maxlength="6" >
           <button class="input-right button" ref="button" @click.prevent="getCode()">发送验证码</button>
           <br>
           <span class="xh"><span>_</span><span>_</span><span>_</span><span>_</span><span>_</span><span>_</span></span>
@@ -120,6 +120,9 @@
         } else {
           this.$refs.phone.style.width = 12 + 'rem';
         }
+      },
+      verCode(){
+        this.verCode = this.verCode.replace(/[^0-9]/,'');
       },
       screenHeight (val) {
         if(this.originHeight > val + 100) {        //加100为了兼容华为的返回键
