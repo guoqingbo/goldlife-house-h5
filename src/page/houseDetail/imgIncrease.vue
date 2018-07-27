@@ -16,14 +16,13 @@
     <!--<h1> params.id：{{ $route.params.imgs }}</h1>-->
     <div class="imgDiv">
       <div class="swiper-container">
-        <div class="swiper-wrapper">
-          <div v-for='i in $route.params.imgs' class="swiper-slide">
-            <img :src="i">
-          </div>
-        </div>
-        <!-- 如果需要分页器 -->
-        <div class="swiper-pagination"></div>
+        <mt-swipe :auto="0" @change="handleChange" :show-indicators="false">
+          <mt-swipe-item v-for="(item,index) in $route.params.imgs" :key="index">
+            <img :src="item" >
+          </mt-swipe-item>
+        </mt-swipe>
       </div>
+      <div class="showNum" v-if="imgList.length>0">{{indexNum}}/{{imgList.length}}</div>
     </div>
     <keep-alive>
       <router-view></router-view>
@@ -32,33 +31,31 @@
 </template>
 
 <script>
-  import Swiper from 'swiper'
 
   export default {
     //参数
     data() {
-      return {}
+      return {
+        indexNum:'1',
+        imgList : [],
+      }
     },
     created() {
 
+      this.imgList = this.$route.params.imgs;
+      console.log(this.imgList)
     },
     components: {
     },
     mounted() {
-      var mySwiper = new Swiper('.swiper-container', {
-        loop: true,
-        /*autoplay: {
-          delay: 3000,//3秒切换一次
-        },*/
-        // 如果需要分页器
-        pagination: {
-          el: '.swiper-pagination',
-          type: 'fraction',
-        },
-      });
+
     },
 
-    methods: {}
+    methods: {
+      handleChange(index){
+        this.indexNum = index+1;
+      },
+    }
   }
 
 
@@ -98,18 +95,22 @@
       .swiper-container {
         width: 100%;
         height: 30rem;
-        margin-top: 30%;
+        margin-top: 13rem;
       }
-      .swiper-pagination {
+      .showNum{
+        font-size: 1.6rem;
         height: 4rem;
         width: 4rem;
         border-radius: 2rem;
+        position: absolute;
+        top: 42.5rem;
+        right: 1rem;
+        z-index: 1;
+        color: #f0f0f0;
         background-color: #303133;
         opacity: 0.7;
         text-align: center;
         line-height: 4rem;
-        left: 85%;
-        color: #f0f0f0;
       }
       img {
         width: 100%;

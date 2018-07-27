@@ -1,10 +1,12 @@
 <template>
-  <div>
-      <head-top />
-      <h1 class="nav-hd">
-        <span class="hd-title">签约查询</span>
-        <span class="hd-back" @click="$router.go(-1)">返回</span>
-      </h1>
+  <div class="search-box">
+      <!-- <head-top /> -->
+      <div class="tt">
+        <h1 class="nav-hd">
+          <span class="hd-title">签约查询</span>
+          <span class="hd-back" @click="$router.go(-1)">返回</span>
+        </h1>
+      </div>
 
       <div class="box" v-for="item in signList" @click="toDetail(item.id)">
         <div class="title">
@@ -23,6 +25,7 @@
 </template>
 <script type="text/javascript">
   import api from '../../api/axios'
+  // import headTop from '../../components/header/head'
   export default {
     name:'signSearch',
     data(){
@@ -65,44 +68,57 @@
     },
     filters: { //定义过滤器
       formatPrice: function (value) {
-      if(!value) return '0.00';
-         var intPart = Number(value).toFixed(0); //获取整数部分
-        //将整数部分逢三一断
-         var intPartFormat = intPart.toString().replace(/(\d)(?=(?:\d{3})+$)/g, '$1,');
-         var valueStr = value + '';//先转换成字符串
-         // 判断是否有小数
-         if(valueStr.indexOf(".") >= 0){
-            var floatPart = valueStr.split(".")[1]; //预定义小数部分
-            return intPartFormat + "." + floatPart;
-         }else{
-            return intPartFormat;
-         }
-      }
+        if(!value) return '0.00';
+             var valueStr = value.toString();//先转换成字符串
+             // 判断是否有小数
+             if(valueStr.indexOf(".") >= 0){
+              var intPart = valueStr.split(".")[0];
+                var floatPart = valueStr.split(".")[1]; //预定义小数部分
+                 //将整数部分逢三一断
+              var intPartFormat = intPart.replace(/(\d)(?=(?:\d{3})+$)/g, '$1,');
+                return intPartFormat + "." + floatPart;
+            }else{
+              return valueStr.replace(/(\d)(?=(?:\d{3})+$)/g, '$1,');
+            }
+        }
     },
-    components: {
-
-      },
+    // components: {
+    //     headTop
+    //   },
   }
 </script>
 <style lang="scss" scoped>
-  .nav-hd{
-    display: flex;
-    justify-content: space-between;
-    background-color: #fff;
-    font-size: 1.6rem;
-    color: #424242;
-    height: 4.4rem;
-    line-height: 4.4rem;
-    border-bottom: solid .6rem #f8f8f8;
-    padding:0 2rem;
-    .hd-back{
-      color:#ffc16b;
-    }
-    .hd-title{
-      display: inline-block;
-      font-weight: bold;
+  .search-box{
+    width: 100%;
+    height: 100%;
+    padding-top: 4.4rem;
+    .tt{
+      height: 4.4rem;
+      width: 100%;
+      background: #ffffff;
+      position: fixed;
+      top: 0;
+      .nav-hd{
+        display: flex;
+        justify-content: space-between;
+        // background-color: #fff;
+        font-size: 1.6rem;
+        color: #424242;
+        height: 4.4rem;
+        line-height: 4.4rem;
+        border-bottom: solid .6rem #f8f8f8;
+        padding:0 2rem;
+        .hd-back{
+          color:#ffc16b;
+        }
+        .hd-title{
+          display: inline-block;
+          font-weight: bold;
+        }
+      }
     }
   }
+
 
   .box{
     width: 100%;

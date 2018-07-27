@@ -1,53 +1,55 @@
 <template>
 	<div>
-        <h1 class="nav-header">
-          <span class="go-back" @click="$router.go(-1)"><i class="icon iconfont go-back-icon">&#xe60f;</i></span>
-          <span class="header-title">看房记录</span>
-        </h1>
+		<div class="history-box">
+			<h1 class="nav-header">
+				<span class="go-back" @click="$router.go(-1)"><i class="icon iconfont go-back-icon">&#xe60f;</i></span>
+				<span class="header-title">看房记录</span>
+			</h1>
 
-		<div class="box" v-for="i in houseList">
+			<div class="box" v-for="i in houseList">
 
-			<div>
-				<div class="house-detail" v-if="i.targetHouse != undefined">
-					<img :src="!!i.targetHouse.pic?i.targetHouse.pic:'./static/bg_smallphotonormal@2x.png'">
-					<div>
-						<h3>
-							<span>约看小区&nbsp;</span>
-							{{i.targetHouse.community_name}}
-						</h3>
-						<p class="describ">{{i.targetHouse.room}}室{{i.targetHouse.hall}}厅{{i.targetHouse.toilet}}卫/{{i.targetHouse.buildarea}}㎡/朝{{i.targetHouse.forward}}</p>
-						<p class="price">
-							<span>{{i.targetHouse.price}}万</span>
-							<span>&nbsp;&nbsp;{{i.targetHouse.avgprice}}&nbsp;元/平</span>
+				<div>
+					<div class="house-detail" v-if="i.targetHouse != undefined">
+						<img :src="!!i.targetHouse.pic?i.targetHouse.pic:'./static/bg_smallphotonormal@2x.png'">
+						<div>
+							<h3>
+								<span>约看小区&nbsp;</span>
+								{{i.targetHouse.community_name}}
+							</h3>
+							<p class="describ">{{i.targetHouse.room}}室{{i.targetHouse.hall}}厅{{i.targetHouse.toilet}}卫/{{i.targetHouse.buildarea}}㎡/朝{{i.targetHouse.forward}}</p>
+							<p class="price">
+								<span>{{i.targetHouse.price}}万</span>
+								<span>&nbsp;&nbsp;{{i.targetHouse.avgprice|formatPrice}}&nbsp;元/平</span>
+							</p>
+						</div>
+					</div>
+					<div class="house-status" v-if="i.lookHouseLog != undefined">
+						<p >
+							<span><b>{{ i.brokerName }}</b>&nbsp;经纪人带看</span>
+							<span>{{ (i.time)/1000 |moment('MM月DD日 HH:mm') }}</span>
 						</p>
+
+						<!-- <mt-button v-if="i.lookHouseLog.lable==''&&i.lookHouseLog.text==''" size="large" @click="editNode(i)">添加看房笔记</mt-button> -->
+						<span class="add" v-if="i.lookHouseLog.lable==''&&i.lookHouseLog.text==''"  @click="editNode(i)">添加看房笔记</span>
+
+						<div v-else class="label" @click="editNode(i)">
+
+							<p v-show="!!i.lookHouseLog.lable">{{i.lookHouseLog.lable}}。</p>
+							<p v-show="!!i.lookHouseLog.text">{{i.lookHouseLog.text}}</p>
+						</div>
+
 					</div>
 				</div>
-				<div class="house-status" v-if="i.lookHouseLog != undefined">
-					<p >
-						<span><b>{{ i.brokerName }}</b>&nbsp;经纪人带看</span>
-						<span>{{ (i.time)/1000 |moment('MM月DD日 HH:mm') }}</span>
-					</p>
 
-					<!-- <mt-button v-if="i.lookHouseLog.lable==''&&i.lookHouseLog.text==''" size="large" @click="editNode(i)">添加看房笔记</mt-button> -->
-					<span class="add" v-if="i.lookHouseLog.lable==''&&i.lookHouseLog.text==''"  @click="editNode(i)">添加看房笔记</span>
 
-					<div v-else class="label" @click="editNode(i)">
-
-						<p v-show="!!i.lookHouseLog.lable">{{i.lookHouseLog.lable}}。</p>
-						<p v-show="!!i.lookHouseLog.text">{{i.lookHouseLog.text}}</p>
-					</div>
-
-				</div>
 			</div>
-
-
 		</div>
-
 
 	</div>
 </template>
 <script type="text/javascript">
 	import api from '../../api/axios'
+  	// import headTop from '../../components/header/head'
 	export default {
 		name:'lookHouseHistory',
 		data(){
@@ -87,34 +89,57 @@
 				this.$router.push({path:'/addLookHouseLog',query:{data:_data}})
 			}
 		},
-		components:{
-
+		filters:{
+			formatPrice: function (value) {
+				if(!value) return '0.00';
+		         var valueStr = value.toString();//先转换成字符串
+		         // 判断是否有小数
+		         if(valueStr.indexOf(".") >= 0){
+		         	var intPart = valueStr.split(".")[0];
+		            var floatPart = valueStr.split(".")[1]; //预定义小数部分
+		             //将整数部分逢三一断
+		        	var intPartFormat = intPart.replace(/(\d)(?=(?:\d{3})+$)/g, '$1,');
+		            return intPartFormat + "." + floatPart;
+		        }else{
+		        	return valueStr.replace(/(\d)(?=(?:\d{3})+$)/g, '$1,');
+		        }
+		    }
 		}
+
 	}
 </script>
 <style lang="scss" scoped>
-  .nav-header{
-    position: relative;
-    background-color: #fff;
-    font-size: 16px;
-    color: #424242;
-    height: 4.4rem;
-    line-height: 4.4rem;
-    border-bottom: solid .6rem #f8f8f8;
-    .go-back{
-      position: absolute;
-      left: 1.5rem;
-    }
-    .go-back-icon,{
-      font-size: 2rem;
-    }
-    .header-title{
-      display: inline-block;
-      width:100% ;
-      font-weight: bold;
-      text-align: center;
-    }
-  }
+	.history-box{
+		width: 100%;
+		height:100%;
+		padding-top: 4.4rem;
+		.nav-header{
+		    position: fixed;
+		    top: 0;
+		    width: 100%;
+		    z-index: 777;
+		    background-color: #fff;
+		    font-size: 16px;
+		    color: #424242;
+		    height: 4.4rem;
+		    line-height: 4.4rem;
+		    border-bottom: solid .6rem #f8f8f8;
+		    .go-back{
+		      position: absolute;
+		      left: 1.5rem;
+		    }
+		    .go-back-icon,{
+		      font-size: 2rem;
+		    }
+		    .header-title{
+		      display: inline-block;
+		      width:100% ;
+		      font-weight: bold;
+		      text-align: center;
+		    }
+		  }
+	}
+
 
 	.box{
 		width: 100%;
