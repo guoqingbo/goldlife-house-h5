@@ -6,10 +6,10 @@
       <span class="header-title">对比清单</span>
       <span class="nav-header-right" v-if="!complete">
         <i class="icon iconfont icon-add" @click="sheetVisible = !sheetVisible">&#xe61a;</i>
-        <i class="icon iconfont icon-modify" @click="complete = !complete">&#xe690;</i>
+        <i class="icon iconfont icon-modify"  @click="change">&#xe62e;</i>
       </span>
       <span class="nav-header-right" v-if="complete">
-        <label class="modify-text" @click="complete = !complete">完成</label>
+        <label class="modify-text" @click="change">完成</label>
       </span>
     </div>
     <!--房源结果列表-->
@@ -71,6 +71,12 @@
 
     },
     methods:{
+        //切换功能
+      change(){
+        this.complete = !this.complete
+        //清空选择的房源
+        this.beginCompared = [];
+      },
        //从关注房源添加
       addFromCareHouse(){
         this.$router.push({
@@ -116,6 +122,14 @@
       },
        //选中房源
       selectedHouse(houseId){
+        if(!this.complete&&this.beginCompared.length>3){
+          this.$toast({
+            message: "最多可同时对比4条房源",
+            position: 'middle',
+            duration: 3000
+          })
+          return
+        }
         let indexId = this.beginCompared.indexOf(houseId);
         if (indexId>=0){
           this.beginCompared.splice(indexId,1);
@@ -126,6 +140,7 @@
       //全选
       selectAll(){
           this.isSelectedAll = !this.isSelectedAll;
+        console.log(this.isSelectedAll)
           if(this.isSelectedAll){
             let selectHouseIdArr = [];
             Object.keys(this.houseLists).forEach((key)=>{
@@ -141,12 +156,12 @@
       //清除失效房源
       clearInvalidHouse(){
           let data = [];
-          this.beginCompared.forEach((value)=>{
-              let item = {};
-              item.cityId = 'hz';
-              item.houseId = value;
+          Object.keys(this.houseLists).forEach((key)=>{
+            let item = {};
+            item.cityId = 'hz';
+            item.houseId = this.houseLists[key].id;
             data.push(item)
-          });
+          })
           api.clearInvalidHouse(data)
             .then(res=>{
                 if (res.data.success){
@@ -187,7 +202,17 @@
       },
       //删除对比清单
       deleteComparedList(){
-        this.beginCompared.forEach((value)=>{
+        if(this.beginCompared.length < 1){
+          this.$toast({
+            message: '未选择要清除的房源',
+            position: 'middle',
+            duration: 3000
+          })
+          return
+        }
+console.log(this.beginCompared)
+        let beginCompared = [].concat(this.beginCompared)
+        beginCompared.forEach((value)=>{
           let _index = this.beginCompared.indexOf(value);
           if (_index>=0){
             //删除存储
