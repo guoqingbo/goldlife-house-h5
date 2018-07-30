@@ -123,7 +123,12 @@ router.beforeEach((to, from, next) => {
     api.isLogin()
       .then(res => {
         if (res.data.success) {
-          next()
+          next();
+          /*if(to.name=="login"){
+            alert("2121");
+            next({path:'/logout'})
+          }*/
+          
         }else{
           //跳出登录弹框
           MessageBox({
@@ -152,6 +157,16 @@ router.beforeEach((to, from, next) => {
   } else {
     next();
   }
+
+ /* if(!!this.$store.state.loginBack){
+      if(to.name=="login"){
+          alert("2121");
+          next({path:'/logout'})
+        }
+  }else{
+          next();
+        }*/
+
 });
 
 export default router
