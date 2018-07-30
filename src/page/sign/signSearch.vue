@@ -50,7 +50,6 @@
               if(res.data.success){
                   let loginName = res.data.result
                   api.signSearch(loginName).then(res=>{
-
                     if(res.data.success){
                       this.signList = res.data.result;
                     }else{

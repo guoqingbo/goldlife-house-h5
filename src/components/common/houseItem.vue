@@ -111,7 +111,7 @@
       align-content: space-between;
       flex-wrap: wrap;
       /*width: 17rem;*/
-      width: 57%;
+      width: 16rem;
       padding-left: 1.5rem;
       p {
         width: 100%;
