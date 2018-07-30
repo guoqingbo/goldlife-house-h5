@@ -112,6 +112,7 @@ router.beforeEach((to, from, next) => {
     api.isLogin()
       .then(res => {
         if (res.data.success) {
+          console.log(res)
           next();
         }else{
           //跳出登录弹框
