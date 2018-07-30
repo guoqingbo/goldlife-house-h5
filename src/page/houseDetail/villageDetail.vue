@@ -152,6 +152,7 @@
 <script>
   import api from '../../api/axios'
   import BMap from 'BMap'
+  import { MessageBox } from 'mint-ui';
 
   export default {
     data() {
@@ -280,7 +281,7 @@
               //重置地图
               this.resetMap();
               //初始化轮播
-              this.$nextTick(function () {
+              /*this.$nextTick(function () {
                 var mySwiper = new Swiper('.swiper-container', {
                   loop: true,
                   autoplay: {
@@ -292,7 +293,7 @@
                     type: 'fraction',
                   },
                 });
-              });
+              });*/
             } else {
               this.$message.error(res.data.errorMessage);
             }
@@ -390,6 +391,24 @@
                     console.log(response)
                   });
               }
+            }else{
+              MessageBox({
+                title: '',
+                message: '请登录查看',
+                showCancelButton: true,
+                confirmButtonText:"登录"
+              }).then(action => {
+                if(action == "confirm"){
+                  router.replace({ //跳转到登录页面
+                    path: 'login',
+                    query: {
+                      redirect: router.currentRoute.fullPath, //将跳转的路由path作为参数，登录成功后跳转到该路由
+                      openId:res.result.openId,
+                      code:res.result.code
+                    }
+                  });
+                }
+              })
             }
           });
 
