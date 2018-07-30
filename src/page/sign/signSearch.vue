@@ -62,8 +62,8 @@
         })
       },
       toDetail(id){
-        // this.$router.push({path:'/signDetail?id='+id})
         this.$router.push({path:'/signDetail',query:{houseId:id}})
+        // this.$router.push({path:'/signDetail#current',query:{houseId:id}})
       }
     },
     filters: { //定义过滤器
