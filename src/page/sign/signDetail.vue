@@ -1,12 +1,13 @@
 <template>
 	<div class="container_box" >
 		<!-- <head-top /> -->
-        <h1 class="nav-header">
+        <h1 class="nav-header" ref="title">
           <span class="go-back" @click="$router.go(-1)"><i class="icon iconfont go-back-icon">&#xe60f;</i></span>
           <span class="header-title">签约详情</span>
         </h1>
 
-		<div class="signBox">
+		<!-- <div class="signBox box_fixed" ref="houseDetail"> -->
+		<div class="signBox box_fixed">
 			<div class="addr">
 				<h2>
 					<span>房源地址：</span>
@@ -29,10 +30,19 @@
 					<span>{{ signDetail.owner_tel }}</span>
 				</p>
 			</div>
+			<h2 class="CS">当前签约状态：<span>{{ current_Status }}</span></h2>
+
+		</div>
+
+		<div class="emptyBox"></div>
+
+		<!-- <div class="signBox" id="status" :style="'height:'+statusH+'px'"> -->
+		<div class="signBox" id="status">
 			<div class="status" v-if="signDetail.now_transfer != undefined">
-				<h2>当前签约状态：<span>{{ signDetail.now_transfer.stage_name }}</span></h2>
+				<!-- <h2>当前签约状态：<span>{{ signDetail.now_transfer.stage_name }}</span></h2> -->
 
 				<div class="scroll-box" id="scroll-box" :style="'height:'+Heig+'px'">
+				<!-- <div class="scroll-box" id="scroll-box"> -->
 					<div class="status_content">
 						<p v-for="item in transfer">
 							<span v-if="item.step_id==signDetail.now_transfer.step_id" class="current" id="current"></span>
@@ -43,8 +53,8 @@
 					</div>
 				</div>
 			</div>
-
 		</div>
+		
 
 	</div>
 </template>
@@ -64,13 +74,18 @@
 		          '2':'结案',
 		          '3':'作废'
 		        },
-		        Heig:''
+		        Heig:'',
+		        marginTop:'',
+		        boxH:'',
+		        statusH:'',
+		        current_Status:''
 			}
 		},
 		created(){
 			this.getSignDetail();
 		},
 		mounted(){
+
 			let that = this;
 			setTimeout(function(){	//先等待DOM元素加载完成
 				that.currentStatus();
@@ -89,6 +104,7 @@
 					if(res.data.success){
 						this.signDetail = res.data.result;
 						this.transfer = res.data.result.transfer;
+						this.current_Status = res.data.result.now_transfer.stage_name;
 					}else{
 						this.$toast({
 			              message: res.data.errorMessage,
@@ -108,7 +124,7 @@
 				var BoxTop = scrollBox.getBoundingClientRect().top;
 				var screenH = document.documentElement.clientHeight;
 				let HH = screenH - BoxTop;
-				this.Heig = HH
+				this.Heig = HH		
 			}
 		},
 		/*components: {
@@ -139,8 +155,15 @@
 		height:100%;
 		overflow-y: hidden;
 	}
+	.emptyBox{
+		height:31.1rem;
+	}
   .nav-header{
-    position: relative;
+    // position: relative;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 777;
     background-color: #fff;
     font-size: 1.6rem;
     color: #424242;
@@ -161,6 +184,7 @@
       text-align: center;
     }
   }
+
 
   .signBox{
   	background: #F8F8F8;
@@ -252,17 +276,14 @@
 
   		}
   		p:first-child{
-  			margin-top: 1.5rem;
+  			margin-top: 2rem;
   		}
   		p:last-child{
   			margin-bottom: 1.75rem;
   		}
-  		h2{
-  			span{
-  				color: #ffbb02;
-  			}
-  		}
+  		
   		.scroll-box{
+  			height:100%;
   			overflow-y: scroll;
   			padding-left: 0.2rem;
   		}
@@ -306,6 +327,20 @@
 		position: absolute;
 		left:-0.5rem;
   	}
+  }
+  .box_fixed{
+  	z-index: 55;
+	position: fixed;
+	top: 4.4rem;
+	height:27.9rem;
+	.CS{
+		padding: 1rem  1.5rem;
+		background: #ffffff;
+		z-index: 333;
+		span{
+			color: #ffbb02;
+		}
+	}
   }
 
 
