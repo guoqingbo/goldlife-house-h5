@@ -13,10 +13,10 @@
       </ul>
     </div>
     <!-- 对应的内容 -->
-    <div>
+    <div class="house-box">
       <!--房源结果列表-->
       <ul v-if="houseLists.length>0">
-        <li class="" v-for="(item,index) in houseLists" :key="item.id">
+        <li class="house-li" v-for="(item,index) in houseLists" :key="item.id">
           <mt-cell-swipe
             :right="[{
                 content: '取消关注',
@@ -186,7 +186,9 @@
 <style lang="scss" scoped>
   //导航头
  .header-nav{
-   position: relative;
+   position: fixed;
+   top:0;
+   width: 100%;
    border-bottom: 0.05rem solid #f8f8f8;
    /*height: ;*/
    .go-back{
@@ -216,8 +218,21 @@
    }
  }
   /*列表*/
-  .house-item-box{
-    position: relative;
-    padding: 0 2rem;
+  .house-box{
+    width: 100%;
+    padding-top: 4.4rem;
+    .house-li{
+      width: 100%;
+      overflow: hidden;
+      padding: 0 1.5rem;
+    }
+    .house-item-box{
+      /*position: absolute;*/
+      /*padding: 0 2rem;*/
+      /*padding-left: 2rem;*/
+      /*margin-right: 2rem;*/
+      /*padding-right: 2rem;*/
+    }
   }
+
 </style>

@@ -29,28 +29,52 @@
             <div class="condition-filter clear" @touchmove.prevent>
               <ul class="left clear">
                 <li @click = 'opentFilter("district")' :class="{'select-active':filterTypeActive == 'district'}">
-                  {{filterShowText.district.name}}
+                  {{filterSelect.district.name?filterSelect.district.name:'区域'}}
                   <i v-if="filterType != 'district'" class="icon iconfont">&#xe65e;</i>
                   <i  v-if="filterType == 'district'" class="icon iconfont select-active">&#xe65d;</i>
                 </li>
                 <li @click = 'opentFilter("price")' :class="{'select-active':filterTypeActive == 'price'}">
-                  {{filterShowText.price.name}}
+                  {{filterSelect.price.name?filterSelect.price.name:houseType==1?'价格':'租金'}}
                   <i v-if="filterType != 'price'" class="icon iconfont">&#xe65e;</i>
                   <i  v-if="filterType == 'price'" class="icon iconfont select-active">&#xe65d;</i>
                 </li>
                 <li @click = 'opentFilter("roomType")' :class="{'select-active':filterTypeActive == 'roomType'}">
-                  {{filterShowText.roomType.name}}
+                  {{filterSelect.roomType.name?filterSelect.roomType.name:'房型'}}
                   <i v-if="filterType != 'roomType'" class="icon iconfont">&#xe65e;</i>
                   <i  v-if="filterType == 'roomType'" class="icon iconfont select-active">&#xe65d;</i>
                 </li>
                 <li @click = 'opentFilter("filterMore")' :class="{'select-active':filterTypeActive == 'filterMore'}">
-                  {{filterShowText.filterMore.name}}
+                  {{filterSelect.filterMore.name?filterSelect.filterMore.name:'筛选'}}
                   <i v-if="filterType != 'filterMore'" class="icon iconfont">&#xe65e;</i>
                   <i v-if="filterType == 'filterMore'" class="icon iconfont select-active">&#xe65d;</i>
                 </li>
                 <li @click = 'opentFilter("filterOrder")' :class="{'select-active':filterTypeActive == 'filterOrder'}">
                   <i class="icon iconfont">&#xe656;</i></li>
               </ul>
+            </div>
+
+            <!--区域-->
+            <div v-if="filterType == 'district'" class="filter-district" @touchmove.prevent>
+              <div class="clear">
+                <!--区域-->
+                <ul class="district-ul left" @touchmove.stop>
+                  <li v-for="(districtItem,index) in district"
+                      :class="{'select-font-active': selectedDistrictIndex>0&&selectedDistrictIndex == index}"
+                      @click="setCheckDistrictValue($event,index)">
+                    {{districtItem.district}}
+                  </li>
+                </ul>
+                <!--板块-->
+                <ul class="street-ul left clear" @touchmove.stop>
+                  <li v-for="streetItem in district[activDistrictIndex].street"
+                      @click="setCheckStreetValue($event,streetItem)"
+                      :class="{'street-active':streetItem.id>0&&houseParams[houseType].areaIds == streetItem.id}">
+                    {{streetItem.name}}
+                  </li>
+                </ul>
+              </div>
+              <!--遮罩-->
+              <div class="filter-mask" @click = 'opentFilter("district")' @touchmove.prevent></div>
             </div>
             <!--价格-->
             <div v-if="filterType == 'price'" class="filter-price"  @touchmove.prevent>
@@ -84,29 +108,6 @@
               </div>
               <!--遮罩-->
               <div class="filter-mask" @click = 'opentFilter("price")'></div>
-            </div>
-            <!--区域-->
-            <div v-if="filterType == 'district'" class="filter-district" @touchmove.prevent>
-              <div class="clear">
-                <!--区域-->
-                <ul class="district-ul left" @touchmove.stop>
-                  <li v-for="(districtItem,index) in district"
-                      :class="{'select-font-active': activDistrictIndex == index}"
-                      @click="setCheckDistrictValue($event,index)">
-                    {{districtItem.district}}
-                  </li>
-                </ul>
-                <!--板块-->
-                <ul class="street-ul left clear" @touchmove.stop>
-                  <li v-for="streetItem in district[activDistrictIndex].street"
-                      @click="setCheckStreetValue($event,streetItem)"
-                      :class="{'street-active': houseParams[houseType].areaIds == streetItem.id}">
-                    {{streetItem.name}}
-                  </li>
-                </ul>
-              </div>
-              <!--遮罩-->
-              <div class="filter-mask" @click = 'opentFilter("district")' @touchmove.prevent></div>
             </div>
             <!--房型-->
             <div v-if="filterType == 'roomType'" class="filter-room-type"  @touchmove.prevent>
@@ -200,7 +201,8 @@
         v-if="isShowSearch"
         :houseType="houseType"
         @hideSearch="isShowSearch = false"
-        @searchHouse="searchHouse">
+        @searchHouse="searchHouse"
+        @searchHouseHistory="searchHouseHistory">
       </search>
       <!--加载更多-->
       <ul class="more-ul" v-if="morePopVisible">
@@ -248,33 +250,7 @@
                   orderColumn:'',
                 },//租房房源请求参数
               },
-              houseParamsInit:{
-                1:{
-                  cityId:"hz",
-                  communityId:"",
-                  areaIds:"",
-                  priceMin:"",//最小价格
-                  priceMax:"",//最大价格
-                  filterIds:[],
-                  pageSize:10,
-                  pageIndex:1,
-                  orderBy:"",
-                  orderColumn:'',
-                },//二手房房源请求参数
-                2:{
-                  cityId:"hz",
-                  communityId:"",
-                  areaIds:"",
-                  priceMin:"",//最小价格
-                  priceMax:"",//最大价格
-                  filterIds:[],
-                  pageSize:10,
-                  pageIndex:1,
-                  orderBy:"",
-                  orderColumn:'',
-                },//租房房源请求参数
-              },
-              communityName:'',
+              communityName:'',//搜索的小区名
               houseLists:[],//房源列表
               recomment:0,//是否为推荐房源
               houseType:this.$store.state.activeInfo.houseType?this.$store.state.activeInfo.houseType:1,//房源类型
@@ -286,7 +262,8 @@
               },//获取过滤列表
               district:[],//区域板块列表
               streetInDistrictIds:[],//板块不限列表（板块不限）
-              activDistrictIndex:0,//选中的小区
+              activDistrictIndex:0,//活动的小区
+              selectedDistrictIndex:0,//搜索时选中的小区
               orderFilter:{
                   1:[
                     {orderColumn:"id",orderBy:"desc",describe:"最新发布"},
@@ -311,12 +288,13 @@
               },//详情类型
               isLoadAll: false, //是否加载完所有数据
               loading:false,
-              filterShowText:{
-                district:{name:'区域',select:[]},
-                price:{name:'价格',select:[]},
-                roomType:{name:'房型',select:[]},
-                filterMore:{name:'筛选',select:[]},
-              }
+              filterSelect:{
+                district:{name:'',select:[]},
+                price:{name:'',select:[]},
+                roomType:{name:'',select:[]},
+                filterMore:{name:'',select:[]},
+              },
+//              searchHistoryName:'',//拼接历史的名称
             }
         },
         mounted(){
@@ -362,7 +340,12 @@
                           }
                           console.log(this.houseLists)
                         }else{
+                          window.scrollTo(0,0);//置顶
+                          //本地存储搜索历史
                           this.recomment = res.data.result.recomment;//是否为推荐房源
+                          if( this.recomment==0){
+                            this.storageHouseSearchHistory()
+                          }
                           this.houseLists = res.data.result.list;
                           if (res.data.result.list.length<this.houseParams[this.houseType].pageSize){ //是否已经加载完所有数据
                             this.loading = true
@@ -390,11 +373,11 @@
             }
             else if(this.houseType == 2){
               //获取出售房源列表
+              let params = this.houseParams[this.houseType];
               console.log(params)
               api.getRentHouseList(params)
                 .then( res => {
                     console.log(res)
-                  this.recomment = res.data.result.recomment;//是否为推荐房源
                   if (res.data.success){
                     if(isLoadMore){
                       this.houseLists = this.houseLists.concat(res.data.result.list);
@@ -406,6 +389,12 @@
                         this.isLoadAll = false;
                       }
                     }else{
+                      window.scrollTo(0,0);//置顶
+                      //本地存储搜索历史
+                      this.recomment = res.data.result.recomment;//是否为推荐房源
+                      if( this.recomment==0){
+                        this.storageHouseSearchHistory()
+                      }
                       this.houseLists = res.data.result.list;
                       if (res.data.result.list.length<this.houseParams[this.houseType].pageSize){ //是否已经加载完所有数据
                         this.loading = true
@@ -432,13 +421,100 @@
                 });
             }
           },
+          //拼接历史筛选
+          getSearchHistoryCondition(){
+              let searchHistoryCondition={
+                name:[],
+                params :{
+                  communityId:"",
+                  areaIds:"",
+                  priceMin:"",//最小价格
+                  priceMax:"",//最大价格
+                  filterIds:[],
+                },//房源请求参数
+                filterSelect:this.filterSelect//筛选条件展示名
+              }
+              //获取筛选的区域名
+              if(this.filterSelect.district.name){
+                searchHistoryCondition.name.push(this.filterSelect.district.name)
+                searchHistoryCondition.params.areaIds = this.houseParams[this.houseType].areaIds
+              }
+              //获取筛选价格
+              if(this.filterSelect.price.select.length>0){
+                this.filterSelect.price.select.forEach(item=>{
+                  searchHistoryCondition.name.push(item.child_name)
+                  searchHistoryCondition.params.filterIds.push(item.id)
+                })
+              }
+              //获取输入的价格
+              let priceMin = this.houseParams[this.houseType].priceMin;
+              let priceMax = this.houseParams[this.houseType].priceMax;
+              if(priceMin || priceMax){
+                searchHistoryCondition.name.push(this.filterSelect.price.name)
+                searchHistoryCondition.params.priceMin = this.houseParams[this.houseType].priceMin;
+                searchHistoryCondition.params.priceMax = this.houseParams[this.houseType].priceMax
+              }
+              //获取输入的房型
+              if(this.filterSelect.roomType.select.length>0){
+                this.filterSelect.roomType.select.forEach(item=>{
+                  searchHistoryCondition.name.push(item.child_name)
+                  searchHistoryCondition.params.filterIds.push(item.id)
+                })
+              }
+              //获取小区名
+              if(this.communityName){
+                searchHistoryCondition.name.push(this.communityName)
+                searchHistoryCondition.params.filterIds.communityId = this.houseParams[this.houseType].communityId;
+              }
+              searchHistoryCondition.name = searchHistoryCondition.name.join('|')
+              return searchHistoryCondition;
+          },
+          //本地存储搜索历史
+          storageHouseSearchHistory(){
+              let houseSearchHistory = localStorage.getItem("houseSearchHistory");
+              console.log(houseSearchHistory)
+              if(houseSearchHistory == null || houseSearchHistory.length<1){
+                houseSearchHistory = {
+                    1:[],//二手房搜索历史
+                    2:[]//租房搜索历史
+                };
+              }else{
+                houseSearchHistory = JSON.parse(houseSearchHistory)
+              }
+              //获取历史搜索条件
+            let searchHistory =  this.getSearchHistoryCondition();
+            console.log(searchHistory)
+            if(searchHistory.name==''){ //无筛选条件则清空
+                return
+            }
+console.log(searchHistory)
+            //去除搜索名重复的历史搜索
+            houseSearchHistory[this.houseType].forEach((item,index)=>{
+                if(item.name == searchHistory.name){
+                  houseSearchHistory[this.houseType].splice(index,1)
+                }
+            })
+            //添加历史纪录
+            houseSearchHistory[this.houseType].unshift(searchHistory);
+            console.log(searchHistory)
+            localStorage.setItem("houseSearchHistory",JSON.stringify(houseSearchHistory));
+          },
+          //搜索历史记录点击
+          searchHouseHistory(item){
+              console.log(item)
+            //清空筛选条件
+            this.clearAllFilter();
+            this.houseParams[this.houseType].communityId = item.params.communityId
+            this.houseParams[this.houseType].areaIds = item.params.areaIds
+            this.houseParams[this.houseType].priceMin = item.params.priceMin
+            this.houseParams[this.houseType].priceMax = item.params.priceMax
+            this.houseParams[this.houseType].filterIds = item.params.filterIds
+            this.filterSelect = item.filterSelect
+            this.gethouseLists();
+            this.isShowSearch = false //不展示搜索组键
+          },
           //获取过滤条件
           getFilterList(){
-//              console.log(this.filterList)
-//            if (this.filterList && this.filterList.price){
-//                return
-//            }
-
             api.getFilterList({type:1})
               .then( res => {
                 if (res.data.success){
@@ -454,7 +530,7 @@
               })
               .catch(res =>{
                 this.$toast({
-                  message: res.data.errorMessage,
+                  message: res,
                   position: 'bottom',
                   duration: 3000
                 });
@@ -546,16 +622,43 @@
           },
           //清空筛选条件
           clearAllFilter(){
-            let  filterShowText = {
-                  district:{name:'区域',select:[]},
-                  price:{name:'价格',select:[]},
-                  roomType:{name:'房型',select:[]},
-                  filterMore:{name:'筛选',select:[]},
-                }
-            this.houseParams[this.houseType] = this.houseParamsInit[this.houseType];
-            this.filterShowText = filterShowText;
+            let  filterSelect = {
+                  district:{name:'',select:[]},
+                  price:{name:'',select:[]},
+                  roomType:{name:'',select:[]},
+                  filterMore:{name:'',select:[]},
+                };
+            let houseParams = {
+              1:{
+                cityId:"hz",
+                  communityId:"",
+                  areaIds:"",
+                  priceMin:"",//最小价格
+                  priceMax:"",//最大价格
+                  filterIds:[],
+                  pageSize:10,
+                  pageIndex:1,
+                  orderBy:"",
+                  orderColumn:'',
+              },//二手房房源请求参数
+              2:{
+                cityId:"hz",
+                  communityId:"",
+                  areaIds:"",
+                  priceMin:"",//最小价格
+                  priceMax:"",//最大价格
+                  filterIds:[],
+                  pageSize:10,
+                  pageIndex:1,
+                  orderBy:"",
+                  orderColumn:'',
+              },//租房房源请求参数
+            }
+            this.houseParams[this.houseType] = houseParams[this.houseType];
+            this.filterSelect = filterSelect;
             this.filterTypeActive = '';
             this.activDistrictIndex = 0;
+            this.selectedDistrictIndex = 0;
           },
           //清空传入的筛选条件
           clearFilterByChild(child){
@@ -568,10 +671,18 @@
           },
           //清空价格筛选条件
           clearNowFilter(){
+              let  filterSelect = {
+                district:{name:'',select:[]},
+                price:{name:'',select:[]},
+                roomType:{name:'',select:[]},
+                filterMore:{name:'',select:[]},
+              }
+              this.filterSelect[this.filterType] = filterSelect[this.filterType];
               if(this.filterType == 'price'){//价格
                 let child = this.filterList[this.houseType].price.child;
                 this.clearFilterByChild(child);
-                this.filterShowText. price = {name:'价格',select:[]};
+                this.houseParams[this.houseType].priceMax = '';
+                this.houseParams[this.houseType].priceMin = '';
               }else if(this.filterType == 'roomType'){//房型
                 let child = this.filterList[this.houseType].room.child;
                 this.clearFilterByChild(child);
@@ -579,9 +690,14 @@
                 let buildareaChild = this.filterList[this.houseType].buildarea.child;
                 let buildyearChild = this.filterList[this.houseType].buildyear.child;
                 let forwardChild = this.filterList[this.houseType].forward.child;
-                let child = buildareaChild.concat(buildyearChild,forwardChild);console.log(forwardChild)
+                let child = buildareaChild.concat(buildyearChild,forwardChild);
+                console.log(buildareaChild)
+                console.log(buildyearChild)
+                console.log(forwardChild)
+                console.log(child)
                 this.clearFilterByChild(child);
               }
+              console.log(this.filterSelect)
           },
           //打开房源类型弹框
           openHouseTypePop(){
@@ -591,13 +707,13 @@
           //设置价格过滤条件
           setFilterValue(event,item){
             let idIndex = this.houseParams[this.houseType].filterIds.indexOf(item.id);
-            let selectIndex = this.filterShowText[this.filterType].select.indexOf(item.child_name);//显示选中的条件
+            let selectIndex = this.filterSelect[this.filterType].select.indexOf(item);//显示选中的条件
             if (idIndex == "-1") {
               this.houseParams[this.houseType].filterIds.push(item.id);
-              this.filterShowText[this.filterType].select.push(item.child_name);//显示选中的条件
+              this.filterSelect[this.filterType].select.push(item);//显示选中的条件
             } else {
               this.houseParams[this.houseType].filterIds.splice(idIndex,1);
-              this.filterShowText[this.filterType].select.splice(selectIndex,1);
+              this.filterSelect[this.filterType].select.splice(selectIndex,1);
             }
             if(this.filterType == 'price'){
               this.houseParams[this.houseType].priceMin = '';
@@ -607,27 +723,26 @@
           //过滤确认按钮
           filterConfirm(){
             this.gethouseLists();
-            //获取输入的价格
-            let priceMin = this.houseParams[this.houseType].priceMin;
-            let priceMax = this.houseParams[this.houseType].priceMax;
-            let priceUnit = this.houseType == 1?'万元':'元';
+
             //设置选中条件名
-            if(this.filterShowText[this.filterType].select.length>1){
-              this.filterShowText[this.filterType].name = '多选';
-            }else  if(this.filterShowText[this.filterType].select.length==1){
-              if(this.filterType == 'price'&&(priceMin || priceMax)){
-                this.filterShowText[this.filterType].name = '多选';
-              }else{
-                this.filterShowText[this.filterType].name = this.filterShowText[this.filterType].select[0];
-              }
-            }else if(this.filterType == 'price' && this.filterShowText[this.filterType].select.length==0){//价格输入的情况
+            if(this.filterType == 'price'){
+              //获取输入的价格
+              let priceMin = this.houseParams[this.houseType].priceMin;
+              let priceMax = this.houseParams[this.houseType].priceMax;
+              let priceUnit = this.houseType == 1?'万元':'元';
               if(priceMin && priceMax){
-                this.filterShowText[this.filterType].name = priceMin+'-'+priceMax
+                this.filterSelect[this.filterType].name = priceMin+'-'+priceMax
               }else if(priceMin){
-                this.filterShowText[this.filterType].name = priceMin+priceUnit+'以上'
+                this.filterSelect[this.filterType].name = priceMin+priceUnit+'以上'
               }else if(priceMax){
-                this.filterShowText[this.filterType].name = priceMax+priceUnit+'以下'
+                this.filterSelect[this.filterType].name = priceMax+priceUnit+'以下'
+              }else{
+                this.filterSelect[this.filterType].name = this.filterSelect[this.filterType].select.length>1? '多选':this.filterSelect[this.filterType].select[0].child_name;
               }
+            }else if(this.filterType == 'roomType'){
+              this.filterSelect[this.filterType].name = this.filterSelect[this.filterType].select.length>1? '多选':this.filterSelect[this.filterType].select[0].child_name;
+            }else if(this.filterType == 'filterMore'){
+              this.filterSelect[this.filterType].name = this.filterSelect[this.filterType].select.length>=1? '多选':this.filterSelect[this.filterType].name;
             }
             this.filterType = '';
           },
@@ -643,7 +758,7 @@
             this.activDistrictIndex = id;
               if(id == 0){
                 this.houseParams[this.houseType].areaIds = '';
-                this.filterShowText.district.name = '区域';
+                this.filterSelect.district.name = '';
                 this.gethouseLists();
                 this.filterType = ''
               }
@@ -652,12 +767,13 @@
           setCheckStreetValue(event,streetItem){
               if(streetItem.id == 0){
                 this.houseParams[this.houseType].areaIds = this.streetInDistrictIds[this.activDistrictIndex].join(',')
-                this.filterShowText.district.name = this.district[this.activDistrictIndex].district;
+                this.filterSelect.district.name = this.district[this.activDistrictIndex].district;
               }else{
                 this.houseParams[this.houseType].areaIds = streetItem.id;
-                this.filterShowText.district.name = streetItem.name;
+                this.filterSelect.district.name = streetItem.name;
               }
             this.gethouseLists();
+            this.selectedDistrictIndex = this.activDistrictIndex//设置搜素时选中的区域
             this.filterType = ''
 
           },
@@ -682,8 +798,10 @@
           //通过小区搜索房源(搜索子组件触发)
           searchHouse(community){
               console.log(community)
+            //清空筛选条件
+            this.clearAllFilter();
             this.communityName = community.communityName
-           //房源请求参数
+           //设置小区id
             this.houseParams[this.houseType].communityId = community.communityId;
             this.gethouseLists();
             this.isShowSearch = false //不展示搜索组键

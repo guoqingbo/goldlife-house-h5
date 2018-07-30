@@ -1,5 +1,7 @@
 <template>
 	<div class="box">
+		<!-- <head-top /> -->
+    <!-- <div class="compared-box"> -->
       <h1 class="nav-header">
         <span class="go-back" @click="$router.go(-1)"><i class="icon iconfont go-back-icon">&#xe60f;</i></span>
         <span class="header-title">房源对比</span>
@@ -48,11 +50,12 @@
         </div>
 
       </div>
- 
+    <!-- </div> -->
   </div>
 </template>
 <script>
 	import api from '../../api/axios'
+	// import headTop from '../../components/header/head'
 
 	export default {
     name:'comparedResult',
@@ -70,9 +73,9 @@
 		methods:{
 			getCompareData(){
 				// _data为从上一页获取到的数据,最少2条，最多4条
-        let _data = this.$route.params.data;
-        // let _data = [{"cityId":"hz","houseId":"36979"},{"cityId":"hz","houseId":"36980"}];
-        
+         let _data = this.$route.params.data;
+//        let _data = [{"cityId":"hz","houseId":"36979"},{"cityId":"hz","houseId":"36980"}];
+        // console.log(_data)
 				api.houseCompared(_data)
 				.then(res=>{
 					if(res.data.success){
@@ -94,9 +97,12 @@
 	}
 </script>
 <style lang="scss" scoped>
+	// @import '../../style/mixin';
 
   .box{
     position: relative;
+    // width: 100%;
+    // height: 100%;
     padding-top: 4.4rem;
 
   }
@@ -127,6 +133,9 @@
       }
     }
 
+    // .box{
+    // 	position: relative;
+    // }
   .house-common{
     .house-decrible{
       height: 16rem;
@@ -142,9 +151,10 @@
   	padding-left:2rem;
   	text-align: left;
   	padding-bottom:6rem;
-  	position: absolute;
-  	left:0;
-  	overflow: hidden;
+	position: absolute;
+	// top:8.8rem;
+	left:0;
+	overflow: hidden;
 
   	h2{
   		width: 5rem;
@@ -196,7 +206,6 @@
         width: 12rem;
         height:9rem;
         margin-top:1.5rem;
-        border-radius: 0.5rem;
         /*margin-bottom:3rem;*/
       }
   		ul > li{
@@ -207,7 +216,9 @@
 	  		background:url(../../assets/icon/circle2@2x.png) no-repeat left center;
 	  		background-size:0.5rem 0.5rem;
   		}
-  		
+  		/* ul:first-child{
+			margin-bottom:9rem;
+		} */
   	}
   }
 </style>
