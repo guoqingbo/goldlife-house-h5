@@ -102,6 +102,17 @@ const routes = [
 const router = new Router({
   mode: envConfig.routerMode,
   routes,
+  scrollBehavior(to, from, savedPosition){ //滚动条行为，前进置顶，后退保持
+    console.log(savedPosition)
+    if(savedPosition) {
+      return savedPosition
+    } else {
+      if (from.meta.keepAlive) {
+        from.meta.savedPosition = document.body.scrollTop;
+      }
+      return { x: 0, y: to.meta.savedPosition ||0}
+    }
+  },
 });
 //注册全局钩子用来拦截导航
 router.beforeEach((to, from, next) => {
@@ -112,7 +123,7 @@ router.beforeEach((to, from, next) => {
     api.isLogin()
       .then(res => {
         if (res.data.success) {
-          next();
+          next()
         }else{
           //跳出登录弹框
           MessageBox({
@@ -131,24 +142,16 @@ router.beforeEach((to, from, next) => {
                 }
               });
             }
+
           })
         }
       });
-  }
-  //更改title
-  if (to.meta.title) {
+  } else if (to.meta.title) {
     document.title = to.meta.title;
     next();
-  }
-
-  // else if(to.meta.redirect){
-  //   //路由跳转(微信需要)
-  //   let data = to.query;
-  //   api.weixinMenu(data);
-  //   // window.location.href = envConfig.weixinRederectUrl+to.fullPath;
-  // }
-  else {
+  } else {
     next();
   }
 });
+
 export default router

@@ -207,9 +207,9 @@
       <!--加载更多-->
       <ul class="more-ul" v-if="morePopVisible">
         <li><i class="icon iconfont arrow">&#xe65d;</i></li>
-        <li @click="morePopVisible=false"><router-link to="/myCare"><span><i class="icon iconfont my-care">&#xe609;</i></span>我的关注</router-link></li>
-        <li @click="morePopVisible=false"><router-link to="/lookHouseIndex"><span><i class="icon iconfont look-house">&#xe610;</i></span>看房预约</router-link></li>
-        <li @click="morePopVisible=false"><router-link to="/signSearch"><span><i class="icon iconfont sign-search">&#xe60b;</i></span>签约查询</router-link></li>
+        <li @click="morePopVisible=false"><router-link :to="{name:'myCare'}"><span><i class="icon iconfont my-care">&#xe609;</i></span>我的关注</router-link></li>
+        <li @click="morePopVisible=false"><router-link :to="{name:'lookHouseIndex'}"><span><i class="icon iconfont look-house">&#xe610;</i></span>看房预约</router-link></li>
+        <li @click="morePopVisible=false"><router-link :to="{name:'signSearch'}"><span><i class="icon iconfont sign-search">&#xe60b;</i></span>签约查询</router-link></li>
       </ul>
       <!--全屏遮罩-->
       <div class="full-mask" v-if="morePopVisible" @touchmove.prevent @click="morePopVisible = false"></div>
