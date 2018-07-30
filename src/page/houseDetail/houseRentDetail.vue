@@ -434,7 +434,21 @@
         window.scrollTo(0,0);
       },
       phoneCall() {
-        MessageBox({
+        api.isLogin()
+          .then(res => {
+            if (res.data.success) {
+              MessageBox({
+                title: '',
+                message: '呼叫：'+this.brokerPhone,
+                showCancelButton: true,
+              }).then(action => {
+                if(action == "confirm"){
+                  window.location.href = 'tel://'+this.brokerPhone
+                }
+              })
+            }
+          });
+        /*MessageBox({
           title: '',
           message: '呼叫：'+this.brokerPhone,
           showCancelButton: true,
@@ -442,7 +456,7 @@
           if(action == "confirm"){
             window.location.href = 'tel://'+this.brokerPhone
           }
-        })
+        })*/
       },
       clkVillage(){
         if((this.isSell&&this.sellLength>0)||(this.isRent&&this.rentLength>0)){
