@@ -258,14 +258,18 @@
       font-size: 1.6rem;
       @include border-top;
       &:first-child{
-        padding: 2.5rem 0;
+        padding: 2rem 0 1rem 0;
         color: #9c9a9d;
+        /*border-top: none;*/
         span:nth-child(2){
           float: right;
         }
         .icon-delete{
           font-sise:26px;
         }
+      }
+      &:nth-child(2){
+        border-top: none;
       }
       &:nth-child(n + 1){
         color:#424242;
@@ -281,6 +285,9 @@
       font-size: 1.6rem;
       @include border-top;
       color:#424242;
+    }
+    li:first-child{
+      border-top:none;
     }
   }
 
