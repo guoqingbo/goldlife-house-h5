@@ -17,7 +17,9 @@
           <input type="search" placeholder="请输入想找的楼盘名称" @keyup="showSearchResult" v-model="params.keyword">
         </div>
       </div>
-      <div class="my-search-right right" @click="$emit('hideSearch')">取消</div>
+      <div class="my-search-right right" @click="$emit('hideSearch')">
+        取消
+      </div>
     </div>
     <!--搜索结果-->
     <ul  v-if="searchResult.length>0"  class="search-result">
@@ -45,7 +47,7 @@
         isShowHouseType:false,//搜索房源类型 1：二手房 2：租房
         searchResult:[],//搜索结果
         searchHouseType:this.houseType, //搜索房源类型
-        houseSearchHistory:localStorage.getItem("houseSearchHistory").length<=0 ? {1:[], 2:[]} : JSON.parse(localStorage.getItem("houseSearchHistory")),
+        houseSearchHistory:localStorage.getItem("houseSearchHistory")==null || localStorage.getItem("houseSearchHistory").length<=0 ? {1:[], 2:[]} : JSON.parse(localStorage.getItem("houseSearchHistory")),
       }
     },
     props: {
