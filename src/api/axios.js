@@ -33,6 +33,7 @@ axios.defaults.headers.post['Content-Type'] = "application/x-www-form-urlencoded
 // respone拦截器
 axios.interceptors.response.use(
   response => {
+    console.log(response)
     // if(response){
     //   let res = response.data
     //   switch(res.errorCode){ //与路由拦截有冲突
