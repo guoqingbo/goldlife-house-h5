@@ -59,7 +59,7 @@
                 <!--区域-->
                 <ul class="district-ul left" @touchmove.stop>
                   <li v-for="(districtItem,index) in district"
-                      :class="{'select-font-active': selectedDistrictIndex>0&&selectedDistrictIndex == index}"
+                      :class="{'select-font-active': activDistrictIndex>0&&activDistrictIndex == index}"
                       @click="setCheckDistrictValue($event,index)">
                     {{districtItem.district}}
                   </li>
@@ -263,7 +263,10 @@
               district:[],//区域板块列表
               streetInDistrictIds:[],//板块不限列表（板块不限）
               activDistrictIndex:0,//活动的小区
-              selectedDistrictIndex:0,//搜索时选中的小区
+              selectedDistrictIndex:0,//选中的小区
+              selectedfilterIds:[],//选中的筛选条件
+
+
               orderFilter:{
                   1:[
                     {orderColumn:"id",orderBy:"desc",describe:"最新发布"},
@@ -472,7 +475,6 @@
           //本地存储搜索历史
           storageHouseSearchHistory(){
               let houseSearchHistory = localStorage.getItem("houseSearchHistory");
-              console.log(houseSearchHistory)
               if(houseSearchHistory == null || houseSearchHistory.length<1){
                 houseSearchHistory = {
                     1:[],//二手房搜索历史
@@ -611,11 +613,18 @@ console.log(searchHistory)
 //              if (this.isShowHouseType){ //房源类型弹框打开时
 //                  return
 //              }
+
               this.isShowHouseType = false
-              if (this.filterType){
+              if (this.filterType){ //关闭弹框
                 this.filterType = ''
                 this.filterTypeActive = ''
-              }else{
+              }else{ //打开弹框
+                //设置选中的小区为活动小区
+                this.activDistrictIndex = this.selectedDistrictIndex;
+                //设置选中的条件为活动的条件
+                this.houseParams[this.houseType].filterIds = [].concat(this.selectedfilterIds);
+
+                console.log(this.selectedfilterIds+'selectedfilterIds')
                 this.filterType = filterType
                 this.filterTypeActive = filterType
               }
@@ -705,7 +714,7 @@ console.log(searchHistory)
             this.filterType = '';
             this.isShowHouseType = !this.isShowHouseType;
           },
-          //设置价格过滤条件
+          //设置过滤条件
           setFilterValue(event,item){
             let idIndex = this.houseParams[this.houseType].filterIds.indexOf(item.id);
             let selectIndex = this.filterSelect[this.filterType].select.indexOf(item);//显示选中的条件
@@ -723,8 +732,9 @@ console.log(searchHistory)
           },
           //过滤确认按钮
           filterConfirm(){
+              //设置当前活动条件为选中的筛选条件
+            this.selectedfilterIds = [].concat( this.houseParams[this.houseType].filterIds);
             this.gethouseLists();
-
             //设置选中条件名
             if(this.filterType == 'price'){
               //获取输入的价格

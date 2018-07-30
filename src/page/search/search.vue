@@ -17,9 +17,7 @@
           <input type="search" placeholder="请输入想找的楼盘名称" @keyup="showSearchResult" v-model="params.keyword">
         </div>
       </div>
-      <div class="my-search-right right" @click="$emit('hideSearch')">
-        取消
-      </div>
+      <div class="my-search-right right" @click="$emit('hideSearch')">取消</div>
     </div>
     <!--搜索结果-->
     <ul  v-if="searchResult.length>0"  class="search-result">

@@ -21,7 +21,7 @@
           <li>楼层</li>
           <li class="h3" >基础信息</li>
         </ul>
-        <ul>
+        <ul class="basic">
           <li>板块</li>
           <li>小区</li>
           <li>类型</li>
@@ -36,13 +36,14 @@
           </div>
           <ul class="house-ul first_ul">
             <li>{{ !!item.buildarea?item.buildarea:'无' }}㎡</li>
-            <li>{{ !!item.avgprice?(item.avgprice+'元/平'):'无' }}</li>
+            <!-- <li>{{ !!item.avgprice?(item.avgprice+'元/平'):'无' }}</li> -->
+            <li>{{ item.avgprice+'元/平'}}</li>
             <li>{{ item.room }}室{{ item.hall }}厅{{ item.toilet }}卫</li>
             <li>{{ !!item.forward?item.forward:'无' }}</li>
             <li>{{ !!item.fitment?item.fitment:'无' }}</li>
             <li>{{ item.floor_name }}/共{{ item.totalfloor }}层</li>
           </ul>
-          <ul>
+          <ul class="basic">
             <li>{{ !!item.district_name?item.district_name:'无' }}</li>
             <li>{{ !!item.block_name?item.block_name: '无'}}</li>
             <li>{{ !!item.sell_type?item.sell_type:'无' }}</li>
@@ -142,6 +143,9 @@
     }
     .house-ul{
       height: 24rem;
+    }
+    .basic{
+      margin-top: 2rem;
     }
   }
   .houseInfo{

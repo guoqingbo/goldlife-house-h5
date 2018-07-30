@@ -44,9 +44,16 @@
         }
       },
       avgprice(value){
-        if (value) {
+
+        if (/^[0-9]*$/.test(value)) {
           return value + ' 元/平';
+        }else{
+          return value
         }
+
+        /*if (value) {
+          return value + ' 元/平';
+        }*/
       },
       publishTime(value){
         if (value) {
@@ -103,7 +110,8 @@
       /*flex-direction:column;*/
       align-content: space-between;
       flex-wrap: wrap;
-      width: 16rem;
+      /*width: 17rem;*/
+      width: 57%;
       padding-left: 1.5rem;
       p {
         width: 100%;

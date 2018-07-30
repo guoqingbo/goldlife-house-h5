@@ -116,7 +116,6 @@ const router = new Router({
 });
 //注册全局钩子用来拦截导航
 router.beforeEach((to, from, next) => {
-
   //判断要去的路由是否需要先登录
   if (to.meta.checkLogin) {
     //判断是否登录
