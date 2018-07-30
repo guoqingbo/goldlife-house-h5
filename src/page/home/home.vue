@@ -82,16 +82,16 @@
               <div class="price-between-input">
                 <input
                   class="left" v-model="houseParams[houseType].priceMin"
-                  @focus="clearNowFilter()"
+                  @focus="clearSelectPrice"
                   maxlength="4"
-                  @input="houseParams[houseType].priceMin.length>4?houseParams[houseType].priceMin = houseParams[houseType].priceMin.slice(0, 4):''"
+                  @input="checkInput($event,'priceMin')"
                   type="number"/>
                 <span><i class="icon iconfont iconfont-heng">&#xe6f1;</i></span>
                 <input
                   class="right"
                   v-model="houseParams[houseType].priceMax"
-                  @focus="clearNowFilter"
-                  @input="houseParams[houseType].priceMax.length>4?houseParams[houseType].priceMax = houseParams[houseType].priceMax.slice(0, 4):''"
+                  @focus="clearSelectPrice"
+                  @input="checkInput($event,'priceMax')"
                   maxlength="4" type="number"/>
               </div>
               <ul class="filter-select">
@@ -265,7 +265,8 @@
               activDistrictIndex:0,//活动的小区
               selectedDistrictIndex:0,//选中的小区
               selectedfilterIds:[],//选中的筛选条件
-
+              selectedPriceMin:'',//选中的最小价格
+              selectedPriceMax:'',//选中的最大价格
 
               orderFilter:{
                   1:[
@@ -485,11 +486,9 @@
               }
               //获取历史搜索条件
             let searchHistory =  this.getSearchHistoryCondition();
-            console.log(searchHistory)
             if(searchHistory.name==''){ //无筛选条件则清空
                 return
             }
-console.log(searchHistory)
             //去除搜索名重复的历史搜索
             houseSearchHistory[this.houseType].forEach((item,index)=>{
                 if(item.name == searchHistory.name){
@@ -498,7 +497,6 @@ console.log(searchHistory)
             })
             //添加历史纪录
             houseSearchHistory[this.houseType].unshift(searchHistory);
-            console.log(searchHistory)
             localStorage.setItem("houseSearchHistory",JSON.stringify(houseSearchHistory));
           },
           //搜索历史记录点击
@@ -623,6 +621,9 @@ console.log(searchHistory)
                 this.activDistrictIndex = this.selectedDistrictIndex;
                 //设置选中的条件为活动的条件
                 this.houseParams[this.houseType].filterIds = [].concat(this.selectedfilterIds);
+                //设置输入的价格
+                this.houseParams[this.houseType].priceMax = this.selectedPriceMax
+                this.houseParams[this.houseType].priceMin = this.selectedPriceMin
 
                 console.log(this.selectedfilterIds+'selectedfilterIds')
                 this.filterType = filterType
@@ -671,13 +672,40 @@ console.log(searchHistory)
             this.selectedDistrictIndex = 0;
           },
           //清空传入的筛选条件
-          clearFilterByChild(child){
+          clearFilterByChild(child,clearSelect){
             child.forEach((item)=>{
-              let index = this.houseParams[this.houseType].filterIds.indexOf(item.id)
+              let index = this.houseParams[this.houseType].filterIds.indexOf(item.id);
               if(index>=0){
                 this.houseParams[this.houseType].filterIds.splice(index,1)
               }
+              if(clearSelect == 'true'){
+                //清空选中的条件
+                let select_index = this.selectedfilterIds.indexOf(item.id)
+                if(select_index>=0){
+                  this.selectedfilterIds.splice(select_index,1)
+                }
+              }
             })
+          },
+          //检查输入的价格是否合适
+          checkInput(event,priceType){
+            let price = event.target.value
+              if(price==''){
+                price = ''
+              }else if(price <=0){
+                price = 0
+              }else if(price.length>4){
+                price =  price.slice(0, 4);
+              }
+            this.houseParams[this.houseType][priceType] = price
+          },
+          //输入价格事件
+          clearSelectPrice(){
+            //清空选择的价格
+            let child = this.filterList[this.houseType].price.child;
+            this.clearFilterByChild(child,false);
+            //清空展示的价格
+            this.filterSelect.price.select = [];
           },
           //清空价格筛选条件
           clearNowFilter(){
@@ -690,12 +718,15 @@ console.log(searchHistory)
               this.filterSelect[this.filterType] = filterSelect[this.filterType];
               if(this.filterType == 'price'){//价格
                 let child = this.filterList[this.houseType].price.child;
-                this.clearFilterByChild(child);
+                this.clearFilterByChild(child,true);
                 this.houseParams[this.houseType].priceMax = '';
                 this.houseParams[this.houseType].priceMin = '';
+                //清空选中的条件
+                this.selectedPriceMin = '';
+                this.selectedPriceMax = '';
               }else if(this.filterType == 'roomType'){//房型
                 let child = this.filterList[this.houseType].room.child;
-                this.clearFilterByChild(child);
+                this.clearFilterByChild(child,true);
               }else if(this.filterType == 'filterMore'){//筛选
                 let buildareaChild = this.filterList[this.houseType].buildarea.child;
                 let buildyearChild = this.filterList[this.houseType].buildyear.child;
@@ -705,7 +736,7 @@ console.log(searchHistory)
                 console.log(buildyearChild)
                 console.log(forwardChild)
                 console.log(child)
-                this.clearFilterByChild(child);
+                this.clearFilterByChild(child,true);
               }
               console.log(this.filterSelect)
           },
@@ -740,7 +771,9 @@ console.log(searchHistory)
               //获取输入的价格
               let priceMin = this.houseParams[this.houseType].priceMin;
               let priceMax = this.houseParams[this.houseType].priceMax;
-              let priceUnit = this.houseType == 1?'万元':'元';
+              let priceUnit = this.houseType == 1?'万':'元';
+              this.selectedPriceMin = priceMin
+              this.selectedPriceMax = priceMax
               if(priceMin && priceMax){
                 this.filterSelect[this.filterType].name = priceMin+'-'+priceMax
               }else if(priceMin){
@@ -748,12 +781,30 @@ console.log(searchHistory)
               }else if(priceMax){
                 this.filterSelect[this.filterType].name = priceMax+priceUnit+'以下'
               }else{
-                this.filterSelect[this.filterType].name = this.filterSelect[this.filterType].select.length>1? '多选':this.filterSelect[this.filterType].select[0].child_name;
+                console.log(this.filterSelect[this.filterType]);
+                if(this.filterSelect[this.filterType].select.length>1){
+                    this.filterSelect[this.filterType].name = '多选'
+                  }else if (this.filterSelect[this.filterType].select.length == 1){
+                    this.filterSelect[this.filterType].name = this.filterSelect[this.filterType].select[0].child_name;
+                  }else{
+                    this.filterSelect[this.filterType].name = ''
+                  }
               }
             }else if(this.filterType == 'roomType'){
-              this.filterSelect[this.filterType].name = this.filterSelect[this.filterType].select.length>1? '多选':this.filterSelect[this.filterType].select[0].child_name;
+                console.log( this.filterSelect[this.filterType])
+              if(this.filterSelect[this.filterType].select.length>1){
+                this.filterSelect[this.filterType].name = '多选'
+              }else if (this.filterSelect[this.filterType].select.length == 1){
+                this.filterSelect[this.filterType].name = this.filterSelect[this.filterType].select[0].child_name;
+              }else{
+                this.filterSelect[this.filterType].name = ''
+              }
             }else if(this.filterType == 'filterMore'){
-              this.filterSelect[this.filterType].name = this.filterSelect[this.filterType].select.length>=1? '多选':this.filterSelect[this.filterType].name;
+              if(this.filterSelect[this.filterType].select.length>=1) {
+                this.filterSelect[this.filterType].name = '多选'
+              }else{
+                this.filterSelect[this.filterType].name = ''
+              }
             }
             this.filterType = '';
           },
