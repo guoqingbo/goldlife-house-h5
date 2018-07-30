@@ -7,7 +7,7 @@
 		<div class="ifCheck">
 			<img src="../../assets/icon/icon_questionmark@2x.png" alt="">
 			<p style="margin-bottom: 0.7rem;">是否确认退出</p>
-			<p>当前 {{(!!this.$store.state.userInfo.loginName?this.$store.state.userInfo.loginName:'')}} 的账号？</p>
+			<p>当前 {{loginName}} 的账号？</p>
 			<button class="btn-logout" @click.prevent="confirmOut">确认退出</button>
 		</div>
 
@@ -20,9 +20,14 @@
 	export default {
 		// name:'logout',
 		data(){
-			return{}
+			return{
+        loginName:''
+      }
 		},
-		created(){},
+		created(){
+		    this.getUserName();
+      document.title = '金品生活'
+    },
 		methods:{
 			confirmOut(){
 				//从url获取openId和code
@@ -64,7 +69,19 @@
 				.catch(err=>{
 					console.log(err);
 				})
-			}
+			},
+      getUserName(){//获取用户名
+			    api.isLogin()
+            .then(res=>{
+                console.log(res)
+                if(res.data.success){
+                  this.loginName = res.data.result
+                }
+            })
+            .catch(res=>{
+
+            })
+      }
 		},
 		components: {
 

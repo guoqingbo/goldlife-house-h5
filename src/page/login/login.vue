@@ -42,6 +42,7 @@
         },
         created(){
 //          console.log(this.$route.params);
+          document.title = '金品生活'
         },
         components: {
         },
@@ -128,6 +129,7 @@
                   let redirectUrl = res.data.result;
                   //弹框确认登录后的跳回地址
                   let redirect = decodeURIComponent(this.$route.query.redirect || '/');
+                  console.log(redirect)
 //                  this.$messageBox.alert(redirectUrl, "回掉地址");
                   if (redirectUrl){ //请求中有跳转则跳转
                       window.location.href = redirectUrl;

@@ -15,11 +15,11 @@ const routes = [
     component: r => require.ensure([], () => r(require('../page/home/home'))),
   },
   {//登录页
-    path: '/login', name: 'login', meta:{title: '金品生活'},
+    path: '/login', name: 'login',
     component: r => require.ensure([], () => r(require('../page/login/login'))),
   },
   {//登出
-    path: '/logout', name: 'logout',meta:{title: '金品生活'},
+    path: '/logout', name: 'logout',
     component: r => require.ensure([], () => r(require('../page/login/logout'))),
   },
   {//房源列表页
@@ -117,7 +117,7 @@ const router = new Router({
 });
 //注册全局钩子用来拦截导航
 router.beforeEach((to, from, next) => {
-
+  console.log(to)
   //判断要去的路由是否需要先登录
   if (to.meta.checkLogin) {
     //判断是否登录
@@ -125,7 +125,10 @@ router.beforeEach((to, from, next) => {
       .then(res => {
         if (res.data.success) {
           next();         
+
         }else{
+          console.log(to)
+          console.log(to.path)
           //跳出登录弹框
           MessageBox({
             title: '',
@@ -137,19 +140,29 @@ router.beforeEach((to, from, next) => {
               next({ //跳转到登录页面
                 path: 'login',
                 query: {
-                  redirect: router.currentRoute.fullPath, //将跳转的路由path作为参数，登录成功后跳转到该路由
+                  redirect: to.path, //将跳转的路由path作为参数，登录成功后跳转到该路由
                   openId:res.data.result.openId,
                   code:res.data.result.code
                 }
               });
             }
-
           })
         }
       });
-  } else if (to.meta.title) {
-    document.title = to.meta.title;
-    next();
+  } else if(to.name == 'login'){
+    console.log(to)
+    if(to.name == 'login'){
+      api.isLogin()
+        .then(res => {
+          if (res.data.success) {
+            next({ //跳转到登录页面
+              path: '/logout',
+            });
+          }else{
+            next();
+          }
+        });
+    }
   } else {
     next();
   }
