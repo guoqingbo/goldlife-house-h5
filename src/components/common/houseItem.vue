@@ -33,7 +33,7 @@
         if (value) {
           return value;
         }else{
-          return "../../static/bg_smallphotonormal@2x.png"
+          return "./static/bg_smallphotonormal@2x.png"
         }
       },
       price(value,houseType){
