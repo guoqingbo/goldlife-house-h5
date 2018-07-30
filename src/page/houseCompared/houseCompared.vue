@@ -244,7 +244,7 @@ console.log(this.beginCompared)
     }
   }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
   @import '../../style/mixin';
   /*导航头*/
   .nav-header{

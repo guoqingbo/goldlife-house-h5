@@ -33,7 +33,7 @@
         if (value) {
           return value;
         }else{
-          return "../../../static/bg_smallphotonormal@2x.png"
+          return "../../static/bg_smallphotonormal@2x.png"
         }
       },
       price(value,houseType){
@@ -93,7 +93,7 @@
 //    @include border-top;
     padding:1.5rem 0;
     width: 100%;
-    overflow: hidden;
+    /*overflow: hidden;*/
     .img {
       width: 12.1rem;
       height: 9rem;
@@ -106,14 +106,19 @@
       }
     }
     .li-content {
+      overflow: hidden;
+      /*width: 100%;*/
+      /*flex: 1 1 auto;*/
       display: flex;
       /*flex-direction:column;*/
       align-content: space-between;
       flex-wrap: wrap;
-      /*width: 17rem;*/
-      width: 16rem;
+      /*width: 20.5rem;*/
+      /*width: 62%;*/
       padding-left: 1.5rem;
       p {
+        display: inline-block;
+        flex: 1 1 auto;
         width: 100%;
         /*margin-bottom: 0.2rem;*/
         overflow: hidden;
