@@ -608,9 +608,10 @@ console.log(searchHistory)
           },
           //打开筛选弹框
           opentFilter(filterType){
-              if (this.isShowHouseType){ //房源类型弹框打开时
-                  return
-              }
+//              if (this.isShowHouseType){ //房源类型弹框打开时
+//                  return
+//              }
+              this.isShowHouseType = false
               if (this.filterType){
                 this.filterType = ''
                 this.filterTypeActive = ''

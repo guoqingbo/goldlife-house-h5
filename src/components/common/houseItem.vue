@@ -103,7 +103,7 @@
       /*flex-direction:column;*/
       align-content: space-between;
       flex-wrap: wrap;
-      /*width: 17rem;*/
+      width: 16rem;
       padding-left: 1.5rem;
       p {
         width: 100%;
