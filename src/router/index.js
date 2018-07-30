@@ -112,8 +112,7 @@ router.beforeEach((to, from, next) => {
     api.isLogin()
       .then(res => {
         if (res.data.success) {
-          console.log(res)
-          next();
+          next()
         }else{
           //跳出登录弹框
           MessageBox({
@@ -132,23 +131,14 @@ router.beforeEach((to, from, next) => {
                 }
               });
             }
+
           })
         }
       });
-  }
-  //更改title
-  if (to.meta.title) {
+  } else if (to.meta.title) {
     document.title = to.meta.title;
     next();
-  }
-
-  // else if(to.meta.redirect){
-  //   //路由跳转(微信需要)
-  //   let data = to.query;
-  //   api.weixinMenu(data);
-  //   // window.location.href = envConfig.weixinRederectUrl+to.fullPath;
-  // }
-  else {
+  } else {
     next();
   }
 });
