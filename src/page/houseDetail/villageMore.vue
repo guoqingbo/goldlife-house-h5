@@ -48,9 +48,9 @@
       <div class="filter-mask" @click='opentFilter("district")' @touchmove.prevent></div>
     </div>
     </div>
-    <keep-alive>
+    <!--<keep-alive>
       <router-view></router-view>
-    </keep-alive>
+    </keep-alive>-->
   </div>
 
 </template>
@@ -147,7 +147,7 @@
       houseItem,
     },
     mounted() {
-      this.menu();
+      //this.menu();
       this.gethouseLists();
     },
 
