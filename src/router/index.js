@@ -124,11 +124,7 @@ router.beforeEach((to, from, next) => {
     api.isLogin()
       .then(res => {
         if (res.data.success) {
-          next();
-          /*if(to.name=="login"){
-            alert("2121");
-            next({path:'/logout'})
-          }*/
+          next();         
 
         }else{
           console.log(to)
@@ -170,15 +166,6 @@ router.beforeEach((to, from, next) => {
   } else {
     next();
   }
-
- /* if(!!this.$store.state.loginBack){
-      if(to.name=="login"){
-          alert("2121");
-          next({path:'/logout'})
-        }
-  }else{
-          next();
-        }*/
 
 });
 

@@ -6,7 +6,6 @@
           <span class="header-title">签约详情</span>
         </h1>
 
-		<!-- <div class="signBox box_fixed" ref="houseDetail"> -->
 		<div class="signBox box_fixed">
 			<div class="addr">
 				<h2>
@@ -36,13 +35,11 @@
 
 		<div class="emptyBox"></div>
 
-		<!-- <div class="signBox" id="status" :style="'height:'+statusH+'px'"> -->
 		<div class="signBox" id="status">
 			<div class="status" v-if="signDetail.now_transfer != undefined">
 				<!-- <h2>当前签约状态：<span>{{ signDetail.now_transfer.stage_name }}</span></h2> -->
 
-				<div class="scroll-box" id="scroll-box" :style="'height:'+Heig+'px'">
-				<!-- <div class="scroll-box" id="scroll-box"> -->
+				<div class="scroll-box" id="scroll-box" :style="'height:'+Heig+'px'">				
 					<div class="status_content">
 						<p v-for="item in transfer">
 							<span v-if="item.step_id==signDetail.now_transfer.step_id" class="current" id="current"></span>
@@ -60,14 +57,12 @@
 </template>
 <script type="text/javascript">
 	import api from '../../api/axios'
-	// import headTop from '../../components/header/head'
 	export default {
 		name:'signDetail',
 		data(){
 			return{
 				signDetail:{},
 				transfer:[],
-				// signId:'',
 				userType:2, //用户身份固定为2客户
 				bargainStatus:{
 		          '1':'办理中',
@@ -77,7 +72,6 @@
 		        Heig:'',
 		        marginTop:'',
 		        boxH:'',
-		        statusH:'',
 		        current_Status:''
 			}
 		},
@@ -127,9 +121,6 @@
 				this.Heig = HH		
 			}
 		},
-		/*components: {
-          headTop
-        },*/
         filters: { //定义过滤器
 		  formatPrice: function (value) {
 				if(!value) return '0.00';
@@ -149,7 +140,6 @@
 	}
 </script>
 <style lang="scss" scoped>
-	// @import '../../style/mixin';
 
 	.container_box{
 		height:100%;
@@ -276,7 +266,7 @@
 
   		}
   		p:first-child{
-  			margin-top: 2rem;
+  			margin-top: 3.5rem;
   		}
   		p:last-child{
   			margin-bottom: 1.75rem;
