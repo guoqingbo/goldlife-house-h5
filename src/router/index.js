@@ -102,6 +102,17 @@ const routes = [
 const router = new Router({
   mode: envConfig.routerMode,
   routes,
+  scrollBehavior(to, from, savedPosition){ //滚动条行为，前进置顶，后退保持
+    console.log(savedPosition)
+    if(savedPosition) {
+      return savedPosition
+    } else {
+      if (from.meta.keepAlive) {
+        from.meta.savedPosition = document.body.scrollTop;
+      }
+      return { x: 0, y: to.meta.savedPosition ||0}
+    }
+  },
 });
 //注册全局钩子用来拦截导航
 router.beforeEach((to, from, next) => {
@@ -142,4 +153,5 @@ router.beforeEach((to, from, next) => {
     next();
   }
 });
+
 export default router
