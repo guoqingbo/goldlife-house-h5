@@ -125,6 +125,8 @@ router.beforeEach((to, from, next) => {
         if (res.data.success) {
           next()
         }else{
+          console.log(to)
+          console.log(to.path)
           //跳出登录弹框
           MessageBox({
             title: '',
@@ -136,13 +138,12 @@ router.beforeEach((to, from, next) => {
               next({ //跳转到登录页面
                 path: 'login',
                 query: {
-                  redirect: router.currentRoute.fullPath, //将跳转的路由path作为参数，登录成功后跳转到该路由
+                  redirect: to.path, //将跳转的路由path作为参数，登录成功后跳转到该路由
                   openId:res.data.result.openId,
                   code:res.data.result.code
                 }
               });
             }
-
           })
         }
       });
