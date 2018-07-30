@@ -80,12 +80,12 @@ const routes = [
   },
 
   {// 看房预约
-    path: '/lookHouseIndex', name: 'lookHouseIndex',meta:{checkLogin:true},
+    path: '/lookHouseIndex', name: 'lookHouseIndex',meta:{checkLogin:true,keepAlive:true},
     component: r => require.ensure([], () => r(require('../page/lookHouse/lookHouseIndex'))),
   },
 
   { // 看房记录
-    path: '/lookHouseHistory', name: 'lookHouseHistory',
+    path: '/lookHouseHistory', name: 'lookHouseHistory',meta:{keepAlive:true},
     component: r => require.ensure([], () => r(require('../page/lookHouse/lookHouseHistory'))),
   },
   { // 添加看房笔记
@@ -137,8 +137,8 @@ router.beforeEach((to, from, next) => {
                 path: 'login',
                 query: {
                   redirect: router.currentRoute.fullPath, //将跳转的路由path作为参数，登录成功后跳转到该路由
-                  openId:res.result.openId,
-                  code:res.result.code
+                  openId:res.data.result.openId,
+                  code:res.data.result.code
                 }
               });
             }

@@ -81,7 +81,7 @@
 		        MessageBox({
 				  title: '呼叫',
 				  message: this.reservationInfo.phone,
-				  showCancelButton: true
+				  showCancelButton: true,
 				}).then(action => {
 					if(action == "confirm"){
 						window.location.href = 'tel://'+this.reservationInfo.phone
