@@ -75,7 +75,7 @@ const routes = [
     component: r => require.ensure([], () => r(require('../page/houseDetail/villageDetail'))),
   },
   {
-    path: '/villageMore', name: 'villageMore',
+    path: '/villageMore', name: 'villageMore',meta:{keepAlive:true},
     component: r => require.ensure([], () => r(require('../page/houseDetail/villageMore'))),
   },
 
