@@ -122,19 +122,29 @@
       },
        //选中房源
       selectedHouse(houseId){
-        if(!this.complete&&this.beginCompared.length>3){
+        /*if(!this.complete&&this.beginCompared.length>3){
           this.$toast({
             message: "最多可同时对比4条房源",
             position: 'middle',
             duration: 3000
           })
           return
-        }
+        }*/
         let indexId = this.beginCompared.indexOf(houseId);
         if (indexId>=0){
           this.beginCompared.splice(indexId,1);
         }else{
-          this.beginCompared.push (houseId);
+          
+          if(!this.complete&&this.beginCompared.length>3){
+            this.$toast({
+              message: "最多可同时对比4条房源",
+              position: 'middle',
+              duration: 3000
+            })
+            return
+          }else{
+            this.beginCompared.push (houseId);
+          }
         }
       },
       //全选

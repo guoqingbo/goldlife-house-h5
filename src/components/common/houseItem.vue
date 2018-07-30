@@ -44,9 +44,16 @@
         }
       },
       avgprice(value){
-        if (value) {
+
+        if (/^[0-9]*$/.test(value)) {
           return value + ' 元/平';
+        }else{
+          return value
         }
+
+        /*if (value) {
+          return value + ' 元/平';
+        }*/
       },
       publishTime(value){
         if (value) {
