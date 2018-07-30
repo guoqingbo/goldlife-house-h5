@@ -101,6 +101,7 @@ const routes = [
 
 const router = new Router({
   mode: envConfig.routerMode,
+  base: '/h5house/',
   routes,
   scrollBehavior(to, from, savedPosition){ //滚动条行为，前进置顶，后退保持
     console.log(savedPosition)
