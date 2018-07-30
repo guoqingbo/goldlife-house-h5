@@ -44,9 +44,16 @@
         }
       },
       avgprice(value){
-        if (value) {
+
+        if (/^[0-9]*$/.test(value)) {
           return value + ' 元/平';
+        }else{
+          return value
         }
+
+        /*if (value) {
+          return value + ' 元/平';
+        }*/
       },
       publishTime(value){
         if (value) {
@@ -104,6 +111,7 @@
       align-content: space-between;
       flex-wrap: wrap;
       /*width: 17rem;*/
+      width: 57%;
       padding-left: 1.5rem;
       p {
         width: 100%;
@@ -116,8 +124,14 @@
         font-weight: bold;
         font-size: 1.6rem;
         color: #424242;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
       .dicrible {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
         font-size: 1.5rem;
         color: #9c9a9d;
       }
