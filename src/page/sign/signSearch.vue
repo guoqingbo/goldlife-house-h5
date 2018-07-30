@@ -43,23 +43,29 @@
     },
     methods:{
       getSignSearch(){
-        //从vuex中获取登录用户手机号
-        var phoneNum = this.$store.state.userInfo.loginName;
-        console.log(phoneNum)
-        api.signSearch(phoneNum).then(res=>{
-          if(res.data.success){
-            this.signList = res.data.result;
-          }else{
-            this.$toast({
-              message: res.data.errorMessage,
-              position: 'middle',
-              duration: 3000
-            })
-          }
-        })
-        .catch(err=>{
-          console.log(err);
-        })
+        //获取登录用户手机号
+        api.isLogin()
+          .then(res=>{
+            console.log(res.data.result)
+              if(res.data.success){
+                  let loginName = res.data.result
+                  api.signSearch(loginName).then(res=>{
+
+                    if(res.data.success){
+                      this.signList = res.data.result;
+                    }else{
+                      this.$toast({
+                        message: res.data.errorMessage,
+                        position: 'middle',
+                        duration: 3000
+                      })
+                    }
+                  })
+                    .catch(err=>{
+                      console.log(err);
+                    })
+              }
+          })
       },
       toDetail(id){
         this.$router.push({path:'/signDetail',query:{houseId:id}})

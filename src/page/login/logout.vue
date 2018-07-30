@@ -26,6 +26,7 @@
 		},
 		created(){
 		    this.getUserName();
+      document.title = '金品生活'
     },
 		methods:{
 			confirmOut(){

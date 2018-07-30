@@ -42,6 +42,7 @@
         },
         created(){
 //          console.log(this.$route.params);
+          document.title = '金品生活'
         },
         components: {
         },

@@ -9,7 +9,7 @@
         <i class="icon iconfont icon-modify"  @click="change">&#xe62e;</i>
       </span>
       <span class="nav-header-right" v-if="complete">
-        <label class="modify-text" @click="change">完成</label>
+        <label class="modify-text" @click="completed">完成</label>
       </span>
     </div>
     <!--房源结果列表-->
@@ -71,6 +71,13 @@
 
     },
     methods:{
+      completed(){
+        //保存数据
+        localStorage.setItem("comparedList_hz_"+this.loginName,JSON.stringify(this.houseLists));
+        this.complete = !this.complete
+        //清空选择的房源
+        this.beginCompared = [];
+      },
         //切换功能
       change(){
         this.complete = !this.complete
@@ -134,7 +141,7 @@
         if (indexId>=0){
           this.beginCompared.splice(indexId,1);
         }else{
-          
+
           if(!this.complete&&this.beginCompared.length>3){
             this.$toast({
               message: "最多可同时对比4条房源",
@@ -185,7 +192,7 @@
                         delete this.houseLists[value.houseId];
                       }
                   })
-                  localStorage.setItem("comparedList_hz_"+this.loginName,JSON.stringify(this.houseLists));
+//                  localStorage.setItem("comparedList_hz_"+this.loginName,JSON.stringify(this.houseLists));
                   //从新渲染
                   this.houseLists = Object.assign({},this.houseLists);
 
@@ -230,7 +237,7 @@ console.log(this.beginCompared)
             delete this.houseLists[value];
           }
         })
-        localStorage.setItem("comparedList_hz_"+this.loginName,JSON.stringify(this.houseLists));
+//        localStorage.setItem("comparedList_hz_"+this.loginName,JSON.stringify(this.houseLists));
         //从新渲染
         this.houseLists = Object.assign({},this.houseLists);
       }
