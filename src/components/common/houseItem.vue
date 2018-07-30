@@ -111,6 +111,7 @@
       align-content: space-between;
       flex-wrap: wrap;
       /*width: 17rem;*/
+      width: 57%;
       padding-left: 1.5rem;
       p {
         width: 100%;
@@ -123,8 +124,14 @@
         font-weight: bold;
         font-size: 1.6rem;
         color: #424242;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
       .dicrible {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
         font-size: 1.5rem;
         color: #9c9a9d;
       }
