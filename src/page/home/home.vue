@@ -678,7 +678,7 @@
               if(index>=0){
                 this.houseParams[this.houseType].filterIds.splice(index,1)
               }
-              if(clearSelect == 'true'){
+              if(clearSelect){
                 //清空选中的条件
                 let select_index = this.selectedfilterIds.indexOf(item.id)
                 if(select_index>=0){
