@@ -133,6 +133,7 @@
       }
     },
     created() {
+      this.getloginName();
       console.log(this.$route.params.homes)
       if(this.$route.params.homes == null){
         this.$router.push({ name:'home',params: { }});
@@ -141,7 +142,7 @@
         if(picList != null && picList.length>0){
           this.pic = picList[0];
         }
-        this.phone = this.$store.state.userInfo.loginName;
+//        this.phone = this.$store.state.userInfo.loginName;
       }
 
     },
@@ -158,6 +159,15 @@
     },
 
     methods: {
+      //获取用户名
+      getloginName(){
+        api.isLogin()
+          .then(res=>{
+            if(res.data.success){
+              this.phone = res.data.result
+            }
+          })
+      },
       openPicker () {
         this.$refs.picker.open()
       },

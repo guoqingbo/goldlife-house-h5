@@ -11,7 +11,7 @@
         <p><span class="dicrible">{{item.describe}}</span></p>
         <p>
           <span class="price">{{item.price | price(houseType)}}</span>
-          <span class="avgprice">{{item.avgprice | avgprice}}</span>
+          <span class="avgprice">{{item.avgprice | avgprice(houseType)}}</span>
         </p>
         <p v-if="!checkBox"><span class="publish-time">{{item.create_time | publishTime}}</span></p>
       </div>
@@ -43,12 +43,11 @@
           return value
         }
       },
-      avgprice(value){
-
-        if (/^[0-9]*$/.test(value)) {
-          return value + ' 元/平';
+      avgprice(value,houseType){
+        if (value&&/^[0-9]*$/.test(value)) {
+          return houseType == 1||houseType == 3 ? value + ' 元/平':'';
         }else{
-          return value
+          return houseType == 1 || houseType == 3 ? value : '';
         }
 
         /*if (value) {
