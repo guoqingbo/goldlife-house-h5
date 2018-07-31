@@ -124,7 +124,7 @@
                   console.log(res.data)
                 if (res.data.success){
                   //保存用户信息
-                  this.$store.commit('setUserInfo',{loginName:this.loginName,});
+//                  this.$store.commit('setUserInfo',{loginName:this.loginName,});
                   //获取登录后的跳转地址
                   let redirectUrl = res.data.result;
                   //弹框确认登录后的跳回地址

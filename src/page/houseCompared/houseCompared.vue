@@ -55,7 +55,7 @@
         ],
         sheetVisible:false,//是否展示底部下拉选项
         houseLists:{},//房源列表
-        loginName:this.$store.state.userInfo.loginName?this.$store.state.userInfo.loginName:"",//登录账号
+        loginName:"",//登录账号
         beginCompared:[],//开始对比房源数据
         complete:false,//选项完成
         isSelectedAll:false,//是否全选
@@ -65,12 +65,22 @@
       houseItem,
     },
     created(){
+        this.getloginName();
       this.getComparedList();
     },
     mounted(){
 
     },
     methods:{
+      //获取用户名
+      getloginName(){
+        api.isLogin()
+          .then(res=>{
+            if(res.data.success){
+              this.loginName = res.data.result
+            }
+          })
+      },
       completed(){
         //保存数据
         localStorage.setItem("comparedList_hz_"+this.loginName,JSON.stringify(this.houseLists));

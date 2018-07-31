@@ -93,7 +93,7 @@
           </li>
           <li v-if="isRent" v-for='rentImg in rentList'>
             <router-link
-              :to="{ name:'houseRentDetail',params: {cityId:cityId,houseId:houseId,userType:userType,houseType:houseType}}">
+              :to="{ name:'houseRentDetail',params: {cityId:cityId,houseId:rentImg.id,userType:userType,houseType:houseType}}">
               <img :src="rentImg.pic?rentImg.pic:require('../../../static/bg_smallphotonormal@2x.png')"><br/>
               <p>{{rentImg.room_type}}|{{rentImg.buildarea}}|{{rentImg.forward}}</p>
               <p><span style="color: #e10000">{{rentImg.price}}</span></p>
@@ -211,15 +211,18 @@
         sellLength:'',
         rentLength:'',
         indexNum:'1',
+        loginName:'',//登录用户名
       }
     },
     created() {
+      this.getloginName()
       this.menu();
       this.getHouseDetail();
       this.getCompareNum();
       //存储当前房源id
       this.$store.commit("setActiveInfo",{houseId:this.houseId,houseType:this.houseType})
-
+      console.log(this.houseType)
+console.log(this.$store.state.activeInfo)
     },
     components: {
     },
@@ -228,6 +231,15 @@
     },
 
     methods: {
+        //获取用户名
+      getloginName(){
+          api.isLogin()
+            .then(res=>{
+                if(res.data.success){
+                    this.loginName = res.data.result
+                }
+            })
+      },
       //房源详情
       getHouseDetail() {
         let params = {
@@ -275,8 +287,7 @@
               //重置地图
               this.resetMap();
               //对比按钮
-              var loginName = this.$store.state.userInfo.loginName;
-              var list = localStorage.getItem("comparedList_hz_" + loginName);
+              var list = localStorage.getItem("comparedList_hz_" + this.loginName);
               if (list != null) {
                 if (JSON.parse(list)[this.houseId]) {
                   this.compareDesc = '取消对比'
@@ -413,6 +424,22 @@
                     console.log(response)
                   });
               }
+            }else{
+              MessageBox({
+                title: '',
+                message: '请登录查看',
+                showCancelButton: true,
+                confirmButtonText:"登录"
+              }).then(action => {
+                if(action == "confirm"){
+                  this.$router.replace({ //跳转到登录页面
+                    path: 'login',
+                    query: {
+                      redirect: this.$router.currentRoute.fullPath, //将跳转的路由path作为参数，登录成功后跳转到该路由
+                    }
+                  });
+                }
+              })
             }
           });
 
@@ -423,6 +450,22 @@
             if (res.data.success) {
               console.log(res)
               this.$router.push({ name: 'houseCompared', params: {}});
+            }else{
+              MessageBox({
+                title: '',
+                message: '请登录查看',
+                showCancelButton: true,
+                confirmButtonText:"登录"
+              }).then(action => {
+                if(action == "confirm"){
+                  this.$router.replace({ //跳转到登录页面
+                    path: 'login',
+                    query: {
+                      redirect: this.$router.currentRoute.fullPath, //将跳转的路由path作为参数，登录成功后跳转到该路由
+                    }
+                  });
+                }
+              })
             }
           });
       },
@@ -440,9 +483,9 @@
       getCompareNum() {
         //获取用户名
         console.log(this.$store.state)
-        let loginName = this.$store.state.userInfo.loginName;
+//        let loginName = this.$store.state.userInfo.loginName;
         //在该用户获取对比清单
-        var compareArr = localStorage.getItem("comparedList_hz_" + loginName);
+        var compareArr = localStorage.getItem("comparedList_hz_" + this.loginName);
         console.log('aompareArr');
         console.log(JSON.parse(compareArr));
 
@@ -466,11 +509,11 @@
           .then(res => {
             if (res.data.success) {
               console.log(res)
-              var loginName = this.$store.state.userInfo.loginName;
-              var list = Object.assign({},JSON.parse(localStorage.getItem("comparedList_hz_" + loginName)));
+//              var loginName = this.$store.state.userInfo.loginName;
+              var list = Object.assign({},JSON.parse(localStorage.getItem("comparedList_hz_" + this.loginName)));
               console.log('localStorage-compare')
               console.log(list);
-              var addList = JSON.parse(localStorage.getItem("comparedList_hz_" + loginName));
+              var addList = JSON.parse(localStorage.getItem("comparedList_hz_" + this.loginName));
               console.log(addList);
               if (this.compareDesc == '加入对比') {
                   console.log(this.houseDetail)
@@ -481,16 +524,32 @@
 
                 console.log(list);
                 //加入对比清单
-                localStorage.setItem("comparedList_hz_" + loginName, JSON.stringify(list));
+                localStorage.setItem("comparedList_hz_" + this.loginName, JSON.stringify(list));
                 this.compareDesc = '取消对比';
                 this.getCompareNum();
               } else if (this.compareDesc == '取消对比') {
                 delete list[this.houseId]
                 //对比清单移除
-                localStorage.setItem("comparedList_hz_" + loginName, JSON.stringify(list));
+                localStorage.setItem("comparedList_hz_" + this.loginName, JSON.stringify(list));
                 this.compareDesc = '加入对比';
                 this.getCompareNum();
               }
+            }else{
+              MessageBox({
+                title: '',
+                message: '请登录查看',
+                showCancelButton: true,
+                confirmButtonText:"登录"
+              }).then(action => {
+                if(action == "confirm"){
+                  this.$router.replace({ //跳转到登录页面
+                    path: 'login',
+                    query: {
+                      redirect: this.$router.currentRoute.fullPath, //将跳转的路由path作为参数，登录成功后跳转到该路由
+                    }
+                  });
+                }
+              })
             }
           });
       },
@@ -498,13 +557,34 @@
         api.isLogin()
           .then(res => {
             if (res.data.success) {
+              if(this.isAndroid_ios){
+                MessageBox({
+                  title: '',
+                  message: '呼叫：'+this.brokerPhone,
+                  showCancelButton: true,
+                }).then(action => {
+                  if(action == "confirm"){
+                    window.location.href = 'tel:'+this.brokerPhone
+                  }
+                })
+              }else{
+                window.location.href = 'tel://'+this.brokerPhone
+              }
+
+            }else{
               MessageBox({
                 title: '',
-                message: '呼叫：'+this.brokerPhone,
+                message: '请登录查看',
                 showCancelButton: true,
+                confirmButtonText:"登录"
               }).then(action => {
                 if(action == "confirm"){
-                  window.location.href = 'tel://'+this.brokerPhone
+                  this.$router.replace({ //跳转到登录页面
+                    path: 'login',
+                    query: {
+                      redirect: this.$router.currentRoute.fullPath, //将跳转的路由path作为参数，登录成功后跳转到该路由
+                    }
+                  });
                 }
               })
             }
@@ -536,6 +616,22 @@
               console.log(res)
               //跳转看房预约{ name:'houseAppointment',params: { homes: houseDetail}}
               this.$router.push({ name:'houseAppointment',params: { homes: this.houseDetail}});
+            }else{
+              MessageBox({
+                title: '',
+                message: '请登录查看',
+                showCancelButton: true,
+                confirmButtonText:"登录"
+              }).then(action => {
+                if(action == "confirm"){
+                  this.$router.replace({ //跳转到登录页面
+                    path: 'login',
+                    query: {
+                      redirect: this.$router.currentRoute.fullPath, //将跳转的路由path作为参数，登录成功后跳转到该路由
+                    }
+                  });
+                }
+              })
             }
           });
       },

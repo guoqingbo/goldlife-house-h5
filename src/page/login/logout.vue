@@ -38,7 +38,7 @@
 //					code:2334
 				};
 				//清空本地用户信息
-        this.$store.commit('setUserInfo',{});
+//        this.$store.commit('setUserInfo',{});
 
 				api.logout(_data)
 				.then(res=>{

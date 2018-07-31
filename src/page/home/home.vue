@@ -468,7 +468,7 @@
               //获取小区名
               if(this.communityName){
                 searchHistoryCondition.name.push(this.communityName)
-                searchHistoryCondition.params.filterIds.communityId = this.houseParams[this.houseType].communityId;
+                searchHistoryCondition.params.communityId = this.houseParams[this.houseType].communityId;
               }
               searchHistoryCondition.name = searchHistoryCondition.name.join('|')
               return searchHistoryCondition;
@@ -665,11 +665,15 @@
                   orderColumn:'',
               },//租房房源请求参数
             }
+            //清空房源查询参数
             this.houseParams[this.houseType] = houseParams[this.houseType];
+            //清空过滤选中的条件
             this.filterSelect = filterSelect;
             this.filterTypeActive = '';
             this.activDistrictIndex = 0;
             this.selectedDistrictIndex = 0;
+            //清空小区名
+            this.communityName = '';
           },
           //清空传入的筛选条件
           clearFilterByChild(child,clearSelect){

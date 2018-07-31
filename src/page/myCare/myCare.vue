@@ -43,7 +43,7 @@
     props:[],
     data(){
       return {
-        houseType: 1, //1二手房 2租房 3楼盘
+        houseType:this.$store.state.activeInfo.blockId>0?3:this.$store.state.activeInfo.houseType?this.$store.state.activeInfo.houseType:1,//房源类型, //1二手房 2租房 3楼盘
         houseLists: [],//收藏房源列表
         houseTypeDetail: {
           1: 'houseBuyDetail',
@@ -57,6 +57,7 @@
     },
     created(){
       this.getAttention(this.houseType);
+      console.log(this.houseType)
     },
     methods:{
       //获取关注
@@ -223,8 +224,10 @@
     padding-top: 4.4rem;
     .house-li{
       width: 100%;
-      overflow: hidden;
       padding: 0 1.5rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
     .house-item-box{
       /*position: absolute;*/
