@@ -29,7 +29,7 @@ export default new Vuex.Store({
     //   state.userInfo = userInfo;
     // },
     setActiveInfo(state,activeInfo){
-      state.activeInfo = activeInfo;
+      state.activeInfo = Object.assign(state.activeInfo,activeInfo);
     }
   },
   actions: {
