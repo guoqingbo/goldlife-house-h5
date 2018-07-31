@@ -166,7 +166,6 @@
 
   export default {
     beforeCreate() {
-
     },
     //参数
     data() {
@@ -215,15 +214,11 @@
       }
     },
     created() {
-      console.log(this.$store.state.activeInfo)
       this.getloginName()
-      this.menu();
       this.getHouseDetail();
       this.getCompareNum();
       //存储当前房源id
       this.$store.commit("setActiveInfo",{houseId:this.houseId,houseType:this.houseType})
-      console.log(this.houseType)
-console.log(this.$store.state.activeInfo)
     },
     components: {
     },
@@ -254,10 +249,6 @@ console.log(this.$store.state.activeInfo)
             if (res.data.success) {
               var resultHouse = res.data.result;
               this.houseDetail = resultHouse;
-              console.log('二手房params')
-              console.log(params)
-              console.log('二手房result')
-              console.log(this.houseDetail);
               this.title = resultHouse.title;
               this.price = resultHouse.price;
               this.buildarea = resultHouse.buildarea;
@@ -479,7 +470,6 @@ console.log(this.$store.state.activeInfo)
           this.houseType = '1';
           this.getHouseDetail();
         }
-        this.menu();
       },
       getCompareNum() {
         //获取用户名
@@ -509,8 +499,6 @@ console.log(this.$store.state.activeInfo)
         api.isLogin()
           .then(res => {
             if (res.data.success) {
-              console.log(res)
-//              var loginName = this.$store.state.userInfo.loginName;
               var list = Object.assign({},JSON.parse(localStorage.getItem("comparedList_hz_" + this.loginName)));
               console.log('localStorage-compare')
               console.log(list);
@@ -612,9 +600,6 @@ console.log(this.$store.state.activeInfo)
           this.$router.push({ name:'villageMore',params: { more: this.isSell?this.sellList:this.rentList,villageName:this.title,id:this.blockId,houseType:this.houseType}});
         }
 
-      },
-      menu() {
-        window.scrollTo(0,0);
       },
       appoint(){
         api.isLogin()

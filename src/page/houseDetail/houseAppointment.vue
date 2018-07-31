@@ -134,7 +134,6 @@
     },
     created() {
       this.getloginName();
-      console.log(this.$route.params.homes)
       if(this.$route.params.homes == null){
         this.$router.push({ name:'home',params: { }});
       }else{
@@ -142,9 +141,7 @@
         if(picList != null && picList.length>0){
           this.pic = picList[0];
         }
-//        this.phone = this.$store.state.userInfo.loginName;
       }
-
     },
     components: {
 

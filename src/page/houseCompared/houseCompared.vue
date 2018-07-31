@@ -66,7 +66,7 @@
     },
     created(){
         this.getloginName();
-      this.getComparedList();
+
     },
     mounted(){
 
@@ -78,6 +78,7 @@
           .then(res=>{
             if(res.data.success){
               this.loginName = res.data.result
+              this.getComparedList();
             }
           })
       },
@@ -110,6 +111,7 @@
       },
       //获取对比清单
       getComparedList(){
+          console.log(this.loginName)
         if(this.loginName && localStorage.getItem("comparedList_hz_"+this.loginName)){
           this.houseLists = JSON.parse(localStorage.getItem("comparedList_hz_"+this.loginName));
           console.log(this.houseLists)
@@ -195,12 +197,13 @@
                     //返回的失效房源清除
                   let invalidHouse = res.data.result;
                   invalidHouse.forEach((value)=>{
-                      let _index = this.beginCompared.indexOf(value.houseId);
-                      if (_index>=0){
-                          //删除存储
-                        this.beginCompared.splice(_index,1)
-                        delete this.houseLists[value.houseId];
-                      }
+                    delete this.houseLists[value.houseId];
+//                      let _index = this.beginCompared.indexOf(value.houseId);
+//                      if (_index>=0){
+//                          //删除存储
+//                        this.beginCompared.splice(_index,1)
+//                        delete this.houseLists[value.houseId];
+//                      }
                   })
 //                  localStorage.setItem("comparedList_hz_"+this.loginName,JSON.stringify(this.houseLists));
                   //从新渲染
