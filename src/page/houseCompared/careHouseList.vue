@@ -12,7 +12,7 @@
     <!--房源结果列表-->
     <div>
       <ul class="house-list">
-        <li class="house-item clear" v-for="item in houseLists" :key="item.id" @click="selectedHouse(item)">
+        <li class="house-item clear" v-for="(item,index) in houseLists" @click="selectedHouse(item)">
           <house-item :item="item" :houseType="1" :checkBox="true">
             <div slot="checkBox" class="check-box-div">
               <span
@@ -48,9 +48,8 @@
       houseItem,
     },
     created(){
-      this.getLoginName();
+      this.getloginName();
       this.getHouseList();
-      this.getComparedList()
     },
     methods:{
       //获取用户名
@@ -59,6 +58,7 @@
           .then(res=>{
             if(res.data.success){
               this.loginName = res.data.result
+              this.getComparedList()
             }
           })
       },
@@ -92,7 +92,8 @@
               .then(res=>{
                 if (res.data.success){
                     let houseLists = [];
-                  res.data.result.forEach(item=>{
+                    console.log(res.data.result)
+                    res.data.result.forEach(item=>{
                     houseLists.push(item.targetHouse)
                   });
                   this.houseLists = houseLists
@@ -105,11 +106,7 @@
                 }
               })
               .catch(res=>{
-                this.$toast({
-                  message: res.data.errorMessage,
-                  position: 'bottom',
-                  duration: 3000
-                });
+                console.log(res)
               })
         }
       },
@@ -157,6 +154,7 @@
           }
           console.log(this.loginName)
           //在该用户加入对比清单
+        console.log(this.addComparedHouse)
           localStorage.setItem("comparedList_hz_"+this.loginName,JSON.stringify(this.addComparedHouse));
           //跳转对比清单
           this.$router.push({

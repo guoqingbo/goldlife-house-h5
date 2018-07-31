@@ -14,7 +14,7 @@
           </ul>
         </div>
         <div class="my-search-input left">
-          <input type="search" placeholder="请输入想找的楼盘名称" @keyup="showSearchResult" v-model="params.keyword">
+          <input type="search" placeholder="请输入想找的楼盘名称" @focus="isShowHouseType=false" @keyup="showSearchResult" v-model="params.keyword">
         </div>
       </div>
       <div class="my-search-right right" @click="$emit('hideSearch')">
@@ -23,12 +23,12 @@
     </div>
     <!--搜索结果-->
     <ul  v-if="searchResult.length>0"  class="search-result">
-      <li v-for="(item,index) in searchResult" :key="item.communityId" @click="$emit('searchHouse',item)">{{item.communityName}}</li>
+      <li v-for="(item,index) in searchResult" :key="item.communityId" @click="$emit('searchHouse',item,searchHouseType)">{{item.communityName}}</li>
     </ul>
     <!--搜索历史-->
     <ul v-if="houseSearchHistory&&houseSearchHistory[searchHouseType].length>0&&searchResult.length<=0" class="search-history">
       <li><span>搜索历史</span><span><i class="icon iconfont icon-delete" @click="deletehouseSearchHistory(searchHouseType)">&#xe613;</i></span></li>
-      <li v-for="(item,index) in houseSearchHistory[searchHouseType]"  @click="$emit('searchHouseHistory',item)">{{item.name}}</li>
+      <li v-for="(item,index) in houseSearchHistory[searchHouseType]"  @click="$emit('searchHouseHistory',item,searchHouseType)">{{item.name}}</li>
     </ul>
 
   </div>

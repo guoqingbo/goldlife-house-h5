@@ -11,6 +11,7 @@ export default new Vuex.Store({
       houseType:'',//当前活动房源类型
       blockId:'',//当前活动小区id
       rentHouseId:'',//租房id
+      careHouseType:'',//关注房源类型
     },
   },
   getters: {
