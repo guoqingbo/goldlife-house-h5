@@ -85,7 +85,7 @@ const routes = [
   },
 
   { // 看房记录
-    path: '/lookHouseHistory', name: 'lookHouseHistory',meta:{keepAlive:true},
+    path: '/lookHouseHistory', name: 'lookHouseHistory',
     component: r => require.ensure([], () => r(require('../page/lookHouse/lookHouseHistory'))),
   },
   { // 添加看房笔记
@@ -124,7 +124,7 @@ router.beforeEach((to, from, next) => {
     api.isLogin()
       .then(res => {
         if (res.data.success) {
-          next();         
+          next();
 
         }else{
           console.log(to)
