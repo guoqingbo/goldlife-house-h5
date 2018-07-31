@@ -79,11 +79,11 @@
 			this.getSignDetail();
 		},
 		mounted(){
-
-			let that = this;
+			this.currentStatus();
+			/*let that = this;
 			setTimeout(function(){	//先等待DOM元素加载完成
 				that.currentStatus();
-			},500)
+			},500)*/
 		},
 		methods:{
 			getSignDetail(){
@@ -112,13 +112,26 @@
 				})
 			},
 			currentStatus(){//动态设置签约状态盒子的高度
-				// var currEle = document.getElementById("current");
-				// var currTop = currEle.getBoundingClientRect().top;
-				var scrollBox = document.getElementById("scroll-box");
+				/*var scrollBox = document.getElementById("scroll-box");
 				var BoxTop = scrollBox.getBoundingClientRect().top;
 				var screenH = document.documentElement.clientHeight;
 				let HH = screenH - BoxTop;
-				this.Heig = HH		
+				this.Heig = HH	*/	
+				var timer = null		
+				var scrollBox = document.getElementById("scroll-box");	
+				if(scrollBox) {
+					var BoxTop = scrollBox.getBoundingClientRect().top;
+					var screenH = document.documentElement.clientHeight;
+			        let HH = screenH - BoxTop;
+					this.Heig = HH
+			        //  清除定时器
+			        if(!timer) {
+			            clearTimeout(timer)
+			        }
+			    } else {
+			        //  自我调用
+			        timer = setTimeout(this.currentStatus, 0)
+			    }
 			}
 		},
         filters: { //定义过滤器
