@@ -449,7 +449,12 @@
                   priceMax:"",//最大价格
                   filterIds:[],
                 },//房源请求参数
-                filterSelect:this.filterSelect//筛选条件展示名
+                filterSelect:{
+                  district:this.filterSelect.district,
+                  price:this.filterSelect.price,
+                  roomType:this.filterSelect.roomType,
+                  filterMore:{name:'',select:[]},
+                }//筛选条件展示名
               }
               //获取小区名
               if(this.communityName){
