@@ -664,7 +664,7 @@ console.log(this.$store.state.activeInfo)
 
 <style lang="scss" >
   @import '../../style/mixin';
-  @import "../../../static/css/swiper.min.css";
+  /*@import "../../../static/css/swiper.min.css";*/
 
   .houseBuyDetail {
     font-size: 1.6rem;

@@ -555,7 +555,7 @@
 
 <style lang="scss">
   @import '../../style/mixin';
-  @import "../../../static/css/swiper.min.css";
+  /*@import "../../../static/css/swiper.min.css";*/
   .houseRentDetail{
     font-size: 1.6rem;
 
