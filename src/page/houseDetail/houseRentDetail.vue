@@ -244,6 +244,7 @@
       }
     },
     created() {
+      console.log(this.$store.state.activeInfo)
       this.menu();
       this.getHouseDetail();
       //this.getCommunityDetail();
@@ -251,6 +252,7 @@
       console.log(this.houseId)
       console.log(this.houseType)
       this.$store.commit("setActiveInfo",{rentHouseId:this.houseId})
+      console.log(this.$store.state.activeInfo)
     },
     components: {
 

@@ -1,6 +1,6 @@
 <template>
   <!--房源结果列表-->
-  <div class="">
+  <div class="" @click="">
     <!--头部导航-->
     <div class="header-nav">
       <!--返回图标-->
@@ -43,7 +43,7 @@
     props:[],
     data(){
       return {
-        houseType:this.$store.state.activeInfo.blockId>0?3:this.$store.state.activeInfo.houseType?this.$store.state.activeInfo.houseType:1,//房源类型, //1二手房 2租房 3楼盘
+        houseType:this.$store.state.activeInfo.careHouseType>0?this.$store.state.activeInfo.careHouseType:1,//房源类型, //1二手房 2租房 3楼盘
         houseLists: [],//收藏房源列表
         houseTypeDetail: {
           1: 'houseBuyDetail',
@@ -62,6 +62,8 @@
     methods:{
       //获取关注
       getAttention(houseType){
+        //存储当前小区id和房源类型
+          this.$store.commit("setActiveInfo",{careHouseType:houseType})
           this.houseType = houseType;
           this.houseLists = [];
           if (houseType == 3){

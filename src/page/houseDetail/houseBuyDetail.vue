@@ -215,6 +215,7 @@
       }
     },
     created() {
+      console.log(this.$store.state.activeInfo)
       this.getloginName()
       this.menu();
       this.getHouseDetail();
