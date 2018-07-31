@@ -473,7 +473,7 @@ console.log(this.$store.state.activeInfo)
       getHomeDetail(data) {
         if(data == this.houseId){
           //window.reload();
-          this.$router.go(0);
+          //this.$router.go(0);
         }else{
           this.houseId = data;
           this.houseType = '1';
