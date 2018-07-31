@@ -130,7 +130,7 @@
         </el-row>
         <ul class="category-head" ref="ulDisplay">
           <li v-if="isSell" v-for='sellImg in sellList' >
-            <router-link :to="{ name:'houseBuyDetail',params: {cityId:cityId,houseId:houseId,userType:userType,houseType:houseType}}">
+            <router-link :to="{ name:'houseBuyDetail',params: {cityId:cityId,houseId:sellImg.id,userType:userType,houseType:houseType}}">
               <img :src="sellImg.pic?sellImg.pic:require('../../../static/bg_smallphotonormal@2x.png')"><br/>
               <p>{{sellImg.room_type}}|{{sellImg.buildarea}}|{{sellImg.forward}}</p>
               <p><span style="color: #e10000">{{sellImg.price}}</span>&nbsp;&nbsp;&nbsp;{{sellImg.avgprice}}</p>
@@ -208,7 +208,7 @@
         center: {lng: 116.40387397, lat: 39.91488908},
         //房源
         houseDetail: '',
-        houseId: this.$route.params.houseId?this.$route.params.houseId:this.$store.state.activeInfo.houseId,
+        houseId: this.$route.params.houseId?this.$route.params.houseId:this.$store.state.activeInfo.rentHouseId,
         isSell: false,//是否在售
         isRent: true,//是否在租
         title: '',//小区名+户型
@@ -248,7 +248,9 @@
       this.getHouseDetail();
       //this.getCommunityDetail();
       //设置当前活动房源id
-      this.$store.commit("setActiveInfo",{houseId:this.houseId,houseType:this.houseType})
+      console.log(this.houseId)
+      console.log(this.houseType)
+      this.$store.commit("setActiveInfo",{rentHouseId:this.houseId})
     },
     components: {
 
@@ -269,6 +271,8 @@
         };
         api.getHouseDetail(params)
           .then(res => {
+            console.log(params)
+            console.log(res)
             if (res.data.success) {
               console.log(res.data.result);
               var resultHouse = res.data.result;
@@ -426,6 +430,22 @@
                     console.log(response)
                   });
               }
+            }else{
+              MessageBox({
+                title: '',
+                message: '请登录查看',
+                showCancelButton: true,
+                confirmButtonText:"登录"
+              }).then(action => {
+                if(action == "confirm"){
+                  this.$router.replace({ //跳转到登录页面
+                    path: 'login',
+                    query: {
+                      redirect: this.$router.currentRoute.fullPath, //将跳转的路由path作为参数，登录成功后跳转到该路由
+                    }
+                  });
+                }
+              })
             }
           });
 
@@ -433,17 +453,44 @@
       menu() {
         window.scrollTo(0,0);
       },
+      isAndroid_ios(){
+        var u = navigator.userAgent, app = navigator.appVersion;
+        var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1; //android终端或者uc浏览器
+        var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+        return isAndroid==true?true:false;
+      },
       phoneCall() {
         api.isLogin()
           .then(res => {
             if (res.data.success) {
+              if(this.isAndroid_ios){
+                MessageBox({
+                  title: '',
+                  message: '呼叫：'+this.brokerPhone,
+                  showCancelButton: true,
+                }).then(action => {
+                  if(action == "confirm"){
+                    window.location.href = 'tel:'+this.brokerPhone
+                  }
+                })
+              }else{
+                window.location.href = 'tel://'+this.brokerPhone
+              }
+
+            }else{
               MessageBox({
                 title: '',
-                message: '呼叫：'+this.brokerPhone,
+                message: '请登录查看',
                 showCancelButton: true,
+                confirmButtonText:"登录"
               }).then(action => {
                 if(action == "confirm"){
-                  window.location.href = 'tel://'+this.brokerPhone
+                  this.$router.replace({ //跳转到登录页面
+                    path: 'login',
+                    query: {
+                      redirect: this.$router.currentRoute.fullPath, //将跳转的路由path作为参数，登录成功后跳转到该路由
+                    }
+                  });
                 }
               })
             }

@@ -93,7 +93,7 @@
           </li>
           <li v-if="isRent" v-for='rentImg in rentList'>
             <router-link
-              :to="{ name:'houseRentDetail',params: {cityId:cityId,houseId:houseId,userType:userType,houseType:houseType}}">
+              :to="{ name:'houseRentDetail',params: {cityId:cityId,houseId:rentImg.id,userType:userType,houseType:houseType}}">
               <img :src="rentImg.pic?rentImg.pic:require('../../../static/bg_smallphotonormal@2x.png')"><br/>
               <p>{{rentImg.room_type}}|{{rentImg.buildarea}}|{{rentImg.forward}}</p>
               <p><span style="color: #e10000">{{rentImg.price}}</span></p>
@@ -424,6 +424,22 @@ console.log(this.$store.state.activeInfo)
                     console.log(response)
                   });
               }
+            }else{
+              MessageBox({
+                title: '',
+                message: '请登录查看',
+                showCancelButton: true,
+                confirmButtonText:"登录"
+              }).then(action => {
+                if(action == "confirm"){
+                  this.$router.replace({ //跳转到登录页面
+                    path: 'login',
+                    query: {
+                      redirect: this.$router.currentRoute.fullPath, //将跳转的路由path作为参数，登录成功后跳转到该路由
+                    }
+                  });
+                }
+              })
             }
           });
 
@@ -434,6 +450,22 @@ console.log(this.$store.state.activeInfo)
             if (res.data.success) {
               console.log(res)
               this.$router.push({ name: 'houseCompared', params: {}});
+            }else{
+              MessageBox({
+                title: '',
+                message: '请登录查看',
+                showCancelButton: true,
+                confirmButtonText:"登录"
+              }).then(action => {
+                if(action == "confirm"){
+                  this.$router.replace({ //跳转到登录页面
+                    path: 'login',
+                    query: {
+                      redirect: this.$router.currentRoute.fullPath, //将跳转的路由path作为参数，登录成功后跳转到该路由
+                    }
+                  });
+                }
+              })
             }
           });
       },
@@ -502,6 +534,22 @@ console.log(this.$store.state.activeInfo)
                 this.compareDesc = '加入对比';
                 this.getCompareNum();
               }
+            }else{
+              MessageBox({
+                title: '',
+                message: '请登录查看',
+                showCancelButton: true,
+                confirmButtonText:"登录"
+              }).then(action => {
+                if(action == "confirm"){
+                  this.$router.replace({ //跳转到登录页面
+                    path: 'login',
+                    query: {
+                      redirect: this.$router.currentRoute.fullPath, //将跳转的路由path作为参数，登录成功后跳转到该路由
+                    }
+                  });
+                }
+              })
             }
           });
       },
@@ -509,13 +557,34 @@ console.log(this.$store.state.activeInfo)
         api.isLogin()
           .then(res => {
             if (res.data.success) {
+              if(this.isAndroid_ios){
+                MessageBox({
+                  title: '',
+                  message: '呼叫：'+this.brokerPhone,
+                  showCancelButton: true,
+                }).then(action => {
+                  if(action == "confirm"){
+                    window.location.href = 'tel:'+this.brokerPhone
+                  }
+                })
+              }else{
+                window.location.href = 'tel://'+this.brokerPhone
+              }
+
+            }else{
               MessageBox({
                 title: '',
-                message: '呼叫：'+this.brokerPhone,
+                message: '请登录查看',
                 showCancelButton: true,
+                confirmButtonText:"登录"
               }).then(action => {
                 if(action == "confirm"){
-                  window.location.href = 'tel://'+this.brokerPhone
+                  this.$router.replace({ //跳转到登录页面
+                    path: 'login',
+                    query: {
+                      redirect: this.$router.currentRoute.fullPath, //将跳转的路由path作为参数，登录成功后跳转到该路由
+                    }
+                  });
                 }
               })
             }
