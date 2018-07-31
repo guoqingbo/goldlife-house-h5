@@ -127,7 +127,7 @@
 
 <style lang="scss" scoped>
   @import '../../style/mixin';
-  @import "../../../static/css/swiper.min.css";
+  /*@import "../../../static/css/swiper.min.css";*/
 
   /**导航*/
   .nav-header {

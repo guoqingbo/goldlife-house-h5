@@ -1,6 +1,6 @@
 <template>
   <!--房源结果列表-->
-  <div class="">
+  <div class="" @click="">
     <!--头部导航-->
     <div class="header-nav">
       <!--返回图标-->
@@ -57,6 +57,7 @@
     },
     created(){
       this.getAttention(this.houseType);
+      console.log(this.houseType)
     },
     methods:{
       //获取关注
@@ -189,8 +190,6 @@
   //导航头
  .header-nav{
    position: fixed;
-   z-index: 1;
-   background-color: #fff;
    top:0;
    width: 100%;
    border-bottom: 0.05rem solid #f8f8f8;
@@ -227,7 +226,7 @@
     padding-top: 4.4rem;
     .house-li{
       width: 100%;
-      padding: 0 1rem 0 1.5rem;
+      padding: 0 1.5rem;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;

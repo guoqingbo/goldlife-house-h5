@@ -85,7 +85,7 @@ const routes = [
   },
 
   { // 看房记录
-    path: '/lookHouseHistory', name: 'lookHouseHistory',
+    path: '/lookHouseHistory', name: 'lookHouseHistory',meta:{keepAlive:true},
     component: r => require.ensure([], () => r(require('../page/lookHouse/lookHouseHistory'))),
   },
   { // 添加看房笔记
@@ -117,13 +117,14 @@ const router = new Router({
 });
 //注册全局钩子用来拦截导航
 router.beforeEach((to, from, next) => {
+  console.log(to)
   //判断要去的路由是否需要先登录
   if (to.meta.checkLogin) {
     //判断是否登录
     api.isLogin()
       .then(res => {
         if (res.data.success) {
-          next();
+          next();         
 
         }else{
           console.log(to)

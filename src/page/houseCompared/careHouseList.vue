@@ -41,7 +41,7 @@
         loginName:"",//登录账号
         houseLists:[],//收藏房源列表
         addComparedHouse:{},//选择关注的房源
-        addType:this.$store.state.activeInfo.addType?this.$store.state.activeInfo.addType:1, //1从关注房源添加  2从看房列表添加
+        addType:this.$route.params?this.$route.params.addType:1, //1从关注房源添加  2从看房列表添加
       }
     },
     components: {
