@@ -546,15 +546,20 @@
         api.isLogin()
           .then(res => {
             if (res.data.success) {
-              MessageBox({
-                title: '',
-                message: '呼叫：'+this.brokerPhone,
-                showCancelButton: true,
-              }).then(action => {
-                if(action == "confirm"){
-                  window.location.href = 'tel://'+this.brokerPhone
-                }
-              })
+              if(this.isAndroid_ios){
+                MessageBox({
+                  title: '',
+                  message: '呼叫：'+this.brokerPhone,
+                  showCancelButton: true,
+                }).then(action => {
+                  if(action == "confirm"){
+                    window.location.href = 'tel:'+this.brokerPhone
+                  }
+                })
+              }else{
+                window.location.href = 'tel://'+this.brokerPhone
+              }
+
             }else{
               MessageBox({
                 title: '',
