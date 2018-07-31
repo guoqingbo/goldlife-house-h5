@@ -224,10 +224,10 @@
   /*列表*/
   .house-box{
     width: 100%;
-    padding-top: 4.4rem;
+    padding: 4.4rem 1rem 0 1.5rem;
     .house-li{
       width: 100%;
-      padding: 0 1.5rem;
+      /*padding: 0 1.5rem;*/
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
