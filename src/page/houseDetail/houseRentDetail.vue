@@ -454,16 +454,15 @@
         window.scrollTo(0,0);
       },
       isAndroid_ios(){
-        var u = navigator.userAgent, app = navigator.appVersion;
-        var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1; //android终端或者uc浏览器
-        var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+        var u = navigator.userAgent;
+        var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1 || u.indexOf('android') > -1; //android终端或者uc浏览器
         return isAndroid==true?true:false;
       },
       phoneCall() {
         api.isLogin()
           .then(res => {
             if (res.data.success) {
-              if(this.isAndroid_ios){
+              if(this.isAndroid_ios()){
                 MessageBox({
                   title: '',
                   message: '呼叫：'+this.brokerPhone,

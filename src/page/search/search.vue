@@ -53,10 +53,9 @@
     props: {
       houseType:{
           default:1
-      }
+        },
     },
     created(){
-
     },
     mounted(){
         //
@@ -198,6 +197,8 @@
         background-color: transparent;
         font-size: 1.3rem;
         width: 100%;
+        border: 0;
+        outline: none;
       }
     }
     .my-search-right{
