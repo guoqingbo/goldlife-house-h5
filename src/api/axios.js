@@ -2,7 +2,7 @@ import axios from 'axios'
 import qs from 'qs'
 import { MessageBox } from 'mint-ui';
 // import store from '../store'
-import router from '../router/index'
+// import router from '../router/index'
 import envConfig from  '../config/env'
 
 //设置全局axios默认值
