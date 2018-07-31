@@ -14,7 +14,7 @@
           </ul>
         </div>
         <div class="my-search-input left">
-          <input type="search" placeholder="请输入想找的楼盘名称" @keyup="showSearchResult" v-model="params.keyword">
+          <input type="search" placeholder="请输入想找的楼盘名称" @focus="isShowHouseType=false" @keyup="showSearchResult" v-model="params.keyword">
         </div>
       </div>
       <div class="my-search-right right" @click="$emit('hideSearch')">
