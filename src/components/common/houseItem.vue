@@ -37,14 +37,14 @@
         }
       },
       price(value,houseType){
-        if (/^[0-9]*$/.test(value)) {
+        if (/^\d+(\.\d+)?$/.test(value)) {
           return houseType == 1 ? value + '万' : value + '元/月';
         }else {
           return value
         }
       },
       avgprice(value,houseType){
-        if (value&&/^[0-9]*$/.test(value)) {
+        if (/^\d+(\.\d+)?$/.test(value)) {
           return houseType == 1||houseType == 3 ? value + ' 元/平':'';
         }else{
           return houseType == 1 || houseType == 3 ? value : '';

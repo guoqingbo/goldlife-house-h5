@@ -50,8 +50,8 @@
     data(){
       return{
         actions:[//底部下拉选项
-            {name:"从关注房源添加", method:()=>this.addFromCareHouse()},
-            {name:"从看房记录添加", method:()=>this.addFromLookHouse()}
+            {name:"从关注房源添加", method:()=>this.addFromCareHouse(1)},
+            {name:"从看房记录添加", method:()=>this.addFromCareHouse(2)}
         ],
         sheetVisible:false,//是否展示底部下拉选项
         houseLists:{},//房源列表
@@ -96,19 +96,22 @@
         this.beginCompared = [];
       },
        //从关注房源添加
-      addFromCareHouse(){
+      addFromCareHouse(addType){
+        this.$store.commit("setActiveInfo",{addType:addType})
+
         this.$router.push({
-          params:{addType:1},
-          name: 'careHouseList',
+          params:{addType:addType},
+          name: addType == 1?'careHouseList': 'careHouseList' ,
         });
       },
-      //从看房记录添加
-      addFromLookHouse(){
-        this.$router.push({
-          params:{addType:2},
-          name: 'careHouseList',
-        });
-      },
+//      //从看房记录添加
+//      addFromLookHouse(){
+//        this.$store.commit("setActiveInfo",{addType:2})
+//        this.$router.push({
+//          params:{addType:2},
+//          name: 'careHouseList',
+//        });
+//      },
       //获取对比清单
       getComparedList(){
           console.log(this.loginName)
@@ -240,7 +243,6 @@
           })
           return
         }
-console.log(this.beginCompared)
         let beginCompared = [].concat(this.beginCompared)
         beginCompared.forEach((value)=>{
           let _index = this.beginCompared.indexOf(value);
