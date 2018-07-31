@@ -38,7 +38,7 @@
     props:[],
     data(){
       return {
-        loginName:this.$store.state.userInfo.loginName?this.$store.state.userInfo.loginName:"",//登录账号
+        loginName:"",//登录账号
         houseLists:[],//收藏房源列表
         addComparedHouse:{},//选择关注的房源
         addType:this.$route.params?this.$route.params.addType:1, //1从关注房源添加  2从看房列表添加
@@ -48,10 +48,20 @@
       houseItem,
     },
     created(){
+      this.getLoginName();
       this.getHouseList();
       this.getComparedList()
     },
     methods:{
+      //获取用户名
+      getloginName(){
+        api.isLogin()
+          .then(res=>{
+            if(res.data.success){
+              this.loginName = res.data.result
+            }
+          })
+      },
         //获取房源列表
       getHouseList(){
         if (this.addType == 1){
@@ -165,7 +175,9 @@
   }
   /*导航头*/
   .nav-header{
-    position: relative;
+    position: fixed;
+    top: 0;
+    width: 100%;
     background-color: #fff;
     font-size: 1.6rem;
     color: #424242;
@@ -188,7 +200,7 @@
   }
   /*房源列表*/
   .house-list{
-    padding: 0 2rem;
+    padding: 4.4rem 2rem;
     /*选中按钮*/
     .check-box-div{
       line-height: 8rem;

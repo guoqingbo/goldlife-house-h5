@@ -31,40 +31,42 @@ axios.defaults.headers.post['Content-Type'] = "application/x-www-form-urlencoded
 //   }
 // );
 // respone拦截器
-axios.interceptors.response.use(
-  response => {
-    // console.log(response)
-    // console.log(response.config.url == '/user/isLogin')
-    if(response&&response.config.url != '/user/isLogin'){
-      let res = response.data
-      switch(res.errorCode){ //与路由拦截有冲突
-        case 3001://跳出登录弹框
-          MessageBox({
-            title: '',
-            message: '请登录查看',
-            showCancelButton: true,
-            confirmButtonText:"登录"
-          }).then(action => {
-            if(action == "confirm"){
-              router.replace({ //跳转到登录页面
-                path: 'login',
-                query: {
-                  redirect: router.currentRoute.fullPath, //将跳转的路由path作为参数，登录成功后跳转到该路由
-                  openId:res.result.openId,
-                  code:res.result.code
-                }
-              });
-            }
-          })
-      }
-    }
-    return response;
-  },
-  error => {
-    console.log(error.response)
-    return Promise.resolve(error.response);
-  }
-);
+// axios.interceptors.response.use(
+//   response => {
+//     // console.log(response)
+//     // console.log(response.config.url == '/user/isLogin')
+//     console.log(router.currentRoute)
+//     if(response&&!(router.currentRoute.fullPath=='/')){
+//       console.log(response)
+//       let res = response.data
+//       switch(res.errorCode){ //与路由拦截有冲突
+//         case 3001://跳出登录弹框
+//           MessageBox({
+//             title: '',
+//             message: '请登录查看',
+//             showCancelButton: true,
+//             confirmButtonText:"登录"
+//           }).then(action => {
+//             if(action == "confirm"){
+//               router.replace({ //跳转到登录页面
+//                 path: 'login',
+//                 query: {
+//                   redirect: router.currentRoute.fullPath, //将跳转的路由path作为参数，登录成功后跳转到该路由
+//                   openId:res.result.openId,
+//                   code:res.result.code
+//                 }
+//               });
+//             }
+//           })
+//       }
+//     }
+//     return response;
+//   },
+//   error => {
+//     console.log(error.response)
+//     return Promise.resolve(error.response);
+//   }
+// );
 
 export default {
   //发送验证码
