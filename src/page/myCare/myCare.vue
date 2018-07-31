@@ -186,7 +186,7 @@
     }
   }
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
   //导航头
  .header-nav{
    position: fixed;
@@ -237,6 +237,9 @@
       /*padding-left: 2rem;*/
       /*margin-right: 2rem;*/
       /*padding-right: 2rem;*/
+    }
+    .mint-cell-title{
+      width: 100%;
     }
   }
 
