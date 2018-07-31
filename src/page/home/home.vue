@@ -18,7 +18,7 @@
                   </ul>
                 </div>
                 <div class="my-search-input left">
-                  <input type="search" placeholder="请输入想找的楼盘名称" @focus="isShowSearch=true" v-model="communityName">
+                  <input type="search" placeholder="请输入想找的楼盘名称" @focus="isShowSearch=true;isShowHouseType=false" v-model="communityName">
                 </div>
               </div>
               <div class="my-search-right left" @click="toggleMore">
@@ -181,7 +181,7 @@
               <div class="recomment-tip">为您推荐</div>
             </div>
             <!--房源结果列表-->
-            <div v-if="houseLists.length>0" class="house-list-box">
+            <div v-if="houseLists.length>0" class="house-list-box" @click="boxClick">
               <ul class="house-list" ref="houseScroll" @touchmove="loadMore">
                 <li class="house-item clear" v-for="item in houseLists" :key="item.id">
                   <router-link
@@ -318,6 +318,10 @@
 
         },
         methods: {
+            //全局点击事件
+          boxClick(){
+              this.isShowHouseType = false
+          },
           gethouseLists(isLoadMore){
             if(!isLoadMore){ //不是加载更多时
               this.houseParams[this.houseType].pageIndex = 1
@@ -468,6 +472,7 @@
               //获取小区名
               if(this.communityName){
                 searchHistoryCondition.name.push(this.communityName)
+                searchHistoryCondition.communityName = this.communityName
                 searchHistoryCondition.params.communityId = this.houseParams[this.houseType].communityId;
               }
               searchHistoryCondition.name = searchHistoryCondition.name.join('|')
@@ -500,10 +505,12 @@
             localStorage.setItem("houseSearchHistory",JSON.stringify(houseSearchHistory));
           },
           //搜索历史记录点击
-          searchHouseHistory(item){
+          searchHouseHistory(item,houseType){
               console.log(item)
             //清空筛选条件
             this.clearAllFilter();
+            this.houseType = houseType
+            this.communityName = item.communityName
             this.houseParams[this.houseType].communityId = item.params.communityId
             this.houseParams[this.houseType].areaIds = item.params.areaIds
             this.houseParams[this.houseType].priceMin = item.params.priceMin
@@ -852,9 +859,8 @@
           },
           //更多菜单
           toggleMore(){
-              if(this.filterType){
-                return
-              }
+              this.filterType = '';
+              this.isShowHouseType = false
               this.morePopVisible = !this.morePopVisible
           },
           //展示搜索页
@@ -862,11 +868,12 @@
               this.isShowSearch = true
           },
           //通过小区搜索房源(搜索子组件触发)
-          searchHouse(community){
+          searchHouse(community,houseType){
               console.log(community)
             //清空筛选条件
             this.clearAllFilter();
             this.communityName = community.communityName
+            this.houseType =  houseType
            //设置小区id
             this.houseParams[this.houseType].communityId = community.communityId;
             this.gethouseLists();

@@ -1,6 +1,6 @@
 <template>
   <!--房源结果列表-->
-  <div class="">
+  <div class="" @click="">
     <!--头部导航-->
     <div class="header-nav">
       <!--返回图标-->
