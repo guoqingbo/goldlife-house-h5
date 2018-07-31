@@ -20,6 +20,7 @@
                 <div class="my-search-input left">
                   <input type="search" placeholder="请输入想找的楼盘名称" @focus="isShowSearch=true" v-model="communityName">
                 </div>
+                <span :class="['delIcon',{'hide':toHide}]" @click="toDefault" ></span>
               </div>
               <div class="my-search-right left" @click="toggleMore">
                 <i class="icon iconfont iconfont-more">&#xe641;</i>
@@ -299,6 +300,7 @@
                 filterMore:{name:'',select:[]},
               },
 //              searchHistoryName:'',//拼接历史的名称
+              toHide:true
             }
         },
         mounted(){
@@ -318,6 +320,12 @@
 
         },
         methods: {
+          toDefault(){
+            //清空筛选条件
+              this.clearAllFilter();
+              this.gethouseLists();
+           
+          },
           gethouseLists(isLoadMore){
             if(!isLoadMore){ //不是加载更多时
               this.houseParams[this.houseType].pageIndex = 1
@@ -925,6 +933,13 @@
 //          houseType(){
 //
 //          }
+          communityName:function(){
+            if(this.communityName){
+             this.toHide = false             
+            }else{
+              this.toHide = true;
+            }
+          }
         }
     }
 
@@ -1027,6 +1042,20 @@
         padding-left: 1rem;
         width:85%;
         // width: 29rem;
+        position: relative;
+        .delIcon{
+          display: inline-block;
+          width: 2.1rem;
+          height:2.1rem;
+          background: url(../../assets/icon/icon_searchbar_cancle@2x.png) center no-repeat;
+          position: absolute;
+          right: 1.2rem;
+          top:0.75rem;
+          background-size: 2rem 2rem;
+        }
+        .hide{
+          display: none;
+        }
       }
       /*下拉样式*/
       .my-search-dropdown{
