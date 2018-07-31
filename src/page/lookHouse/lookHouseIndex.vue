@@ -2,8 +2,7 @@
 	<div>
 		<div class="look_box">
 			<h1 class="nav-header">
-				<!-- <span class="go-back" @click="$router.go(-1)"><i class="icon iconfont go-back-icon">&#xe60f;</i></span> -->
-				<span class="go-back" @click="backHome"><i class="icon iconfont go-back-icon">&#xe60f;</i></span>
+				<span class="go-back" @click="$router.go(-1)"><i class="icon iconfont go-back-icon">&#xe60f;</i></span>
 				<span class="header-title">看房日程</span>
 				<span class="go-edit" @click="lookHistory"><i class="icon iconfont editor-icon">&#xe62e;</i></span>
 			</h1>
@@ -100,9 +99,6 @@
 			},
 			toDetail(houseData){
 				this.$router.push({path:'/lookHouseReservation',query:{data:houseData}});
-			},
-			backHome(){
-				this.$router.push({path:'/'});
 			}
 		},
 		filters:{
