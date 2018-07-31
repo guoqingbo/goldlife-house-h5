@@ -553,11 +553,17 @@ console.log(this.$store.state.activeInfo)
             }
           });
       },
+      isAndroid_ios(){
+        var u = navigator.userAgent;
+        var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1 || u.indexOf('android') > -1; //android终端或者uc浏览器
+        return isAndroid==true?true:false;
+      },
       phoneCall() {
         api.isLogin()
           .then(res => {
+            console.log(res)
             if (res.data.success) {
-              if(this.isAndroid_ios){
+              if(this.isAndroid_ios()){
                 MessageBox({
                   title: '',
                   message: '呼叫：'+this.brokerPhone,
