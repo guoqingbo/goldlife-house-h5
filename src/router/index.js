@@ -124,7 +124,7 @@ router.beforeEach((to, from, next) => {
     api.isLogin()
       .then(res => {
         if (res.data.success) {
-          next();         
+          next();
 
         }else{
           console.log(to)
