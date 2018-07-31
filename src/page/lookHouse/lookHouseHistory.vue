@@ -2,7 +2,9 @@
 	<div>
 		<div class="history-box">
 			<h1 class="nav-header">
-				<span class="go-back" @click="$router.go(-1)"><i class="icon iconfont go-back-icon">&#xe60f;</i></span>
+				<!-- 直接回退会回退到添加笔记页面 -->
+				<!-- <span class="go-back" @click="$router.go(-1)"><i class="icon iconfont go-back-icon">&#xe60f;</i></span> -->
+				<span class="go-back" @click="backToIndex"><i class="icon iconfont go-back-icon">&#xe60f;</i></span>
 				<span class="header-title">看房记录</span>
 			</h1>
 
@@ -29,7 +31,6 @@
 							<span>{{ (i.time)/1000 |moment('MM月DD日 HH:mm') }}</span>
 						</p>
 
-						<!-- <mt-button v-if="i.lookHouseLog.lable==''&&i.lookHouseLog.text==''" size="large" @click="editNode(i)">添加看房笔记</mt-button> -->
 						<span class="add" v-if="i.lookHouseLog.lable==''&&i.lookHouseLog.text==''"  @click="editNode(i)">添加看房笔记</span>
 
 						<div v-else class="label" @click="editNode(i)">
@@ -87,6 +88,9 @@
 					lable:data.lookHouseLog.lable,
 				}
 				this.$router.push({path:'/addLookHouseLog',query:{data:_data}})
+			},
+			backToIndex(){
+				this.$router.push({path:'/lookHouseIndex'});
 			}
 		},
 		filters:{

@@ -85,7 +85,7 @@ const routes = [
   },
 
   { // 看房记录
-    path: '/lookHouseHistory', name: 'lookHouseHistory',meta:{keepAlive:true},
+    path: '/lookHouseHistory', name: 'lookHouseHistory',
     component: r => require.ensure([], () => r(require('../page/lookHouse/lookHouseHistory'))),
   },
   { // 添加看房笔记
