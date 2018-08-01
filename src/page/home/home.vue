@@ -533,7 +533,7 @@
             this.houseParams[this.houseType].filterIds = this.selectedfilterIds = item.params.filterIds
             this.filterSelect = item.filterSelect
 
-            this.selectedDistrictIndex=item.selectedDistrictIndex,//选中的小区
+            this.selectedDistrictIndex=item.selectedDistrictIndex?item.selectedDistrictIndex:0,//选中的小区
 
             this.gethouseLists();
             this.isShowSearch = false //不展示搜索组键
@@ -639,6 +639,7 @@
                 this.filterTypeActive = ''
               }else{ //打开弹框
                 //设置选中的小区为活动小区
+                console.log(this.selectedDistrictIndex)
                 this.activDistrictIndex = this.selectedDistrictIndex;
                 //设置选中的条件为活动的条件
                 this.houseParams[this.houseType].filterIds = [].concat(this.selectedfilterIds);
