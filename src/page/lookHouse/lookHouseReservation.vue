@@ -1,7 +1,6 @@
 <template>
 	<div>
 		<div class="res-box">
-			<!-- <head-top /> -->
 			<h1 class="nav-header">
 				<span class="go-back" @click="$router.go(-1)"><i class="icon iconfont go-back-icon">&#xe60f;</i></span>
 			</h1>
@@ -33,7 +32,6 @@
 								<span>{{reservationInfo.targetHouse.price}}万</span>
 								<span>&nbsp;&nbsp;{{reservationInfo.targetHouse.avgprice |formatPrice}}&nbsp;元/平</span>
 							</p>
-							<!-- <p class="dayT">{{reservationInfo.targetHouse.create_time*1000 |moment('MM月DD日 hh:mm')}}&nbsp;发布</p> -->
 							<p class="dayT">{{reservationInfo.targetHouse.create_time |publishTime}}</p>
 						</div>
 						<div v-else class="lineDown">
@@ -52,7 +50,6 @@
 	</template>
 <script type="text/javascript">
 	import api from '../../api/axios'
-  	// import headTop from '../../components/header/head'
   	import { MessageBox } from 'mint-ui';
   	export default {
 		name:'lookHouseReservation',
@@ -70,11 +67,8 @@
 		},
 		created(){
 			this.reservationInfo = this.$route.query.data
-			console.log(this.reservationInfo);
 		},
-		mounted(){
-
-		},
+		mounted(){},
 		methods:{
 
 			phoneNum(){
@@ -104,10 +98,7 @@
             let fullYear = date.getFullYear(); // 获取完整的年份(4位,1970)
             let month = date.getMonth()+1<10?'0'+(date.getMonth()+1):date.getMonth()+1;// 获取月份(0-11,0代表1月,用的时候记得加上1)
             let day = date.getDate()<10?'0'+date.getDate():date.getDate(); // 获取日(1-31)
-//            date.getTime(); // 获取时间(从1970.1.1开始的毫秒数)
-//            date.getHours(); // 获取小时数(0-23)
-//            date.getMinutes(); // 获取分钟数(0-59)
-//            date.getSeconds(); // 获取秒数(0-59)
+
             return fullYear+'年'+month+'月'+day+'日'+ '发布';
           }else if (diffDay>15){
             return '15天以上';
@@ -132,9 +123,6 @@
 		    }
 
 		},
-		/*components:{
-			headTop
-		}*/
 	}
 </script>
 <style lang="scss" scoped>
@@ -158,8 +146,6 @@
 
   }
 
-
-
   .reservaInfo{
   	width: 100%;
   	padding: 1.5rem 2rem;
@@ -167,12 +153,10 @@
   	h2{
   		font-size: 2.4rem;
 		color: #333333;
-		// margin: 0.8rem 0 1.8rem;
 		margin-bottom: 1.8rem;
   	}
   	.info{
   		height: 9rem;
-  		// line-height: 9rem;
   		padding: 1rem;
   		background: url(../../assets/icon/BG424242_ticket@2x.png) no-repeat;
   		background-size: 100% 100%;
@@ -200,7 +184,6 @@
 				width: 2.2rem;
 				height: 2.2rem;
 				margin: auto;
-				// background: url(../../assets/icon/icon_lighterff997a@2x.png) no-repeat center;
 				background-size: 2.2rem 2.2rem;
 			}
 			.res{//预约中

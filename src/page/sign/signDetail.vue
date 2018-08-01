@@ -1,6 +1,5 @@
 <template>
   <div class="container_box" >
-    <!-- <head-top /> -->
     <h1 class="nav-header" ref="title">
       <span class="go-back" @click="$router.go(-1)"><i class="icon iconfont go-back-icon">&#xe60f;</i></span>
       <span class="header-title">签约详情</span>
@@ -37,8 +36,6 @@
 
     <div class="signBox" id="status">
       <div class="status" v-if="signDetail.now_transfer != undefined">
-        <!-- <h2>当前签约状态：<span>{{ signDetail.now_transfer.stage_name }}</span></h2> -->
-
         <div class="scroll-box" id="scroll-box" :style="'height:'+Heig+'px'">
           <div class="status_content">
             <p v-for="item in transfer">
@@ -51,7 +48,6 @@
         </div>
       </div>
     </div>
-
 
   </div>
 </template>

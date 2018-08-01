@@ -67,7 +67,7 @@
           .then(res=>{
             if(res.data.success){
               this.houseList = res.data.result;
-              console.log(res.data.result);
+              // console.log(res.data.result);
             }else{
               console.log(res.data);
             }

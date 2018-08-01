@@ -44,9 +44,6 @@
 		},
 		mounted(){
 			this.haveLable();
-			// console.log(this.selectedLable);
-			console.log(this.$route.query.data);
-
 		},
 		methods:{
 			getLabel(){//获取标签

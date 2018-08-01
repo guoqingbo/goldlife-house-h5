@@ -85,8 +85,6 @@
           .then(res=>{
             if(res.data.success){
               this.houseList = res.data.result;
-              console.log(res.data);
-
             }else{
               console.log(res.data.errorMessage);
             }

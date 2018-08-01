@@ -1,6 +1,5 @@
 <template>
   <div class="search-box">
-      <!-- <head-top /> -->
       <div class="tt">
         <h1 class="nav-hd">
           <span class="hd-title">签约查询</span>
@@ -25,7 +24,6 @@
 </template>
 <script type="text/javascript">
   import api from '../../api/axios'
-  // import headTop from '../../components/header/head'
   export default {
     name:'signSearch',
     data(){
@@ -68,7 +66,6 @@
       },
       toDetail(id){
         this.$router.push({path:'/signDetail',query:{houseId:id}})
-        // this.$router.push({path:'/signDetail#current',query:{houseId:id}})
       }
     },
     filters: { //定义过滤器
@@ -87,9 +84,6 @@
             }
         }
     },
-    // components: {
-    //     headTop
-    //   },
   }
 </script>
 <style lang="scss" scoped>
@@ -106,7 +100,6 @@
       .nav-hd{
         display: flex;
         justify-content: space-between;
-        // background-color: #fff;
         font-size: 1.6rem;
         color: #424242;
         height: 4.4rem;
@@ -167,7 +160,5 @@
 
     }
   }
-
-
 
 </style>
