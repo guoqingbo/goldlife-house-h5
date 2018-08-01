@@ -244,15 +244,11 @@
       }
     },
     created() {
-      console.log(this.$store.state.activeInfo)
       this.menu();
       this.getHouseDetail();
       //this.getCommunityDetail();
       //设置当前活动房源id
-      console.log(this.houseId)
-      console.log(this.houseType)
       this.$store.commit("setActiveInfo",{rentHouseId:this.houseId})
-      console.log(this.$store.state.activeInfo)
     },
     components: {
 
@@ -273,14 +269,9 @@
         };
         api.getHouseDetail(params)
           .then(res => {
-            console.log(params)
-            console.log(res)
             if (res.data.success) {
-              console.log(res.data.result);
               var resultHouse = res.data.result;
               this.houseDetail = resultHouse;
-              console.log('houseDetail')
-              console.log(this.houseDetail);
               this.title = resultHouse.title;
               this.price = resultHouse.price;
               this.buildarea = resultHouse.buildarea;
@@ -341,12 +332,9 @@
         api.getCommunityDetail(params)
           .then(res => {
             if (res.data.success) {
-              console.log('小区');
-              console.log(res.data.result);
               var resultHouse = res.data.result;
               this.sellList = resultHouse.houseInblock.sell.lists;
               this.rentList = resultHouse.houseInblock.rent.lists;
-              console.log(this.sellList);
               this.communityAround = resultHouse.communityAround;
             } else {
               this.$message.error(res.data.errorMessage);
@@ -388,7 +376,6 @@
         api.isLogin()
           .then(res => {
             if (res.data.success) {
-              console.log(res)
               if (this.attentionStatus === '关注') {
                 let attentionnfo = {
                   cityId: this.cityId,
@@ -397,12 +384,9 @@
                   sysType: 1,
                   attentionState: 1,
                 };
-                console.log(attentionnfo);
                 api.attention(attentionnfo)
                   .then(res => {
-                    console.log(res.data)
                     if (res.data.success) {
-                      console.log('关注成功')
                       this.attentionStatus = '已关注';
                       this.$refs.spanIcon.style.left = '7.4rem'
                     }
@@ -421,9 +405,7 @@
                 };
                 api.attention(attentionnfo)
                   .then(res => {
-                    console.log(res.data)
                     if (res.data.success) {
-                      console.log('取消关注')
                       this.attentionStatus = '关注';
                       this.$refs.spanIcon.style.left = '8rem'
                     }
@@ -508,7 +490,6 @@
       },
       clkVillage(){
         if((this.isSell&&this.sellLength>0)||(this.isRent&&this.rentLength>0)){
-          console.log(this.isSell)
           this.$router.push({ name:'villageMore',params: { more: this.isSell?this.sellList:this.rentList,villageName:this.title,id:this.blockId,houseType:this.houseType}});
         }
 

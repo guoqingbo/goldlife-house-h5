@@ -69,14 +69,12 @@
       // 搜索结果展示
       showSearchResult(){
           let searchParams = this.params;
-          console.log(searchParams.keyword)
           if (searchParams.keyword == ''){
               this.searchResult=[];
               return
           }
         api.searchCommunity(searchParams)
           .then(res=>{
-              console.log(res.data)
               if (res.data.success){
                 this.searchResult = res.data.result
               }else{
@@ -89,11 +87,6 @@
             })
           .catch(res=>{
               console.log(res)
-            this.$toast({
-              message: res.Error,
-              position: 'bottom',
-              duration: 3000
-            })
           })
       },
       //取消

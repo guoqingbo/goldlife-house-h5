@@ -72,7 +72,6 @@
         let point2;
         var geolocation = new BMap.Geolocation();
         geolocation.getCurrentPosition((r) => {
-          console.log(r.point);
           if (r.point) {
             point2 = r.point;
             window.point2 = point2;

@@ -41,9 +41,7 @@
       }
     },
     created() {
-
       this.imgList = this.$route.params.imgs;
-      console.log(this.imgList)
     },
     components: {
     },

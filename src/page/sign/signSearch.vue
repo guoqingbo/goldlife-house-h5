@@ -44,7 +44,6 @@
         //获取登录用户手机号
         api.isLogin()
           .then(res=>{
-            console.log(res.data.result)
               if(res.data.success){
                   let loginName = res.data.result
                   api.signSearch(loginName).then(res=>{

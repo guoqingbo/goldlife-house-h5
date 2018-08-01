@@ -219,8 +219,6 @@
         api.getCommunityDetail(params)
           .then(res => {
             if (res.data.success) {
-              console.log('小区');
-              console.log(res.data.result);
               var resultHouse = res.data.result;
               this.id = resultHouse.id;
               this.sellList = resultHouse.houseInblock.sell.lists;
@@ -255,10 +253,6 @@
                   this.$refs.sameSell.style.backgroundColor='#f5f5f5';
                 }
               }
-              console.log('在售列表')
-              console.log(this.sellList);
-              console.log('在租列表')
-              console.log(this.rentList);
               this.communityAround = resultHouse.communityAround;
               this.address = resultHouse.disrictName + '区-' + resultHouse.streetName;
               this.buildYear = resultHouse.build_date;
@@ -266,9 +260,6 @@
               this.title = resultHouse.cmt_name;
               this.addressDetail = resultHouse.address.split('（')[0];
               this.cityId = resultHouse.cityId;
-              console.log(this.id)
-              console.log('关注状态')
-              console.log(resultHouse.attentionState)
               if (resultHouse.attentionState == '0') {
                 this.attentionStatus = false;
               } else if (resultHouse.attentionState == '1') {
@@ -349,7 +340,6 @@
         api.isLogin()
           .then(res => {
             if (res.data.success) {
-              console.log(res)
               if (!this.attentionStatus) {
                 let attentionnfo = {
                   cityId: this.cityId,
@@ -358,12 +348,9 @@
                   sysType: 1,
                   attentionState: 1,
                 };
-                console.log(attentionnfo);
                 api.attention(attentionnfo)
                   .then(res => {
-                    console.log(res.data)
                     if (res.data.success) {
-                      console.log('关注成功')
                       this.attentionStatus = true;
                     }
                   })
@@ -381,9 +368,7 @@
                 };
                 api.attention(attentionnfo)
                   .then(res => {
-                    console.log(res.data)
                     if (res.data.success) {
-                      console.log('取消关注')
                       this.attentionStatus = false;
                     }
                   })

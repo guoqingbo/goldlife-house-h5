@@ -9,8 +9,6 @@
 
 let baseUrl = '';
 let routerMode = 'hash';
-console.log(location.hostname)
-console.log(location.host)
 if(location.hostname == 'localhost'){ //本地开发
 
 }else if(location.hostname == 'jpwx.cd121.com'){ //生产环境

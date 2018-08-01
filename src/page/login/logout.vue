@@ -73,7 +73,6 @@
       getUserName(){//获取用户名
 			    api.isLogin()
             .then(res=>{
-                console.log(res)
                 if(res.data.success){
                   this.loginName = res.data.result
                 }

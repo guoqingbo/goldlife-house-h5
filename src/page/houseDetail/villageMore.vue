@@ -183,7 +183,6 @@
           //openId:this.$route.query ? this.$route.query.openId:"",
           params.openId = this.$route.query? this.$route.query.openId : "";
           params.code = this.$route.query.code ? this.$route.query.code : "";
-          console.log(params)
           api.getSellHouseList(params)
             .then( res => {
               if (res.data.success){
@@ -197,7 +196,6 @@
                     this.loading = false
                     this.isLoadAll = false;
                   }
-                  console.log(this.houseLists)
                 }else{
                   this.houseLists = res.data.result.list;
                   if (res.data.result.list.length<this.houseParams[this.houseType].pageSize){ //是否已经加载完所有数据
@@ -230,10 +228,8 @@
         else if(this.houseType == 2){
           //获取出售房源列表
           let params = this.houseParams[this.houseType];
-          console.log(params)
           api.getRentHouseList(params)
             .then( res => {
-              console.log(res)
               if (res.data.success){
                 if(isLoadMore){
                   this.houseLists = this.houseLists.concat(res.data.result.list);
@@ -278,7 +274,6 @@
       //加载更多
       loadBottom(){
         this.houseParams[this.houseType].pageIndex++;
-        console.log(this.houseParams[this.houseType].pageIndex)
         this.gethouseLists(true)
         this.$refs.loadmore.onBottomLoaded();
       },
@@ -286,7 +281,6 @@
       loadMore() {
         this.loading = true;
         this.houseParams[this.houseType].pageIndex++;
-        console.log(this.houseParams[this.houseType].pageIndex)
         this.gethouseLists(true)
       }
     }

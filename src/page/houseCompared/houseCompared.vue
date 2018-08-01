@@ -111,10 +111,8 @@
       },
       //获取对比清单
       getComparedList(){
-          console.log(this.loginName)
         if(this.loginName && localStorage.getItem("comparedList_hz_"+this.loginName)){
           this.houseLists = JSON.parse(localStorage.getItem("comparedList_hz_"+this.loginName));
-          console.log(this.houseLists)
         }
       },
       //开始对比
@@ -131,9 +129,7 @@
             itemObj.cityId = 'hz';
             itemObj.houseId = item;
           comparedData.push(itemObj)
-          console.log(item)
         })
-        console.log(comparedData)
         this.$router.push({
           params:{data:comparedData},
           name: 'comparedResult',
@@ -169,14 +165,12 @@
       //全选
       selectAll(){
           this.isSelectedAll = !this.isSelectedAll;
-        console.log(this.isSelectedAll)
           if(this.isSelectedAll){
             let selectHouseIdArr = [];
             Object.keys(this.houseLists).forEach((key)=>{
               selectHouseIdArr.push(this.houseLists[key].id)
             })
             this.beginCompared = selectHouseIdArr;
-            console.log(selectHouseIdArr)
           }else{
             this.beginCompared = [];
           }
@@ -240,7 +234,6 @@
           })
           return
         }
-console.log(this.beginCompared)
         let beginCompared = [].concat(this.beginCompared)
         beginCompared.forEach((value)=>{
           let _index = this.beginCompared.indexOf(value);

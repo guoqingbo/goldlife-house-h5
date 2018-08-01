@@ -104,7 +104,6 @@ const router = new Router({
   base: '/h5house/',
   routes,
   scrollBehavior(to, from, savedPosition){ //滚动条行为，前进置顶，后退保持
-    console.log(savedPosition)
     if(savedPosition) {
       return savedPosition
     } else {
@@ -117,7 +116,6 @@ const router = new Router({
 });
 //注册全局钩子用来拦截导航
 router.beforeEach((to, from, next) => {
-  console.log(to)
   //判断要去的路由是否需要先登录
   if (to.meta.checkLogin) {
     //判断是否登录
@@ -125,10 +123,7 @@ router.beforeEach((to, from, next) => {
       .then(res => {
         if (res.data.success) {
           next();
-
         }else{
-          console.log(to)
-          console.log(to.path)
           //跳出登录弹框
           MessageBox({
             title: '',
@@ -150,7 +145,6 @@ router.beforeEach((to, from, next) => {
         }
       });
   } else if(to.name == 'login'){
-    console.log(to)
     if(to.name == 'login'){
       api.isLogin()
         .then(res => {
@@ -166,7 +160,6 @@ router.beforeEach((to, from, next) => {
   } else {
     next();
   }
-
 });
 
 export default router

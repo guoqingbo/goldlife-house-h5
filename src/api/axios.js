@@ -5,7 +5,7 @@ import { MessageBox } from 'mint-ui';
 // import router from '../router/index'
 import envConfig from  '../config/env'
 
-//设置全局axios默认值
+// 设置全局axios默认值
 axios.defaults.timeout = 5000; //5000的超时验证
 axios.defaults.baseURL = envConfig.baseUrl;
 axios.defaults.withCredentials = true;
@@ -253,7 +253,6 @@ export default {
 
   //微信菜单
   weixinMenu(data){
-    console.log(data)
     return axios.get('/user/weixin/menu',{
       params:{
         redirectType:data.redirectType,// 可能值 house  account fund finan loan invite

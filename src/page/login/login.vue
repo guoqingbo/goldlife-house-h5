@@ -89,7 +89,6 @@
                           duration: 3000
                         })
                       }
-                      console.log(res)
                   })
                   .catch(function (res) {
                     this.$toast({
@@ -118,10 +117,8 @@
               openId:this.$route.query ? this.$route.query.openId:"",
               code:this.$route.query ? this.$route.query.code:"",
             }
-            console.log(loginInfo)
             api.userLogin(loginInfo)
               .then(res =>{
-                  console.log(res.data)
                 if (res.data.success){
                   //保存用户信息
 //                  this.$store.commit('setUserInfo',{loginName:this.loginName,});
@@ -129,7 +126,6 @@
                   let redirectUrl = res.data.result;
                   //弹框确认登录后的跳回地址
                   let redirect = decodeURIComponent(this.$route.query.redirect || '/');
-                  console.log(redirect)
 //                  this.$messageBox.alert(redirectUrl, "回掉地址");
                   if (redirectUrl){ //请求中有跳转则跳转
                       window.location.href = redirectUrl;
@@ -150,7 +146,6 @@
               })
               .catch(function (res) {
 //                  this.$message.error(response.error_msg);
-                console.log(res)
               });
           },
         }

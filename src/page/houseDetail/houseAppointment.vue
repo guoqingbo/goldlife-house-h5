@@ -170,7 +170,6 @@
       },
       handleConfirm (data) {
         this.dateValue = this.getDate(data);   //获取的时间为时间戳，getdata是自己写的一个转换时间的方法
-        console.log(this.dateValue)
       },
       getDate(data){
         var year = data.getFullYear();
@@ -208,7 +207,6 @@
         }, 1000);
         api.getCode(this.phone)
           .then(res => {
-            console.log(res);
             if (res.data.success == false) {
               this.$toast({
                 message: res.data.errorMessage,
@@ -270,7 +268,6 @@
         }*/
         var timestamp2 = Date.parse(new Date(this.dateValue));
         this.datestamp = timestamp2;
-        console.log(this.datestamp);
         let appointmentInfo = {
           cityId: this.$route.params.homes.cityId,
           houseId: this.$route.params.homes.id,
@@ -283,9 +280,7 @@
         };
         api.houseAppointment(appointmentInfo)
           .then(res => {
-            console.log(res.data)
             if (res.data.success) {
-              console.log('提交成功')
               //跳转看房日程
               this.$router.push({ name: 'lookHouseIndex', params: {}});
             }else{

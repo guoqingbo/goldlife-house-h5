@@ -92,7 +92,6 @@
               .then(res=>{
                 if (res.data.success){
                     let houseLists = [];
-                    console.log(res.data.result)
                     res.data.result.forEach(item=>{
                     houseLists.push(item.targetHouse)
                   });
@@ -115,18 +114,15 @@
 //        localStorage.removeItem("comparedList_hz_"+this.loginName)
         if(this.loginName && localStorage.getItem("comparedList_hz_"+this.loginName)){
            this.addComparedHouse =JSON.parse(localStorage.getItem("comparedList_hz_"+this.loginName));
-           console.log(this.addComparedHouse)
         }
       },
       // 选中房源
       selectedHouse(houseItem){
-        console.log(houseItem.id);
         if (this.addComparedHouse[houseItem.id]){
             delete this.addComparedHouse[houseItem.id];
         }else{
           this.addComparedHouse[houseItem.id] = houseItem;
         }
-        console.log(this.addComparedHouse[houseItem.id]);
         this.addComparedHouse = Object.assign({}, this.addComparedHouse);//对象重新渲染
       },
       //加入对比清单
@@ -152,9 +148,7 @@
             })
             return;
           }
-          console.log(this.loginName)
           //在该用户加入对比清单
-        console.log(this.addComparedHouse)
           localStorage.setItem("comparedList_hz_"+this.loginName,JSON.stringify(this.addComparedHouse));
           //跳转对比清单
           this.$router.push({

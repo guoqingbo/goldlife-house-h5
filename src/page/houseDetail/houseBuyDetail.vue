@@ -305,7 +305,6 @@
             }
           })
           .catch(res => {
-            console.log(res)
             this.$message.error(res);
           });
       },
@@ -320,11 +319,7 @@
         api.getCommunityDetail(params)
           .then(res => {
             if (res.data.success) {
-              console.log('二手房小区params');
-              console.log(params)
               var resultHouse = res.data.result;
-              console.log('二手房小区res');
-              console.log(resultHouse)
               this.sellList = resultHouse.houseInblock.sell.lists;
               this.rentList = resultHouse.houseInblock.rent.lists;
               this.communityAround = resultHouse.communityAround;
@@ -391,7 +386,6 @@
                 api.attention(attentionnfo)
                   .then(res => {
                     if (res.data.success) {
-                      console.log('关注成功')
                       this.attentionStatus = true;
                     }
                   })
@@ -410,7 +404,6 @@
                 api.attention(attentionnfo)
                   .then(res => {
                     if (res.data.success) {
-                      console.log('取消关注')
                       this.attentionStatus = false;
                     }
                   })
@@ -442,7 +435,6 @@
         api.isLogin()
           .then(res => {
             if (res.data.success) {
-              console.log(res)
               this.$router.push({ name: 'houseCompared', params: {}});
             }else{
               MessageBox({
@@ -476,20 +468,13 @@
       },
       getCompareNum() {
         //获取用户名
-        console.log(this.$store.state)
 //        let loginName = this.$store.state.userInfo.loginName;
         //在该用户获取对比清单
         var compareArr = localStorage.getItem("comparedList_hz_" + this.loginName);
-        console.log('aompareArr');
-        console.log(JSON.parse(compareArr));
-
-
         var len = 0;
         if(compareArr != null){
 
           len = Object.keys(JSON.parse(compareArr)).length;
-          console.log(Object.keys(JSON.parse(compareArr)))
-          console.log(len)
         }
         //var _length = Object.keys(localStorage.getItem("comparedList_hz_" + loginName));
         if (len>0) {
@@ -502,21 +487,15 @@
         api.isLogin()
           .then(res => {
             if (res.data.success) {
-              console.log(res)
 //              var loginName = this.$store.state.userInfo.loginName;
               var list = Object.assign({},JSON.parse(localStorage.getItem("comparedList_hz_" + this.loginName)));
-              console.log('localStorage-compare')
-              console.log(list);
               var addList = JSON.parse(localStorage.getItem("comparedList_hz_" + this.loginName));
-              console.log(addList);
               if (this.compareDesc == '加入对比') {
-                  console.log(this.houseDetail)
                 if(this.houseDetail.img.length>0){
                   this.houseDetail.pic = this.houseDetail.img[0]
                 }
                 list[this.houseId] =  this.houseDetail;
 
-                console.log(list);
                 //加入对比清单
                 localStorage.setItem("comparedList_hz_" + this.loginName, JSON.stringify(list));
                 this.compareDesc = '取消对比';
@@ -555,7 +534,6 @@
       phoneCall() {
         api.isLogin()
           .then(res => {
-            console.log(res)
             if (res.data.success) {
               if(this.isAndroid_ios()){
                 MessageBox({
@@ -601,7 +579,6 @@
       },
       clkVillage(){
         if((this.isSell&&this.sellLength>0)||(this.isRent&&this.rentLength>0)){
-          console.log(this.isSell)
           this.$router.push({ name:'villageMore',params: { more: this.isSell?this.sellList:this.rentList,villageName:this.title,id:this.blockId,houseType:this.houseType}});
         }
 
@@ -613,7 +590,6 @@
         api.isLogin()
           .then(res => {
             if (res.data.success) {
-              console.log(res)
               //跳转看房预约{ name:'houseAppointment',params: { homes: houseDetail}}
               this.$router.push({ name:'houseAppointment',params: { homes: this.houseDetail}});
             }else{

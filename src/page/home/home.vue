@@ -183,7 +183,7 @@
             </div>
             <!--房源结果列表-->
             <div v-if="houseLists.length>0" class="house-list-box" @click="boxClick">
-              <ul class="house-list" ref="houseScroll" @touchmove="loadMore">
+              <ul class="house-list" ref="houseScroll" @touchmove="loadMore()">
                 <li class="house-item clear" v-for="item in houseLists" :key="item.id">
                   <router-link
                     :to="{name:houseTypeDetail[houseType], params:{cityId:'hz', houseId:item.id, userType:'customer', houseType:houseType}}">
@@ -342,7 +342,6 @@
               //openId:this.$route.query ? this.$route.query.openId:"",
               params.openId = this.$route.query? this.$route.query.openId : "";
               params.code = this.$route.query.code ? this.$route.query.code : "";
-              console.log(params)
               api.getSellHouseList(params)
                 .then( res => {
                   if (res.data.success){
@@ -355,7 +354,6 @@
                             this.loading = false
                             this.isLoadAll = false;
                           }
-                          console.log(this.houseLists)
                         }else{
                           window.scrollTo(0,0);//置顶
                           //本地存储搜索历史
@@ -391,10 +389,8 @@
             else if(this.houseType == 2){
               //获取出售房源列表
               let params = this.houseParams[this.houseType];
-              console.log(params)
               api.getRentHouseList(params)
                 .then( res => {
-                    console.log(res)
                   if (res.data.success){
                     if(isLoadMore){
                       this.houseLists = this.houseLists.concat(res.data.result.list);
@@ -521,7 +517,6 @@
           },
           //搜索历史记录点击
           searchHouseHistory(item,houseType){
-              console.log(item)
             //清空筛选条件
             this.clearAllFilter();
             this.houseType = houseType
@@ -603,7 +598,6 @@
 
                   this.district = district;
                   this.streetInDistrictIds = streetInDistrictIds;
-                  console.log(this.district)
                 }else{
                   this.$toast({
                   message: res.data.errorMessage,
@@ -613,7 +607,6 @@
                 }
               })
               .catch(res =>{
-                  console.log(res)
                 this.$toast({
                   message: res,
                   position: 'bottom',
@@ -639,7 +632,6 @@
                 this.filterTypeActive = ''
               }else{ //打开弹框
                 //设置选中的小区为活动小区
-                console.log(this.selectedDistrictIndex)
                 this.activDistrictIndex = this.selectedDistrictIndex;
                 //设置选中的条件为活动的条件
                 this.houseParams[this.houseType].filterIds = [].concat(this.selectedfilterIds);
@@ -647,11 +639,9 @@
                 this.houseParams[this.houseType].priceMax = this.selectedPriceMax
                 this.houseParams[this.houseType].priceMin = this.selectedPriceMin
 
-                console.log(this.selectedfilterIds+'selectedfilterIds')
                 this.filterType = filterType
                 this.filterTypeActive = filterType
               }
-            console.log(this.filterList)
           },
           //清空筛选条件
           clearAllFilter(){
@@ -762,13 +752,8 @@
                 let buildyearChild = this.filterList[this.houseType].buildyear.child;
                 let forwardChild = this.filterList[this.houseType].forward.child;
                 let child = buildareaChild.concat(buildyearChild,forwardChild);
-                console.log(buildareaChild)
-                console.log(buildyearChild)
-                console.log(forwardChild)
-                console.log(child)
                 this.clearFilterByChild(child,true);
               }
-              console.log(this.filterSelect)
           },
           //打开房源类型弹框
           openHouseTypePop(){
@@ -810,8 +795,7 @@
                 this.filterSelect[this.filterType].name = priceMin+priceUnit+'以上'
               }else if(priceMax){
                 this.filterSelect[this.filterType].name = priceMax+priceUnit+'以下'
-              }else{
-                console.log(this.filterSelect[this.filterType]);
+              }else{;
                 if(this.filterSelect[this.filterType].select.length>1){
                     this.filterSelect[this.filterType].name = '多选'
                   }else if (this.filterSelect[this.filterType].select.length == 1){
@@ -821,7 +805,6 @@
                   }
               }
             }else if(this.filterType == 'roomType'){
-                console.log( this.filterSelect[this.filterType])
               if(this.filterSelect[this.filterType].select.length>1){
                 this.filterSelect[this.filterType].name = '多选'
               }else if (this.filterSelect[this.filterType].select.length == 1){
@@ -888,7 +871,6 @@
           },
           //通过小区搜索房源(搜索子组件触发)
           searchHouse(community,houseType){
-              console.log(community)
             //清空筛选条件
             this.clearAllFilter();
             this.communityName = community.communityName
@@ -905,24 +887,18 @@
               }
               let scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scroll;
               let innerHeight = window.innerHeight;
-              let offsetHeight =   document.documentElement.offsetHeight || document.body.offsetHeight;
+              let offsetHeight =   this.$refs.houseScroll.offsetHeight;
+//            let offsetHeight =   document.documentElement.offsetHeight || document.body.offsetHeight;
+
               // 判断是否滚动到底部
               if(scrollTop + innerHeight >= offsetHeight) {
                   if(this.loading){ //防止连续请求
                       return
                   }
-                console.log("++++")
                   this.loading = true;
                   this.houseParams[this.houseType].pageIndex++;
                   this.gethouseLists(true)
               }
-
-//            this.loading = true;
-//            this.houseParams[this.houseType].pageIndex++;
-//            console.log(this.houseParams[this.houseType].pageIndex)
-//            this.gethouseLists(true)
-//              this.loading = false;
-            console.log(123)
           }
         },
         watch:{

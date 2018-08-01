@@ -57,7 +57,6 @@
     },
     created(){
       this.getAttention(this.houseType);
-      console.log(this.houseType)
     },
     methods:{
       //获取关注
@@ -69,7 +68,6 @@
           if (houseType == 3){
             api.getCommunityAttention()
               .then( res => {
-                console.log(res)
                 if (res.data.success){
                     let houseLists = [];
                   res.data.result.forEach(item=>{
@@ -80,7 +78,6 @@
 
                     houseLists.push(item)
                   });
-                  console.log(houseLists)
                   this.houseLists = houseLists;
                 }else{
                   this.$toast({
@@ -92,16 +89,10 @@
               })
               .catch(res =>{
                   console.log(res)
-                this.$toast({
-                  message: res.data.errorMessage,
-                  position: 'bottom',
-                  duration: 3000
-                });
               });
           }else if(houseType == 2){
             api.getRentAttention()
               .then( res => {
-                console.log(res)
                 if (res.data.success){
                   this.houseLists = res.data.result
                 }else{
@@ -122,7 +113,6 @@
           }else if(houseType == 1){
             api.getHouseAttention()
               .then( res => {
-                console.log(res)
                 if (res.data.success){
                   this.houseLists = res.data.result
                 }else{
@@ -158,7 +148,6 @@
         };
         api.attention(params)
           .then( res => {
-            console.log(res)
             if (res.data.success){
               this.houseLists.splice(index,1)
               this.$toast({
@@ -176,11 +165,6 @@
           })
           .catch(res =>{
             console.log(res)
-            this.$toast({
-              message: res.data.errorMessage,
-              position: 'bottom',
-              duration: 3000
-            });
           });
       }
     }
