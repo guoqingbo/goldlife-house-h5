@@ -215,15 +215,11 @@
       }
     },
     created() {
-      console.log(this.$store.state.activeInfo)
       this.getloginName()
       this.menu();
       this.getHouseDetail();
-      this.getCompareNum();
       //存储当前房源id
       this.$store.commit("setActiveInfo",{houseId:this.houseId,houseType:this.houseType})
-      console.log(this.houseType)
-console.log(this.$store.state.activeInfo)
     },
     components: {
     },
@@ -239,6 +235,19 @@ console.log(this.$store.state.activeInfo)
                 if(res.data.success){
                     this.loginName = res.data.result
                 }
+              //对比按钮
+                var list = localStorage.getItem("comparedList_hz_" + this.loginName);
+                if (list != null) {
+                  if (JSON.parse(list)[this.houseId]) {
+                    this.compareDesc = '取消对比'
+                  } else {
+                    this.compareDesc = '加入对比'
+                  }
+                }else{
+                  this.compareDesc = '加入对比'
+                }
+
+                this.getCompareNum();
             })
       },
       //房源详情
@@ -254,10 +263,6 @@ console.log(this.$store.state.activeInfo)
             if (res.data.success) {
               var resultHouse = res.data.result;
               this.houseDetail = resultHouse;
-              console.log('二手房params')
-              console.log(params)
-              console.log('二手房result')
-              console.log(this.houseDetail);
               this.title = resultHouse.title;
               this.price = resultHouse.price;
               this.buildarea = resultHouse.buildarea;
@@ -287,18 +292,6 @@ console.log(this.$store.state.activeInfo)
               this.address = resultHouse.disrictName + ',' + resultHouse.streetName;
               //重置地图
               this.resetMap();
-              //对比按钮
-              var list = localStorage.getItem("comparedList_hz_" + this.loginName);
-              if (list != null) {
-                if (JSON.parse(list)[this.houseId]) {
-                  this.compareDesc = '取消对比'
-                } else {
-                  this.compareDesc = '加入对比'
-                }
-              }else{
-                this.compareDesc = '加入对比'
-              }
-
               this.sellList = resultHouse.houseInBlock.sell.lists;
               this.sellLength = resultHouse.houseInBlock.sell.tatalCount;
               this.rentList = resultHouse.houseInBlock.rent.lists;

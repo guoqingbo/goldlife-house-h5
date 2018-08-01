@@ -9,22 +9,35 @@
 
 let baseUrl = '';
 let routerMode = 'hash';
+console.log(location.hostname)
+console.log(location.host)
+if(location.hostname == 'localhost'){ //本地开发
 
-if (process.env.NODE_ENV == 'development') {
-    baseUrl = '';
-    // routerMode = 'history';
-
+}else if(location.hostname == 'jpwx.cd121.com'){ //生产环境
+  baseUrl = 'http://jpwx.cd121.com';
+  routerMode = 'history'
+}else if(location.hostname == 'wxtest.cd121.com'){ //测试环境
+  baseUrl = 'http://wxtest.cd121.com';
+  routerMode = 'history'
+}else{
+  baseUrl = 'http://wxtest.cd121.com';
+  routerMode = 'history'
 }
+// if (process.env.NODE_ENV == 'development') {
+//     baseUrl = '';
+//     // routerMode = 'history';
+//
+// }
 // else if(process.env.NODE_ENV == 'production'){//正式环境
 //   baseUrl = 'http://jpwx.cd121.com';
 //   routerMode = 'history'
 // }
-else if(process.env.NODE_ENV == 'production'){//测试环境
-  //baseUrl = 'http://101.37.27.156:7090';
-  baseUrl = 'http://wxtest.cd121.com';
-  // baseUrl = 'http://10.157.59.28:7090';
-  routerMode = 'history'
-}
+// else if(process.env.NODE_ENV == 'production'){//测试环境
+//   //baseUrl = 'http://101.37.27.156:7090';
+//   baseUrl = 'http://wxtest.cd121.com';
+//   // baseUrl = 'http://10.157.59.28:7090';
+//   routerMode = 'history'
+// }
 
 export default {
 	baseUrl:baseUrl,
