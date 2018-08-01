@@ -305,7 +305,7 @@
             }
           })
           .catch(res => {
-            this.$message.error(res);
+            console.log(res)
           });
       },
       //小区详情
@@ -328,7 +328,7 @@
             }
           })
           .catch(res => {
-            this.$message.error(res);
+            console.log(res)
           });
       },
       getBaiduMap() {
