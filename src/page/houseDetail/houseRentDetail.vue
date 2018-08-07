@@ -167,7 +167,7 @@
                 :src="ortherImg.surface_img?ortherImg.surface_img:require('../../../static/bg_smallphotonormal@2x.png')"><br/>
               <p style="color: #885D24;">{{ortherImg.build_date}}年建</p>
               <p>{{ortherImg.cmt_name}}</p>
-              <p class="p-bottom"><span style="color: #e10000">{{ortherImg.averprice}}元/平</span></p>
+              <p class="p-bottom"><span style="color: #e10000">{{ortherImg.averprice}}元/月</span></p>
             </router-link>
           </li>
         </ul>
